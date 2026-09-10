@@ -64,3 +64,10 @@ roadmap.
 - Documented OSM data provenance, ODbL handling, attribution placement, tag
   semantics, audit definitions, findings, and remaining manual acceptance
   gates.
+- Added a chronological build timeline with commit-pinned links to the project
+  foundation, public progress documentation, and reproducible road-audit
+  artifacts.
+- Defined the next bounded engineering milestone as one inspectable browser 3D
+  road slice with camera controls, real-to-local coordinate evidence, and
+  explicit road-width provenance. Bicycle implementation follows its geometry
+  and alignment review.

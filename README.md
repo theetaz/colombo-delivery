@@ -17,8 +17,10 @@ access, stopping safety, junction details, and current street conditions still
 need manual validation. No game runtime has been implemented yet.
 
 Development happens in public. Follow the [roadmap](docs/ROADMAP.md) for planned
-stages, the [development log](docs/DEVELOPMENT_LOG.md) for verified changes, and
-the [main branch commit history](https://github.com/theetaz/colombo-delivery/commits/main)
+stages, the [build timeline](docs/BUILD_TIMELINE.md) for a chronological record
+with commit-pinned artifacts, the [development log](docs/DEVELOPMENT_LOG.md) for
+verified changes, and the
+[main branch commit history](https://github.com/theetaz/colombo-delivery/commits/main)
 for the project's implementation record.
 
 The first playable target is a small, recognizable area around Lotus Tower. It
@@ -47,6 +49,8 @@ safety.*
 
 ## Documentation
 
+- [Build timeline](docs/BUILD_TIMELINE.md) records each completed milestone in
+  delivery order with immutable links to its artifacts.
 - [Roadmap](docs/ROADMAP.md) defines the staged delivery plan and acceptance
   criteria.
 - [Architecture](docs/ARCHITECTURE.md) records the proposed technical design
@@ -92,8 +96,10 @@ Then open
 
 ## Next step
 
-Use the audited snapshot to prototype one provisional bicycle route and road
-section while validating the highest-priority road and delivery-entrance gaps.
-Keep every unresolved access, direction, barrier, and turn assumption explicit.
-Do not describe a candidate as real-world safe, legal, or reachable until the
-corresponding checks are complete.
+Use the audited snapshot to render one small road section in a browser with the
+proposed Vite, TypeScript, and Three.js stack. The first slice should expose
+camera controls, source and local coordinates, coordinate alignment, and the
+exact width evidence or fallback used by every rendered segment. Add the first
+controllable bicycle after the road geometry passes this review. Stage 1 access,
+entrance, stopping, junction, and current-street checks remain open throughout
+the prototype.

@@ -46,10 +46,10 @@ Acceptance criteria:
 
 ## Stage 2 — Drivable small area
 
-Status: not started. The next engineering slice is one provisional
-road-generation and bicycle-routing prototype using the audited snapshot with
-documented assumptions; no game runtime exists. Open Stage 1 field checks do
-not block this bounded prototype.
+Status: not started. The next engineering slice renders one small road section
+from the audited snapshot with inspectable coordinates and width rules; the
+first bicycle follows after the road geometry and alignment review. No game
+runtime exists. Open Stage 1 field checks do not block this bounded prototype.
 
 Generate a browser scene from the audited data and add the first bicycle. Use a
 metre-based local coordinate system derived from stored latitude and longitude.
