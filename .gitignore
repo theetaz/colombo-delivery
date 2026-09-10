@@ -1,0 +1,36 @@
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+
+# Dependency directories
+node_modules/
+.pnpm-store/
+.yarn/cache/
+.venv/
+venv/
+
+# Build and test output
+build/
+dist/
+coverage/
+.coverage
+.next/
+.nuxt/
+.output/
+target/
+*.tsbuildinfo
+
+# Runtime caches and logs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.log
+logs/
