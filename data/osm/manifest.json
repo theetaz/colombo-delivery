@@ -1,0 +1,82 @@
+{
+  "anchor": {
+    "coordinate_method": "Overpass out center for the OSM building way",
+    "lat": 6.9270265,
+    "lon": 79.8583149,
+    "name": "Colombo Lotus Tower",
+    "osm_id": 728831229,
+    "osm_type": "way",
+    "verification": {
+      "nominatim_coordinate": [
+        79.8583152,
+        6.9270163
+      ],
+      "nominatim_url": "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q=Colombo%20Lotus%20Tower%2C%20Sri%20Lanka",
+      "osm_object_url": "https://www.openstreetmap.org/way/728831229"
+    }
+  },
+  "dataset": "Colombo Lotus Tower Stage 1 OSM road audit",
+  "element_counts": {
+    "node": 10014,
+    "relation": 26,
+    "way": 2200
+  },
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "fetched_at_utc": "2026-09-10T23:12:35Z",
+  "osm_base_timestamp": "2026-09-10T23:11:10Z",
+  "overpass_generator": "Overpass API 0.7.62.11 87bfad18",
+  "privacy": {
+    "excluded_contributor_identity_fields": [
+      "user",
+      "uid"
+    ],
+    "query_output_mode": "body"
+  },
+  "projection": {
+    "axis_convention": {
+      "x": "east",
+      "y": "north"
+    },
+    "earth_radius_m": 6371008.8,
+    "name": "local spherical azimuthal equidistant",
+    "origin_wgs84": [
+      79.8583149,
+      6.9270265
+    ],
+    "precision_note": "Spherical local analysis, not WGS84 ellipsoidal survey precision.",
+    "units": "metres"
+  },
+  "query_file": "data/osm/lotus_tower_query.overpassql",
+  "query_sha256": "25cc926964d06684e8e5665435d45c64cc06ad98a6f36189ab434ee8c9161a17",
+  "schema_version": 1,
+  "snapshot_bytes_compressed": 222763,
+  "snapshot_bytes_uncompressed": 1632078,
+  "snapshot_file": "data/osm/lotus_tower_snapshot.osm.json.gz",
+  "snapshot_sha256_compressed": "35ae3d3b68c95215ad1caf928ee8f9278a6b564ac4e8d7a1c539c681256f5a96",
+  "snapshot_sha256_uncompressed": "6171a366640dcb48a3ba395be3839c1c8bd789359e03d0a45ff68dcb28f42c0a",
+  "source": {
+    "attribution": "\u00a9 OpenStreetMap contributors",
+    "copyright_url": "https://www.openstreetmap.org/copyright",
+    "license": "Open Data Commons Open Database License (ODbL) 1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "name": "OpenStreetMap",
+    "overpass_api": "https://overpass-api.de/api/interpreter"
+  },
+  "study_area": {
+    "acquisition_bbox_wgs84": [
+      79.8447259,
+      6.9135367,
+      79.8719039,
+      6.9405163
+    ],
+    "boundary_inclusion": "A road intersects an area when any projected segment touches or enters its circular boundary.",
+    "center_wgs84": [
+      79.8583149,
+      6.9270265
+    ],
+    "context_radius_m": 1500,
+    "core_radius_m": 1000,
+    "routing_buffer_m": 500,
+    "shape": "spherical_azimuthal_equidistant_circle"
+  }
+}

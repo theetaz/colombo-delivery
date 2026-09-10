@@ -1,10 +1,12 @@
 # Roadmap
 
 Each stage should produce evidence that its acceptance criteria are met before
-the project expands to the next stage. Dates and estimates will be added only
-after the initial map-data audit.
+the project expands to the next stage. The Stage 1 desk audit can inform a
+limited road prototype while its manual verification gates remain visible.
 
 ## Stage 0 — Repository and product definition
+
+Status: complete.
 
 Define the product, proposed architecture, development stages, and decision
 log.
@@ -19,22 +21,35 @@ Acceptance criteria:
 
 ## Stage 1 — Colombo road-data audit
 
+Status: map-data audit and previews complete; manual road and candidate-stop
+validation remains open.
+
 Select a connected area around Lotus Tower and evaluate its OpenStreetMap data.
 The boundary must include the main roads, local access streets, and delivery
 approaches needed for complete routes.
 
 Acceptance criteria:
 
-- The selected boundary and data snapshot are recorded and reproducible.
-- Road names, classifications, connectivity, one-way directions, access rules,
-  turn restrictions, bridges, signals, crossings, and roundabouts are audited.
-- Missing or ambiguous details are listed for source or field verification.
-- Candidate delivery coordinates resolve to safe, reachable stopping points or
-  entrances rather than building centres.
-- OpenStreetMap attribution and data-license obligations are documented for the
-  game.
+- [x] The selected boundary and data snapshot are recorded and reproducible.
+- [x] Road names, classifications, structural connectivity, mapped one-way and
+  access tags, turn-restriction relations, bridges, signals, crossings, and
+  roundabouts are measured from the snapshot.
+- [x] Missing or ambiguous mapped evidence is listed for source or field
+  verification.
+- [ ] Candidate delivery coordinates are manually confirmed as safe, legal,
+  reachable stopping points or entrances rather than building centres. The
+  published candidates are graph-screened only.
+- [x] OpenStreetMap attribution and data-licence handling are documented for
+  the repository, previews, and future game.
+- [ ] A bicycle-aware, turn-aware review confirms the complete first route and
+  its current junction controls.
 
 ## Stage 2 — Drivable small area
+
+Status: not started. The next engineering slice is one provisional
+road-generation and bicycle-routing prototype using the audited snapshot with
+documented assumptions; no game runtime exists. Open Stage 1 field checks do
+not block this bounded prototype.
 
 Generate a browser scene from the audited data and add the first bicycle. Use a
 metre-based local coordinate system derived from stored latitude and longitude.
@@ -52,6 +67,8 @@ Acceptance criteria:
 
 ## Stage 3 — Complete delivery loop
 
+Status: not started.
+
 Build job selection, pickup, navigation, delivery, payment, and local progress
 saving.
 
@@ -68,6 +85,8 @@ Acceptance criteria:
 
 ## Stage 4 — Traffic and road rules
 
+Status: not started.
+
 Add working junction controls, nearby traffic, and understandable driving
 feedback.
 
@@ -82,6 +101,8 @@ Acceptance criteria:
 
 ## Stage 5 — Vehicle progression
 
+Status: not started.
+
 Add the garage, electric bicycle, and the first meaningful upgrade purchase.
 Extend progression to motorbikes and cars only after the core economy is tested.
 
@@ -95,6 +116,8 @@ Acceptance criteria:
   remain useful.
 
 ## Stage 6 — Scenery and Colombo expansion
+
+Status: not started.
 
 Improve recognizable surroundings, assess reusable Colombo Atlas assets, and
 expand through connected map sections.

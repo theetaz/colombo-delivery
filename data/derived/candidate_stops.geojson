@@ -1,0 +1,895 @@
+{
+  "bbox": [
+    79.8511525,
+    6.9182026,
+    79.8655669,
+    6.9336186
+  ],
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          79.8647242,
+          6.9283734
+        ],
+        "type": "Point"
+      },
+      "id": "stop-01",
+      "properties": {
+        "candidate_id": "stop-01",
+        "category": "entrance=yes",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 5.0,
+        "evidence": [
+          "entrance=yes"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1490861793,
+          1493480947
+        ],
+        "name": null,
+        "nearest_way_id": 1490861793,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13685180779,
+        "network_endpoint_wgs84": [
+          79.8647242,
+          6.9283734
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13685180779,
+        "osm_type": "node",
+        "rationale": "Mapped entrance=yes source linked to reachable OSM network node 13685180779 (5.0 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8647665,
+          6.9283885
+        ],
+        "source_name": null,
+        "source_osm_id": 13685180778,
+        "source_osm_type": "node",
+        "source_tags": {
+          "entrance": "yes"
+        },
+        "source_to_road_segment_distance_m": 5.0,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.857876,
+          6.9272653
+        ],
+        "type": "Point"
+      },
+      "id": "stop-02",
+      "properties": {
+        "candidate_id": "stop-02",
+        "category": "entrance=yes",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 13.6,
+        "evidence": [
+          "entrance=yes"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1492548090,
+          1492866613
+        ],
+        "name": null,
+        "nearest_way_id": 1492548090,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13680101730,
+        "network_endpoint_wgs84": [
+          79.857876,
+          6.9272653
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13680101730,
+        "osm_type": "node",
+        "rationale": "Mapped entrance=yes source linked to reachable OSM network node 13680101730 (13.6 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8579838,
+          6.9272057
+        ],
+        "source_name": null,
+        "source_osm_id": 13680101733,
+        "source_osm_type": "node",
+        "source_tags": {
+          "entrance": "yes"
+        },
+        "source_to_road_segment_distance_m": 13.6,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8540795,
+          6.9336186
+        ],
+        "type": "Point"
+      },
+      "id": "stop-03",
+      "properties": {
+        "candidate_id": "stop-03",
+        "category": "entrance=yes",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 53.1,
+        "evidence": [
+          "entrance=yes"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          10548292,
+          200567916
+        ],
+        "name": null,
+        "nearest_way_id": 10548292,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 5385270037,
+        "network_endpoint_wgs84": [
+          79.8540795,
+          6.9336186
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 5385270037,
+        "osm_type": "node",
+        "rationale": "Mapped entrance=yes source linked to reachable OSM network node 5385270037 (53.1 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8542328,
+          6.933166
+        ],
+        "source_name": null,
+        "source_osm_id": 13453342481,
+        "source_osm_type": "node",
+        "source_tags": {
+          "entrance": "yes"
+        },
+        "source_to_road_segment_distance_m": 42.7,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8632938,
+          6.9210869
+        ],
+        "type": "Point"
+      },
+      "id": "stop-04",
+      "properties": {
+        "candidate_id": "stop-04",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 1.0,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          708607625
+        ],
+        "name": null,
+        "nearest_way_id": 708607625,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 6658661121,
+        "network_endpoint_wgs84": [
+          79.8632938,
+          6.9210869
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 6658661121,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 6658661121 (1.0 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8632875,
+          6.9210804
+        ],
+        "source_name": null,
+        "source_osm_id": 653113058,
+        "source_osm_type": "node",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 0.8,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8608813,
+          6.9203282
+        ],
+        "type": "Point"
+      },
+      "id": "stop-05",
+      "properties": {
+        "candidate_id": "stop-05",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 1.6,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1105152534,
+          1105152535
+        ],
+        "name": null,
+        "nearest_way_id": 1105152535,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 10113476477,
+        "network_endpoint_wgs84": [
+          79.8608813,
+          6.9203282
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 10113476477,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 10113476477 (1.6 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8608953,
+          6.9203235
+        ],
+        "source_name": null,
+        "source_osm_id": 581526682,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 0.2,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.857118,
+          6.9205104
+        ],
+        "type": "Point"
+      },
+      "id": "stop-06",
+      "properties": {
+        "candidate_id": "stop-06",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 3.5,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1494849373
+        ],
+        "name": null,
+        "nearest_way_id": 1494849373,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13697058058,
+        "network_endpoint_wgs84": [
+          79.857118,
+          6.9205104
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13697058058,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 13697058058 (3.5 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8571245,
+          6.9204797
+        ],
+        "source_name": null,
+        "source_osm_id": 625781654,
+        "source_osm_type": "node",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 3.2,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8636049,
+          6.9314752
+        ],
+        "type": "Point"
+      },
+      "id": "stop-07",
+      "properties": {
+        "candidate_id": "stop-07",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 3.8,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          533955501
+        ],
+        "name": null,
+        "nearest_way_id": 533955501,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13677261222,
+        "network_endpoint_wgs84": [
+          79.8636049,
+          6.9314752
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13677261222,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 13677261222 (3.8 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8636339,
+          6.9314928
+        ],
+        "source_name": null,
+        "source_osm_id": 533955500,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 3.8,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8530056,
+          6.9206369
+        ],
+        "type": "Point"
+      },
+      "id": "stop-08",
+      "properties": {
+        "candidate_id": "stop-08",
+        "category": "amenity=fuel",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 4.2,
+        "evidence": [
+          "amenity=fuel",
+          "name=Lanka IOC"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1374127692,
+          1374127693
+        ],
+        "name": "Lanka IOC",
+        "nearest_way_id": 1374127692,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 12723030073,
+        "network_endpoint_wgs84": [
+          79.8530056,
+          6.9206369
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 12723030073,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=fuel source linked to reachable OSM network node 12723030073 (4.2 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8530433,
+          6.9206368
+        ],
+        "source_name": "Lanka IOC",
+        "source_osm_id": 6324930578,
+        "source_osm_type": "node",
+        "source_tags": {
+          "amenity": "fuel",
+          "brand": "Lanka IOC",
+          "brand:wikidata": "Q30595420",
+          "name": "Lanka IOC"
+        },
+        "source_to_road_segment_distance_m": 3.9,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8518877,
+          6.9224089
+        ],
+        "type": "Point"
+      },
+      "id": "stop-09",
+      "properties": {
+        "candidate_id": "stop-09",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 4.5,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1443715161
+        ],
+        "name": null,
+        "nearest_way_id": 1443715161,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13247916395,
+        "network_endpoint_wgs84": [
+          79.8518877,
+          6.9224089
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13247916395,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 13247916395 (4.5 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.85189,
+          6.9224492
+        ],
+        "source_name": null,
+        "source_osm_id": 514653088,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 0.9,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8637816,
+          6.9299683
+        ],
+        "type": "Point"
+      },
+      "id": "stop-10",
+      "properties": {
+        "candidate_id": "stop-10",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 6.9,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          533955506
+        ],
+        "name": null,
+        "nearest_way_id": 533955506,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 5179504940,
+        "network_endpoint_wgs84": [
+          79.8637816,
+          6.9299683
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 5179504940,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 5179504940 (6.9 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8638046,
+          6.9300262
+        ],
+        "source_name": null,
+        "source_osm_id": 533955507,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 6.9,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8615847,
+          6.9223726
+        ],
+        "type": "Point"
+      },
+      "id": "stop-11",
+      "properties": {
+        "candidate_id": "stop-11",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 8.4,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1105152538,
+          1105152541
+        ],
+        "name": null,
+        "nearest_way_id": 1105152541,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 10113476504,
+        "network_endpoint_wgs84": [
+          79.8615847,
+          6.9223726
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 10113476504,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 10113476504 (8.4 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8615328,
+          6.9223174
+        ],
+        "source_name": null,
+        "source_osm_id": 544326129,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking",
+          "fee": "yes",
+          "parking": "surface"
+        },
+        "source_to_road_segment_distance_m": 6.8,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8583163,
+          6.9182026
+        ],
+        "type": "Point"
+      },
+      "id": "stop-12",
+      "properties": {
+        "candidate_id": "stop-12",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 9.1,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          1489801410,
+          1494894379
+        ],
+        "name": null,
+        "nearest_way_id": 1489801410,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13655164577,
+        "network_endpoint_wgs84": [
+          79.8583163,
+          6.9182026
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13655164577,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 13655164577 (9.1 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8582882,
+          6.9181256
+        ],
+        "source_name": null,
+        "source_osm_id": 1489801409,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking",
+          "parking": "surface"
+        },
+        "source_to_road_segment_distance_m": 4.2,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8655669,
+          6.9231332
+        ],
+        "type": "Point"
+      },
+      "id": "stop-13",
+      "properties": {
+        "candidate_id": "stop-13",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 9.3,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          311102112
+        ],
+        "name": null,
+        "nearest_way_id": 311102112,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 3166483452,
+        "network_endpoint_wgs84": [
+          79.8655669,
+          6.9231332
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 3166483452,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 3166483452 (9.3 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8656445,
+          6.9231015
+        ],
+        "source_name": null,
+        "source_osm_id": 1030128487,
+        "source_osm_type": "way",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 7.2,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8538838,
+          6.920008
+        ],
+        "type": "Point"
+      },
+      "id": "stop-14",
+      "properties": {
+        "candidate_id": "stop-14",
+        "category": "amenity=parking",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 12.1,
+        "evidence": [
+          "amenity=parking"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          329394206
+        ],
+        "name": null,
+        "nearest_way_id": 329394206,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 2112070546,
+        "network_endpoint_wgs84": [
+          79.8538838,
+          6.920008
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 2112070546,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=parking source linked to reachable OSM network node 2112070546 (12.1 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8538363,
+          6.9201059
+        ],
+        "source_name": null,
+        "source_osm_id": 654743924,
+        "source_osm_type": "node",
+        "source_tags": {
+          "amenity": "parking"
+        },
+        "source_to_road_segment_distance_m": 10.6,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {}
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          79.8511525,
+          6.9324289
+        ],
+        "type": "Point"
+      },
+      "id": "stop-15",
+      "properties": {
+        "candidate_id": "stop-15",
+        "category": "amenity=post_office",
+        "caveats": "Map-based screening only; stopping legality, curb access, operating hours, and physical safety were not field-verified.",
+        "coordinate_basis": "Feature geometry is an existing OSM highway node; source_coordinate_wgs84 is the mapped source node or mean coordinate of its way nodes.",
+        "distance_to_network_m": 17.0,
+        "evidence": [
+          "amenity=post_office",
+          "name=EMS Speed Post"
+        ],
+        "in_core": true,
+        "linked_way_ids": [
+          396031863,
+          1493259575
+        ],
+        "name": "EMS Speed Post",
+        "nearest_way_id": 396031863,
+        "network_access_bicycle_class": "unresolved",
+        "network_access_bicycle_source_tag": null,
+        "network_endpoint_osm_node_id": 13683468467,
+        "network_endpoint_wgs84": [
+          79.8511525,
+          6.9324289
+        ],
+        "network_node_access_bicycle_class": "unresolved",
+        "network_node_access_bicycle_source_tag": null,
+        "osm_id": 13683468467,
+        "osm_type": "node",
+        "rationale": "Mapped amenity=post_office source linked to reachable OSM network node 13683468467 (17.0 m straight-line endpoint link).",
+        "source_access_bicycle_class": "unresolved",
+        "source_access_bicycle_source_tag": null,
+        "source_coordinate_wgs84": [
+          79.8512184,
+          6.9325666
+        ],
+        "source_name": "EMS Speed Post",
+        "source_osm_id": 2328940514,
+        "source_osm_type": "node",
+        "source_tags": {
+          "amenity": "post_office",
+          "name": "EMS Speed Post",
+          "name:zh": "EMS 速运"
+        },
+        "source_to_road_segment_distance_m": 16.3,
+        "structurally_can_return_to_anchor": true,
+        "structurally_reachable_from_anchor": true,
+        "tags": {
+          "crossing": "marked",
+          "crossing:markings": "zebra",
+          "highway": "crossing"
+        }
+      },
+      "type": "Feature"
+    }
+  ],
+  "metadata": {
+    "acquisition_bbox_wgs84": [
+      79.8447259,
+      6.9135367,
+      79.8719039,
+      6.9405163
+    ],
+    "center_wgs84": [
+      79.8583149,
+      6.9270265
+    ],
+    "context_radius_m": 1500,
+    "core_radius_m": 1000,
+    "generated_from_osm_base_timestamp": "2026-09-10T23:11:10Z",
+    "maximum_network_endpoint_link_distance_m": 100,
+    "minimum_preferred_source_spacing_m": 100,
+    "projection": {
+      "axis_convention": {
+        "x": "east",
+        "y": "north"
+      },
+      "earth_radius_m": 6371008.8,
+      "name": "local spherical azimuthal equidistant",
+      "origin_wgs84": [
+        79.8583149,
+        6.9270265
+      ],
+      "precision_note": "Spherical local analysis, not WGS84 ellipsoidal survey precision.",
+      "units": "metres"
+    },
+    "routing_buffer_m": 500,
+    "schema_version": 1,
+    "screening_status": "Desktop OSM evidence with graph-endpoint and structural out-and-back screening; no field, safety, curb, permission, or legal validation.",
+    "selection_limit": 15,
+    "source_manifest": "data/osm/manifest.json",
+    "source_snapshot_sha256": "35ae3d3b68c95215ad1caf928ee8f9278a6b564ac4e8d7a1c539c681256f5a96"
+  },
+  "type": "FeatureCollection"
+}

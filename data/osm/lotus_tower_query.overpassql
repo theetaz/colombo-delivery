@@ -1,0 +1,43 @@
+[out:json][timeout:180][bbox:6.9135367,79.8447259,6.9405163,79.8719039];
+way["highway"]->.roads;
+node(w.roads)->.road_nodes;
+rel(bw.roads)["type"="restriction"]->.restrictions_by_way;
+rel(bn.road_nodes)["type"="restriction"]->.restrictions_by_node;
+rel["type"="restriction"]->.restrictions_in_bbox;
+(
+  .restrictions_by_way;
+  .restrictions_by_node;
+  .restrictions_in_bbox;
+)->.restrictions;
+(
+  node["highway"~"^(crossing|traffic_signals|mini_roundabout|stop|give_way)$"];
+  way["highway"~"^(crossing|pedestrian)$"];
+  node["barrier"];
+  way["barrier"];
+  node["entrance"];
+  way["entrance"];
+  node["amenity"~"^(parking|fuel|charging_station|restaurant|cafe|fast_food|pharmacy|hospital|clinic|marketplace|post_office)$"];
+  way["amenity"~"^(parking|fuel|charging_station|restaurant|cafe|fast_food|pharmacy|hospital|clinic|marketplace|post_office)$"];
+  node["shop"~"^(supermarket|convenience|department_store|mall|wholesale)$"];
+  way["shop"~"^(supermarket|convenience|department_store|mall|wholesale)$"];
+  node["tourism"~"^(attraction|hotel)$"];
+  way["tourism"~"^(attraction|hotel)$"];
+  node["public_transport"];
+  way["public_transport"];
+  node["highway"="bus_stop"];
+  node["railway"~"^(station|halt|tram_stop)$"];
+  way["railway"~"^(station|halt|tram_stop)$"];
+)->.mapped_features;
+way(728831229)->.anchor;
+(
+  .roads;
+  .road_nodes;
+  .restrictions;
+  .mapped_features;
+  .anchor;
+)->.selected;
+(
+  .selected;
+  .selected >>;
+);
+out body qt;

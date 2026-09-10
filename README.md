@@ -10,8 +10,11 @@ Repository: [theetaz/colombo-delivery](https://github.com/theetaz/colombo-delive
 
 ## Project status
 
-The local repository currently contains product and engineering documentation
-only. No game runtime, map data, assets, or build tooling has been added yet.
+Stage 1 now contains a reproducible OpenStreetMap snapshot, offline road-network
+audit, gap inventory, candidate delivery-point screen, and map previews for the
+Lotus Tower study area. The audit is a desk review: candidate entrances, bicycle
+access, stopping safety, junction details, and current street conditions still
+need manual validation. No game runtime has been implemented yet.
 
 Development happens in public. Follow the [roadmap](docs/ROADMAP.md) for planned
 stages, the [development log](docs/DEVELOPMENT_LOG.md) for verified changes, and
@@ -22,6 +25,14 @@ The first playable target is a small, recognizable area around Lotus Tower. It
 will include a controllable bicycle, 10–20 verified pickup and drop-off points,
 one complete timed-delivery loop, saved earnings, and an electric-bicycle
 upgrade. The map can then expand through connected areas of Colombo.
+
+## Stage 1 audit preview
+
+![Static overview of the Lotus Tower Stage 1 road-data audit](docs/maps/lotus-tower-road-audit.svg)
+
+*Static overview of the OSM road audit. Candidate markers are graph-screened
+test locations and remain unverified for real-world access, stopping, and
+safety.*
 
 ## Product principles
 
@@ -39,13 +50,50 @@ upgrade. The map can then expand through connected areas of Colombo.
 - [Roadmap](docs/ROADMAP.md) defines the staged delivery plan and acceptance
   criteria.
 - [Architecture](docs/ARCHITECTURE.md) records the proposed technical design
-  and open decisions.
+  and the implemented audit pipeline.
+- [Lotus Tower map-data audit](docs/MAP_DATA_AUDIT.md) records the study scope,
+  reproducible method, results, gaps, and manual verification gates.
+- [Data sources](docs/DATA_SOURCES.md) records OSM provenance, tag
+  interpretation, attribution, and data-licence handling.
+- [Interactive audit map](docs/maps/lotus-tower-road-audit.html) and
+  [static audit map](docs/maps/lotus-tower-road-audit.svg) provide offline
+  previews of the reviewed layers. They are inspection aids, not gameplay.
 - [Development log](docs/DEVELOPMENT_LOG.md) records completed, verifiable
   project changes.
 
+## Reproduce the map audit
+
+Python 3.12 is recommended and is the tested version. The scripts use only the
+Python standard library. These commands reproduce the audit and previews from
+the committed snapshot without network access:
+
+```sh
+python3 scripts/audit_road_network.py
+python3 scripts/build_map_preview.py
+python3 -m unittest discover -s tests -v
+```
+
+Only refresh the live OSM input when intentionally starting a new, separately
+reviewed snapshot:
+
+```sh
+python3 scripts/fetch_osm_data.py
+```
+
+GitHub displays the interactive HTML file as source. Serve the preview locally
+from the repository root:
+
+```sh
+python3 -m http.server 4173 --bind 127.0.0.1 --directory docs/maps
+```
+
+Then open
+[http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
+
 ## Next step
 
-Audit OpenStreetMap coverage for the selected Lotus Tower area. The audit must
-check road connectivity, access and one-way restrictions, crossings, traffic
-signals, roundabouts, bridges, and useful delivery entrances before map
-generation begins.
+Use the audited snapshot to prototype one provisional bicycle route and road
+section while validating the highest-priority road and delivery-entrance gaps.
+Keep every unresolved access, direction, barrier, and turn assumption explicit.
+Do not describe a candidate as real-world safe, legal, or reachable until the
+corresponding checks are complete.
