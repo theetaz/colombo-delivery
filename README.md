@@ -13,6 +13,11 @@ Repository: [theetaz/colombo-delivery](https://github.com/theetaz/colombo-delive
 The local repository currently contains product and engineering documentation
 only. No game runtime, map data, assets, or build tooling has been added yet.
 
+Development happens in public. Follow the [roadmap](docs/ROADMAP.md) for planned
+stages, the [development log](docs/DEVELOPMENT_LOG.md) for verified changes, and
+the [main branch commit history](https://github.com/theetaz/colombo-delivery/commits/main)
+for the project's implementation record.
+
 The first playable target is a small, recognizable area around Lotus Tower. It
 will include a controllable bicycle, 10–20 verified pickup and drop-off points,
 one complete timed-delivery loop, saved earnings, and an electric-bicycle

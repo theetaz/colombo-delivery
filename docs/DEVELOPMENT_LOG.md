@@ -18,3 +18,7 @@ roadmap.
   routing, streaming, and save-data architecture.
 - Added staged milestones with acceptance criteria.
 - Identified the OpenStreetMap coverage audit as the next implementation step.
+- Changed the GitHub repository visibility from private to public so development
+  can be followed openly.
+- Updated the README with links to the roadmap, development log, and `main`
+  branch commit history for following public progress.
