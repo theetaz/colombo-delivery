@@ -66,6 +66,37 @@ Validation measured 700 core `highway=*` ways, 23 mapped traffic-signal
 nodes, and 15 graph-screened candidate endpoints. All 12 tests passed, and
 offline regeneration produced outputs identical to the committed artifacts.
 
+## 2026-09-11 — First 3D road prototype
+
+Status: road-geometry prototype complete; Stage 2 bicycle work remains open.
+
+The first browser scene turns the saved audit geometry into a 900 × 900 m
+Three.js road slice centred on the Lotus Tower OSM anchor. It renders 109 source
+ways as 110 clipped pieces and lets a reviewer orbit, pan, zoom, select roads,
+inspect source and local metre coordinates, and see the width and provisional
+vertical-placement rule used by each surface.
+
+Delivered in commit
+[`e88fc37315fbb3d8726c2b7416e720afaf1704d0`](https://github.com/theetaz/colombo-delivery/commit/e88fc37315fbb3d8726c2b7416e720afaf1704d0):
+
+- [Frozen prototype report](https://github.com/theetaz/colombo-delivery/blob/e88fc37315fbb3d8726c2b7416e720afaf1704d0/docs/ROAD_PROTOTYPE.md)
+- [Browser and road-model source](https://github.com/theetaz/colombo-delivery/tree/e88fc37315fbb3d8726c2b7416e720afaf1704d0/src)
+- [Locked package and build commands](https://github.com/theetaz/colombo-delivery/blob/e88fc37315fbb3d8726c2b7416e720afaf1704d0/package.json)
+- [Production screenshot](https://github.com/theetaz/colombo-delivery/blob/e88fc37315fbb3d8726c2b7416e720afaf1704d0/docs/milestones/2026-09-11-road-prototype.jpg)
+
+![First 3D road prototype at the delivery commit](https://raw.githubusercontent.com/theetaz/colombo-delivery/e88fc37315fbb3d8726c2b7416e720afaf1704d0/docs/milestones/2026-09-11-road-prototype.jpg)
+
+All nine TypeScript road-model tests and all 12 existing Python audit tests
+passed, along with strict TypeScript checking and the production build. Chromium
+QA at 1280 × 800 and 390 × 844 covered camera controls, direct and list-based
+selection, source inspection, layer controls, mobile scrolling, and overflow;
+the browser console remained free of warnings and errors.
+
+Widths derived from lane counts or road class and elevations derived from OSM
+layers remain explicit visual assumptions. Intersecting ribbons are not yet
+joined into drivable junction geometry, and the prototype has no bicycle,
+physics, collision surfaces, routing, traffic, or delivery loop.
+
 ## Current state
 
 The repository contains the product definition, Stage 1 audit pipeline, and a
