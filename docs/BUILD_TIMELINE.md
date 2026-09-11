@@ -99,13 +99,17 @@ physics, collision surfaces, routing, traffic, or delivery loop.
 
 ## Current state
 
-The repository contains the product definition, Stage 1 audit pipeline, and a
-first browser-rendered 3D road prototype. The scene clips a 900 × 900 m square
-around Lotus Tower from the saved audit artifact and exposes its source
-coordinates, local metre coordinates, width provenance, and provisional
-vertical placement. It does not yet include a bicycle, driving physics, or a
-delivery loop. See the [prototype report](ROAD_PROTOTYPE.md) for its exact
-scope, controls, validation, and limitations.
+The repository contains the product definition, Stage 1 audit pipeline, first
+browser-rendered 3D road prototype, and first controllable bicycle. The bicycle
+uses custom assisted kinematics in the same 900 × 900 m Lotus Tower slice, with
+pedal, coast, brake, steer, road and grass handling, a following camera, marked
+training obstacles, world-boundary collisions, reset, and the preserved source
+inspector. See the [bicycle prototype report](BICYCLE_PROTOTYPE.md) for its exact
+spawn, controls, tuning, validation, and limitations, and the
+[road prototype report](ROAD_PROTOTYPE.md) for the underlying geometry and
+source contract.
+
+![Current production view of the first controllable bicycle](milestones/2026-09-11-bicycle-prototype.jpg)
 
 The normal current static audit preview remains
 [the repository SVG](maps/lotus-tower-road-audit.svg); unlike the commit-pinned
@@ -123,19 +127,17 @@ Then open
 [http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
 That address works only while the local server is running.
 
-## Next bounded milestone — Controllable bicycle
+## Next bounded milestone — Ride-feel review and tuning
 
-Add the first controllable bicycle to the reviewed road scene. The slice is
-complete when someone can use a desktop browser to:
+Ride the bicycle on the current road slice and judge the relationship between
+city scale, speed, steering, braking, camera distance, grass slowdown, obstacle
+clearance, and recovery. The review should cover sustained keyboard control and
+physical multi-touch input as well as browser contact with both marked training
+obstacles and the world boundary.
 
-- steer, accelerate, coast, and brake with approachable bicycle handling;
-- use a following camera while retaining a clear view of the road;
-- collide with road boundaries or prototype obstacles and recover when stuck;
-- reset safely after leaving the usable scene; and
-- inspect speed and control state while testing the geometry.
-
-This next slice validates the control, camera, and collision foundation. It does
-not yet need traffic, routing, jobs, progression, or a final bicycle model.
+Use that feedback to tune the small assisted model before expanding the map or
+adding jobs. The review does not require Rapier, traffic, routing, route
+legality, progression, or ramps between elevated road segments.
 
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and

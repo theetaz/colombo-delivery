@@ -1,16 +1,18 @@
 # Architecture
 
-The offline Stage 1 map audit and first Three.js road scene are implemented.
-The broader game architecture remains a proposal until vehicle, physics,
-routing, interface, and streaming choices pass focused prototypes.
+The offline Stage 1 map audit, first Three.js road scene, and first controllable
+bicycle are implemented. The broader game architecture remains a proposal
+until vehicle, physics, routing, interface, and streaming choices pass focused
+prototypes and rider feedback.
 
 ## Initial technical direction
 
 - TypeScript for the game and future runtime map-import code.
 - Vite for the browser development and production build.
 - Three.js for rendering the 3D world.
-- Rapier for collisions and rigid-body physics, with custom approachable vehicle
-  controls.
+- Rapier remains a candidate for later rigid-body physics. The first bicycle
+  uses custom assisted kinematics and focused collision tests so its feel can
+  be reviewed before that dependency and architecture are confirmed.
 - React for menus, job selection, the heads-up display, garage, and settings.
 - Blender-authored assets exported as optimized GLB files.
 - Browser storage for prototype progress; a backend only when accounts, shared
@@ -97,6 +99,47 @@ and routing geometry.
 See the [prototype report](ROAD_PROTOTYPE.md) for the exact source, scope,
 assumption table, controls, validation results, and present limitations.
 
+## First controllable bicycle slice
+
+The first bicycle runs on the existing 900 × 900 m road slice. Pure TypeScript
+in `src/game/bicycle.ts` owns its deterministic fixed-step state, input,
+surface classification, collision tests, spawn, reset, and tuning. The scene
+layer owns the procedural bicycle and obstacle visuals, following camera, and
+the transition between Ride and Inspect map modes. The interface layer maps
+keyboard and on-screen controls to the shared input state and displays speed,
+surface, distance, local position, and contact feedback.
+
+The custom simulation advances at 120 Hz. Its controller accepts at most 0.25 s
+per call, while the browser scene applies a tighter 0.1 s frame-delta cap before
+the call. Pedalling, rolling resistance, speed-squared aerodynamic drag,
+braking, and an additional grass slowdown update forward speed. Assisted
+steering approaches a normalized input, returns towards centre after release,
+and feeds a wheelbase turn calculation only while the bicycle is moving. The
+current speed caps are 30 km/h on road and 12 km/h on grass. These constants are
+a reviewable baseline rather than a final vehicle model; the exact table is in
+the [bicycle prototype report](BICYCLE_PROTOTYPE.md).
+
+The spawn is derived from saved source way `13884292`, D. R. Wijewardene
+Mawatha. It retains source longitude and latitude alongside local metre
+coordinates and heading. Road membership is the union of the generated
+ground-level road triangles. Steps, bridges, tunnels, and nonzero display
+elevations are excluded, while every other position is treated as grass for the
+handling test. This is a visual and physical prototype rule, not a claim about
+real surface condition, bicycle permission, or route legality.
+
+The collision model is deliberately planar. A swept 0.55 m bicycle circle
+tests two marked 0.55 m training obstacles and the inset square world boundary.
+Contact stops forward movement and records feedback; reset restores the known
+road spawn and clears the ride state. Curbs, buildings, traffic, road edges,
+slopes, wheel slip, and rigid-body balance are not collision inputs yet.
+
+Ride mode uses a smoothed following camera and disables map picking and orbit
+controls. Inspect map pauses the bicycle, clears ride input, and restores the
+earlier orbit, pan, zoom, road selection, source inspector, and layer controls.
+Returning to Ride mode resumes from the bicycle's existing position. The
+bicycle, rider, wheels, and practice obstacles use Three.js primitives, so this
+milestone requires no Blender or external model asset.
+
 ## World coordinates and streaming
 
 Authoritative locations remain stored as latitude and longitude. At runtime,
@@ -138,10 +181,12 @@ It must not require routine speeding or red-light violations.
 
 ## Driving and traffic simulation
 
-The first bicycle should use assisted balance and forgiving steering while its
-visual model leans into turns. Later vehicles can share input, camera, collision,
-and recovery systems while defining their own acceleration, braking, handling,
-capacity, and energy characteristics.
+The first bicycle establishes assisted forward motion, forgiving steering,
+surface-dependent speed, a following camera, bounded collisions, and recovery.
+Its procedural front wheel steers and its wheels and crank rotate with travel;
+rigid-body lean and balance remain later experiments. Later vehicles can share
+input, camera, collision, and recovery responsibilities while defining their
+own acceleration, braking, handling, capacity, and energy characteristics.
 
 Traffic simulation should initially cover a small number of nearby vehicles.
 Signals use explicit game control phases tied to stop lines and approaches.
@@ -158,7 +203,8 @@ textures, and browser performance before copying or converting them.
 
 - Mobile support at launch; desktop browser is the current planning assumption.
 - Desktop performance budget and reference devices.
-- Physics and vehicle-control prototype results before confirming Rapier.
+- Rider feedback on the custom bicycle prototype before confirming handling
+  changes or Rapier integration.
 - Art direction, scenery fidelity, weather, and time-of-day scope.
 - Input support beyond keyboard and mouse, including gamepads and touch.
 - Save-data schema and the point at which a backend becomes necessary.

@@ -126,3 +126,67 @@ roadmap.
 - Recorded the prototype's reproducible commands, exact bounds, source contract,
   assumptions, controls, validation, and current limitations in the
   [first 3D road prototype report](ROAD_PROTOTYPE.md).
+- Added the first controllable bicycle to the existing 900 × 900 m road slice.
+  Ride mode supports pedal, coast, brake, steer, a smoothed following camera,
+  reset, keyboard input, and on-screen hold controls.
+- Implemented the bicycle as renderer-independent custom kinematics with a
+  fixed 1/120 s simulation step. The tuning baseline caps road speed at 30 km/h
+  and grass speed at 12 km/h and records explicit acceleration, deceleration,
+  steering, wheelbase, and turn-rate constants for rider review.
+- Derived the repeatable training spawn from D. R. Wijewardene Mawatha, source
+  way 13884292, 70 m along the source direction and 1.5 m to its left. Its
+  local position is `x = 275.37068363728685`, `y = 0`,
+  `z = −13.41014759519771`; its saved WGS84 position is longitude
+  79.86080957499048, latitude 6.927147093685909.
+- Classified road handling from the union of actual ground-level road mesh
+  triangles while excluding steps, bridges, tunnels, and nonzero elevations.
+  Entering grass immediately applies its lower speed cap and additional
+  deceleration without presenting the visual classification as surveyed
+  surface or access evidence.
+- Added swept collisions between the bicycle's 0.55 m planar circle, two
+  marked 0.55 m grass-side training obstacles, and the inset 900 m world
+  boundary. Contact stops forward travel and reset restores the saved spawn and
+  clears ride state.
+- Added a procedural bicycle, simple rider, rotating wheels and crank, steering
+  front assembly, contact shadow, and procedural training markers from Three.js
+  primitives. No external model or Blender step is required.
+- Preserved the road-inspection workflow as a separate Inspect map mode. It
+  pauses movement, clears ride input, and restores orbit, pan, zoom, road
+  selection, source details, camera actions, and layer controls before Ride mode
+  returns to the bicycle's current position.
+- Added ride feedback for speed, road or grass surface, distance travelled,
+  local east/south position, and obstacle or world-boundary contact. Browser
+  blur, hidden-tab state, and editable controls clear held input.
+- Added six bicycle-controller tests covering acceleration, coasting, braking,
+  grass behaviour, steering, fixed-step agreement at 60 and 144 frames per
+  second, swept collisions, reset, road-mesh membership, source exclusions,
+  exact spawn coordinates, finite frame-delta handling, and obstacle clearance.
+  All six focused tests pass alongside the nine road-builder tests and 12
+  Python audit tests. Strict TypeScript checking and the production build also
+  pass.
+- Recorded the current build-size limit: the 595.41 KB minified JavaScript
+  chunk is 153.82 KB gzip and triggers Vite's default chunk advisory. The CSS
+  is 11.42 KB minified and 3.38 KB gzip; the saved 2.88 MB GeoJSON remains a
+  separate asset.
+- Reviewed the production build in Chromium at 1280 × 800 and 390 × 844. The
+  desktop scene opened cleanly in the stopped Ride state, the mobile canvas
+  matched its viewport, all four hold controls stayed in bounds, and neither
+  layout had horizontal overflow. The browser console contained no warnings or
+  errors.
+- Verified pointer-held Pedal to 10.8 km/h and 3 m travelled, pointer-held Brake
+  back to 0.0 km/h, `R` reset, visible steering and road-to-grass transition,
+  `F` mode switching, frozen ride telemetry during inspection, restored follow
+  camera, and correct shortcut exclusion while the road selector had focus.
+- Rechecked the preserved source inspector with Trace Lane's mapped 10 m width
+  and the Kovil Street bridge's provisional 5 m elevation. The observed 56 FPS
+  is one result from this test environment rather than a general performance
+  claim.
+- Recorded the 1280 × 800 production Ride view at
+  `docs/milestones/2026-09-11-bicycle-prototype.jpg` and verified it as a native
+  JPEG. Sustained hardware-keyboard riding, physical multi-touch, and browser
+  contact with a marked obstacle remain hands-on checks beyond the automated
+  controller coverage.
+- Recorded the exact controls, spawn and obstacle coordinates, tuning constants,
+  camera, surface rules, collision model, procedural visual scope, validation,
+  and current limitations in the
+  [first controllable bicycle prototype report](BICYCLE_PROTOTYPE.md).

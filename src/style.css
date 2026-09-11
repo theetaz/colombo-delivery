@@ -44,10 +44,18 @@ a {
 
 .app-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 344px;
+  grid-template-columns: minmax(0, 1fr);
   width: 100%;
   height: 100dvh;
   background: #d8dfd1;
+}
+
+.app-shell[data-mode="inspect"] {
+  grid-template-columns: minmax(0, 1fr) 344px;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 .map-panel {
@@ -67,6 +75,10 @@ a {
 .scene-host canvas {
   touch-action: none;
   outline: none;
+}
+
+.app-shell[data-mode="ride"] .scene-host canvas {
+  cursor: default;
 }
 
 .masthead {
@@ -118,6 +130,84 @@ a {
   gap: 7px;
 }
 
+.ride-toolbar {
+  position: absolute;
+  z-index: 5;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mode-switch {
+  display: flex;
+  padding: 3px;
+  border: 1px solid rgba(21, 54, 47, 0.17);
+  border-radius: 10px;
+  background: rgba(245, 243, 235, 0.88);
+  box-shadow: 0 5px 20px rgba(34, 53, 47, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.mode-button,
+.reset-bike-button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 7px;
+  color: #29433c;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+}
+
+.mode-button {
+  padding: 0 12px;
+}
+
+.mode-button.is-active {
+  color: #fffaf0;
+  background: #1f6963;
+  box-shadow: 0 3px 8px rgba(20, 70, 64, 0.22);
+}
+
+.reset-bike-button {
+  position: relative;
+  padding: 0 13px;
+  border: 1px solid rgba(21, 54, 47, 0.17);
+  background: rgba(245, 243, 235, 0.88);
+  box-shadow: 0 5px 20px rgba(34, 53, 47, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.mode-button:hover,
+.reset-bike-button:hover {
+  color: #16342e;
+  background-color: #fffaf0;
+}
+
+.mode-button.is-active:hover {
+  color: #fffaf0;
+  background: #195b56;
+}
+
+.mode-button:focus-visible,
+.reset-bike-button:focus-visible,
+.hold-control:focus-visible {
+  outline: 3px solid rgba(215, 101, 49, 0.52);
+  outline-offset: 3px;
+}
+
+.app-shell[data-mode="inspect"] .ride-toolbar {
+  right: 24px;
+}
+
+.app-shell[data-mode="inspect"] .camera-toolbar {
+  top: 73px;
+}
+
 .camera-button {
   display: grid;
   width: 38px;
@@ -159,6 +249,121 @@ a {
   pointer-events: none;
 }
 
+.ride-hud {
+  position: absolute;
+  z-index: 3;
+  bottom: 54px;
+  left: 28px;
+  display: flex;
+  min-height: 72px;
+  overflow: hidden;
+  border: 1px solid rgba(21, 54, 47, 0.16);
+  border-radius: 12px;
+  color: #18342d;
+  background: rgba(245, 243, 235, 0.88);
+  box-shadow: 0 8px 28px rgba(24, 48, 42, 0.12);
+  backdrop-filter: blur(11px);
+}
+
+.speed-readout {
+  display: flex;
+  min-width: 118px;
+  padding: 13px 17px;
+  align-items: baseline;
+  border-right: 1px solid rgba(21, 54, 47, 0.13);
+}
+
+.speed-value {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+}
+
+.speed-unit {
+  margin-left: 6px;
+  color: #6f7a75;
+  font-size: 0.61rem;
+  font-weight: 720;
+  text-transform: uppercase;
+}
+
+.ride-metric {
+  display: flex;
+  min-width: 94px;
+  padding: 13px 14px;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(21, 54, 47, 0.1);
+}
+
+.ride-metric:last-child {
+  min-width: 145px;
+  border-right: 0;
+}
+
+.metric-label {
+  color: #78837e;
+  font-size: 0.58rem;
+  font-weight: 760;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  margin-top: 7px;
+  color: #233d36;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.surface-road::before,
+.surface-grass::before {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #1f6963;
+  content: "";
+}
+
+.surface-grass::before {
+  background: #d76531;
+}
+
+.ride-feedback {
+  position: absolute;
+  z-index: 4;
+  top: 79px;
+  left: 50%;
+  max-width: min(460px, calc(100% - 48px));
+  margin: 0;
+  padding: 7px 11px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(21, 54, 47, 0.13);
+  border-radius: 8px;
+  color: #36504a;
+  background: rgba(245, 243, 235, 0.8);
+  font-size: 0.67rem;
+  text-align: center;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+
+.ride-feedback[data-tone="warning"] {
+  border-color: rgba(215, 101, 49, 0.42);
+  color: #733814;
+  background: rgba(255, 241, 220, 0.92);
+}
+
+.ride-controls {
+  display: none;
+}
+
 .attribution {
   position: absolute;
   z-index: 3;
@@ -172,8 +377,9 @@ a {
 .runtime-status {
   position: absolute;
   z-index: 2;
-  top: 83px;
-  right: 24px;
+  top: 112px;
+  left: 28px;
+  right: auto;
   display: flex;
   gap: 7px;
   color: #26443d;
@@ -431,6 +637,11 @@ a {
 @media (max-width: 720px) {
   .app-shell {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .app-shell[data-mode="inspect"] {
+    grid-template-columns: 1fr;
     grid-template-rows: minmax(360px, 54dvh) minmax(0, 46dvh);
   }
 
@@ -455,12 +666,11 @@ a {
   }
 
   .subtitle {
-    margin-top: 5px;
-    font-size: 0.7rem;
+    display: none;
   }
 
   .camera-toolbar {
-    top: 18px;
+    top: 108px;
     right: 14px;
     gap: 5px;
   }
@@ -472,27 +682,149 @@ a {
   }
 
   .runtime-status {
-    top: auto;
-    right: 13px;
-    bottom: 42px;
+    top: 158px;
+    left: 18px;
+    right: auto;
+    bottom: auto;
   }
 
   .scene-hint {
-    left: 16px;
-    bottom: 15px;
+    display: none;
     max-width: calc(100% - 32px);
     font-size: 0.62rem;
   }
 
   .attribution {
     right: 14px;
-    bottom: 16px;
+    bottom: 10px;
     font-size: 0.58rem;
+  }
+
+  .ride-toolbar {
+    top: 62px;
+    right: 14px;
+  }
+
+  .app-shell[data-mode="inspect"] .ride-toolbar {
+    right: 14px;
+  }
+
+  .app-shell[data-mode="inspect"] .camera-toolbar {
+    top: 108px;
+  }
+
+  .app-shell[data-mode="ride"] .runtime-status {
+    display: none;
+  }
+
+  .reset-bike-button {
+    width: 38px;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0;
+  }
+
+  .reset-bike-button::after {
+    display: grid;
+    width: 38px;
+    height: 34px;
+    place-items: center;
+    color: #29433c;
+    content: "↺";
+    font-size: 1rem;
+  }
+
+  .ride-hud {
+    top: 112px;
+    right: 13px;
+    bottom: auto;
+    left: 13px;
+    min-height: 56px;
+  }
+
+  .speed-readout {
+    min-width: 96px;
+    padding: 9px 11px;
+  }
+
+  .speed-value {
+    font-size: 1.7rem;
+  }
+
+  .ride-metric {
+    min-width: 0;
+    padding: 9px 11px;
+    flex: 1;
+  }
+
+  .ride-metric:last-child {
+    display: none;
+  }
+
+  .ride-feedback {
+    top: 176px;
+    font-size: 0.62rem;
+  }
+
+  .ride-controls {
+    position: absolute;
+    z-index: 6;
+    right: 12px;
+    bottom: 35px;
+    left: 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .hold-control {
+    display: flex;
+    min-width: 0;
+    height: 64px;
+    padding: 5px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(20, 54, 47, 0.24);
+    border-radius: 13px;
+    color: #183a33;
+    background: rgba(248, 245, 235, 0.88);
+    box-shadow: 0 7px 20px rgba(20, 43, 37, 0.13);
+    touch-action: none;
+    user-select: none;
+    pointer-events: auto;
+    backdrop-filter: blur(9px);
+  }
+
+  .hold-control.is-held {
+    color: #fffaf0;
+    border-color: #1f6963;
+    background: #1f6963;
+    transform: translateY(1px);
+  }
+
+  .hold-brake.is-held {
+    border-color: #b84f26;
+    background: #c6582d;
+  }
+
+  .hold-glyph {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+
+  .hold-label {
+    margin-top: 5px;
+    font-size: 0.57rem;
+    font-weight: 760;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 }
 
 @media (max-width: 450px) {
-  .app-shell {
+  .app-shell[data-mode="inspect"] {
     grid-template-rows: minmax(330px, 52dvh) minmax(0, 48dvh);
   }
 
@@ -501,17 +833,24 @@ a {
   }
 
   .camera-toolbar {
-    top: 68px;
-    left: 16px;
-    right: auto;
+    top: 108px;
+    left: auto;
+    right: 12px;
   }
 
-  .runtime-status {
+  .ride-toolbar {
     right: 10px;
-    bottom: 34px;
   }
 
-  .scene-hint {
+  .mode-button {
+    padding: 0 9px;
+  }
+
+  .ride-hud {
+    top: 112px;
+  }
+
+  .ride-metric:nth-child(3) {
     display: none;
   }
 }

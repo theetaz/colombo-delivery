@@ -46,12 +46,14 @@ Acceptance criteria:
 
 ## Stage 2 — Drivable small area
 
-Status: in progress. The first browser road scene renders a 900 × 900 m slice
-from the audited snapshot with inspectable source and local coordinates, width
-rules, and provisional vertical separation. The first controllable bicycle is
-the next bounded slice. Open Stage 1 field checks do not block this technical
-prototype, but they remain required before destinations or routes are presented
-as validated.
+Status: in progress. The first browser road scene and first controllable bicycle
+now run in a 900 × 900 m slice from the audited snapshot. The bicycle adds
+assisted pedal, coast, brake, and steer behaviour, a following camera, surface
+feedback, marked training obstacles, world-boundary collisions, reset, and a
+preserved map inspector. The next bounded checkpoint is hands-on review and
+tuning of road scale and ride feel. Open Stage 1 field checks do not block this
+technical prototype, but they remain required before destinations or routes are
+presented as validated.
 
 Generate a browser scene from the audited data and add the first bicycle. Use a
 metre-based local coordinate system derived from stored latitude and longitude.
@@ -63,10 +65,18 @@ Engineering checkpoints:
 - [x] Preserve source identifiers and coordinates and expose the local metre
   conversion, width provenance, and vertical-placement rationale.
 - [x] Document and test clipping, coordinate, width, and elevation assumptions.
-- [ ] Add a controllable bicycle with steering, acceleration, braking,
+- [x] Add a controllable bicycle with steering, acceleration, braking,
   camera-follow behaviour, collisions, and recovery.
+- [ ] Review road scale, acceleration, braking, steering, camera distance,
+  grass slowdown, collision recovery, and mobile controls with hands-on rider
+  feedback; tune the bounded prototype where needed.
 - [ ] Extend the reviewed slice into the complete Stage 2 area and meet all
   acceptance criteria below.
+
+The bounded bicycle checkpoint uses custom assisted kinematics and a procedural
+model. It intentionally omits Rapier, route legality, traffic, delivery jobs,
+progression, and ramps between elevated road segments. Those systems should not
+hide unresolved scale or handling feedback from this first rideable slice.
 
 Acceptance criteria:
 

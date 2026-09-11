@@ -2,7 +2,8 @@ import "./style.css";
 
 import roadNetworkUrl from "../data/derived/road_network.geojson?url";
 import sourceManifestRaw from "../data/osm/manifest.json?raw";
-import { RoadScene } from "./scene/RoadScene";
+import type { BicycleInput, BicycleState } from "./game/bicycle";
+import { RoadScene, type SceneMode } from "./scene/RoadScene";
 import { buildRoadSlice } from "./world/road-slice";
 import type { GeoJsonFeatureCollection, Road, RoadSlice } from "./world/types";
 
@@ -21,6 +22,7 @@ const app = document.querySelector<HTMLElement>("#app");
 if (!app) throw new Error("The application mount point is missing.");
 
 let activeScene: RoadScene | null = null;
+let activeCleanup: (() => void) | null = null;
 void boot(app);
 
 async function boot(host: HTMLElement): Promise<void> {
@@ -37,7 +39,10 @@ async function boot(host: HTMLElement): Promise<void> {
 }
 
 if (import.meta.hot) {
-  import.meta.hot.dispose(() => activeScene?.dispose());
+  import.meta.hot.dispose(() => {
+    activeCleanup?.();
+    activeScene?.dispose();
+  });
 }
 
 function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: SourceManifest): RoadScene {
@@ -49,10 +54,21 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   const sceneHost = element("div", "scene-host");
 
   const masthead = element("header", "masthead");
-  const eyebrow = element("p", "eyebrow", "Road geometry study · ±450 m");
+  const eyebrow = element("p", "eyebrow", "900 m road feel study");
   const title = element("h1", "title", "Colombo Delivery");
-  const subtitle = element("p", "subtitle", "Lotus Tower · road prototype");
+  const subtitle = element("p", "subtitle", "Lotus Tower · bicycle prototype");
   masthead.append(eyebrow, title, subtitle);
+
+  const rideToolbar = element("div", "ride-toolbar");
+  rideToolbar.setAttribute("aria-label", "Experience mode");
+  const modeSwitch = element("div", "mode-switch");
+  const rideModeButton = textButton("Ride", "mode-button is-active", "ride-mode");
+  const inspectModeButton = textButton("Inspect map", "mode-button", "inspect-mode");
+  rideModeButton.setAttribute("aria-pressed", "true");
+  inspectModeButton.setAttribute("aria-pressed", "false");
+  modeSwitch.append(rideModeButton, inspectModeButton);
+  const resetBikeButton = textButton("Reset bicycle", "reset-bike-button", "reset-bike");
+  rideToolbar.append(modeSwitch, resetBikeButton);
 
   const toolbar = element("div", "camera-toolbar");
   toolbar.setAttribute("aria-label", "Camera controls");
@@ -63,7 +79,7 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     iconButton("Zoom out", "−", "zoom-out"),
   );
 
-  const sceneHint = element("p", "scene-hint", "Drag to orbit · right-drag to pan · scroll to zoom · click a road to inspect");
+  const sceneHint = element("p", "scene-hint", "W / ↑ pedal · A D steer · S / ↓ / Space brake · F inspect · R reset");
   const attribution = element("a", "attribution", "© OpenStreetMap contributors");
   attribution.href = manifest.source.copyright_url;
   attribution.target = "_blank";
@@ -76,16 +92,48 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   const fpsText = element("span", "status-fps", "Measuring FPS…");
   runtimeStatus.append(countText, fpsText);
 
+  const rideHud = element("section", "ride-hud");
+  rideHud.setAttribute("aria-label", "Bicycle status");
+  const speedValue = element("strong", "speed-value", "0.0");
+  const speedUnit = element("span", "speed-unit", "km/h");
+  const speedReadout = element("div", "speed-readout");
+  speedReadout.append(speedValue, speedUnit);
+  const surfaceValue = element("strong", "metric-value surface-road", "Road");
+  const distanceValue = element("strong", "metric-value", "0 m");
+  const coordinateValue = element("strong", "metric-value coordinate-value", "E +0.0 · S +0.0");
+  rideHud.append(
+    speedReadout,
+    metric("Surface", surfaceValue),
+    metric("Travelled", distanceValue),
+    metric("Position", coordinateValue),
+  );
+
+  const rideFeedback = element("p", "ride-feedback", "Pedal onto the road and judge the city at bicycle scale.");
+  rideFeedback.setAttribute("aria-live", "polite");
+  rideFeedback.setAttribute("aria-atomic", "true");
+
+  const rideControls = element("div", "ride-controls");
+  rideControls.setAttribute("aria-label", "Bicycle controls");
+  rideControls.append(
+    holdButton("left", "Steer left", "←", "Steer"),
+    holdButton("pedal", "Pedal", "↑", "Pedal"),
+    holdButton("brake", "Brake", "■", "Brake"),
+    holdButton("right", "Steer right", "→", "Steer"),
+  );
+
   const inspector = element("aside", "inspector");
   inspector.setAttribute("aria-label", "Road inspector");
   inspector.append(buildInspectorHeader(), buildRoadPicker(roadSlice.roads), buildLayerControls(), buildDetailsEmpty(), buildSourceNote(manifest, roadSlice));
 
-  mapPanel.append(sceneHost, masthead, toolbar, sceneHint, attribution, runtimeStatus);
+  mapPanel.append(sceneHost, masthead, rideToolbar, toolbar, rideHud, rideFeedback, rideControls, sceneHint, attribution, runtimeStatus);
   host.append(mapPanel, inspector);
 
   const roadSelect = required<HTMLSelectElement>("#road-select");
   const details = required<HTMLElement>("#road-details");
   const pathsInput = required<HTMLInputElement>("#layer-paths");
+  let currentMode: SceneMode = "ride";
+  let previousState: BicycleState | null = null;
+  let feedbackTimer = 0;
   const scene = new RoadScene(sceneHost, roadSlice, {
     onRoadSelected: (roadId) => {
       roadSelect.value = roadId ?? "";
@@ -94,6 +142,99 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     onFpsSample: (fps) => {
       fpsText.textContent = `${fps} FPS`;
     },
+    onBicycleState: (state) => {
+      speedValue.textContent = (Math.abs(state.speed) * 3.6).toFixed(1);
+      surfaceValue.textContent = state.surface === "road" ? "Road" : "Grass";
+      surfaceValue.className = `metric-value surface-${state.surface}`;
+      distanceValue.textContent = formatDistance(state.distanceTravelled);
+      coordinateValue.textContent = `E ${formatSigned(state.x)} · S ${formatSigned(state.z)}`;
+      if (previousState) {
+        if (state.boundaryCollisions > previousState.boundaryCollisions) {
+          showFeedback("Study boundary reached — turn back or press R / Reset bicycle.", "warning");
+        } else if (state.obstacleCollisions > previousState.obstacleCollisions) {
+          showFeedback("Training marker hit — approach around it or press R / Reset bicycle.", "warning");
+        } else if (state.surface !== previousState.surface) {
+          showFeedback(state.surface === "grass" ? "Grass slows the bicycle." : "Back on a mapped road surface.", state.surface);
+        }
+      }
+      previousState = state;
+    },
+  });
+
+  function showFeedback(message: string, tone = "neutral"): void {
+    window.clearTimeout(feedbackTimer);
+    rideFeedback.textContent = message;
+    rideFeedback.dataset.tone = tone;
+    feedbackTimer = window.setTimeout(() => {
+      rideFeedback.textContent = currentMode === "ride"
+        ? "Pedal onto the road and judge the city at bicycle scale."
+        : "Map inspection pauses the bicycle.";
+      delete rideFeedback.dataset.tone;
+    }, 2600);
+  }
+
+  const inputNames: Array<keyof BicycleInput> = ["pedal", "brake", "left", "right"];
+  const keyboardInput = new Set<string>();
+  const buttonKeyboardInput = new Set<keyof BicycleInput>();
+  const pointerInput = new Map<number, keyof BicycleInput>();
+  const codeToInput = (code: string): keyof BicycleInput | null => {
+    if (code === "KeyW" || code === "ArrowUp") return "pedal";
+    if (code === "KeyA" || code === "ArrowLeft") return "left";
+    if (code === "KeyD" || code === "ArrowRight") return "right";
+    if (code === "KeyS" || code === "ArrowDown" || code === "Space") return "brake";
+    return null;
+  };
+
+  const applyInput = (): void => {
+    const input: BicycleInput = { pedal: false, brake: false, left: false, right: false };
+    for (const name of inputNames) {
+      input[name] = [...keyboardInput].some((code) => codeToInput(code) === name)
+        || buttonKeyboardInput.has(name)
+        || [...pointerInput.values()].includes(name);
+    }
+    scene.setRideInput(input);
+    for (const button of rideControls.querySelectorAll<HTMLButtonElement>("[data-input]")) {
+      button.classList.toggle("is-held", input[button.dataset.input as keyof BicycleInput]);
+    }
+  };
+
+  const clearInput = (): void => {
+    keyboardInput.clear();
+    buttonKeyboardInput.clear();
+    pointerInput.clear();
+    scene.clearRideInput();
+    for (const button of rideControls.querySelectorAll<HTMLButtonElement>("[data-input]")) button.classList.remove("is-held");
+  };
+
+  const setMode = (mode: SceneMode): void => {
+    if (mode === currentMode) return;
+    currentMode = mode;
+    clearInput();
+    scene.setMode(mode);
+    scene.setPaused(mode === "inspect" || document.hidden || !document.hasFocus());
+    host.dataset.mode = mode;
+    inspector.hidden = mode === "ride";
+    toolbar.hidden = mode === "ride";
+    rideHud.hidden = mode === "inspect";
+    rideControls.hidden = mode === "inspect";
+    rideModeButton.classList.toggle("is-active", mode === "ride");
+    inspectModeButton.classList.toggle("is-active", mode === "inspect");
+    rideModeButton.setAttribute("aria-pressed", String(mode === "ride"));
+    inspectModeButton.setAttribute("aria-pressed", String(mode === "inspect"));
+    sceneHint.textContent = mode === "ride"
+      ? "W / ↑ pedal · A D steer · S / ↓ / Space brake · F inspect · R reset"
+      : "Drag to orbit · right-drag to pan · scroll to zoom · click a road to inspect · F ride";
+    showFeedback(mode === "ride" ? "Ride resumed." : "Map inspection pauses the bicycle.");
+  };
+
+  host.dataset.mode = "ride";
+  inspector.hidden = true;
+  toolbar.hidden = true;
+  rideModeButton.addEventListener("click", () => setMode("ride"));
+  inspectModeButton.addEventListener("click", () => setMode("inspect"));
+  resetBikeButton.addEventListener("click", () => {
+    previousState = scene.resetBicycle();
+    showFeedback("Returned to the training start.");
   });
 
   required<HTMLButtonElement>("#reset-view").addEventListener("click", () => scene.resetCamera());
@@ -124,7 +265,144 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     if (roadId) scene.focusRoad(roadId);
     renderRoadDetails(details, selectedRoad);
   });
+
+  const onKeyDown = (event: KeyboardEvent): void => {
+    if (isEditableTarget(event.target)) return;
+    if (event.code === "KeyF") {
+      event.preventDefault();
+      if (!event.repeat) setMode(currentMode === "ride" ? "inspect" : "ride");
+      return;
+    }
+    if (event.code === "KeyR") {
+      event.preventDefault();
+      if (!event.repeat) {
+        previousState = scene.resetBicycle();
+        showFeedback("Returned to the training start.");
+      }
+      return;
+    }
+    if (currentMode !== "ride") return;
+    const input = codeToInput(event.code);
+    if (!input) return;
+    event.preventDefault();
+    keyboardInput.add(event.code);
+    applyInput();
+  };
+  const onKeyUp = (event: KeyboardEvent): void => {
+    const input = codeToInput(event.code);
+    if (!input || !keyboardInput.has(event.code)) return;
+    keyboardInput.delete(event.code);
+    if (!isEditableTarget(event.target) && currentMode === "ride") event.preventDefault();
+    applyInput();
+  };
+  const onVisibilityChange = (): void => {
+    if (document.hidden) clearInput();
+    scene.setPaused(currentMode === "inspect" || document.hidden || !document.hasFocus() || isEditableTarget(document.activeElement));
+  };
+  const onFocusIn = (event: FocusEvent): void => {
+    if (isEditableTarget(event.target)) {
+      clearInput();
+      scene.setPaused(true);
+    }
+  };
+  const onFocusOut = (): void => queueMicrotask(() => {
+    scene.setPaused(currentMode === "inspect" || document.hidden || !document.hasFocus() || isEditableTarget(document.activeElement));
+  });
+  const onWindowBlur = (): void => {
+    clearInput();
+    scene.setPaused(true);
+  };
+  const onWindowFocus = (): void => {
+    scene.setPaused(currentMode === "inspect" || document.hidden || isEditableTarget(document.activeElement));
+  };
+  document.addEventListener("keydown", onKeyDown);
+  document.addEventListener("keyup", onKeyUp);
+  document.addEventListener("visibilitychange", onVisibilityChange);
+  document.addEventListener("focusin", onFocusIn);
+  document.addEventListener("focusout", onFocusOut);
+  window.addEventListener("blur", onWindowBlur);
+  window.addEventListener("focus", onWindowFocus);
+
+  for (const button of rideControls.querySelectorAll<HTMLButtonElement>("[data-input]")) {
+    const name = button.dataset.input as keyof BicycleInput;
+    button.addEventListener("pointerdown", (event) => {
+      if (currentMode !== "ride") return;
+      event.preventDefault();
+      button.setPointerCapture(event.pointerId);
+      pointerInput.set(event.pointerId, name);
+      applyInput();
+    });
+    const release = (event: PointerEvent): void => {
+      if (!pointerInput.has(event.pointerId)) return;
+      pointerInput.delete(event.pointerId);
+      applyInput();
+    };
+    button.addEventListener("pointerup", release);
+    button.addEventListener("pointercancel", release);
+    button.addEventListener("lostpointercapture", release);
+    button.addEventListener("contextmenu", (event) => event.preventDefault());
+    button.addEventListener("keydown", (event) => {
+      if (event.code !== "Space" && event.code !== "Enter") return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (currentMode !== "ride") return;
+      buttonKeyboardInput.add(name);
+      applyInput();
+    });
+    button.addEventListener("keyup", (event) => {
+      if (event.code !== "Space" && event.code !== "Enter") return;
+      event.preventDefault();
+      event.stopPropagation();
+      buttonKeyboardInput.delete(name);
+      applyInput();
+    });
+    button.addEventListener("blur", () => {
+      if (!buttonKeyboardInput.delete(name)) return;
+      applyInput();
+    });
+  }
+
+  activeCleanup = () => {
+    window.clearTimeout(feedbackTimer);
+    document.removeEventListener("keydown", onKeyDown);
+    document.removeEventListener("keyup", onKeyUp);
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+    document.removeEventListener("focusin", onFocusIn);
+    document.removeEventListener("focusout", onFocusOut);
+    window.removeEventListener("blur", onWindowBlur);
+    window.removeEventListener("focus", onWindowFocus);
+  };
   return scene;
+}
+
+function metric(labelText: string, value: HTMLElement): HTMLElement {
+  const item = element("div", "ride-metric");
+  item.append(element("span", "metric-label", labelText), value);
+  return item;
+}
+
+function textButton(label: string, className: string, id: string): HTMLButtonElement {
+  const button = element("button", className, label);
+  button.type = "button";
+  button.id = id;
+  return button;
+}
+
+function holdButton(input: keyof BicycleInput, ariaLabel: string, glyph: string, labelText: string): HTMLButtonElement {
+  const button = element("button", `hold-control hold-${input}`);
+  button.type = "button";
+  button.dataset.input = input;
+  button.setAttribute("aria-label", ariaLabel);
+  button.append(element("span", "hold-glyph", glyph), element("span", "hold-label", labelText));
+  return button;
+}
+
+function isEditableTarget(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && Boolean(target.closest("input, select, textarea, [contenteditable='true']"));
+}
+
+function formatDistance(metres: number): string {
+  return metres >= 1000 ? `${(metres / 1000).toFixed(2)} km` : `${Math.round(metres)} m`;
 }
 
 function buildInspectorHeader(): HTMLElement {

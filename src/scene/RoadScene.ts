@@ -1,7 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+import {
+  createBicycleController,
+  type BicycleController,
+  type BicycleInput,
+  type BicycleState,
+} from "../game/bicycle";
 import type { Road, RoadSlice } from "../world/types";
+import { BicycleVisual, makeObstacleVisual } from "./BicycleVisual";
 
 const PATH_CLASSES = new Set(["footway", "path", "steps", "pedestrian", "platform", "cycleway"]);
 
@@ -22,11 +29,14 @@ interface RoadVisual {
 export interface SceneCallbacks {
   onRoadSelected: (roadId: string | null) => void;
   onFpsSample: (fps: number) => void;
+  onBicycleState: (state: BicycleState) => void;
 }
+
+export type SceneMode = "ride" | "inspect";
 
 export class RoadScene {
   private readonly scene = new THREE.Scene();
-  private readonly camera = new THREE.PerspectiveCamera(42, 1, 1, 4000);
+  private readonly camera = new THREE.PerspectiveCamera(52, 1, 0.08, 4000);
   private readonly renderer: THREE.WebGLRenderer;
   private readonly controls: OrbitControls;
   private readonly raycaster = new THREE.Raycaster();
@@ -52,13 +62,21 @@ export class RoadScene {
   private readonly grid: THREE.GridHelper;
   private readonly resizeObserver: ResizeObserver;
   private readonly resetDistance: number;
+  private readonly bicycleController: BicycleController;
+  private readonly bicycleVisual = new BicycleVisual();
+  private readonly bicycleInput: BicycleInput = { pedal: false, brake: false, left: false, right: false };
+  private readonly followPosition = new THREE.Vector3();
+  private readonly followTarget = new THREE.Vector3();
   private selectedRoadId: string | null = null;
+  private mode: SceneMode = "ride";
+  private paused = false;
   private showWidthSources = false;
   private showPaths = true;
   private showCentrelines = false;
   private animationFrame = 0;
   private frameCount = 0;
   private frameSampleStart = performance.now();
+  private lastFrameTimestamp = performance.now();
   private pointerStart: { x: number; y: number } | null = null;
 
   constructor(
@@ -75,8 +93,8 @@ export class RoadScene {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
-    this.renderer.domElement.setAttribute("aria-label", "Interactive 3D road map around Colombo Lotus Tower");
+    this.renderer.toneMappingExposure = 1.12;
+    this.renderer.domElement.setAttribute("aria-label", "Controllable bicycle on the Colombo road study");
     this.renderer.domElement.setAttribute("role", "img");
     this.host.append(this.renderer.domElement);
 
@@ -102,6 +120,12 @@ export class RoadScene {
     this.addRoads(roadSlice.roads);
     this.addAnchorMarker();
 
+    this.bicycleController = createBicycleController(roadSlice);
+    this.scene.add(this.bicycleVisual.group);
+    for (const obstacle of this.bicycleController.obstacles) this.scene.add(makeObstacleVisual(obstacle));
+    const initialState = this.bicycleController.getState();
+    this.bicycleVisual.update(initialState);
+
     this.camera.position.set(0.535, 0.624, 0.548).normalize().multiplyScalar(this.resetDistance);
     this.camera.up.set(0, 1, 0);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -114,7 +138,11 @@ export class RoadScene {
     this.controls.screenSpacePanning = false;
     this.controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
     this.controls.mouseButtons.RIGHT = THREE.MOUSE.PAN;
+    this.controls.enabled = false;
     this.controls.update();
+
+    this.snapFollowCamera(initialState);
+    this.callbacks.onBicycleState(initialState);
 
     this.renderer.domElement.addEventListener("pointerdown", this.handlePointerDown);
     this.renderer.domElement.addEventListener("pointerup", this.handlePointerUp);
@@ -178,6 +206,44 @@ export class RoadScene {
     for (const visual of this.visuals.values()) {
       if (visual.road.id !== this.selectedRoadId) visual.surface.material = this.getRoadMaterial(visual.road);
     }
+  }
+
+  setMode(mode: SceneMode): void {
+    if (this.mode === mode) return;
+    this.mode = mode;
+    this.clearRideInput();
+    this.controls.enabled = mode === "inspect";
+    if (mode === "inspect") this.resetCamera();
+    else this.snapFollowCamera(this.bicycleController.getState());
+  }
+
+  setRideInput(input: Partial<BicycleInput>): void {
+    Object.assign(this.bicycleInput, input);
+  }
+
+  setPaused(paused: boolean): void {
+    this.paused = paused;
+    if (paused) this.clearRideInput();
+  }
+
+  clearRideInput(): void {
+    this.bicycleInput.pedal = false;
+    this.bicycleInput.brake = false;
+    this.bicycleInput.left = false;
+    this.bicycleInput.right = false;
+  }
+
+  resetBicycle(): BicycleState {
+    this.clearRideInput();
+    const state = this.bicycleController.reset();
+    this.bicycleVisual.update(state);
+    if (this.mode === "ride") this.snapFollowCamera(state);
+    this.callbacks.onBicycleState(state);
+    return state;
+  }
+
+  getBicycleState(): BicycleState {
+    return this.bicycleController.getState();
   }
 
   resetCamera(): void {
@@ -245,6 +311,7 @@ export class RoadScene {
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.08;
+    ground.receiveShadow = true;
     this.scene.add(ground);
   }
 
@@ -260,6 +327,7 @@ export class RoadScene {
       surface.position.y = 0.12;
       surface.userData.roadId = road.id;
       surface.renderOrder = 1;
+      surface.receiveShadow = true;
       this.scene.add(surface);
       this.roadObjectIds.set(surface.id, road.id);
 
@@ -349,7 +417,7 @@ export class RoadScene {
   private readonly handlePointerUp = (event: PointerEvent): void => {
     const start = this.pointerStart;
     this.pointerStart = null;
-    if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
+    if (this.mode !== "inspect" || !start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
     const bounds = this.renderer.domElement.getBoundingClientRect();
     this.pointer.set(
       ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
@@ -365,7 +433,18 @@ export class RoadScene {
 
   private readonly render = (timestamp = performance.now()): void => {
     this.animationFrame = requestAnimationFrame(this.render);
-    this.controls.update();
+    const deltaSeconds = Math.min(Math.max((timestamp - this.lastFrameTimestamp) / 1000, 0), 0.1);
+    this.lastFrameTimestamp = timestamp;
+    if (this.mode === "ride" && !this.paused) {
+      const state = this.bicycleController.step(deltaSeconds, this.bicycleInput);
+      this.bicycleVisual.update(state);
+      this.updateFollowCamera(state, deltaSeconds);
+      this.callbacks.onBicycleState(state);
+    } else if (this.mode === "ride") {
+      this.updateFollowCamera(this.bicycleController.getState(), deltaSeconds);
+    } else {
+      this.controls.update();
+    }
     this.renderer.render(this.scene, this.camera);
     this.frameCount += 1;
     const elapsed = timestamp - this.frameSampleStart;
@@ -375,4 +454,38 @@ export class RoadScene {
       this.frameSampleStart = timestamp;
     }
   };
+
+  private snapFollowCamera(state: BicycleState): void {
+    this.getFollowVectors(state, this.followPosition, this.followTarget);
+    this.camera.position.copy(this.followPosition);
+    this.camera.lookAt(this.followTarget);
+  }
+
+  private updateFollowCamera(state: BicycleState, deltaSeconds: number): void {
+    const desiredPosition = new THREE.Vector3();
+    const desiredTarget = new THREE.Vector3();
+    this.getFollowVectors(state, desiredPosition, desiredTarget);
+    const positionBlend = 1 - Math.exp(-deltaSeconds * 4.2);
+    const targetBlend = 1 - Math.exp(-deltaSeconds * 6.2);
+    this.followPosition.lerp(desiredPosition, positionBlend);
+    this.followTarget.lerp(desiredTarget, targetBlend);
+    this.camera.position.copy(this.followPosition);
+    this.camera.lookAt(this.followTarget);
+  }
+
+  private getFollowVectors(state: BicycleState, position: THREE.Vector3, target: THREE.Vector3): void {
+    const forwardX = Math.sin(state.heading);
+    const forwardZ = -Math.cos(state.heading);
+    const speedLift = THREE.MathUtils.clamp(Math.abs(state.speed) * 0.06, 0, 0.35);
+    position.set(
+      state.x - forwardX * 5.9,
+      state.y + 3.15 + speedLift,
+      state.z - forwardZ * 5.9,
+    );
+    target.set(
+      state.x + forwardX * 4.2,
+      state.y + 1.05,
+      state.z + forwardZ * 4.2,
+    );
+  }
 }
