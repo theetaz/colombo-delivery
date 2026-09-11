@@ -68,10 +68,17 @@ offline regeneration produced outputs identical to the committed artifacts.
 
 ## Current state
 
-The repository contains the product definition and Stage 1 audit pipeline. It
-does not yet contain a browser game or 3D runtime. The normal current static
-preview is [the repository SVG](maps/lotus-tower-road-audit.svg); unlike the
-commit-pinned image above, that relative link follows the current checkout.
+The repository contains the product definition, Stage 1 audit pipeline, and a
+first browser-rendered 3D road prototype. The scene clips a 900 × 900 m square
+around Lotus Tower from the saved audit artifact and exposes its source
+coordinates, local metre coordinates, width provenance, and provisional
+vertical placement. It does not yet include a bicycle, driving physics, or a
+delivery loop. See the [prototype report](ROAD_PROTOTYPE.md) for its exact
+scope, controls, validation, and limitations.
+
+The normal current static audit preview remains
+[the repository SVG](maps/lotus-tower-road-audit.svg); unlike the commit-pinned
+image above, that relative link follows the current checkout.
 
 The interactive preview is an offline HTML artifact, not a hosted game. GitHub
 shows its source. To inspect the current checkout, run this from the repository
@@ -85,23 +92,19 @@ Then open
 [http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
 That address works only while the local server is running.
 
-## Next bounded milestone — First 3D road slice
+## Next bounded milestone — Controllable bicycle
 
-Build one small browser-rendered road section from the committed audited
-geometry using the proposed Vite, TypeScript, and Three.js stack. The slice is
-complete when someone can inspect it in a desktop browser and:
+Add the first controllable bicycle to the reviewed road scene. The slice is
+complete when someone can use a desktop browser to:
 
-- orbit, pan, and zoom the camera around the road;
-- see the source longitude and latitude alongside the local metre coordinates
-  used by the scene;
-- verify coordinate alignment against the recorded Lotus Tower origin;
-- trace every rendered centreline back to the audited GeoJSON feature; and
-- inspect the exact road-width rule used for each segment, distinguishing a
-  source `width` value from a lane-derived or road-class fallback.
+- steer, accelerate, coast, and brake with approachable bicycle handling;
+- use a following camera while retaining a clear view of the road;
+- collide with road boundaries or prototype obstacles and recover when stuck;
+- reset safely after leaving the usable scene; and
+- inspect speed and control state while testing the geometry.
 
-This milestone validates the map-to-3D coordinate and road-width pipeline. The
-first controllable bicycle follows after the road geometry and alignment pass
-this review.
+This next slice validates the control, camera, and collision foundation. It does
+not yet need traffic, routing, jobs, progression, or a final bicycle model.
 
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and

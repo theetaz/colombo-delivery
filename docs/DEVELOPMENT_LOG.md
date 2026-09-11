@@ -71,3 +71,58 @@ roadmap.
   road slice with camera controls, real-to-local coordinate evidence, and
   explicit road-width provenance. Bicycle implementation follows its geometry
   and alignment review.
+- Added the first Vite, TypeScript, and Three.js browser runtime with Node.js 24
+  and npm 11 as the supported minimum toolchain. Runtime dependencies are
+  locked, and the production build emits local assets without a CDN or live map
+  request.
+- Added a renderer-independent TypeScript road builder that reads the saved
+  Stage 1 GeoJSON, validates its projection origin and Earth radius, and carries
+  its source snapshot hash into the generated slice summary.
+- Fixed the prototype scope to a 900 × 900 m square centred on the OSM Lotus
+  Tower anchor. The scene uses `x` east, `z` south, and `y` for display elevation,
+  with one scene unit equal to one metre.
+- Clipped 109 intersecting OSM source ways into 110 render pieces totalling
+  11,740.633 m of centreline. The source contains 2,045 features; four proposed
+  or construction lifecycle ways are excluded before geometric selection.
+- Preserved each rendered piece's source feature and OSM identifiers, full
+  source WGS84 centreline, clipped local centreline, tags, representative
+  coordinates, width rationale, and vertical-placement rationale.
+- Applied mapped widths where strict numeric metre or feet values are credible,
+  then a provisional 3.2 m-per-lane rule for motor-road classes, then documented
+  road-class visual fallbacks. Of the 109 intersecting source ways, one uses a
+  mapped width, 11 use a lane assumption, and 97 use class fallbacks.
+- Kept mapped vertical separation visible with a provisional 5 m per layer.
+  One rendered layer-1 bridge, Kovil Street OSM way 228885183, is displayed at
+  5 m; ramps, terrain transitions, portals, and surveyed elevations are not
+  modelled.
+- Added the browser road scene with orbit, pan, zoom, reset, and top-view camera
+  controls; selectable road surfaces; a source inspector; grid, centreline,
+  path, and width-source toggles; an FPS readout; a Lotus Tower origin marker;
+  responsive layouts; and visible OpenStreetMap attribution.
+- Added nine road-builder tests covering coordinate round trips, clipping,
+  exclusions, source traceability, width and elevation rules, bounded ribbon
+  geometry, source metadata drift, and deterministic saved-snapshot totals.
+  All nine tests, all 12 existing Python audit tests, strict TypeScript checking,
+  and the production build pass. The independent centreline total differs by
+  approximately 0.00000003 m.
+- Reviewed the production build in Chromium at 1280 × 800 and 390 × 844. Camera
+  controls, direct and list-based road selection, camera focus,
+  automatic path reveal, layer toggles, mobile scrolling, and width and bridge
+  inspection passed with no browser-console warnings or errors and no mobile
+  horizontal overflow.
+- Confirmed Trace Lane's mapped 10 m width, D. R. Wijewardene Mawatha's
+  lane-derived 6.4 m width, and the Kovil Street bridge's provisional 5 m
+  layer-1 display in the production inspector. The scene showed 60 FPS in this
+  test environment; this is not a general hardware performance result.
+- Recorded the first production screenshot at
+  `docs/milestones/2026-09-11-road-prototype.jpg`, with D. R. Wijewardene Mawatha
+  selected at 1280 × 800.
+- Recorded the current build-size limit: the 575.45 KB minified JavaScript chunk
+  is 147.33 KB gzip and triggers Vite's default chunk advisory; the 2.88 MB saved
+  GeoJSON remains a separate local asset.
+- Kept overlapping road ribbons explicit as a prototype limitation. Junctions
+  are not yet unioned into authored surfaces, drivable collision geometry, or
+  routable topology.
+- Recorded the prototype's reproducible commands, exact bounds, source contract,
+  assumptions, controls, validation, and current limitations in the
+  [first 3D road prototype report](ROAD_PROTOTYPE.md).

@@ -10,11 +10,13 @@ Repository: [theetaz/colombo-delivery](https://github.com/theetaz/colombo-delive
 
 ## Project status
 
-Stage 1 now contains a reproducible OpenStreetMap snapshot, offline road-network
-audit, gap inventory, candidate delivery-point screen, and map previews for the
-Lotus Tower study area. The audit is a desk review: candidate entrances, bicycle
-access, stopping safety, junction details, and current street conditions still
-need manual validation. No game runtime has been implemented yet.
+The repository now contains the reproducible Stage 1 OpenStreetMap audit and the
+first browser-rendered 3D road prototype. The prototype clips a 900 × 900 m
+slice around Lotus Tower from the saved road data, renders inspectable road
+meshes, and exposes each segment's source coordinates, local metre coordinates,
+width rule, and vertical-placement rule. It is a geometry milestone rather than
+a playable game; candidate entrances, bicycle access, stopping safety, junction
+details, and current street conditions still need manual validation.
 
 Development happens in public. Follow the [roadmap](docs/ROADMAP.md) for planned
 stages, the [build timeline](docs/BUILD_TIMELINE.md) for a chronological record
@@ -27,6 +29,15 @@ The first playable target is a small, recognizable area around Lotus Tower. It
 will include a controllable bicycle, 10–20 verified pickup and drop-off points,
 one complete timed-delivery loop, saved earnings, and an electric-bicycle
 upgrade. The map can then expand through connected areas of Colombo.
+
+## First 3D road prototype
+
+[![Production view of the first Lotus Tower 3D road prototype](docs/milestones/2026-09-11-road-prototype.jpg)](docs/ROAD_PROTOTYPE.md)
+
+*The first production road scene renders 109 saved OSM ways and exposes the
+coordinate, width, and vertical-placement evidence behind each selectable
+surface. Open the [prototype report](docs/ROAD_PROTOTYPE.md) for its exact scope,
+controls, validation, and limitations.*
 
 ## Stage 1 audit preview
 
@@ -54,7 +65,10 @@ safety.*
 - [Roadmap](docs/ROADMAP.md) defines the staged delivery plan and acceptance
   criteria.
 - [Architecture](docs/ARCHITECTURE.md) records the proposed technical design
-  and the implemented audit pipeline.
+  and the implemented audit and road-rendering pipeline.
+- [First 3D road prototype](docs/ROAD_PROTOTYPE.md) records its exact scope,
+  source contract, coordinate system, rendering assumptions, controls,
+  validation, and limitations.
 - [Lotus Tower map-data audit](docs/MAP_DATA_AUDIT.md) records the study scope,
   reproducible method, results, gaps, and manual verification gates.
 - [Data sources](docs/DATA_SOURCES.md) records OSM provenance, tag
@@ -94,12 +108,33 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory docs/maps
 Then open
 [http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
 
+## Run the 3D road prototype
+
+Use Node.js 24 or newer and npm 11 or newer:
+
+```sh
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/). Build and verify the
+prototype with:
+
+```sh
+npm run typecheck
+npm test
+npm run build
+npm run preview -- --host 127.0.0.1 --port 5174
+```
+
+The browser scene uses the committed offline road artifact and does not fetch
+live map data. See the [prototype report](docs/ROAD_PROTOTYPE.md) for the exact
+900 × 900 m scope and the provisional width and elevation rules.
+
 ## Next step
 
-Use the audited snapshot to render one small road section in a browser with the
-proposed Vite, TypeScript, and Three.js stack. The first slice should expose
-camera controls, source and local coordinates, coordinate alignment, and the
-exact width evidence or fallback used by every rendered segment. Add the first
-controllable bicycle after the road geometry passes this review. Stage 1 access,
+Review the road geometry, coordinate alignment, and documented rendering
+assumptions, then add the first controllable bicycle with steering,
+acceleration, braking, camera follow, collisions, and recovery. Stage 1 access,
 entrance, stopping, junction, and current-street checks remain open throughout
 the prototype.

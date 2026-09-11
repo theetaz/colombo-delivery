@@ -1,7 +1,8 @@
 # Architecture
 
-The offline Stage 1 map audit is implemented. The browser game architecture is
-still a proposal and package choices remain subject to a focused prototype.
+The offline Stage 1 map audit and first Three.js road scene are implemented.
+The broader game architecture remains a proposal until vehicle, physics,
+routing, interface, and streaming choices pass focused prototypes.
 
 ## Initial technical direction
 
@@ -52,6 +53,49 @@ require documented defaults or manual correction. Stage 1 graph screening does
 not yet implement complete mode-aware or turn-aware routing, so it cannot be
 used as the runtime route model. A mapped signal node establishes neither its
 real timing nor its full control plan.
+
+## First browser road slice
+
+The first runtime slice uses Vite, TypeScript, and Three.js. The browser imports
+the committed `data/derived/road_network.geojson` artifact; it makes no live map
+request. The source snapshot hash and OSM timestamp are preserved in the
+runtime data contract so a rendered scene can identify the exact audited input.
+`src/main.ts` owns loading and interface wiring, `src/scene/RoadScene.ts` owns
+Three.js rendering and interaction, and `src/world/road-slice.ts` plus
+`src/world/types.ts` own the renderer-independent data model and geometry.
+
+The pure TypeScript road builder is separate from Three.js. It validates the
+GeoJSON collection, converts WGS84 positions with the audit's spherical
+azimuthal-equidistant projection, clips centrelines to a 900 × 900 m square,
+resolves documented widths and display elevations, and returns road records plus
+ribbon-mesh vertices and indices. Every road record preserves its source
+feature and OSM identifiers, tags, unclipped WGS84 centreline, clipped local
+centreline, and the rationale for derived values. This keeps geometry generation
+testable without a browser or rendering context.
+
+The scene layer turns those records into Three.js meshes, provides optional
+width-source colours, marks the Lotus Tower origin, and connects pointer
+selection to an inspection panel. Orbit controls provide camera orbit, pan, and
+zoom. The screen keeps OpenStreetMap attribution visible.
+
+The audit records local `x` east and `y` north. Three.js reserves `y` for display
+elevation, so the scene maps east to `x` and north to `−z`; one unit remains one
+metre. Display elevation uses `y`. This axis conversion is explicit at the
+projection boundary and the inverse conversion supports coordinate inspection
+at clipped endpoints.
+
+Width resolution prefers a credible mapped `width`, then a credible whole lane
+count multiplied by a provisional 3.2 m visual lane width, then a documented
+road-class fallback. Construction and proposed lifecycle ways are excluded;
+other geometrically intersecting `highway=*` features remain eligible. A valid
+OSM layer is displayed at a provisional 5 m per layer. Bridge and tunnel tags
+without a valid layer use +1 and −1 respectively. Ramps, portals, terrain, and
+surveyed elevations are not modelled. Road ribbons overlap at intersections;
+the prototype does not yet union them into junction surfaces or derive collision
+and routing geometry.
+
+See the [prototype report](ROAD_PROTOTYPE.md) for the exact source, scope,
+assumption table, controls, validation results, and present limitations.
 
 ## World coordinates and streaming
 

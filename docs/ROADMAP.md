@@ -46,13 +46,27 @@ Acceptance criteria:
 
 ## Stage 2 — Drivable small area
 
-Status: not started. The next engineering slice renders one small road section
-from the audited snapshot with inspectable coordinates and width rules; the
-first bicycle follows after the road geometry and alignment review. No game
-runtime exists. Open Stage 1 field checks do not block this bounded prototype.
+Status: in progress. The first browser road scene renders a 900 × 900 m slice
+from the audited snapshot with inspectable source and local coordinates, width
+rules, and provisional vertical separation. The first controllable bicycle is
+the next bounded slice. Open Stage 1 field checks do not block this technical
+prototype, but they remain required before destinations or routes are presented
+as validated.
 
 Generate a browser scene from the audited data and add the first bicycle. Use a
 metre-based local coordinate system derived from stored latitude and longitude.
+
+Engineering checkpoints:
+
+- [x] Render a bounded road slice in a desktop browser from the saved audit
+  artifact.
+- [x] Preserve source identifiers and coordinates and expose the local metre
+  conversion, width provenance, and vertical-placement rationale.
+- [x] Document and test clipping, coordinate, width, and elevation assumptions.
+- [ ] Add a controllable bicycle with steering, acceleration, braking,
+  camera-follow behaviour, collisions, and recovery.
+- [ ] Extend the reviewed slice into the complete Stage 2 area and meet all
+  acceptance criteria below.
 
 Acceptance criteria:
 
