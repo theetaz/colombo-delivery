@@ -97,6 +97,45 @@ layers remain explicit visual assumptions. Intersecting ribbons are not yet
 joined into drivable junction geometry, and the prototype has no bicycle,
 physics, collision surfaces, routing, traffic, or delivery loop.
 
+## 2026-09-11 — First controllable bicycle prototype
+
+Status: bounded bicycle prototype complete; hands-on ride feedback remains
+open.
+
+The first rideable build adds a controllable bicycle to the existing 900 ×
+900 m Lotus Tower road slice. Its custom assisted kinematics support pedal,
+coast, brake, steer, road and grass handling, a smoothed following camera,
+marked training obstacles, world-boundary collisions, and reset. The procedural
+bicycle requires no external model, and Inspect map preserves the earlier road
+selection, source evidence, camera actions, and layer controls while pausing the
+ride.
+
+Delivered in commit
+[`a47f7b05777b3e1c85f5693deb6721683141e4a0`](https://github.com/theetaz/colombo-delivery/commit/a47f7b05777b3e1c85f5693deb6721683141e4a0):
+
+- [Frozen bicycle prototype report](https://github.com/theetaz/colombo-delivery/blob/a47f7b05777b3e1c85f5693deb6721683141e4a0/docs/BICYCLE_PROTOTYPE.md)
+- [Bicycle controller](https://github.com/theetaz/colombo-delivery/blob/a47f7b05777b3e1c85f5693deb6721683141e4a0/src/game/bicycle.ts)
+- [Browser scene and interface source](https://github.com/theetaz/colombo-delivery/tree/a47f7b05777b3e1c85f5693deb6721683141e4a0/src)
+- [Bicycle-controller tests](https://github.com/theetaz/colombo-delivery/blob/a47f7b05777b3e1c85f5693deb6721683141e4a0/tests/bicycle-controller.test.ts)
+- [Locked package and build commands](https://github.com/theetaz/colombo-delivery/blob/a47f7b05777b3e1c85f5693deb6721683141e4a0/package.json)
+- [Production screenshot](https://github.com/theetaz/colombo-delivery/blob/a47f7b05777b3e1c85f5693deb6721683141e4a0/docs/milestones/2026-09-11-bicycle-prototype.jpg)
+
+![First controllable bicycle prototype at the delivery commit](https://raw.githubusercontent.com/theetaz/colombo-delivery/a47f7b05777b3e1c85f5693deb6721683141e4a0/docs/milestones/2026-09-11-bicycle-prototype.jpg)
+
+All 15 TypeScript tests and all 12 Python audit tests passed, along with strict
+TypeScript checking and the production build. Chromium QA at 1280 × 800 and
+390 × 844 covered pointer-held pedalling and braking, reset, steering into
+grass, Ride and Inspect mode switching, paused telemetry during inspection,
+restored follow camera, source inspection, responsive layout, and
+editable-control shortcut exclusion. The browser console remained free of
+warnings and errors.
+
+The model uses planar circles and a square study boundary rather than rigid-body
+physics. Sustained hardware-keyboard riding, physical multi-touch, and browser
+contact with the marked obstacles remain hands-on checks. Traffic, routing,
+route legality, delivery jobs, progression, curbs, buildings, and ramps between
+elevated road segments remain outside this milestone.
+
 ## Current state
 
 The repository contains the product definition, Stage 1 audit pipeline, first
@@ -109,7 +148,8 @@ spawn, controls, tuning, validation, and limitations, and the
 [road prototype report](ROAD_PROTOTYPE.md) for the underlying geometry and
 source contract.
 
-![Current production view of the first controllable bicycle](milestones/2026-09-11-bicycle-prototype.jpg)
+The current-checkout production image remains available as the
+[first controllable bicycle screenshot](milestones/2026-09-11-bicycle-prototype.jpg).
 
 The normal current static audit preview remains
 [the repository SVG](maps/lotus-tower-road-audit.svg); unlike the commit-pinned
