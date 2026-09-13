@@ -1,5 +1,8 @@
 # Colombo Delivery
 
+> **Current art status:** Final human review rejected the earlier bicycle proportions and components, inverted wrists, clothing distortion, saddle fit, and grip presentation. The [standalone bicycle rebuild](docs/BICYCLE_REBUILD.md) supersedes that visual target; historical results remain below.
+
+
 Colombo Delivery is a planned browser-based 3D driving game built around real
 Colombo roads and coordinates. Players collect parcels, navigate to reachable
 delivery points, follow traffic rules, and earn money for vehicle upgrades.
@@ -288,3 +291,11 @@ still include timeout and retry, reset cancellation, sustained keyboard control
 on a physical device, physical multi-touch, and marked-obstacle contact. Stage 1 access,
 entrance, stopping, junction, route, and current-street checks remain open; the
 practice markers, straight-line guidance, and minimap do not satisfy them.
+
+### Bicycle art rebuild
+
+Final human review rejected the detailed riding prototype's wrists, clothing
+deformation, saddle fit, and grip presentation despite its passing engineering
+checks. Bicycle art is restarting with a standalone commuter model; the current
+game remains unchanged until human review approves it. See the
+[bicycle rebuild workflow](docs/BICYCLE_REBUILD.md).

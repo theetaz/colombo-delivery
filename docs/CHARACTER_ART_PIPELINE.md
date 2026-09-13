@@ -1,5 +1,8 @@
 # Teenage courier character art brief and production pipeline
 
+> **Riding-art status:** The previous bicycle/rider result is an engineering prototype only. Final human review rejected bicycle proportions and components, inverted wrists, clothing distortion, saddle fit, and grip presentation. See [BICYCLE_REBUILD.md](BICYCLE_REBUILD.md).
+
+
 ## Product correction
 
 The current rigid-part courier remains a useful technical prototype for bicycle
@@ -349,3 +352,11 @@ All 31 tests, strict TypeScript checking, the production build, and the
 documentation diff check pass. The character viewer entry is 9.08 KB (3.86 KB
 gzip), and the shared JavaScript chunk is 644.17 KB (163.17 KB gzip). Vite's
 expected shared-output advisory remains.
+
+## Riding prototype status correction
+
+Passing rig and runtime tests does not constitute visual acceptance. Final human
+review rejected the current riding prototype's wrists, clothing deformation,
+saddle fit, and grip presentation. Future vehicle art will approve the bicycle
+alone, then a stationary rider fit, controlled pedalling, steering, and finally
+simulation binding.

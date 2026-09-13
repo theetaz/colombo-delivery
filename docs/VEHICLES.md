@@ -1,5 +1,8 @@
 # Vehicles and progression
 
+> **Current visual status:** The earlier bicycle and rider passed engineering checks but failed final human review for bicycle proportions and components, inverted wrists, clothing distortion, saddle fit, and grip presentation. [Commuter bicycle v2](BICYCLE_REBUILD.md) is the replacement art track.
+
+
 ## Purpose and current status
 
 Colombo Delivery begins with a bicycle and should grow into a small fleet whose
@@ -195,3 +198,10 @@ available to players:
 - legal and route assumptions sourced separately from visual references.
 
 The planned fleet should remain documentation until those gates are satisfied.
+
+## Commuter bicycle v2 review
+
+The current Blender bicycle and detailed rider remain an engineering prototype;
+their earlier polished label is superseded by final human visual rejection. A
+new standalone commuter bicycle is being reviewed before rider fitting or
+runtime replacement. See [BICYCLE_REBUILD.md](BICYCLE_REBUILD.md).

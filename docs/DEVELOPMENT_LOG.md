@@ -624,3 +624,12 @@ roadmap.
   not implemented. Saved final review frames under
   `docs/milestones/2026-09-13-delivery-rider-*` and construction details in
   `docs/RIDER_EQUIPMENT.md`.
+- Superseded the detailed riding prototype's engineering acceptance after human
+  visual review rejected its inverted wrists, clothing distortion, saddle fit,
+  and grip presentation. Started a separate commuter bicycle v2 with no rider
+  and no changes to the current game. Approval proceeds through bicycle-only,
+  stationary rider fit, controlled pedalling, steering, then simulation.
+- Exported the first standalone commuter bicycle review model at 529,760 bytes
+  and 13,844 triangles. Its 1.093 m wheelbase, 69.5° head angle, 0.045 m
+  perpendicular rake, +X drivetrain, inclined steering pivot, and exact contact
+  nodes passed structural validation. Visual status remains awaiting review.

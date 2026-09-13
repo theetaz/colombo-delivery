@@ -1,5 +1,8 @@
 # Delivery backpack and bicycle rider
 
+> **Visual acceptance superseded:** Final human review rejected the earlier bicycle proportions and components, inverted wrists, clothing distortion, saddle fit, and grip presentation despite passing engineering checks. See [BICYCLE_REBUILD.md](BICYCLE_REBUILD.md).
+
+
 ## Scope
 
 This milestone brings the approved teenage courier onto the existing bicycle
@@ -188,3 +191,11 @@ Reviewed browser frames: [front](milestones/2026-09-13-delivery-rider-front.jpg)
 [rear](milestones/2026-09-13-delivery-rider-back.jpg),
 [mobile](milestones/2026-09-13-delivery-rider-mobile.jpg), and
 [in the game](milestones/2026-09-13-delivery-rider-game.jpg).
+
+## Visual acceptance correction
+
+The recorded structural and runtime checks remain valid, but final human review
+rejected the rider's inverted wrists, clothing distortion, saddle fit, and grip
+presentation. The rider is retained as an engineering prototype and is not the
+accepted production art target. Work now restarts with a standalone commuter
+bicycle before a new stationary rider fit and animation pass.

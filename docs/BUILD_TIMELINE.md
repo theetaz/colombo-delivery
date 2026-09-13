@@ -745,3 +745,25 @@ Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a
 moving branch link.
+
+## 2026-09-13 — Standalone commuter bicycle rebuild started
+
+Status: first bicycle-only model exported; awaiting human review.
+
+Final human review rejected the earlier detailed rider's inverted wrists,
+clothing distortion, saddle fit, and grip presentation despite its passing
+engineering checks. That result remains historical prototype evidence.
+
+The replacement starts from a mechanically defined commuter bicycle without a
+rider and leaves the existing game untouched. Human bicycle approval comes
+first, followed by stationary rider fit, controlled pedalling, steering poses,
+and simulation binding. Structural checks validate the export contract;
+automated screenshots and pixel scoring are not acceptance gates. See
+[Commuter bicycle rebuild](BICYCLE_REBUILD.md).
+
+The first review export is 529,760 bytes and 13,844 triangles. It uses a 1.093 m wheelbase, 69.5° head angle, 0.045 m perpendicular fork rake, and named mechanical pivots. Structural validation passed; no render-based acceptance was performed.
+
+The standalone `bicycle-model-review.html` viewer provides camera presets,
+independent wheel/crank controls, steering, and local feedback notes. All 57
+tests and the production build pass. Visual approval is pending the user's
+feedback; fitting the character remains the next stage.
