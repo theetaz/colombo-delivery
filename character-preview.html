@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Focused review viewer for Colombo Delivery character assets." />
+    <title>Colombo Delivery · Character review</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body, main { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { color: #edf1ef; background: #d4d7d4; font: 600 14px/1.35 system-ui, sans-serif; }
+      main { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); }
+      #character-preview-canvas { grid-column: 2; min-width: 0; min-height: 0; }
+      #character-preview-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+      .review-panel { grid-column: 1; grid-row: 1; min-width: 0; overflow: auto; padding: 24px; border-right: 1px solid #ffffff1c; background: #192326; }
+      a { color: #e7c678; text-decoration: none; }
+      h1 { margin: 6px 0 3px; font-size: clamp(24px, 3vw, 32px); }
+      .lede { margin: 0 0 18px; color: #aebdba; font-weight: 500; }
+      h2 { margin: 18px 0 7px; color: #b9c9c6; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+      .controls { display: flex; flex-wrap: wrap; gap: 7px; }
+      button, select, input { font: inherit; }
+      button { padding: 8px 11px; border: 1px solid #ffffff29; border-radius: 8px; color: inherit; background: #526367; cursor: pointer; }
+      button[aria-pressed="true"] { color: #252b26; background: #e7c678; }
+      button:focus-visible, input:focus-visible { outline: 2px solid #f4d98f; outline-offset: 2px; }
+      #morph-controls label { display: grid; grid-template-columns: minmax(90px, 1fr) 1.5fr; gap: 9px; align-items: center; width: 100%; color: #c7d0ce; font-size: 12px; }
+      .material-controls { display: grid; grid-template-columns: 1fr auto; gap: 7px; }
+      .material-controls label { display: grid; grid-template-columns: 54px minmax(90px, 1fr) 42px; gap: 7px; align-items: center; color: #c7d0ce; font-size: 12px; }
+      .material-controls label, #clay-toggle { grid-column: 1 / -1; }
+      select { min-width: 0; padding: 7px; border: 1px solid #ffffff29; border-radius: 8px; color: inherit; background: #526367; }
+      input[type="color"] { width: 42px; height: 34px; padding: 2px; border: 1px solid #ffffff29; border-radius: 8px; background: #526367; }
+      #asset-status { display: block; margin-top: 18px; color: #d5dfdc; font-size: 12px; font-weight: 500; }
+      #asset-details { margin: 5px 0 0; color: #91a4a0; font-size: 11px; font-weight: 500; }
+      [hidden] { display: none !important; }
+      @media (max-width: 720px) {
+        main { grid-template-columns: 1fr; grid-template-rows: minmax(0, 58dvh) minmax(0, 42dvh); }
+        #character-preview-canvas { grid-column: 1; grid-row: 1; }
+        .review-panel { grid-column: 1; grid-row: 2; padding: 14px; border-top: 1px solid #ffffff1c; border-right: 0; }
+        h1 { margin-top: 3px; font-size: 22px; }
+        .lede { margin-bottom: 10px; }
+        h2 { margin-top: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Character asset review viewer">
+      <div id="character-preview-canvas"></div>
+      <section class="review-panel">
+        <a href="./">← Return to ride</a>
+        <h1>Character review</h1>
+        <p class="lede">Inspect the current reconstruction from every angle.</p>
+        <h2>View</h2>
+        <div class="controls" role="group" aria-label="Camera view">
+          <button data-view="full" aria-pressed="true">Full body</button>
+          <button data-view="head" aria-pressed="false">Head</button>
+          <button data-view="side" aria-pressed="false">Side</button>
+          <button data-view="back" aria-pressed="false">Back</button>
+        </div>
+        <section id="animation-section" hidden>
+          <h2>Animation</h2>
+          <div id="animation-controls" class="controls" role="group" aria-label="Animation clips"></div>
+        </section>
+        <section id="morph-section" hidden>
+          <h2>Facial shapes</h2>
+          <div id="morph-controls" class="controls"></div>
+        </section>
+        <section id="material-section" hidden>
+          <h2>Material color</h2>
+          <div class="material-controls">
+            <label>Skin<select data-palette="skin"><option value="" selected>Authored</option><option value="#a86d52">Warm</option><option value="#704936">Deep</option><option value="#bd805d">Golden</option><option value="custom" hidden>Custom</option></select><input data-color="skin" type="color" value="#a86d52" aria-label="Custom skin color" /></label>
+            <label>Shirt<select data-palette="shirt"><option value="" selected>Authored</option><option value="#267789">Teal</option><option value="#b94f3e">Coral</option><option value="#d6a936">Yellow</option><option value="custom" hidden>Custom</option></select><input data-color="shirt" type="color" value="#267789" aria-label="Custom shirt color" /></label>
+            <label>Shoes<select data-palette="shoes"><option value="" selected>Authored</option><option value="#e2e0d8">Light</option><option value="#34393d">Dark</option><option value="#8a6043">Clay</option><option value="custom" hidden>Custom</option></select><input data-color="shoes" type="color" value="#e2e0d8" aria-label="Custom shoe color" /></label>
+          </div>
+        </section>
+        <section id="inspection-section" hidden>
+          <h2>Surface</h2>
+          <button id="clay-toggle" type="button" aria-pressed="false">Clay inspection</button>
+        </section>
+        <span id="asset-status" role="status">Loading character asset…</span>
+        <p id="asset-details"></p>
+      </section>
+    </main>
+    <script type="module" src="/src/scene/CharacterPreview.ts"></script>
+  </body>
+</html>

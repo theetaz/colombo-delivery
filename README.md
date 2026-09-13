@@ -53,7 +53,16 @@ bicycle behavior.
 limited face and palette choices. The [character study](docs/CHARACTER_STUDY.md)
 records the asset and texture provenance, browser persistence, per-instance
 material isolation, responsive production checks, failure fallback, and the
-remaining rigid-part animation limits.*
+remaining rigid-part animation limits. This is a preserved technical prototype,
+not the target hero-character quality.*
+
+The next [teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md)
+starts from an original 2D identity and requires genuine 3D reconstruction,
+Blender cleanup and retopology, a skinned rig, facial blend shapes, and verified
+skin, shirt, and shoe customization before it can replace that prototype. The
+current `character-preview.html` inspection route shows the static reconstructed
+cleanup and its separated skin, shirt, and shoe material regions; it is not yet
+the game rider.
 
 ## Polished courier bicycle
 
@@ -188,6 +197,9 @@ safety.*
   validation gates required before planned vehicles enter the game.
 - [Courier character study](docs/CHARACTER_STUDY.md) records the rider-detail,
   appearance, material-isolation, persistence, and review contract.
+- [Teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md) records
+  the corrected hero-character brief, production stages, browser review gates,
+  and current preproduction status.
 - [Lotus Tower map-data audit](docs/MAP_DATA_AUDIT.md) records the study scope,
   reproducible method, results, gaps, and manual verification gates.
 - [Data sources](docs/DATA_SOURCES.md) records OSM provenance, tag

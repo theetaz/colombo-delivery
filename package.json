@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
-    "test": "node --import tsx --test tests/road-slice.test.ts tests/bicycle*.test.ts tests/delivery-controller.test.ts tests/practice-minimap.test.ts tests/scenery-placement.test.ts"
+    "test": "node --import tsx --test tests/road-slice.test.ts tests/bicycle*.test.ts tests/character*.test.ts tests/delivery-controller.test.ts tests/practice-minimap.test.ts tests/scenery-placement.test.ts"
   },
   "dependencies": {
     "three": "0.185.0"

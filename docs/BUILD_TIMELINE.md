@@ -368,8 +368,7 @@ and van remain planned and are not present in an unlock or garage interface.
 
 ## 2026-09-13 — Courier character detail and appearance
 
-Status: implemented and verified in the current checkout; publication record
-is pending.
+Status: complete.
 
 The courier now has a more legible original face, three selectable profile
 roots, revised hair and clothing, detailed shoes and parcel bag, and ten small
@@ -411,6 +410,91 @@ The expected shared-output advisory remains.
 The character remains a rigid-part articulated model with limited preset
 customization. It has no skeletal skinning, facial animation, cloth or loose
 hair simulation, free-form editor, or multiplayer behavior.
+
+Delivered in commit
+[`c4f013dabdf1cd815e9f22492cb4b05efa9c8c18`](https://github.com/theetaz/colombo-delivery/commit/c4f013dabdf1cd815e9f22492cb4b05efa9c8c18).
+
+## 2026-09-13 — Teenage courier art direction
+
+Status: concept and first reconstruction checkpoints exist locally; rig review,
+runtime integration, and public-distribution rights confirmation are pending.
+
+The rigid-part courier above remains a technical prototype rather than the
+target hero character. The replacement direction begins with an original 2D
+teenage courier concept package under `art/characters/teen-courier/concept/`:
+a clear three-quarter standing direction, front/side/back turnaround, and six
+expression references. The teal shirt, charcoal shorts, white shoes, youthful
+proportions, face, and hair establish the first working direction. A manifest
+records each image's dimensions, SHA-256 hash, and provenance. These images are
+concept evidence, not a 3D model, rig, implemented expression set, or proof of
+deformation quality.
+
+The concept package is delivered in commit
+[`b0944e8fd77643eddc5804d6f54821887998650a`](https://github.com/theetaz/colombo-delivery/commit/b0944e8fd77643eddc5804d6f54821887998650a).
+
+The [character art pipeline](CHARACTER_ART_PIPELINE.md) defines the next bounded
+path: documented third-party image-to-3D reconstruction, preserved raw source,
+Blender cleanup and retopology, a skinned body and garment rig, a small facial
+blend-shape set, skin/shirt/shoe customization, and validation of the actual
+glTF in the Rider studio and production game. Multiplayer, other rider spawning,
+and procedural population systems remain deferred.
+
+The first Tripo API `P1-20260311` reconstruction used only the original project
+concept. Its untouched 3,253,668-byte draft contains one static fused mesh and
+material, 24,191 vertices, 17,681 triangles, and embedded 4096 px base-colour,
+ORM, and normal maps, with no rig, animation, or morph targets. A first Blender
+cleanup produces a grounded 1.62 m, +Y-up, -Z-forward review GLB with separate
+skin, hair, shirt, shorts, and shoes material regions. It preserves the authored
+4K PBR maps and adds an embedded 2048 px RGB mask for value-preserving skin,
+shirt, and shoe hue/saturation controls.
+
+A subsequent biped-rig result contains one skin and 60 nodes but no animation
+clips. Its deformation, orientation, bicycle fit, and final use remain under
+review. The separate `character-preview.html` inspection route loads the static
+cleanup by default. It exposes Full body, Head, Side, Back, orbit, reversible
+clay, and map-preserving Skin/Shirt/Shoes tints while hiding unsupported rig,
+animation, and morph controls. Browser framing and clay review pass; the game
+asset remains unchanged.
+The first cleanup did not pass art review: unwelded smoothed UV seams opened
+cheek cracks, material masks left jagged garment boundaries, and the shoe region
+extended up the shins. Those repairs remain in progress, so structural and
+framing checks must not be read as visual acceptance.
+
+A normalized rig-review Blender source and GLB contain one skin, 58 bones, the
+same 17,681 triangles, a 1.62 m grounded -Z-forward root, and no animation
+clips. Deformation and bicycle fit still require review; the presence of a skin
+does not establish their quality.
+
+The static repair now passes first-draft face and authored-clothing review with
+8,951 Blender vertices, 25,010 exported vertices, and 17,681 triangles. The rig
+review found normalized weights and finite displacement, then an extreme elbow,
+knee, and head pose exposed a hanging hand triangle from stray influences.
+Removing stray right-foot weights from 572 hand vertices and renormalizing them
+removed the flap when the same pose was repeated with finite joint motion. The
+[browser rig-pose review](milestones/2026-09-13-teen-courier-rig-pose.jpg) is a
+manual QA pose, not a stored animation or proof of complete weight painting or
+bicycle fit. No facial morphs or expression-ready eye and mouth topology exist
+yet.
+
+Strong colour variants exposed wireframe-like seams along UV-island boundaries
+that the default material and earlier checks hid. Mask padding removed the
+major seam network; faint Deep-skin transitions and dark-shoe edge artifacts
+remain known paint work rather than a shipping finish. Responsive desktop and
+390 px layout checks pass.
+
+Tripo's public API documentation does not identify an API-specific
+output licence or attribution rule, and an API credit balance does not identify
+the applicable account tier. Public distribution of the reconstruction remains
+pending confirmation of the account plan and its terms.
+
+All 31 tests, strict TypeScript checking, the production build, and the
+documentation diff check pass. The character viewer entry is 9.08 KB (3.86 KB
+gzip), with 644.17 KB shared JavaScript (163.17 KB gzip). Reviewed artifacts are
+the [static reconstruction](milestones/2026-09-13-teen-courier-reconstruction.jpg),
+[face](milestones/2026-09-13-teen-courier-face.jpg),
+[colour variants](milestones/2026-09-13-teen-courier-colors.jpg),
+[mobile viewer](milestones/2026-09-13-teen-courier-mobile.jpg), and
+[bounded rig pose](milestones/2026-09-13-teen-courier-rig-pose.jpg).
 
 ## Current state
 

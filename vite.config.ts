@@ -8,6 +8,7 @@ export default defineConfig({
         main: "index.html",
         artPreview: "art-preview.html",
         bicyclePreview: "bicycle-preview.html",
+        characterPreview: "character-preview.html",
       },
     },
   },

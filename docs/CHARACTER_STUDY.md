@@ -1,5 +1,9 @@
 # Courier character detail and appearance study
 
+This document preserves a completed technical prototype. Its rigid-part rider
+is not the target hero-character quality. The replacement direction is defined
+in the [teenage courier character art pipeline](CHARACTER_ART_PIPELINE.md).
+
 ## Scope
 
 This milestone improves the implemented bicycle courier at the scale seen from

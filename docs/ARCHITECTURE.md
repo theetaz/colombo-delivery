@@ -276,6 +276,16 @@ does not introduce multiplayer or a free-form character system. See the
 [courier character study](CHARACTER_STUDY.md) for the asset provenance,
 responsive review, and current animation limits.
 
+That rigid-part rider is now a preserved prototype. The target hero pipeline
+starts from an original teenage courier concept, retains the untouched
+third-party reconstruction result as source evidence, and performs cleanup,
+retopology, UV and normal repair, skin rigging, facial blend-shape authoring,
+and bicycle fitting in Blender. The exported glTF must preserve the vehicle
+attachment boundary while adding verified joints, inverse bind matrices, morph
+targets, and stable skin, shirt, and shoe material regions. See the
+[teenage courier character art pipeline](CHARACTER_ART_PIPELINE.md). No
+multiplayer or rider-spawning architecture is implied by this asset work.
+
 Traffic simulation should initially cover a small number of nearby vehicles.
 Signals use explicit game control phases tied to stop lines and approaches.
 Rules should support left-side travel, speed zones, one-way detection,

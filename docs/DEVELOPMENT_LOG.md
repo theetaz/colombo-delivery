@@ -434,3 +434,68 @@ roadmap.
   12.75 KB for the bicycle visual (4.81 KB gzip), 4.67 KB for the Rider studio
   (2.24 KB gzip), 23.98 KB CSS (5.52 KB gzip), and 630.17 KB shared JavaScript
   (159.38 KB gzip). Vite's expected shared-output advisory remains.
+- Published the delivery gameplay and prototype art in commit `c4f013d`.
+- Reclassified the rigid-part courier and preset appearance system as a
+  preserved technical prototype rather than the target hero-character quality.
+- Added an original teenage courier 2D concept package with a three-quarter
+  standing direction, front/side/back turnaround, six-expression reference,
+  and a provenance manifest containing dimensions and SHA-256 hashes. These
+  are working visual references, not a reconstructed or rigged 3D asset or
+  implemented expression set.
+- Published the concept-only package in commit `b0944e8`, separately
+  from reconstruction assets whose publication terms remain under review.
+- Defined the replacement character pipeline through documented image-to-3D
+  reconstruction, preserved raw source, Blender cleanup and retopology, skin
+  rigging, facial blend shapes, skin/shirt/shoe options, and actual glTF browser
+  review. Reconstruction and implementation remain in progress.
+- Produced the first genuine Tripo API `P1-20260311` image-to-3D reconstruction
+  from only the original project concept. Preserved its fused static source,
+  three embedded 4096 px PBR maps, provider preview, dimensions, counts, and
+  hashes in a local provenance record.
+- Created a first 1.62 m grounded Blender cleanup and static review export with
+  separate skin, hair, shirt, shorts, and shoes material regions.
+- Embedded a 2048 px RGB customization mask for skin, shirt, and shoes. Browser
+  controls change hue and saturation while preserving authored texture value;
+  direct base-colour multiplication remains unsupported.
+- Added `character-preview.html` for Full body, Head, Side, Back, orbit, and
+  reversible clay inspection of the static cleanup. Per-instance Skin, Shirt,
+  and Shoes tints retain the embedded maps; unsupported rig, animation, and
+  morph controls remain hidden.
+- Passed clean desktop browser framing for all character views, reversible clay,
+  all 30 current tests, and the production build. The existing game courier is
+  unchanged.
+- Rejected the first cleanup at browser art review because smoothed unwelded UV
+  seams opened cheek cracks, coarse garment regions formed jagged boundaries,
+  and the shoe region extended up the shins. Structural and camera checks pass,
+  while visual cleanup remains in progress.
+- Repaired the static face surface and preserved the authored default clothing;
+  the current checkpoint contains 8,951 Blender vertices, 25,010 exported
+  vertices, and 17,681 triangles.
+- Found wireframe-like UV-island seams in strong colour variants and returned
+  the customization mask for edge-padding repair rather than accepting the
+  earlier variant review.
+- Padded the customization mask and removed the major UV seam network. Faint
+  transitions in Deep skin and edge artifacts on dark shoes remain documented
+  paint-refinement work rather than a shipping finish.
+- Retrieved a separate 60-node biped-rig result with one skin and no animation
+  clips. Weight quality, orientation, bicycle fit, and runtime integration
+  remain under review.
+- Normalized that result into separate Blender and GLB rig-review artifacts with
+  one skin, 58 bones, 17,681 triangles, a grounded 1.62 m -Z-forward contract,
+  and no clips. Deformation quality and bicycle fit remain unverified.
+- Confirmed normalized rig weight sums and finite motion, then found a hanging
+  hand triangle under a combined elbow, knee, and head pose. Rest-pose validity
+  does not establish deformation quality; localized influence repair remains in
+  progress.
+- Removed stray right-foot influences from 572 hand vertices, renormalized the
+  affected weights, and accepted the repeated 70° elbow, 90° knee, and 25° head
+  browser pose with finite motion and no flap. This is bounded rig QA, not a
+  complete weight-paint or riding-animation claim.
+- Recorded that the API credit balance does not identify the applicable Tripo
+  account tier. Public distribution remains pending confirmation of the account
+  plan and corresponding output terms.
+- Passed all 31 tests, strict TypeScript checking, the production build, and the
+  documentation diff check. The character viewer emits 9.08 KB (3.86 KB gzip)
+  and shared JavaScript emits 644.17 KB (163.17 KB gzip).
+- Saved reviewed reconstruction, face, colour, mobile, and bounded rig-pose
+  frames under `docs/milestones/2026-09-13-teen-courier-*.jpg`.

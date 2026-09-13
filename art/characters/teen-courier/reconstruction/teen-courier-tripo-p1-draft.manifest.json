@@ -1,0 +1,62 @@
+{
+  "asset": "teen-courier-tripo-p1-draft.glb",
+  "purpose": "Blender reconstruction draft for cleanup, material separation, facial setup, and rigging",
+  "sourceImage": "../concept/teen-courier-v1.png",
+  "provenance": {
+    "service": "Tripo API",
+    "modelVersion": "P1-20260311",
+    "generationType": "image_to_model",
+    "inputCount": 1,
+    "inputOwnership": "Original project concept art",
+    "generatedAt": "2026-09-13",
+    "creditsConsumed": 60
+  },
+  "request": {
+    "faceLimit": 20000,
+    "texture": true,
+    "pbr": true,
+    "textureQuality": "detailed",
+    "exportUv": true,
+    "autoSize": true
+  },
+  "artifact": {
+    "bytes": 3253668,
+    "meshes": 1,
+    "primitives": 1,
+    "vertices": 24191,
+    "triangles": 17681,
+    "nodes": 1,
+    "materials": 1,
+    "textures": 3,
+    "textureResolution": [4096, 4096],
+    "textureChannels": ["baseColor", "occlusionRoughnessMetallic", "normalOpenGL"],
+    "animations": 0,
+    "skins": 0,
+    "morphTargets": 0,
+    "localBounds": {
+      "min": [-0.0986328125, -0.4990234375, -0.2197265625],
+      "max": [0.0986328125, 0.4990234375, 0.2197265625],
+      "size": [0.197265625, 0.998046875, 0.439453125]
+    }
+  },
+  "cleanupRequired": [
+    "Normalize scale, ground contact, root name, and runtime axes",
+    "Separate or mask skin, hair, shirt, shorts, and shoes for customization",
+    "Inspect silhouette and occluded surfaces from side and rear views",
+    "Retopologize and weight-paint for deformation",
+    "Build facial expression shapes or facial controls",
+    "Rebake PBR maps after topology and material-region changes"
+  ],
+  "bipedRigDraft": {
+    "asset": "teen-courier-tripo-v2_5-biped-rig.glb",
+    "service": "Tripo API",
+    "modelVersion": "v2.5-20260210",
+    "creditsConsumed": 25,
+    "bytes": 3759148,
+    "nodes": 60,
+    "skins": 1,
+    "animations": 0,
+    "triangles": 17681,
+    "status": "Raw weighted rig for Blender integration and deformation review"
+  }
+}

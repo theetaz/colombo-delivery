@@ -169,6 +169,13 @@ The implemented courier also has limited saved face and palette presets in the
 [character study](CHARACTER_STUDY.md). This does not implement a garage,
 vehicle ownership, or free-form character creation.
 
+Before adding the planned fleet, replace the rigid-part courier prototype with
+the original teenage hero defined in the
+[character art pipeline](CHARACTER_ART_PIPELINE.md). Review the 2D identity,
+document the selected image-to-3D reconstruction, retopologize and skin it in
+Blender, add a bounded facial-shape set, preserve bicycle contacts, and verify
+skin, shirt, and shoe options in the exported GLB and production browser.
+
 Acceptance criteria:
 
 - Completing jobs earns money that can be spent in the garage.

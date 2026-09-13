@@ -1,0 +1,80 @@
+{
+  "asset": "teen_courier.glb",
+  "status": "static-cleanup-review",
+  "source": "../art/characters/teen-courier/reconstruction/teen-courier-tripo-p1-draft.glb",
+  "provenance": {
+    "service": "Tripo API",
+    "modelVersion": "P1-20260311",
+    "sourceConcept": "teen-courier-v1.png"
+  },
+  "contract": {
+    "units": "meters",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "origin": "ground contact",
+    "heightMeters": 1.62
+  },
+  "geometry": {
+    "blenderVertices": 8951,
+    "exportedVertices": 25010,
+    "triangles": 17681,
+    "meshes": 1,
+    "materialRegions": {
+      "Teen_Skin": 6208,
+      "Teen_Hair": 7462,
+      "Teen_Shirt": 910,
+      "Teen_Shorts": 912,
+      "Teen_Shoes": 2189
+    }
+  },
+  "materials": [
+    "Teen_Skin",
+    "Teen_Hair",
+    "Teen_Shirt",
+    "Teen_Shorts",
+    "Teen_Shoes"
+  ],
+  "textures": {
+    "embedded": true,
+    "basis": "original Tripo 4K base color, normal, and ORM maps retained without rebaking",
+    "customizationMask": "embedded RGB PNG using baseColor TEXCOORD_0"
+  },
+  "customization": {
+    "ready": true,
+    "default": "authored",
+    "mode": "masked_hsv_hue_saturation",
+    "preserveValue": true,
+    "maskChannels": {
+      "skin": "r",
+      "shirt": "g",
+      "shoes": "b"
+    },
+    "tintableRegions": [
+      "skin",
+      "shirt",
+      "shoes"
+    ],
+    "editableBlendPackedImage": "TeenCourier_CustomizationMask_RGB"
+  },
+  "rig": {
+    "skins": 0,
+    "animations": 0,
+    "morphTargets": 0
+  },
+  "blenderBounds": {
+    "min": [
+      -0.35665363073349,
+      -0.16009783744812012,
+      0.0
+    ],
+    "max": [
+      0.35665363073349,
+      0.16009783744812012,
+      1.619999885559082
+    ]
+  },
+  "notes": [
+    "Static cleanup review asset; automated biped rig is evaluated separately.",
+    "Named polygon regions are provisional and retain the original atlas at a white factor. Customization uses the embedded pixel mask rather than material multiplication."
+  ]
+}

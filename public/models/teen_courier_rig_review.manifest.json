@@ -1,0 +1,76 @@
+{
+  "asset": "teen_courier_rig_review.glb",
+  "status": "rig-deformation-review",
+  "source": "art/characters/teen-courier/reconstruction/teen-courier-tripo-v2_5-biped-rig.glb",
+  "contract": {
+    "units": "meters",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "origin": "ground contact",
+    "heightMeters": 1.62
+  },
+  "rig": {
+    "provider": "Tripo",
+    "modelVersion": "v2.5-20260210",
+    "skinCount": 1,
+    "sourceNodeCount": 60,
+    "animations": 0,
+    "reviewRequired": true,
+    "weightCleanup": {
+      "candidateHandVertices": 2304,
+      "affectedVertices": 572,
+      "removedLegAssignments": 572,
+      "fallbackVertices": 0,
+      "removedGroups": [
+        "tripo::0_Left_Limb_0",
+        "tripo::0_Left_Limb_1",
+        "tripo::0_Left_Limb_2",
+        "tripo::0_Left_Limb_3",
+        "tripo::0_Right_Limb_0",
+        "tripo::0_Right_Limb_1",
+        "tripo::0_Right_Limb_2",
+        "tripo::0_Right_Limb_3"
+      ]
+    }
+  },
+  "geometry": {
+    "blenderVertices": 24261,
+    "exportedVertices": 24304,
+    "triangles": 17681
+  },
+  "textures": {
+    "glbEmbedded": true,
+    "blendPackedImages": [
+      "Color_99c17e80-3736-4938-9712-a4ef0b30528b",
+      "NormalGL_99c17e80-3736-4938-9712-a4ef0b30528b",
+      "ORM_99c17e80-3736-4938-9712-a4ef0b30528b"
+    ],
+    "portable": true
+  },
+  "hashes": {
+    "glbSha256": "e98333cf08bd535e373f1c98a4df32e7c4b0dc6510b92f91361a9f8086cd3c07",
+    "blendSha256": "005b2e11613164b103a3557db98ffa21388e0b5cf812a4a53260c36309d23585"
+  },
+  "blenderWorldBounds": {
+    "min": [
+      -0.35665374994277954,
+      -0.16009798645973206,
+      0.0
+    ],
+    "max": [
+      0.35665372014045715,
+      0.16009807586669922,
+      1.6200001239776611
+    ]
+  },
+  "validation": {
+    "handInfluenceRegression": "fixed",
+    "combinedPoseFinite": true,
+    "combinedPoseVisualReview": "accepted",
+    "evidence": "docs/milestones/2026-09-13-teen-courier-rig-pose.jpg"
+  },
+  "notes": [
+    "Preserves provider weights and hierarchy except the documented narrow hand influence correction.",
+    "Full pedaling, shoulder, hip, and facial-topology review remains pending before runtime use."
+  ]
+}
