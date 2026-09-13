@@ -551,3 +551,11 @@ roadmap.
 - Passed 1440 × 1000 and 390 × 844 production review, saved-look reload,
   independent accessory removal, draft-only Reset, corrupt and blocked storage,
   missing-manifest retry, existing-game loading, all 39 tests, and the build.
+- Installed and enabled Tripo Bridge 1.0.32 in Blender 5.1.2 for a future
+  Studio-to-Blender artist handoff. The Blender-side handshake and heartbeat
+  response were verified; the complete Studio DCC Bridge connection remains
+  pending. No asset transfer, service generation, or credit use occurred, and
+  the current courier and trousers were unchanged. Future transfers will follow
+  the [official guide](https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-blender),
+  preserve a source copy, and check the mesh and materials before garment
+  cleanup and browser-export review.

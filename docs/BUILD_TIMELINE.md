@@ -622,6 +622,23 @@ traffic, and economy progression remain later systems.
   [back](milestones/2026-09-13-trousers-fit-back.jpg), and
   [mobile](milestones/2026-09-13-trousers-fit-mobile.jpg) frames.
 
+## 2026-09-13 — Studio-to-Blender artist bridge setup
+
+- Installed and enabled Tripo Bridge 1.0.32 in Blender 5.1.2 and verified
+  the Blender-side handshake and heartbeat response. The complete Tripo Studio
+  DCC Bridge connection remains to be verified using the
+  [official guide](https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-blender).
+- This prepares a future artist flow from Tripo Studio reconstruction into a
+  controlled Blender cleanup scene and then to a browser-verified glTF export.
+  The transferred source will be preserved and its mesh and materials checked
+  before cleanup continues.
+- No model transfer, import, generation request, or credit use
+  occurred. This tooling milestone does not change the current courier,
+  trousers, rig status, or remaining garment refinement.
+- The next garment pass should refine cuff thickness and restrained fold/seam
+  detail, fit all three shoe options, and review the exported GLB in browser
+  front, side, back, and mobile views.
+
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a

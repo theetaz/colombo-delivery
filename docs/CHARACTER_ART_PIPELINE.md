@@ -161,6 +161,29 @@ rear wheel, and place shoe soles and pedal contact surfaces deliberately. Set
 normals, tangents, UVs, colour space, alpha behavior, and material sidedness
 explicitly before export.
 
+#### Optional Studio-to-Blender handoff
+
+The artist workstation has Tripo Bridge 1.0.32 enabled in Blender 5.1.2. The
+Blender-side handshake and heartbeat response were verified. A complete Tripo
+Studio DCC Bridge connection has not yet been verified. Follow the
+[official Tripo DCC Bridge for Blender guide](https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-blender)
+when completing that connection. No model transfer, import, generation request,
+or credit use was performed during this setup, so it does not change the
+current courier or garment assets.
+
+For a future reconstruction, transfer into a controlled copy of the Blender
+scene, preserve the received source, and inspect the mesh and materials before
+cleanup. The product pipeline remains: reconstruct from the selected concept in
+Tripo Studio, bring the result into Blender through the artist bridge, clean and
+fit the mesh and materials, export glTF, then verify the exported GLB in the
+browser. The bridge
+shortens the handoff; it does not replace garment construction, retopology,
+weight review, or browser validation.
+
+For the next trouser pass, refine cuff thickness, add restrained folds and seam
+detail, verify the fit against all three shoe options, and review the exported
+browser GLB from front, side, back, and mobile views.
+
 ### 4. Build a deformation rig
 
 Create a real armature with skinned deformation for the body and garments.
