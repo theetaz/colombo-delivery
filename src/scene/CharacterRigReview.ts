@@ -97,7 +97,7 @@ async function showModel(nextMode: ModelMode): Promise<void> {
       );
     frame(view);
     const cleanRig = nextMode !== "original";
-    status.textContent = `${models[nextMode].label} loaded · ${cleanRig ? "upper-body checkpoint" : "appearance reference only"}`;
+    status.textContent = `${models[nextMode].label} loaded · ${cleanRig ? "rejected upper-body checkpoint" : "appearance reference only"}`;
   } catch (error) {
     if (disposed || request !== generation) return;
     status.textContent = `Review model unavailable · ${error instanceof Error ? error.message : "load failed"}`;

@@ -725,3 +725,26 @@ roadmap.
 - Passed all 60 tests and the production build for the clean-rig checkpoint.
   Confirmed that the local review page serves the frozen neutral and lean GLB
   bytes, and handed the upper-body comparison over for human visual feedback.
+- Recorded human rejection of clean-rig checkpoint 1. Its model and review
+  variants remain preserved in commit `26b0828`; passing automatic geometry and
+  export checks did not constitute visual approval.
+- On 2026-09-14, audited clean-rig checkpoint 1 and found two concrete weighting
+  defects. A broad Z-below-0.70 m rule assigned lower hand vertices to leg bones
+  and produced hand-region edge strain up to 11.87×; the rigid head/deforming-neck boundary
+  reached 8.2×. Revision 2 used anatomical component membership and smooth
+  neck-ring weights, but its constrained transition moved strain to the outer
+  boundaries: all triangle edges ranged from 0.588865× to 2.096243×. It failed
+  engineering review and is not being shown as a corrected model. Further
+  parameter iteration stopped pending a deformation-energy solve or
+  source-authored weights; bicycle fitting and animation remain blocked.
+- Ran one isolated cage prototype after the failed harmonic transition. It kept
+  neutral geometry and rigid head/arm regions stable but produced 0.097824× to
+  10.306895× triangle-edge ratios at the cage/neck boundary. The diagnostic
+  artifacts remain under `art/characters/teen-courier/cage-rig/` and are not
+  review-ready. Model trials stopped with the torso/neck/head and disconnected-
+  part interface unresolved; the approved original face and bicycle are
+  unchanged.
+- Added regression fixtures that explicitly detect excessive distortion in the
+  three rejected models by comparing corresponding exported triangle edges.
+  All 63 tests and the production build pass; these checks confirm known
+  failures and do not establish an acceptable replacement character.

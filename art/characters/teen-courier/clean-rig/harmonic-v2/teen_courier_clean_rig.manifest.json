@@ -1,8 +1,8 @@
 {
   "asset": "teen_courier_clean_rig",
-  "revision": "teen-courier-clean-rig/1",
+  "revision": "teen-courier-clean-rig/2",
   "status": "upper-body-deformation-checkpoint",
-  "reviewStatus": "rejected-by-human-review",
+  "reviewStatus": "engineering-rejected",
   "source": "art/characters/teen-courier/teen_courier_cleanup.blend",
   "provenance": {
     "approvedStaticGlb": "public/models/teen_courier.glb",
@@ -25,7 +25,7 @@
     }
   },
   "outputs": {
-    "editableBlend": "art/characters/teen-courier/clean-rig/teen_courier_clean_rig.blend",
+    "editableBlend": "art/characters/teen-courier/clean-rig/harmonic-v2/teen_courier_clean_rig.blend",
     "neutral": "teen_courier_clean_rig_neutral.glb",
     "upperBody": "teen_courier_clean_rig_upper_body.glb"
   },
@@ -333,7 +333,7 @@
     "oldProviderArmatureUsed": false
   },
   "weighting": {
-    "method": "anatomical segment distance fields, five mesh-adjacency relaxation passes, cross-component proximity seam synchronization",
+    "method": "anatomical component assignments; inverse-edge-length harmonic head/chest/pelvis fields with fixed boundary regions on the main component; component-scoped arm-chain distance weights",
     "maxInfluences": 4,
     "rigidHeadVertexCount": 5592,
     "rigidHeadVertexIds": [
@@ -5949,8 +5949,77 @@
       17,
       15
     ],
+    "sourceComponentAssignments": {
+      "0": {
+        "size": 6133,
+        "role": "main_head_torso"
+      },
+      "1": {
+        "size": 513,
+        "role": "arm.R"
+      },
+      "2": {
+        "size": 509,
+        "role": "arm.L"
+      },
+      "3": {
+        "size": 434,
+        "role": "foot.R"
+      },
+      "4": {
+        "size": 430,
+        "role": "foot.L"
+      },
+      "5": {
+        "size": 363,
+        "role": "pelvis"
+      },
+      "6": {
+        "size": 202,
+        "role": "leg.R"
+      },
+      "7": {
+        "size": 202,
+        "role": "leg.L"
+      },
+      "8": {
+        "size": 45,
+        "role": "foot.R"
+      },
+      "9": {
+        "size": 31,
+        "role": "foot.L"
+      },
+      "10": {
+        "size": 29,
+        "role": "foot.L"
+      },
+      "11": {
+        "size": 28,
+        "role": "foot.R"
+      },
+      "12": {
+        "size": 17,
+        "role": "head_detail"
+      },
+      "13": {
+        "size": 15,
+        "role": "foot.L"
+      },
+      "harmonic": {
+        "headPins": 5670,
+        "shoulderPins": 77,
+        "waistPins": 82,
+        "iterations": 446,
+        "finalMaxDelta": 9.903739939254308e-09
+      }
+    },
+    "neckTransition": "fixed rigid-head region expanded by three topology rings; unconstrained main-component vertices use the harmonic field",
+    "shoulderTransition": "fixed chest regions expanded by three topology rings from cross-component arm attachment pairs",
+    "waistTransition": "fixed pelvis regions expanded by three topology rings from cross-component pelvis attachment pairs",
+    "armPolicy": "513/509-vertex arm islands use their own side arm chain; those bones share chest motion in this upper-body-only pose",
     "boundarySeamPairCount": 265,
-    "synchronizedSeamVertexCount": 273,
+    "synchronizedSeamVertexCount": 0,
     "positionBoxOverwriteHeuristics": false
   },
   "pose": {
@@ -5984,8 +6053,8 @@
     "neutralMaxVertexErrorMeters": 1.2293457984924316e-07,
     "rigidHeadMaxEdgeLengthErrorMeters": 2.6489435612023216e-08,
     "rigidHeadMaxSingleTransformResidualMeters": 1.4901161193847656e-08,
-    "pairedBoundarySeamMaxWeightError": 0.0,
-    "posedBoundarySeamMaxGapIncreaseMeters": 1.4917918200220426e-08,
+    "pairedBoundarySeamMaxWeightError": 1.0,
+    "posedBoundarySeamMaxGapIncreaseMeters": 1.8270729644498385e-08,
     "allWeightSumsNormalized": true,
     "faceFairingSeedFullyProtected": true,
     "mouth17ComponentFullyProtected": true,
@@ -6001,7 +6070,34 @@
     "evaluatedToBakedMaxCornerNormalError": 0.00034841601310610837,
     "protectedHeadTargetToBakedMaxCornerNormalError": 0.00034841601310610837,
     "sourceNeutralToBakedProtectedMaxCornerNormalError": 0.00034841601310610837,
-    "humanAppearanceReviewRequired": true
+    "allTriangleEdgeStrain": {
+      "edgeCount": 26643,
+      "minRatio": 0.588865433870443,
+      "minEdge": [
+        7471,
+        7500
+      ],
+      "maxRatio": 2.0962433642860514,
+      "maxEdge": [
+        730,
+        749
+      ]
+    },
+    "armTriangleEdgeStrain": {
+      "edgeCount": 3053,
+      "minRatio": 0.9999864697176799,
+      "minEdge": [
+        7563,
+        7605
+      ],
+      "maxRatio": 1.0000088681267398,
+      "maxEdge": [
+        7348,
+        7353
+      ]
+    },
+    "humanAppearanceReviewRequired": true,
+    "neckEdge3276_3277StrainRatio": 1.0
   },
   "geometry": {
     "blenderVertices": 8951,
@@ -6011,7 +6107,7 @@
       "skins": 1
     },
     "upperBodyGlb": {
-      "vertices": 25018,
+      "vertices": 25017,
       "triangles": 17681,
       "skins": 0
     }
@@ -6022,12 +6118,20 @@
     "materialSlotNamesSha256": "109eba9720cf0a7eac4f00b211b9b6ed45e49f12a60b8b1314936caada5b9aa7"
   },
   "hashes": {
-    "blendSha256": "d55b1b6d98ae9ffb0bc9cfcc485cee5ec8719ef549efb54c883b6c2c9138b29f",
-    "neutralGlbSha256": "64f17c6995455898f4c167cd9db2c0aebfa10cabfe700f9fb927476eff827b70",
-    "upperBodyGlbSha256": "d9a6f860b472b199bcf7233f0cf1b2c3012d752d88b82ea2f4825e672919b1c0"
+    "blendSha256": "65c02300bc4ac7630aa85c6a2d2e3dd45d70351f415fe2c0bcd23e9f306e8ed4",
+    "neutralGlbSha256": "5e9aaee8178d3f7998280e38f7820846e4b8d55274a1a3f114eeaca052888bc4",
+    "upperBodyGlbSha256": "b2d6ef9e3fc217126beffd0c3733baed23562d871d30fd84c59fea585da41526"
   },
+  "history": [
+    {
+      "revision": "teen-courier-clean-rig/1",
+      "reviewStatus": "rejected",
+      "reason": "hand vertices received leg weights and the hard neck boundary caused severe edge strain"
+    }
+  ],
   "notes": [
     "This is a torso, shoulder, neck, and head checkpoint only.",
-    "No visual acceptance claim is made; appearance remains a human review gate."
+    "No visual acceptance claim is made; appearance remains a human review gate.",
+    "Rejected harmonic experiment; retained for reproduction and regression diagnosis. Not a review-ready replacement."
   ]
 }

@@ -1,0 +1,48 @@
+{
+  "asset": "teen_courier_cage_rig_upper_body.glb",
+  "status": "isolated-cage-deformation-prototype",
+  "reviewStatus": "engineering-rejected",
+  "source": "art/characters/teen-courier/teen_courier_cleanup.blend",
+  "sourceSha256": "aa05a333eea062498f88def600965e0c71c5cc3396771ba88771243875a20f8a",
+  "method": "closed 12x16 regular torso/neck cage bound with Blender MeshDeform; protected head excluded; component-bounded armature for head and limbs",
+  "scope": {
+    "staticUpperBodyOnly": true,
+    "gameAnimationSupport": false,
+    "sourceGeometryEdited": false
+  },
+  "validation": {
+    "neutralMaxVertexErrorMeters": 1.2293457984924316e-07,
+    "rigidHeadTransformResidualMeters": 1.4901161193847656e-08,
+    "triangleEdgeStrain": {
+      "edgeCount": 26643,
+      "minRatio": 0.09782422014152765,
+      "minEdge": [
+        3256,
+        5342
+      ],
+      "maxRatio": 10.306894761827255,
+      "maxEdge": [
+        7654,
+        7655
+      ]
+    },
+    "armTriangleEdgeStrain": {
+      "edgeCount": 3053,
+      "minRatio": 0.9999864697176799,
+      "minEdge": [
+        7563,
+        7605
+      ],
+      "maxRatio": 1.0000088681267398,
+      "maxEdge": [
+        7348,
+        7353
+      ]
+    },
+    "protectedNormalResidual": 0.00034841601310610837
+  },
+  "hashes": {
+    "blendSha256": "0176dc071e971742e246409b3589cd216bb3e50c26540f924dc575315923fa69",
+    "glbSha256": "4b189249d5055ae983e1449f085acea4b7dcaa9118b250171e1c448878e75988"
+  }
+}

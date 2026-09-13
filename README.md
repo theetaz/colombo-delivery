@@ -1,6 +1,6 @@
 # Colombo Delivery
 
-> **Current art status:** The standalone commuter bicycle remains human-approved. The full-body stationary rider was rejected, and replacement work has reset to a clean rig. The active checkpoint reviews only the original standing character, a new neutral rig, and an upper-body forward lean in [`character-rig-review.html`](character-rig-review.html). Hands, legs, bicycle fitting, and animation wait for human approval; see the [rider fit record](docs/RIDER_FIT.md).
+> **Current art status:** The standalone commuter bicycle remains human-approved. Human review rejected both the full-body stationary rider and clean-rig checkpoint 1. A later source audit confirmed hand and neck weighting defects, but the revision 2 transition-weight repair also failed its deformation bounds and is not being presented for review. Bicycle fitting and animation stay blocked; see the [rider fit record](docs/RIDER_FIT.md).
 
 
 Colombo Delivery is a planned browser-based 3D driving game built around real
@@ -302,7 +302,8 @@ The user approved the standalone commuter bicycle at frozen GLB SHA-256
 The original teenage courier appearance is being refitted to its stationary
 seat, grip, and pedal anchors. Human review rejected the previous fit because of
 a severe triangular torso deformation and waist gap; its contact and limb checks
-had not measured visible surface strain. A repaired static mesh is ready for human review, while the approved bicycle
-and current game remain unchanged. Animation or
-physics work waits for separate fit approval. See the
+had not measured visible surface strain. The later clean-rig checkpoint was also
+rejected, and two replacement experiments failed engineering review. No
+corrected character model is ready; the approved bicycle and current game remain
+unchanged. Animation and physics work remain blocked. See the
 [bicycle rebuild](docs/BICYCLE_REBUILD.md) and [rider fit](docs/RIDER_FIT.md).

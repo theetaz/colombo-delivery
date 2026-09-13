@@ -4,12 +4,13 @@
 
 The standalone commuter bicycle remains human-approved and frozen at SHA-256
 `ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`.
-Human review rejected `teen-courier-seated-v2/2`. Work has reset to a clean rig
-and a smaller upper-body checkpoint: compare the original standing character,
-the new neutral rig, and one forward-lean pose in
-`/character-rig-review.html`. This checkpoint covers the head, torso, and
-shoulders only. Hands and legs remain neutral; the character is not mounted on
-the bicycle, fully fitted, or animated.
+Human review rejected `teen-courier-seated-v2/2` and subsequently rejected the
+smaller `teen-courier-clean-rig/1` upper-body checkpoint. The original standing
+character, new neutral rig, and forward-lean pose remain available in
+`/character-rig-review.html` for comparison. A later source audit found concrete
+weighting defects in v1. A revision 2 repair was attempted but failed its
+deformation bounds and is not a review candidate. Hands and legs remain neutral;
+the character is not mounted on the bicycle, fully fitted, or animated.
 
 Human review rejected the previous rider because its torso stretched into a
 large triangle and the waist separated. Identity transforms, contact markers,
@@ -21,9 +22,22 @@ rejected the overall body construction. Numeric checks can guard known failure
 modes without proving that the anatomy or silhouette looks right. The new rig
 preserves the original face, hair, and UVs while rebuilding weights from named
 anatomical regions rather than reusing the provider weights or repeating broad
-coordinate-box corrections. Human acceptance of the limited upper-body
-checkpoint remains pending before hand, leg, bicycle-fit, or animation work
-resumes.
+coordinate-box corrections. Human review rejected the limited upper-body
+checkpoint. Hand, leg, bicycle-fit, and
+animation work remains blocked.
+
+Clean-rig v1 is preserved in commit `26b0828`. Its source assigned every vertex
+below Blender Z 0.70 m to pelvis or leg bones. That height rule crossed
+unrelated disconnected components and produced hand-region edge strain up to
+11.87×. The rigid head boundary also met the deforming neck abruptly, producing
+8.2× edge strain. Revision 2 replaces the height rule with anatomical component
+membership and smooth neck-ring weights. That constrained transition moved
+strain to its outer boundaries: all triangle-edge strain ranged from 0.588865×
+to 2.096243×, despite rigid arm edges staying within 0.999986×–1.000009× and
+the known neck edge reaching 1.0×. The result failed engineering review and is
+not presented as a corrected model. Further radius or ring parameter iterations
+would repeat the same boundary problem; the transition needs a deformation-
+energy solve or source-authored weights.
 
 The approved cleanup mesh has 8,951 vertices, 17,681 polygons, and 14
 disconnected components. It has no exact-position duplicate vertices; visible
@@ -58,9 +72,10 @@ original neutral split normals through the rigid head transform and validates
 the actual GLB by triangle UV corners. Its maximum protected face-and-hair
 normal error is `0.000348416`, while human appearance review remains required.
 
-### Clean-rig checkpoint reproduction
+### Rejected clean-rig checkpoint 1 reproduction
 
-Rebuild the provisional upper-body checkpoint from the repository root:
+Checkpoint 1 and its builder are preserved in commit `26b0828`. From that
+checkout, rebuild it with:
 
 ```sh
 /Applications/Blender.app/Contents/MacOS/Blender -b art/characters/teen-courier/teen_courier_cleanup.blend --python art/characters/teen-courier/clean-rig/build_clean_rig.py
@@ -73,18 +88,38 @@ npm run build
 | `art/characters/teen-courier/clean-rig/teen_courier_clean_rig.blend` | `d55b1b6d98ae9ffb0bc9cfcc485cee5ec8719ef549efb54c883b6c2c9138b29f` |
 | `public/models/teen_courier_clean_rig_neutral.glb` | `64f17c6995455898f4c167cd9db2c0aebfa10cabfe700f9fb927476eff827b70` |
 | `public/models/teen_courier_clean_rig_upper_body.glb` | `d9a6f860b472b199bcf7233f0cf1b2c3012d752d88b82ea2f4825e672919b1c0` |
-| `public/models/teen_courier_clean_rig.manifest.json` | `b0e552278d1278305702ab420e5ea3f88ba167705c307216ca6f4802ff07e61a` |
+| `public/models/teen_courier_clean_rig.manifest.json` | `a821019802b1f2738dbd63c5dd6b7bcc672bb21603fc59a0b0236f80f638b1cc` |
 
 The source retains 21 named bones and the neutral export retains one skin. The
 forward-lean browser artifact is static and unskinned, with 0.140679 m of chest
 forward displacement and 0.144570 m at `HeadFocus` in Blender +Y. Weight sums
 are normalized, 265 boundary seam pairs have zero weight mismatch, and their
 posed gap increase is below `1.5e-8` m. These are engineering checks for the
-limited checkpoint, not an appearance approval.
+rejected limited checkpoint, not an appearance approval.
 
 Final verification passed all 60 tests and the production build. The local
-review page serves the same neutral and lean GLB bytes recorded above. Visual
-review is handed to the user; no screenshot or computer-vision check was used.
+review page serves the same neutral and lean GLB bytes recorded above. Human
+review subsequently rejected the checkpoint; no screenshot or computer-vision
+score was used as an acceptance gate.
+
+### Failed revision 2 experiments
+
+The rejected harmonic experiment is reproducible with
+`art/characters/teen-courier/clean-rig/rejected_harmonic_v2.py`; its isolated
+outputs are under `art/characters/teen-courier/clean-rig/harmonic-v2/`. The
+separate cage experiment is reproducible with
+`art/characters/teen-courier/cage-rig/build_cage_rig.py`, with outputs beside
+that script. The cage preserved neutral geometry and the rigid head and arms,
+but its cage/neck boundary produced triangle-edge ratios from 0.097824× to
+10.306895×. Neither experiment is review-ready. The unresolved problem is the
+continuous torso, neck, head, and disconnected-part interface; it requires
+source-authored transition topology or weights rather than another broad
+parameter adjustment. The approved original face and bicycle remain unchanged.
+
+The diagnostic suite now checks every corresponding triangle edge in these
+three rejected exports. All 63 tests and the production build pass, including
+three tests that explicitly confirm excessive distortion in rejected fixtures.
+Those passing tests record the failures; they do not certify a corrected model.
 
 The artistic target is
 [`seated-pose-guide-v2.png`](../public/references/rider-fit/seated-pose-guide-v2.png).

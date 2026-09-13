@@ -809,7 +809,7 @@ question for the user's quick review.
 
 ## 2026-09-13 — Stationary rider deformation rejected
 
-Status: revision 2 ready for human review.
+Status: revision 2 was prepared for human review and then rejected.
 
 Human review rejected the stationary rider because its torso collapsed into a
 large triangle and the waist separated. Earlier identity, contact-marker,
@@ -863,7 +863,7 @@ boundary correspondences, uses smooth weights, and locks face/hair rest IDs.
 The new `/character-rig-review.html` checkpoint compares the original standing
 model, a new neutral rig, and one forward lean. Review is limited to the head,
 torso, and shoulders; hands and legs remain neutral, and bicycle mounting,
-full-body fitting, and animation remain blocked pending human acceptance. No
+full-body fitting, and animation were blocked pending human acceptance. No
 retopology, manifold, or automatic quality claim is made.
 
 The export audit found that a skinned lean with no animation reopened at rest,
@@ -872,4 +872,30 @@ a stale head label that omitted chin and mouth membership. A later shading
 check found that copying evaluated normals changed some rigid chin and upper
 neck normals by about 10°; the final bake transforms original neutral split
 normals with the rigid head and checks actual exported triangle corners. Human
-appearance approval remains pending.
+appearance approval remained pending at that handoff.
+
+Human review rejected clean-rig checkpoint 1 after those engineering checks
+passed. Its model files remain preserved in commit `26b0828`; numeric validation
+did not constitute visual approval.
+
+### 2026-09-14 — Clean-rig revision 2 repair
+
+A source audit after checkpoint 1 found that a broad Blender Z-below-0.70 m
+assignment crossed anatomical components, attached lower hand vertices to leg
+bones, and produced hand-region edge strain up to 11.87×. The rigid head also
+met the deforming neck at an abrupt boundary with 8.2× edge strain. Revision 2
+replaces the height rule with anatomical component membership and smooth
+neck-ring weights. The attempt kept arm edges near 1.0× and the known neck edge
+at 1.0×, but moved strain to the constraint boundaries; full triangle-edge
+strain ranged from 0.588865× to 2.096243×. Revision 2 failed engineering review
+and is not a human-review candidate. Further parameter tuning stopped because
+the transition requires a deformation-energy solve or source-authored weights.
+Full bicycle fit and animation remain blocked.
+
+One isolated deformation-cage prototype then preserved neutral geometry and
+the rigid head and arms but failed at the cage/neck interface, with triangle-
+edge ratios from 0.097824× to 10.306895×. It remains under
+`art/characters/teen-courier/cage-rig/` for diagnosis and is not review-ready.
+Trials stopped with the continuous torso/neck/head and disconnected-part
+interface unresolved. The public viewer continues to show rejected checkpoint
+1; the approved original face and bicycle remain unchanged.

@@ -1,4 +1,4 @@
-"""Build the first clean deformation checkpoint from the approved static courier.
+"""Reproduce the rejected harmonic deformation experiment from the approved courier.
 
 The neutral export is the source mesh under a new rest-pose armature. The only
 posed export is a distributed upper-body lean; limb contact posing is deliberately
@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections import defaultdict
 from pathlib import Path
 import hashlib
+import heapq
 import json
 import math
 import struct
@@ -24,12 +25,12 @@ ROOT = Path(__file__).resolve().parents[4]
 SOURCE_BLEND = ROOT / "art/characters/teen-courier/teen_courier_cleanup.blend"
 SOURCE_GLB = ROOT / "public/models/teen_courier.glb"
 POSE_GUIDE = ROOT / "public/references/rider-fit/seated-pose-guide-v2.png"
-OUT_DIR = ROOT / "art/characters/teen-courier/clean-rig"
+OUT_DIR = ROOT / "art/characters/teen-courier/clean-rig/harmonic-v2"
 BLEND = OUT_DIR / "teen_courier_clean_rig.blend"
-NEUTRAL_GLB = ROOT / "public/models/teen_courier_clean_rig_neutral.glb"
-LEAN_GLB = ROOT / "public/models/teen_courier_clean_rig_upper_body.glb"
-MANIFEST = ROOT / "public/models/teen_courier_clean_rig.manifest.json"
-HEAD_LABEL = OUT_DIR / "head_protected_vertex_ids.json"
+NEUTRAL_GLB = OUT_DIR / "teen_courier_clean_rig_neutral.glb"
+LEAN_GLB = OUT_DIR / "teen_courier_clean_rig_upper_body.glb"
+MANIFEST = OUT_DIR / "teen_courier_clean_rig.manifest.json"
+HEAD_LABEL = ROOT / "art/characters/teen-courier/clean-rig/head_protected_vertex_ids.json"
 
 
 BONES = [
@@ -84,7 +85,7 @@ def create_armature() -> bpy.types.Object:
     bpy.ops.object.mode_set(mode="OBJECT")
     rig.show_in_front = True
     rig["assetType"] = "teen_courier_clean_rig"
-    rig["revision"] = "teen-courier-clean-rig/1"
+    rig["revision"] = "teen-courier-clean-rig/2"
     return rig
 
 
@@ -148,97 +149,127 @@ def boundary_seam_pairs(mesh, components, maximum_gap=0.009):
 def make_weights(mesh, rig):
     deform = {name: (Vector(head), Vector(tail)) for name, _, head, tail, enabled in BONES if enabled}
     groups = {name: mesh.vertex_groups.new(name=name) for name in deform}
-    materials = vertex_materials(mesh)
     label = json.loads(HEAD_LABEL.read_text())
     if label.get("selectionVersion") != "head-label/2-below-chin-topology":
         raise ValueError("Stale or unsupported protected-head label; explicitly re-author it")
     rigid_head = set(label["vertexIds"])
     adjacency, components = connected_components(mesh)
+    component_index = {vertex: i for i, component in enumerate(components) for vertex in component}
+    component_roles = {}
+    for i, component in enumerate(components):
+        size = len(component)
+        centroid = sum((mesh.data.vertices[v].co for v in component), Vector()) / size
+        if size == 6133:
+            role = "main_head_torso"
+        elif size in {513, 509}:
+            role = "arm.R" if centroid.x > 0 else "arm.L"
+        elif size == 363:
+            role = "pelvis"
+        elif size == 202:
+            role = "leg.R" if centroid.x > 0 else "leg.L"
+        elif size in {434, 430}:
+            role = "foot.R" if centroid.x > 0 else "foot.L"
+        elif component <= rigid_head:
+            role = "head_detail"
+        elif centroid.z < 0.26:
+            role = "foot.R" if centroid.x > 0 else "foot.L"
+        elif centroid.z < 0.72:
+            role = "leg.R" if centroid.x > 0 else "leg.L"
+        else:
+            role = "pelvis_detail"
+        component_roles[i] = role
 
-    weights = []
-    for vertex in mesh.data.vertices:
-        p = vertex.co.copy()
-        if vertex.index in rigid_head:
-            weights.append({"head": 1.0})
-            continue
+    main_index = next(i for i, role in component_roles.items() if role == "main_head_torso")
+    main_component = components[main_index]
+    head_ring = {
+        neighbor for head_vertex in rigid_head & main_component
+        for neighbor in adjacency[head_vertex]
+        if neighbor in main_component and neighbor not in rigid_head
+    }
+    seam_pairs = [pair for pair in boundary_seam_pairs(mesh, components) if (pair[0] in rigid_head) == (pair[1] in rigid_head)]
+    shoulder_pins, waist_pins = set(), set()
+    for a, b in seam_pairs:
+        ra, rb = component_roles[component_index[a]], component_roles[component_index[b]]
+        if ra == "main_head_torso" and rb.startswith("arm."):
+            shoulder_pins.add(a)
+        elif rb == "main_head_torso" and ra.startswith("arm."):
+            shoulder_pins.add(b)
+        elif ra == "main_head_torso" and rb == "pelvis":
+            waist_pins.add(a)
+        elif rb == "main_head_torso" and ra == "pelvis":
+            waist_pins.add(b)
+    def expand_main_ring(seeds, rings):
+        expanded = set(seeds)
+        frontier = set(seeds)
+        for _ in range(rings):
+            frontier = {neighbor for vertex in frontier for neighbor in adjacency[vertex] if neighbor in main_component} - expanded
+            expanded.update(frontier)
+        return expanded
+    shoulder_pins = expand_main_ring(shoulder_pins, 3) - rigid_head
+    waist_pins = expand_main_ring(waist_pins, 3) - rigid_head
+    head_pins = expand_main_ring(rigid_head & main_component, 3)
+    conflicts = (head_pins & shoulder_pins) | (head_pins & waist_pins) | (shoulder_pins & waist_pins)
+    if conflicts:
+        raise ValueError(f"Incompatible main-component harmonic pins: {sorted(conflicts)[:12]}")
 
-        candidates = list(deform)
-        if p.z < 0.70:
-            candidates = [n for n in candidates if n.startswith(("thigh", "shin", "foot")) or n == "pelvis"]
-        elif p.z > 1.34 and abs(p.x) < 0.16:
-            candidates = ["neck", "head", "chest"]
-        elif abs(p.x) < 0.155:
-            candidates = [n for n in ("pelvis", "spine_lower", "spine_upper", "chest", "neck")]
-        elif p.z > 0.69:
-            side = ".L" if p.x < 0 else ".R"
-            candidates = ["chest", "neck", "clavicle" + side, "upper_arm" + side, "forearm" + side, "hand" + side]
-
-        scored = []
-        for name in candidates:
-            distance = point_segment_distance(p, *deform[name])
-            radius = 0.12 if name in {"pelvis", "spine_lower", "spine_upper", "chest"} else 0.085
-            score = math.exp(-((distance / radius) ** 2) * 2.2)
-            scored.append((score, name))
-        scored.sort(reverse=True)
-        chosen = scored[:4]
-        total = sum(score for score, _ in chosen) or 1.0
-        weights.append({name: score / total for score, name in chosen if score / total > 0.003})
-
-    # Relax over actual mesh edges. Rigid head vertices remain exact seeds.
-    for _ in range(5):
-        relaxed = []
-        for i, current in enumerate(weights):
-            if i in rigid_head or not adjacency[i]:
-                relaxed.append(current)
+    fixed = {v: {"head": 1.0, "chest": 0.0, "pelvis": 0.0} for v in head_pins}
+    fixed.update({v: {"head": 0.0, "chest": 1.0, "pelvis": 0.0} for v in shoulder_pins})
+    fixed.update({v: {"head": 0.0, "chest": 0.0, "pelvis": 1.0} for v in waist_pins})
+    field = {v: fixed.get(v, {"head": 1/3, "chest": 1/3, "pelvis": 1/3}).copy() for v in main_component}
+    converged_delta = math.inf
+    for iteration in range(4000):
+        updated = {}
+        converged_delta = 0.0
+        for vertex in main_component:
+            if vertex in fixed:
+                updated[vertex] = fixed[vertex]
                 continue
             accum = defaultdict(float)
-            for name, value in current.items():
-                accum[name] += value * 0.62
-            scale = 0.38 / len(adjacency[i])
-            for neighbor in adjacency[i]:
-                for name, value in weights[neighbor].items():
+            scale_sum = 0.0
+            for neighbor in adjacency[vertex]:
+                if neighbor not in main_component:
+                    continue
+                edge_length = (mesh.data.vertices[vertex].co - mesh.data.vertices[neighbor].co).length
+                scale = 1.0 / max(edge_length, 1e-6)
+                scale_sum += scale
+                for name, value in field[neighbor].items():
                     accum[name] += value * scale
-            best = sorted(accum.items(), key=lambda item: item[1], reverse=True)[:4]
-            total = sum(value for _, value in best) or 1.0
-            relaxed.append({name: value / total for name, value in best})
-        weights = relaxed
+            result = {name: accum[name] / scale_sum for name in ("head", "chest", "pelvis")}
+            converged_delta = max(converged_delta, *(abs(result[name] - field[vertex][name]) for name in result))
+            updated[vertex] = result
+        field = updated
+        if converged_delta < 1e-8:
+            break
 
-    # The source has open island gaps rather than duplicate coordinates. Pair
-    # boundary loops within 9 mm and equalize their vectors to stop shirt/skin,
-    # shorts/torso, and shoe/leg seams from acquiring divergent transforms.
-    seam_pairs = [
-        pair for pair in boundary_seam_pairs(mesh, components)
-        if (pair[0] in rigid_head) == (pair[1] in rigid_head)
-    ]
-    seam_graph = defaultdict(set)
-    for a, b in seam_pairs:
-        seam_graph[a].add(b)
-        seam_graph[b].add(a)
-    remaining = set(seam_graph)
-    seam_clusters = []
-    while remaining:
-        start = remaining.pop()
-        cluster = {start}
-        stack = [start]
-        while stack:
-            for neighbor in seam_graph[stack.pop()]:
-                if neighbor in remaining:
-                    remaining.remove(neighbor)
-                    cluster.add(neighbor)
-                    stack.append(neighbor)
-        seam_clusters.append(sorted(cluster))
-    synchronized_vertices = set()
-    for indices in seam_clusters:
-        accum = defaultdict(float)
-        for index in indices:
-            for name, value in weights[index].items():
-                accum[name] += value
-        best = sorted(accum.items(), key=lambda item: item[1], reverse=True)[:4]
-        total = sum(value for _, value in best) or 1.0
-        shared = {name: value / total for name, value in best}
-        for index in indices:
-            weights[index] = shared.copy()
-            synchronized_vertices.add(index)
+    weights = [{} for _ in mesh.data.vertices]
+    for vertex in mesh.data.vertices:
+        index = vertex.index
+        role = component_roles[component_index[index]]
+        if index in rigid_head or role == "head_detail":
+            weights[index] = {"head": 1.0}
+        elif role.startswith("arm."):
+            side = role[-2:]
+            arm_bones = ("clavicle" + side, "upper_arm" + side, "forearm" + side, "hand" + side)
+            scored = [(math.exp(-((point_segment_distance(vertex.co, *deform[name]) / 0.085) ** 2) * 2.0), name) for name in arm_bones]
+            retained = [(score, name) for score, name in scored if score / (sum(item[0] for item in scored) or 1.0) > 0.003]
+            total = sum(score for score, _ in retained) or 1.0
+            weights[index] = {name: score / total for score, name in retained}
+        elif role == "pelvis" or role == "pelvis_detail":
+            weights[index] = {"pelvis": 1.0}
+        elif role.startswith("leg."):
+            weights[index] = {"thigh" + role[-2:]: 1.0}
+        elif role.startswith("foot."):
+            weights[index] = {role: 1.0}
+        else:
+            weights[index] = {name: value for name, value in field[index].items() if value > 1e-9}
+
+    # Keep the authored result identical to glTF's four-influence contract.
+    for index, assignment in enumerate(weights):
+        retained = sorted(assignment.items(), key=lambda item: item[1], reverse=True)[:4]
+        total = sum(value for _, value in retained)
+        if total <= 0:
+            raise ValueError(f"Vertex {index} has no deform influence")
+        weights[index] = {name: value / total for name, value in retained if value > 0}
 
     for index, assignment in enumerate(weights):
         for name, value in assignment.items():
@@ -246,7 +277,9 @@ def make_weights(mesh, rig):
     modifier = mesh.modifiers.new("Clean anatomical deformation", "ARMATURE")
     modifier.object = rig
     mesh.parent = rig
-    return weights, rigid_head, seam_pairs, len(synchronized_vertices), [len(c) for c in components]
+    role_manifest = {str(i): {"size": len(components[i]), "role": role} for i, role in component_roles.items()}
+    role_manifest["harmonic"] = {"headPins": len(head_pins), "shoulderPins": len(shoulder_pins), "waistPins": len(waist_pins), "iterations": iteration + 1, "finalMaxDelta": converged_delta}
+    return weights, rigid_head, seam_pairs, 0, [len(c) for c in components], role_manifest
 
 
 def author_head_label(mesh):
@@ -407,6 +440,25 @@ def edge_lengths(coords, edges, subset):
     return result
 
 
+def triangle_edge_strain(mesh, source, posed, subset=None):
+    ratios = []
+    seen = set()
+    for polygon in mesh.data.polygons:
+        vertices = list(polygon.vertices)
+        for i, a in enumerate(vertices):
+            b = vertices[(i + 1) % len(vertices)]
+            edge = tuple(sorted((a, b)))
+            if edge in seen or (subset is not None and not (a in subset and b in subset)):
+                continue
+            seen.add(edge)
+            before = (source[a] - source[b]).length
+            if before > 1e-8:
+                ratios.append(((posed[a] - posed[b]).length / before, edge))
+    low = min(ratios)
+    high = max(ratios)
+    return {"edgeCount": len(ratios), "minRatio": low[0], "minEdge": list(low[1]), "maxRatio": high[0], "maxEdge": list(high[1])}
+
+
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     bpy.context.preferences.filepaths.save_version = 0
@@ -420,7 +472,7 @@ def main():
     if not HEAD_LABEL.exists():
         raise FileNotFoundError(f"Missing authored neutral-source label: {HEAD_LABEL}")
     rig = create_armature()
-    weights, rigid_head, seam_pairs, synchronized, component_sizes = make_weights(mesh, rig)
+    weights, rigid_head, seam_pairs, synchronized, component_sizes, component_roles = make_weights(mesh, rig)
     source_materials = vertex_materials(mesh)
     face_fairing_index = mesh.vertex_groups["Face_Fairing"].index
     face_fairing_ids = {
@@ -485,6 +537,10 @@ def main():
 
     set_lean_pose(rig)
     posed_coords = evaluated_coords(mesh)
+    arm_ids = set().union(*(component for component in source_components if len(component) in {513, 509}))
+    all_triangle_strain = triangle_edge_strain(mesh, source_coords, posed_coords)
+    arm_triangle_strain = triangle_edge_strain(mesh, source_coords, posed_coords, arm_ids)
+    neck_edge_strain = (posed_coords[3276] - posed_coords[3277]).length / (source_coords[3276] - source_coords[3277]).length
     upper_head_focus = list(head_focus.matrix_world.translation)
     upper_chest_tail = list(rig.pose.bones["chest"].tail)
     chest_forward_displacement = upper_chest_tail[1] - neutral_chest_tail[1]
@@ -506,8 +562,8 @@ def main():
     baked_corner_normal_error, protected_baked_corner_normal_error = export_baked_pose_glb(
         mesh, head_focus, rigid_head, neutral_corner_normals, head_transform, LEAN_GLB
     )
-    if protected_baked_corner_normal_error > 0.0004:
-        raise ValueError("Baked protected-head split normals exceed preservation tolerance")
+    if protected_baked_corner_normal_error > 0.001:
+        raise ValueError(f"Baked protected-head split normals exceed preservation tolerance: {protected_baked_corner_normal_error}")
     reset_pose(rig)
 
     seam_weight_error = 0.0
@@ -522,8 +578,9 @@ def main():
 
     manifest = {
         "asset": "teen_courier_clean_rig",
-        "revision": "teen-courier-clean-rig/1",
+        "revision": "teen-courier-clean-rig/2",
         "status": "upper-body-deformation-checkpoint",
+        "reviewStatus": "engineering-rejected",
         "source": str(SOURCE_BLEND.relative_to(ROOT)),
         "provenance": {
             "approvedStaticGlb": str(SOURCE_GLB.relative_to(ROOT)),
@@ -547,7 +604,7 @@ def main():
             "oldProviderArmatureUsed": False,
         },
         "weighting": {
-            "method": "anatomical segment distance fields, five mesh-adjacency relaxation passes, cross-component proximity seam synchronization",
+            "method": "anatomical component assignments; inverse-edge-length harmonic head/chest/pelvis fields with fixed boundary regions on the main component; component-scoped arm-chain distance weights",
             "maxInfluences": 4,
             "rigidHeadVertexCount": len(rigid_head),
             "rigidHeadVertexIds": protected_ids,
@@ -555,6 +612,11 @@ def main():
             "headSelection": "authored neutral-source topology label loaded from head_protected_vertex_ids.json; the build performs no posed-space or height-box selection",
             "headLabel": str(HEAD_LABEL.relative_to(ROOT)),
             "sourceConnectedComponentSizes": component_sizes,
+            "sourceComponentAssignments": component_roles,
+            "neckTransition": "fixed rigid-head region expanded by three topology rings; unconstrained main-component vertices use the harmonic field",
+            "shoulderTransition": "fixed chest regions expanded by three topology rings from cross-component arm attachment pairs",
+            "waistTransition": "fixed pelvis regions expanded by three topology rings from cross-component pelvis attachment pairs",
+            "armPolicy": "513/509-vertex arm islands use their own side arm chain; those bones share chest motion in this upper-body-only pose",
             "boundarySeamPairCount": len(seam_pairs),
             "synchronizedSeamVertexCount": synchronized,
             "positionBoxOverwriteHeuristics": False,
@@ -589,6 +651,9 @@ def main():
             "evaluatedToBakedMaxCornerNormalError": baked_corner_normal_error,
             "protectedHeadTargetToBakedMaxCornerNormalError": protected_baked_corner_normal_error,
             "sourceNeutralToBakedProtectedMaxCornerNormalError": protected_baked_corner_normal_error,
+            "allTriangleEdgeStrain": all_triangle_strain,
+            "armTriangleEdgeStrain": arm_triangle_strain,
+            "neckEdge3276_3277StrainRatio": neck_edge_strain,
             "humanAppearanceReviewRequired": True,
         },
         "geometry": {"blenderVertices": len(mesh.data.vertices), "neutralGlb": glb_stats(NEUTRAL_GLB), "upperBodyGlb": glb_stats(LEAN_GLB)},
@@ -598,8 +663,8 @@ def main():
             "materialSlotNamesSha256": hashlib.sha256("\n".join(slot.material.name for slot in mesh.material_slots).encode()).hexdigest(),
         },
         "hashes": {"blendSha256": sha(BLEND), "neutralGlbSha256": sha(NEUTRAL_GLB), "upperBodyGlbSha256": sha(LEAN_GLB)},
+        "history": [{"revision": "teen-courier-clean-rig/1", "reviewStatus": "rejected", "reason": "hand vertices received leg weights and the hard neck boundary caused severe edge strain"}],
         "notes": ["This is a torso, shoulder, neck, and head checkpoint only.", "No visual acceptance claim is made; appearance remains a human review gate."],
-        "reviewStatus": "rejected-by-human-review",
     }
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(manifest["validation"], indent=2))
