@@ -44,6 +44,39 @@ The character must be original project artwork. The concept, reconstruction
 service or software, licenses, source files, and every manual cleanup step need
 recorded provenance before the mesh becomes a shipping asset.
 
+## Paper Route pipeline audit — 2026-09-14
+
+The public [development archive](https://www.paperroute.lol/devlog/) shows an
+early Meshy rider at checkpoint 25. By checkpoint 35 (`6c8b08f`), the final
+source already includes a posed rider, papers, and bicycle before the rider is
+separated; checkpoint 38 (`66e1bab`) imports an approved textured rig and fitted
+bicycle. The final source's provider and pose-construction method are not
+identified. The public
+[posed-rider GLB](https://www.paperroute.lol/art/posed-rider.glb) has
+`RiderBody` and `FittedBicycle` roots, a cycling rest pose, a 23-joint skin, and
+no animation clips. Its [runtime bundle](https://www.paperroute.lol/assets/main-BvT_ToLo.js)
+restores saved rest transforms each frame, then applies torso motion, analytic
+two-bone IK, steering, pedalling, action changes, and stored hand-grip and
+shoe-pedal offsets.
+
+Colombo Delivery instead began with a standing reconstruction and a separately
+auto-rigged model whose riding suitability was unproven. The playable prototype
+replaced that hierarchy with 19 project-authored bones and coordinate-based
+weight heuristics; its wardrobe remained static rather than ride-ready. Later
+replacement-weight, harmonic, and cage attempts all failed deformation review.
+Automated tests established structural and numeric properties, not acceptable
+character art. Those failures show that these algorithms were inadequate for
+this mesh; they do not prove that manual retopology is universally required.
+No acceptable replacement was produced by this audit, and the rejected rig
+remains rejected.
+
+The next bounded milestone is one human-reviewed stationary construction: the
+approved original character identity seated and fitted to the approved bicycle,
+with coherent garment geometry and a cycling-rest rig built on sound deformation
+topology and authored weights while preserving the existing bicycle-contact
+contract. Only after that pose passes review should one slow pedal cycle be
+authored and submitted for human review.
+
 ## Production stages
 
 ### 1. Review the 2D identity

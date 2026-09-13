@@ -748,3 +748,6 @@ roadmap.
   three rejected models by comparing corresponding exported triangle edges.
   All 63 tests and the production build pass; these checks confirm known
   failures and do not establish an acceptable replacement character.
+- Audited the [Paper Route development archive](https://www.paperroute.lol/devlog/)
+  on 2026-09-14. Corrected the character pipeline's evidence boundary and next
+  milestone without changing the existing rider's rejected status.

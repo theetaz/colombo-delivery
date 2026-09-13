@@ -30,6 +30,9 @@ clothing intersections and hems, bag materials, shoes, bicycle contact, and
 runtime action poses.
 
 Colombo Delivery adapts that review loop to its own original asset pipeline.
+This was inspiration for review sequencing, not a replication of Paper Route's
+construction workflow. See the dated [Paper Route pipeline audit](CHARACTER_ART_PIPELINE.md#paper-route-pipeline-audit--2026-09-14)
+for the evidence boundary and the differences from this project's rider work.
 The courier remains reproducible from the project Blender generator and uses
 project-authored geometry and small deterministic, export-compatible texture
 maps. Isolated renders expose problems that the game camera can hide; the browser preview then
