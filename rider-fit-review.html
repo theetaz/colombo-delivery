@@ -61,6 +61,25 @@
         margin: 0 0 8px;
         font-size: 13px;
       }
+      .pose-reference {
+        display: block;
+        overflow: hidden;
+        border: 1px solid #d7d0c2;
+        border-radius: 10px;
+        background: #fff;
+      }
+      .pose-reference img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .pose-reference span {
+        display: block;
+        padding: 8px 10px;
+        color: #596561;
+        font-size: 12px;
+        font-weight: 600;
+      }
       .buttons {
         display: flex;
         flex-wrap: wrap;
@@ -153,10 +172,25 @@
       <section class="panel">
         <a href="./bicycle-model-review.html">← Approved bicycle</a>
         <div class="eyebrow">
-          Awaiting fit review · teen-courier-seated-v2/1
+          Awaiting fit review · teen-courier-seated-v2/2
         </div>
         <h1>Courier seating fit</h1>
         <p>Check seating, hands and feet before animation.</p>
+        <div class="group">
+          <h2>Pose reference</h2>
+          <a
+            class="pose-reference"
+            href="./references/rider-fit/seated-pose-guide-v2.png"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img
+              src="./references/rider-fit/seated-pose-guide-v2.png"
+              alt="Side-view pose guide for the seated bicycle courier"
+            />
+            <span>Open full-size guide · bicycle contact anchors take priority</span>
+          </a>
+        </div>
         <div class="group">
           <h2>View</h2>
           <div class="buttons" role="group" aria-label="Camera view">

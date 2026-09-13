@@ -1,7 +1,8 @@
 import * as THREE from "three";
 
-export const SEATED_COURIER_V2_URL = "models/teen_courier_seated_v2.glb";
-export const SEATED_COURIER_V2_REVISION = "teen-courier-seated-v2/1";
+export const SEATED_COURIER_V2_URL =
+  "models/teen_courier_seated_v2.glb?v=9c8a9645";
+export const SEATED_COURIER_V2_REVISION = "teen-courier-seated-v2/2";
 export const SEATED_COURIER_V2_NODES = [
   "TeenCourierSeatedV2",
   "PelvisContact",

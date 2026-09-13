@@ -806,3 +806,47 @@ emit expected blob texture-decode warnings outside a browser, and Vite retains
 its expected large shared-chunk advisory. Status remains
 `awaiting-human-review`; the 21–30 mm palm residuals remain a visible refinement
 question for the user's quick review.
+
+## 2026-09-13 — Stationary rider deformation rejected
+
+Status: revision 2 ready for human review.
+
+Human review rejected the stationary rider because its torso collapsed into a
+large triangle and the waist separated. Earlier identity, contact-marker,
+knee-plane, and limb-length checks passed but did not measure deformation of the
+visible skin surface. The rejected export's longest world-space triangle edge
+reached 0.371312 m. The upright source maximum is 0.195273 m, or 0.210895 m at
+the approved 1.08 uniform scale. The repair uses a 0.220 m exported-edge cap
+while preserving the approved bicycle.
+
+The new [seated pose guide](../public/references/rider-fit/seated-pose-guide-v2.png)
+is an artistic reference only. No animation work begins until the repaired
+static mesh passes human review.
+
+An interim `be9bcd7c…` repair corrected the displaced torso pivot, but its
+35.0655° hip-to-shoulder lean concealed 91° of cumulative local trunk rotation
+and left the head looking down. It was held from handoff while separate back,
+neck, and gaze measurements were added.
+
+### Stationary rider revision 2 repair
+
+The corrected world-pivot transform keeps the torso bone head fixed instead of
+injecting armature translation into the rotation. Stable torso and hand weights
+also account for the provider rig's misleading bone names: `tripo::Head_0` is
+lower trunk, `bone_3` carries the shirt, and `bone_4` is the neck transition.
+
+The final distributed pose measures 30.9243° hip-to-shoulder lean, segment
+pitches of 21.82°, 36.76°, and 54.35°, and a face gaze 13° downward. Its static
+GLB is 3,260,968 bytes at SHA-256
+`9c8a9645aa63c9c3a009c690b73806aa8ebf6a1b0a2655d60e4b5434089dcf71`.
+
+Its maximum exported world-space triangle edge is 0.203747 m, below the 0.220 m
+cap and the 0.210895 m scaled-upright reference. Palm point residuals are zero;
+pedal residuals are 2.240 and 5.033 mm. The earlier 20.76 maximum strain was
+localized to the central neck: a 3.424 mm source edge stretched to 71.085 mm
+where a hard torso mask replaced legitimate neck and head weights. A continuous
+weight fade reduces it to 7.061 mm, or 2.062×. Final neck strain is p99 2.0182
+and maximum 2.0711; whole-mesh maximum strain is 9.354 at a small ankle seam.
+Zero palm residual does not certify full hand-to-grip clearance. The approved
+bicycle remains unchanged, no animation is present, and human approval is
+pending.

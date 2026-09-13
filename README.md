@@ -299,7 +299,10 @@ practice markers, straight-line guidance, and minimap do not satisfy them.
 
 The user approved the standalone commuter bicycle at frozen GLB SHA-256
 `ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`.
-The original teenage courier appearance is now being fitted to its stationary
-seat, grip, and pedal anchors. The current game remains unchanged, and animation
-or physics work waits for separate fit approval. See the
+The original teenage courier appearance is being refitted to its stationary
+seat, grip, and pedal anchors. Human review rejected the previous fit because of
+a severe triangular torso deformation and waist gap; its contact and limb checks
+had not measured visible surface strain. A repaired static mesh is ready for human review, while the approved bicycle
+and current game remain unchanged. Animation or
+physics work waits for separate fit approval. See the
 [bicycle rebuild](docs/BICYCLE_REBUILD.md) and [rider fit](docs/RIDER_FIT.md).

@@ -6,6 +6,44 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { validateCommuterBicycle } from "../src/scene/CommuterBicycleModel";
 import { validateSeatedCourier } from "../src/scene/SeatedCourierModel";
 
+const MAX_PLAUSIBLE_TRIANGLE_EDGE_M = 0.22;
+
+function triangleEdgeMetrics(root: THREE.Object3D) {
+  const lengths: number[] = [];
+  root.updateMatrixWorld(true);
+  root.traverse((node) => {
+    if (!(node instanceof THREE.Mesh)) return;
+    const positions = node.geometry.getAttribute("position");
+    const indices = node.geometry.index;
+    assert.ok(indices, `${node.name} must use indexed triangle geometry`);
+    const first = new THREE.Vector3();
+    const second = new THREE.Vector3();
+    for (let offset = 0; offset < indices.count; offset += 3) {
+      const triangle = [
+        indices.getX(offset),
+        indices.getX(offset + 1),
+        indices.getX(offset + 2),
+      ];
+      for (let edge = 0; edge < 3; edge += 1) {
+        first
+          .fromBufferAttribute(positions, triangle[edge]!)
+          .applyMatrix4(node.matrixWorld);
+        second
+          .fromBufferAttribute(positions, triangle[(edge + 1) % 3]!)
+          .applyMatrix4(node.matrixWorld);
+        lengths.push(first.distanceTo(second));
+      }
+    }
+  });
+  lengths.sort((first, second) => first - second);
+  assert.ok(lengths.length > 0, "seated courier must contain triangle edges");
+  return {
+    maxTriangleEdgeM: lengths.at(-1)!,
+    p999TriangleEdgeM: lengths[Math.floor(lengths.length * 0.999)]!,
+    edgesOver020M: lengths.filter((length) => length > 0.2).length,
+  };
+}
+
 test("static seated courier loads at identity with measured surface contacts", async () => {
   (globalThis as typeof globalThis & { self: typeof globalThis }).self =
     globalThis;
@@ -47,6 +85,16 @@ test("static seated courier loads at identity with measured surface contacts", a
   assert.ok(
     [...bounds.min.toArray(), ...bounds.max.toArray()].every(Number.isFinite),
   );
+  // The rejected 6255dc3 fit reached 0.371312 m because torso/shirt vertices
+  // separated into long spikes. The approved upright source peaks at 0.195273 m;
+  // its intended 1.08 fit scale remains below this 0.22 m limit.
+  const geometryQuality = triangleEdgeMetrics(
+    riderResult.nodes.get("TeenCourierSeatedV2")!,
+  );
+  assert.ok(
+    geometryQuality.maxTriangleEdgeM <= MAX_PLAUSIBLE_TRIANGLE_EDGE_M,
+    `seated courier has a ${geometryQuality.maxTriangleEdgeM.toFixed(6)} m triangle edge; likely baked deformation`,
+  );
   const manifest = JSON.parse(
     await readFile(
       new URL(
@@ -56,7 +104,17 @@ test("static seated courier loads at identity with measured surface contacts", a
       "utf8",
     ),
   );
-  assert.equal(manifest.revision, "teen-courier-seated-v2/1");
+  assert.equal(manifest.revision, "teen-courier-seated-v2/2");
+  for (const key of [
+    "maxTriangleEdgeM",
+    "p999TriangleEdgeM",
+    "edgesOver020M",
+  ] as const) {
+    assert.ok(
+      Math.abs(geometryQuality[key] - manifest.geometryQuality[key]) < 1e-6,
+      `${key} differs from independently measured baked geometry`,
+    );
+  }
   assert.equal(
     manifest.approvedBicycle.sha256,
     "ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125",

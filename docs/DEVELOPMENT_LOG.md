@@ -678,3 +678,27 @@ roadmap.
   a browser, and Vite retains its expected large shared-chunk advisory. The
   stationary pose still awaits human review, especially at the 21–30 mm palm
   residuals.
+- Rejected the stationary rider after human review exposed a large triangular
+  torso deformation and waist gap. Earlier identity, contact, knee, and
+  limb-length checks did not measure visible surface strain. Added a world-space
+  triangle-edge regression: the rejected pose reached 0.371312 m versus
+  0.195273 m upright and 0.210895 m at 1.08 scale; the repair cap is 0.220 m.
+  The approved bicycle remains frozen and animation remains blocked.
+- Confirmed that the rejected torso tear came from converting a world bone
+  rotation through the armature's translated matrix, which displaced the pivot.
+  Replaced it with a fixed-head world-pivot transform and added a pivot
+  assertion plus topology and exported-edge checks.
+- Exported a distributed-spine candidate with 30.9243° hip-to-shoulder lean,
+  measured lumbar/mid/upper pitches of 21.82°/36.76°/54.35°, and face gaze 13°
+  downward. Held it after finding that a hard upper-chest weight mask stretched
+  a 3.424 mm central-neck edge to 71.085 mm, or 20.76×.
+- Smoothed the central neck boundary while preserving legitimate `bone_5`
+  influence. The same edge now measures 7.061 mm, or 2.062×. Final torso strain
+  is p99 1.4828/max 1.8039, neck strain is p99 2.0182/max 2.0711, and the 9.354
+  whole-mesh maximum lies at a small ankle seam. Zero palm point residual remains
+  alignment evidence rather than certified physical clearance.
+- Froze the replacement GLB at SHA-256
+  `9c8a9645aa63c9c3a009c690b73806aa8ebf6a1b0a2655d60e4b5434089dcf71`.
+  Maximum exported edge is 0.203747 m; sole residuals are 2.240 and 5.033 mm.
+  The approved bicycle is unchanged, animation remains blocked, and the static
+  pose awaits human review.

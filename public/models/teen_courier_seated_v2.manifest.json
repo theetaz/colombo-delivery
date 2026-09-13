@@ -1,9 +1,10 @@
 {
   "formatVersion": 1,
-  "revision": "teen-courier-seated-v2/1",
+  "revision": "teen-courier-seated-v2/2",
   "reviewStatus": "awaiting-human-review",
   "asset": "teen_courier_seated_v2.glb",
   "source": "art/characters/teen-courier/teen_courier_rig_review.blend",
+  "poseReference": "public/references/rider-fit/seated-pose-guide-v2.png",
   "sourceIdentity": "Original detailed teen face, hair, textured body and outfit preserved.",
   "approvedBicycle": {
     "asset": "commuter_bicycle_v2.glb",
@@ -29,44 +30,44 @@
     "gripRadiusM": 0.017,
     "gripTargetDefinition": "17 mm above the grip centerline on the palmar contact surface",
     "limbLengthRatios": {
-      "tripo::1_Left_Limb_0": 0.9999996332123064,
-      "tripo::1_Left_Limb_1": 1.0000001384647024,
-      "tripo::1_Right_Limb_0": 1.0000001880606035,
-      "tripo::1_Right_Limb_1": 1.000000201714737,
-      "tripo::0_Left_Limb_0": 1.0000006515399293,
-      "tripo::0_Left_Limb_1": 0.9999997801065816,
-      "tripo::0_Right_Limb_0": 1.0000008803525307,
-      "tripo::0_Right_Limb_1": 1.0000006737038611
+      "tripo::1_Left_Limb_0": 0.9999993561210136,
+      "tripo::1_Left_Limb_1": 0.9999997115050983,
+      "tripo::1_Right_Limb_0": 0.9999998369035725,
+      "tripo::1_Right_Limb_1": 0.999999873500907,
+      "tripo::0_Left_Limb_0": 1.0000006542865587,
+      "tripo::0_Left_Limb_1": 0.9999998436098023,
+      "tripo::0_Right_Limb_0": 1.00000085987808,
+      "tripo::0_Right_Limb_1": 1.0000006752965411
     },
     "kneeXBlenderM": {
-      "L": -0.12067533284425735,
-      "R": 0.12171155214309692
+      "L": -0.12023665010929108,
+      "R": 0.12099681794643402
     },
     "contactPositionsBlenderZUp": {
       "PelvisContact": [
-        -0.002563,
-        -0.271469,
-        1.031126
+        -0.017916,
+        -0.273286,
+        1.01882
       ],
       "Palm_L_Contact": [
-        -0.282208,
-        0.323409,
-        1.02382
+        -0.286,
+        0.334,
+        1.006
       ],
       "Palm_R_Contact": [
-        0.278363,
-        0.319159,
-        1.031294
+        0.286,
+        0.334,
+        1.006
       ],
       "Sole_L_Contact": [
-        -0.113106,
-        -0.267439,
-        0.299079
+        -0.109882,
+        -0.267544,
+        0.298519
       ],
       "Sole_R_Contact": [
-        0.114305,
-        0.070286,
-        0.295953
+        0.11395,
+        0.069878,
+        0.295568
       ]
     },
     "targetPositionsBlenderZUp": {
@@ -97,37 +98,128 @@
       ]
     },
     "residualsM": {
-      "PelvisContact": 0.013546,
-      "Palm_L_Contact": 0.021074,
-      "Palm_R_Contact": 0.030304,
-      "Sole_L_Contact": 0.001192,
-      "Sole_R_Contact": 0.004687
+      "PelvisContact": 0.020356,
+      "Palm_L_Contact": 0.0,
+      "Palm_R_Contact": 0.0,
+      "Sole_L_Contact": 0.00224,
+      "Sole_R_Contact": 0.005033
     },
-    "contactMethod": "centroids of evaluated posed mesh surface regions; targets are recorded separately"
+    "contactMethod": "centroids of evaluated posed mesh surface regions; targets are recorded separately",
+    "surfaceStrainRatios": {
+      "wholeMesh": {
+        "edgeCount": 38069,
+        "p95": 1.41469850553763,
+        "p99": 2.0452297447578536,
+        "max": 9.35379958354979,
+        "maxEdge": [
+          18455,
+          18458
+        ]
+      },
+      "torso": {
+        "edgeCount": 619,
+        "p95": 1.2409626613542712,
+        "p99": 1.4827861576241035,
+        "max": 1.8038703982018838,
+        "maxEdge": [
+          21330,
+          22618
+        ]
+      },
+      "neck": {
+        "edgeCount": 2965,
+        "p95": 1.6149966152194983,
+        "p99": 2.0182023159321973,
+        "max": 2.071130364251709,
+        "maxEdge": [
+          9967,
+          9980
+        ]
+      }
+    }
   },
   "boundsBlenderZUp": {
     "min": [
-      -0.343608,
-      -0.5351,
-      0.288358
+      -0.372615,
+      -0.489609,
+      0.28809
     ],
     "max": [
-      0.376463,
-      0.49654,
-      1.901333
+      0.358099,
+      0.488315,
+      1.785441
     ]
   },
   "weightCleanup": {
     "syncedSeamVertices": 0,
-    "shoulderVertices": 134,
-    "handVertices": 2284,
+    "centralTorsoVertices": 5122,
+    "shoulderVertices": 116,
+    "handVertices": 17,
     "contaminatedFingerVertices": 1262,
     "recoveredVertices": 0
+  },
+  "geometryQuality": {
+    "maxTriangleEdgeM": 0.20374704187999715,
+    "p999TriangleEdgeM": 0.15209477893022985,
+    "edgesOver020M": 4,
+    "torsoEdgeStrain": {
+      "edgeCount": 619,
+      "p95": 1.2409626613542712,
+      "p99": 1.4827861576241035,
+      "max": 1.8038703982018838,
+      "maxEdge": [
+        21330,
+        22618
+      ]
+    },
+    "neckEdgeStrain": {
+      "edgeCount": 2965,
+      "p95": 1.6149966152194983,
+      "p99": 2.0182023159321973,
+      "max": 2.071130364251709,
+      "maxEdge": [
+        9967,
+        9980
+      ]
+    },
+    "torsoCoreWidthM": 0.4320340007543564,
+    "torsoCoreDepthM": 0.3954854905605316,
+    "torsoCrossSections": {
+      "waist": {
+        "sampleCount": 77,
+        "widthM": 0.30096930265426636,
+        "depthM": 0.23415053263306618
+      },
+      "midTorso": {
+        "sampleCount": 47,
+        "widthM": 0.3025924265384674,
+        "depthM": 0.22829133598133922
+      },
+      "chest": {
+        "sampleCount": 225,
+        "widthM": 0.4180488735437393,
+        "depthM": 0.4559992551803589
+      }
+    },
+    "anatomicalLeanDegrees": 30.924312016989568,
+    "spineSegmentPitchDegrees": {
+      "tripo::Head_0": 21.82018463838326,
+      "tripo::Spine_0": 36.759489614355154,
+      "bone_3": 54.34911371543383,
+      "bone_4": 45.528798751025604,
+      "bone_5": 58.00000913333958
+    },
+    "headGazeDirection": [
+      3.189500219491492e-08,
+      0.9743701219558716,
+      -0.2249511033296585
+    ],
+    "headGazeElevationDegrees": -13.000001997886274
   },
   "generation": {
     "nodeCount": 7,
     "meshCount": 1,
-    "glbBytes": 3260140
+    "glbBytes": 3260968
   },
   "validation": {
     "status": "passed",
@@ -138,12 +230,15 @@
       "surface-derived contacts recorded separately from targets",
       "approved bicycle unchanged",
       "uniform scale only",
+      "torso surface strain below continuity thresholds",
       "GLB under 5 MB"
     ]
   },
   "sha256": {
-    "glb": "01a52f9343bf605f7510f1d4be4d7ac9368942d11bcca52679f92d45201107d3",
-    "blend": "6657c7028387f8080d68d71a47986d50cc86c3a21cc1eae3daa2cc1328f6efe2",
-    "generator": "a7fb3cddab23a02b7590974516245ff075f54415559390feeff2e8988c010010"
+    "glb": "9c8a9645aa63c9c3a009c690b73806aa8ebf6a1b0a2655d60e4b5434089dcf71",
+    "blend": "207da35c3eb038438abc318c97c2c267dfcc9706de04351b5e1ca39956529946",
+    "generator": "3f6324de24a83e86843916473fb61e3a21dd44c89bf61ca6b033c43069f25a9a",
+    "source": "005b2e11613164b103a3557db98ffa21388e0b5cf812a4a53260c36309d23585",
+    "poseReference": "46ad72dfd953c0e1d62d0bf04f1fd4c2809c0984bbba7688b7ae0763c1ab33d3"
   }
 }
