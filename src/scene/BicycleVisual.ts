@@ -1,19 +1,104 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 import type { BicycleState, PrototypeObstacle } from "../game/bicycle";
+import {
+  applyCourierAppearance,
+  cloneCharacterMaterials,
+  loadCourierAppearance,
+  type CourierAppearance,
+} from "./bicycle-appearance";
 
 const WHEEL_RADIUS = 0.34;
 const WHEELBASE = 1.08;
 const FRAME_RADIUS = 0.025;
+export const BICYCLE_MODEL_URL = "models/courier_bicycle.glb";
+
+export interface VehicleVisualContract {
+  contractVersion: number;
+  vehicleType: string;
+  forwardAxis: "-Z";
+  wheelRadius: number;
+  wheelbase: number;
+  cargoAttachment: string;
+  requiredNodes: readonly string[];
+}
+
+export const COURIER_BICYCLE_CONTRACT = {
+  contractVersion: 1,
+  vehicleType: "bicycle",
+  forwardAxis: "-Z",
+  wheelRadius: WHEEL_RADIUS,
+  wheelbase: WHEELBASE,
+  cargoAttachment: "Cargo_Attach",
+  requiredNodes: [
+    "RearWheel", "FrontAssembly", "FrontWheel", "Crank",
+    "Pedal_L", "Pedal_R", "Pedal_L_Attach", "Pedal_R_Attach", "Grip_L_Attach", "Grip_R_Attach",
+    "Hip_L_Attach", "Hip_R_Attach", "Shoulder_L_Attach", "Shoulder_R_Attach",
+    "UpperArm_L", "UpperArm_R", "Forearm_L", "Forearm_R",
+    "Rider_Thigh_L", "Rider_Thigh_R", "Rider_Shin_L", "Rider_Shin_R",
+    "Hand_L", "Hand_R", "Foot_L", "Foot_R", "Cargo_Attach", "Seat_Attach",
+    "Face_Profile_Classic", "Face_Profile_Soft", "Face_Profile_Angular",
+  ],
+} as const satisfies VehicleVisualContract;
+
+export interface BicycleVisualMotion {
+  pedal?: boolean;
+  deltaSeconds?: number;
+}
+
+interface ImportedBicycleRig {
+  root: THREE.Object3D;
+  nodes: Map<string, THREE.Object3D>;
+  appearanceMaterials: Map<string, THREE.Material[]>;
+}
+
+export function validateCourierBicycleRig(root: THREE.Object3D): { ok: true; nodes: Map<string, THREE.Object3D> } | { ok: false; missing: string[] } {
+  const nodes = new Map<string, THREE.Object3D>();
+  root.traverse((node) => {
+    if (node.name) nodes.set(node.name, node);
+  });
+  const missing: string[] = COURIER_BICYCLE_CONTRACT.requiredNodes.filter((name) => !nodes.has(name));
+  const hierarchy: ReadonlyArray<readonly [string, string]> = [
+    ["FrontWheel", "FrontAssembly"], ["Grip_L_Attach", "FrontAssembly"], ["Grip_R_Attach", "FrontAssembly"],
+    ["Pedal_L", "Crank"], ["Pedal_R", "Crank"], ["Pedal_L_Attach", "Pedal_L"], ["Pedal_R_Attach", "Pedal_R"],
+  ];
+  for (const [childName, parentName] of hierarchy) {
+    const child = nodes.get(childName);
+    if (child && child.parent?.name !== parentName) missing.push(`${childName} parent ${parentName}`);
+  }
+  return missing.length > 0 ? { ok: false, missing } : { ok: true, nodes };
+}
+
+export function bicycleHeadingToVisualRotation(heading: number): number {
+  return -heading;
+}
+
+export function attachmentPositionInRoot(root: THREE.Object3D, attachment: THREE.Object3D, updateMatrices = true): THREE.Vector3 {
+  if (updateMatrices) root.updateMatrixWorld(true);
+  return root.worldToLocal(attachment.getWorldPosition(new THREE.Vector3()));
+}
 
 export class BicycleVisual {
   readonly group = new THREE.Group();
+  readonly ready: Promise<boolean>;
 
+  private readonly fallback = new THREE.Group();
   private readonly wheels: THREE.Group[] = [];
   private readonly frontAssembly = new THREE.Group();
   private readonly crank = new THREE.Group();
+  private readonly pedalPlatforms: THREE.Mesh[] = [];
+  private readonly limbs: THREE.Mesh[] = [];
+  private readonly shoes: THREE.Mesh[] = [];
+  private importedRig: ImportedBicycleRig | null = null;
+  private disposed = false;
+  private crankAngle = 0;
+  private lastDistance = 0;
+  private latestState: BicycleState | null = null;
+  private appearance: CourierAppearance;
 
-  constructor() {
+  constructor(private readonly onLoadNotice?: (message: string) => void, modelUrl = `${import.meta.env.BASE_URL}${BICYCLE_MODEL_URL}`, appearance = loadCourierAppearance()) {
+    this.appearance = { ...appearance };
     this.group.name = "Rider bicycle";
 
     const rubber = new THREE.MeshStandardMaterial({ color: 0x171a19, roughness: 0.82 });
@@ -23,6 +108,8 @@ export class BicycleVisual {
     const riderTop = new THREE.MeshStandardMaterial({ color: 0xf2c75f, roughness: 0.9 });
     const riderBottom = new THREE.MeshStandardMaterial({ color: 0x244d55, roughness: 0.88 });
     const skin = new THREE.MeshStandardMaterial({ color: 0x8b5136, roughness: 0.92 });
+    const helmet = new THREE.MeshStandardMaterial({ color: 0xf3eee0, roughness: 0.74 });
+    const bag = new THREE.MeshStandardMaterial({ color: 0xb7472b, roughness: 0.9 });
     const shadow = new THREE.Mesh(
       new THREE.CircleGeometry(0.52, 20),
       new THREE.MeshBasicMaterial({ color: 0x18221f, transparent: true, opacity: 0.2, depthWrite: false }),
@@ -86,25 +173,87 @@ export class BicycleVisual {
     const pedalB = pedalA.clone();
     pedalB.position.set(-0.1, -0.18, 0);
     this.crank.add(pedalA, pedalB);
+    this.pedalPlatforms.push(pedalA, pedalB);
     this.group.add(this.crank);
 
     const hip = new THREE.Vector3(0, 1.08, 0.34);
-    const shoulder = new THREE.Vector3(0, 1.58, 0.04);
-    const torso = tube(hip, shoulder, 0.13, riderTop);
-    torso.scale.x = 0.68;
+    const shoulder = new THREE.Vector3(0, 1.56, 0.02);
+    const torso = taperedTube(hip, shoulder, 0.12, 0.18, riderTop);
+    torso.scale.x = 0.72;
     this.group.add(torso);
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.115, 14, 10), skin);
-    head.position.set(0, 1.76, -0.06);
-    this.group.add(head);
+    const shorts = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 9), riderBottom);
+    shorts.scale.set(1, 0.72, 1.05);
+    shorts.position.copy(hip);
+    const neck = tube(new THREE.Vector3(0, 1.55, -0.01), new THREE.Vector3(0, 1.66, -0.045), 0.052, skin);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), skin);
+    head.scale.set(0.9, 1.08, 0.92);
+    head.position.set(0, 1.74, -0.075);
+    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.123, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.52), dark);
+    hair.position.set(0, 1.77, -0.067);
+    const helmetShell = new THREE.Mesh(new THREE.SphereGeometry(0.142, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.52), helmet);
+    helmetShell.position.set(0, 1.805, -0.075);
+    helmetShell.scale.z = 1.08;
+    const helmetBrim = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.018, 0.075), helmet);
+    helmetBrim.position.set(0, 1.79, -0.18);
+    helmetBrim.rotation.x = -0.12;
+
+    const parcelBag = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 0.18, 6, 12), bag);
+    parcelBag.position.set(0, 1.39, 0.27);
+    parcelBag.rotation.x = -0.48;
+    parcelBag.scale.z = 0.72;
+    const bagFlap = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 8), dark);
+    bagFlap.position.set(0, 1.54, 0.205);
+    bagFlap.rotation.x = -0.48;
+    bagFlap.scale.set(1, 0.34, 0.68);
+    const bagPocket = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.1, 4, 10), dark);
+    bagPocket.position.set(0, 1.34, 0.385);
+    bagPocket.rotation.x = Math.PI / 2 - 0.42;
+    bagPocket.scale.x = 1.35;
+    const strapLeft = tube(new THREE.Vector3(-0.105, 1.58, 0.01), new THREE.Vector3(-0.105, 1.18, 0.3), 0.014, dark);
+    const strapRight = tube(new THREE.Vector3(0.105, 1.58, 0.01), new THREE.Vector3(0.105, 1.18, 0.3), 0.014, dark);
+    const shoulderLeftCap = new THREE.Mesh(new THREE.SphereGeometry(0.105, 12, 8), riderTop);
+    shoulderLeftCap.position.set(-0.115, 1.515, 0.015);
+    shoulderLeftCap.scale.set(1.1, 0.9, 1);
+    const shoulderRightCap = shoulderLeftCap.clone();
+    shoulderRightCap.position.x = 0.115;
+    this.group.add(shorts, neck, head, hair, helmetShell, helmetBrim, parcelBag, bagFlap, bagPocket, strapLeft, strapRight, shoulderLeftCap, shoulderRightCap);
+
+    for (const x of [-0.055, 0, 0.055]) {
+      const vent = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.012, 0.105), dark);
+      vent.position.set(x, 1.925 - Math.abs(x) * 0.25, -0.078);
+      vent.rotation.x = -0.08;
+      this.group.add(vent);
+    }
 
     const leftHand = new THREE.Vector3(-0.22, 1.04, frontZ + 0.13);
     const rightHand = new THREE.Vector3(0.22, 1.04, frontZ + 0.13);
+    const shoulderLeft = new THREE.Vector3(-0.11, 1.52, 0.015);
+    const shoulderRight = new THREE.Vector3(0.11, 1.52, 0.015);
+    const elbowLeft = shoulderLeft.clone().lerp(leftHand, 0.52).add(new THREE.Vector3(-0.035, 0.06, 0.02));
+    const elbowRight = shoulderRight.clone().lerp(rightHand, 0.52).add(new THREE.Vector3(0.035, 0.06, 0.02));
     this.group.add(
-      tube(new THREE.Vector3(-0.1, 1.5, 0), leftHand, 0.033, skin),
-      tube(new THREE.Vector3(0.1, 1.5, 0), rightHand, 0.033, skin),
-      tube(new THREE.Vector3(-0.065, 1.08, 0.33), new THREE.Vector3(-0.08, 0.63, 0.02), 0.045, riderBottom),
-      tube(new THREE.Vector3(0.065, 1.08, 0.33), new THREE.Vector3(0.08, 0.3, 0.05), 0.045, riderBottom),
+      tube(shoulderLeft, elbowLeft, 0.048, riderTop), tube(elbowLeft, leftHand, 0.036, skin),
+      tube(shoulderRight, elbowRight, 0.048, riderTop), tube(elbowRight, rightHand, 0.036, skin),
     );
+    for (const hand of [leftHand, rightHand]) {
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.046, 10, 8), skin);
+      mesh.position.copy(hand);
+      this.group.add(mesh);
+    }
+
+    for (let index = 0; index < 4; index += 1) {
+      const limb = tube(new THREE.Vector3(), new THREE.Vector3(0, 0.4, 0), index < 2 ? 0.055 : 0.043, index < 2 ? riderBottom : skin);
+      this.limbs.push(limb);
+      this.group.add(limb);
+    }
+    for (const side of [-1, 1]) {
+      const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.065, 0.24), dark);
+      shoe.scale.set(1.12, 1, 1.08);
+      shoe.rotation.y = side * 0.04;
+      this.shoes.push(shoe);
+      this.group.add(shoe);
+    }
+    this.updateRiderPose(0);
 
     this.group.traverse((object) => {
       if (object instanceof THREE.Mesh) {
@@ -112,16 +261,128 @@ export class BicycleVisual {
         object.receiveShadow = true;
       }
     });
+    this.fallback.name = "Procedural bicycle fallback";
+    this.fallback.add(...this.group.children);
+    this.group.add(this.fallback);
+    this.ready = this.loadImportedModel(modelUrl);
   }
 
-  update(state: BicycleState): void {
+  update(state: BicycleState, motion: BicycleVisualMotion = {}): void {
+    this.latestState = { ...state };
     const surfaceHeight = state.surface === "road" ? 0.14 : -0.055;
     this.group.position.set(state.x, state.y + surfaceHeight, state.z);
-    this.group.rotation.y = -state.heading;
+    this.group.rotation.y = bicycleHeadingToVisualRotation(state.heading);
     this.frontAssembly.rotation.y = -state.steering * 0.34;
     const wheelRotation = -state.distanceTravelled / WHEEL_RADIUS;
+    const distanceDelta = state.distanceTravelled - this.lastDistance;
+    if (distanceDelta < -0.01) this.crankAngle = 0;
+    else if (motion.pedal ?? true) this.crankAngle += -distanceDelta / WHEEL_RADIUS * 0.62;
+    this.lastDistance = state.distanceTravelled;
     for (const wheel of this.wheels) wheel.rotation.x = wheelRotation;
-    this.crank.rotation.x = wheelRotation * 0.62;
+    this.crank.rotation.x = this.crankAngle;
+    for (const pedal of this.pedalPlatforms) pedal.rotation.x = -this.crankAngle;
+    this.updateRiderPose(this.crankAngle);
+    this.updateImportedRig(state, wheelRotation);
+  }
+
+  dispose(): void {
+    this.disposed = true;
+  }
+
+  setAppearance(appearance: CourierAppearance): void {
+    this.appearance = { ...appearance };
+    if (this.importedRig) applyCourierAppearance(this.importedRig.root, this.importedRig.appearanceMaterials, this.appearance);
+  }
+
+  getAppearance(): CourierAppearance {
+    return { ...this.appearance };
+  }
+
+  private async loadImportedModel(modelUrl: string): Promise<boolean> {
+    try {
+      const gltf = await new GLTFLoader().loadAsync(modelUrl);
+      if (this.disposed) {
+        disposeBicycleResources(gltf.scene);
+        return false;
+      }
+      const validation = validateCourierBicycleRig(gltf.scene);
+      if (!validation.ok) {
+        disposeBicycleResources(gltf.scene);
+        throw new Error(`missing nodes: ${validation.missing.join(", ")}`);
+      }
+      gltf.scene.name = "Imported courier bicycle";
+      gltf.scene.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      const appearanceMaterials = cloneCharacterMaterials(gltf.scene);
+      applyCourierAppearance(gltf.scene, appearanceMaterials, this.appearance);
+      this.importedRig = { root: gltf.scene, nodes: validation.nodes, appearanceMaterials };
+      this.group.add(gltf.scene);
+      if (this.latestState) this.updateImportedRig(this.latestState, -this.latestState.distanceTravelled / WHEEL_RADIUS);
+      this.fallback.visible = false;
+      this.onLoadNotice?.("Bicycle visual ready · polished courier");
+      return true;
+    } catch (error) {
+      if (this.disposed) return false;
+      const detail = error instanceof Error ? error.message : "unknown model error";
+      this.onLoadNotice?.(`Bicycle visual could not load (${detail}) · procedural fallback active`);
+      return false;
+    }
+  }
+
+  private updateImportedRig(state: BicycleState, wheelRotation: number): void {
+    const rig = this.importedRig;
+    if (!rig) return;
+    rig.nodes.get("RearWheel")!.rotation.x = wheelRotation;
+    rig.nodes.get("FrontWheel")!.rotation.x = wheelRotation;
+    rig.nodes.get("FrontAssembly")!.rotation.y = -state.steering * 0.34;
+    rig.nodes.get("Crank")!.rotation.x = this.crankAngle;
+    rig.nodes.get("Pedal_L")!.rotation.x = -this.crankAngle;
+    rig.nodes.get("Pedal_R")!.rotation.x = -this.crankAngle;
+    rig.root.updateMatrixWorld(true);
+    this.poseImportedSide(rig, "L");
+    this.poseImportedSide(rig, "R");
+  }
+
+  private poseImportedSide(rig: ImportedBicycleRig, side: "L" | "R"): void {
+    const root = rig.root;
+    const point = (name: string) => attachmentPositionInRoot(root, rig.nodes.get(name)!, false);
+    const hip = point(`Hip_${side}_Attach`);
+    const foot = point(`Pedal_${side}_Attach`);
+    const knee = hip.clone().lerp(foot, 0.48);
+    knee.z -= 0.17 + Math.max(0, foot.y - 0.45) * 0.45;
+    setDriverSegment(root, rig.nodes.get(`Rider_Thigh_${side}`)!, hip, knee);
+    setDriverSegment(root, rig.nodes.get(`Rider_Shin_${side}`)!, knee, foot);
+    setNodePositionFromRoot(root, rig.nodes.get(`Foot_${side}`)!, foot.clone().add(new THREE.Vector3(0, 0.025, -0.04)));
+
+    const shoulder = point(`Shoulder_${side}_Attach`);
+    const hand = point(`Grip_${side}_Attach`);
+    const direction = side === "L" ? -1 : 1;
+    const elbow = shoulder.clone().lerp(hand, 0.52).add(new THREE.Vector3(direction * 0.035, 0.06, 0.02));
+    setDriverSegment(root, rig.nodes.get(`UpperArm_${side}`)!, shoulder, elbow);
+    setDriverSegment(root, rig.nodes.get(`Forearm_${side}`)!, elbow, hand);
+    setNodePositionFromRoot(root, rig.nodes.get(`Hand_${side}`)!, hand);
+  }
+
+  private updateRiderPose(crankAngle: number): void {
+    const hips = [new THREE.Vector3(-0.075, 1.08, 0.33), new THREE.Vector3(0.075, 1.08, 0.33)];
+    for (let sideIndex = 0; sideIndex < 2; sideIndex += 1) {
+      const phase = crankAngle + sideIndex * Math.PI;
+      const foot = new THREE.Vector3(
+        sideIndex === 0 ? -0.1 : 0.1,
+        0.45 + Math.cos(phase) * 0.18,
+        0.06 + Math.sin(phase) * 0.18,
+      );
+      const hip = hips[sideIndex]!;
+      const knee = hip.clone().lerp(foot, 0.48);
+      knee.z -= 0.17 + Math.max(0, Math.sin(phase)) * 0.08;
+      setTube(this.limbs[sideIndex]!, hip, knee);
+      setTube(this.limbs[sideIndex + 2]!, knee, foot);
+      this.shoes[sideIndex]!.position.copy(foot).add(new THREE.Vector3(0, 0.025, -0.04));
+    }
   }
 }
 
@@ -192,4 +453,54 @@ function tube(
   mesh.position.copy(midpoint);
   mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
   return mesh;
+}
+
+function taperedTube(start: THREE.Vector3, end: THREE.Vector3, topRadius: number, bottomRadius: number, material: THREE.Material): THREE.Mesh {
+  const midpoint = start.clone().add(end).multiplyScalar(0.5);
+  const direction = end.clone().sub(start);
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(topRadius, bottomRadius, direction.length(), 10), material);
+  mesh.position.copy(midpoint);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+  return mesh;
+}
+
+function setTube(mesh: THREE.Mesh, start: THREE.Vector3, end: THREE.Vector3): void {
+  const direction = end.clone().sub(start);
+  mesh.position.copy(start).add(end).multiplyScalar(0.5);
+  mesh.scale.set(1, direction.length() / 0.4, 1);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+}
+
+function setDriverSegment(root: THREE.Object3D, node: THREE.Object3D, rootStart: THREE.Vector3, rootEnd: THREE.Vector3): void {
+  const start = pointFromRootToParent(root, node, rootStart);
+  const end = pointFromRootToParent(root, node, rootEnd);
+  const direction = end.clone().sub(start);
+  node.position.copy(start).add(end).multiplyScalar(0.5);
+  node.scale.set(1, direction.length(), 1);
+  node.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+}
+
+function setNodePositionFromRoot(root: THREE.Object3D, node: THREE.Object3D, point: THREE.Vector3): void {
+  node.position.copy(pointFromRootToParent(root, node, point));
+}
+
+function pointFromRootToParent(root: THREE.Object3D, node: THREE.Object3D, point: THREE.Vector3): THREE.Vector3 {
+  const worldPoint = root.localToWorld(point.clone());
+  return node.parent ? node.parent.worldToLocal(worldPoint) : worldPoint;
+}
+
+function disposeBicycleResources(root: THREE.Object3D): void {
+  const materials = new Set<THREE.Material>();
+  const textures = new Set<THREE.Texture>();
+  root.traverse((node) => {
+    if (!(node instanceof THREE.Mesh)) return;
+    node.geometry.dispose();
+    const nodeMaterials = Array.isArray(node.material) ? node.material : [node.material];
+    nodeMaterials.forEach((material) => materials.add(material));
+  });
+  for (const material of materials) {
+    for (const value of Object.values(material)) if (value instanceof THREE.Texture) textures.add(value);
+    material.dispose();
+  }
+  textures.forEach((texture) => texture.dispose());
 }

@@ -1,0 +1,290 @@
+{
+  "formatVersion": 1,
+  "generator": "art/generate_colombo_scenery.py",
+  "units": "meters",
+  "upAxis": "Y",
+  "forwardAxis": "+Z",
+  "dimensionOrder": [
+    "widthX",
+    "heightY",
+    "depthZ"
+  ],
+  "usage": "Load once; clone a named top-level root and place its root at ground contact.",
+  "provenance": "Original procedural project artwork. No external meshes or textures.",
+  "surfaceProvenance": "Original glTF-safe painted material palette plus modeled plaster bands, roof ribs, shutter slats, leaf facets, and trim; generated entirely by this script with no downloaded texture inputs.",
+  "inspirationReference": "https://colombolotustower.lk/our-story/ (356 m height reference; no copied imagery or texture)",
+  "disclaimer": "Illustrative Colombo-inspired scenery, not a survey or replica of a real building.",
+  "generation": {
+    "blenderVersion": "5.1.2",
+    "rootCount": 10,
+    "objectCount": 65,
+    "materialCount": 23,
+    "meshVertexCount": 28028,
+    "sourceMeshTriangleCount": 47822,
+    "exportedMeshCount": 55,
+    "exportedNodeCount": 65,
+    "exportedMaterialCount": 20,
+    "exportedTriangleCount": 47822
+  },
+  "palette": {
+    "Ochre": [
+      0.72,
+      0.35,
+      0.12,
+      1
+    ],
+    "OchreLight": [
+      0.91,
+      0.62,
+      0.28,
+      1
+    ],
+    "Cream": [
+      0.88,
+      0.77,
+      0.57,
+      1
+    ],
+    "Teal": [
+      0.07,
+      0.36,
+      0.36,
+      1
+    ],
+    "TealLight": [
+      0.12,
+      0.55,
+      0.5,
+      1
+    ],
+    "Clay": [
+      0.55,
+      0.19,
+      0.1,
+      1
+    ],
+    "Wood": [
+      0.28,
+      0.12,
+      0.06,
+      1
+    ],
+    "Leaf": [
+      0.12,
+      0.34,
+      0.16,
+      1
+    ],
+    "LeafLight": [
+      0.28,
+      0.48,
+      0.18,
+      1
+    ],
+    "Dark": [
+      0.055,
+      0.07,
+      0.07,
+      1
+    ],
+    "Metal": [
+      0.2,
+      0.23,
+      0.22,
+      1
+    ],
+    "Glass": [
+      0.13,
+      0.4,
+      0.48,
+      1
+    ],
+    "Coral": [
+      0.72,
+      0.18,
+      0.1,
+      1
+    ],
+    "Yellow": [
+      0.91,
+      0.6,
+      0.08,
+      1
+    ],
+    "PlasterWarm": [
+      0.8,
+      0.55,
+      0.3,
+      1
+    ],
+    "PlasterCool": [
+      0.53,
+      0.68,
+      0.62,
+      1
+    ],
+    "LeafDark": [
+      0.055,
+      0.2,
+      0.09,
+      1
+    ],
+    "LeafSun": [
+      0.48,
+      0.62,
+      0.18,
+      1
+    ],
+    "Rust": [
+      0.46,
+      0.13,
+      0.055,
+      1
+    ],
+    "Tyre": [
+      0.018,
+      0.022,
+      0.021,
+      1
+    ],
+    "LampWarm": [
+      1.0,
+      0.56,
+      0.16,
+      1
+    ]
+  },
+  "assets": [
+    {
+      "name": "Shop_Ochre",
+      "catalogPosition": [
+        0,
+        0,
+        0
+      ],
+      "dimensions": [
+        7.75,
+        7.6633,
+        6.0187
+      ]
+    },
+    {
+      "name": "Shop_CreamTeal",
+      "catalogPosition": [
+        10,
+        0,
+        0
+      ],
+      "dimensions": [
+        7.8049,
+        7.2555,
+        5.9836
+      ]
+    },
+    {
+      "name": "BoundaryWall_Gate",
+      "catalogPosition": [
+        20,
+        0,
+        0
+      ],
+      "dimensions": [
+        8.8276,
+        2.8452,
+        1.3552
+      ]
+    },
+    {
+      "name": "ShadeTree",
+      "catalogPosition": [
+        30,
+        0,
+        0
+      ],
+      "dimensions": [
+        7.6911,
+        7.2126,
+        5.0499
+      ]
+    },
+    {
+      "name": "PalmTree",
+      "catalogPosition": [
+        40,
+        0,
+        0
+      ],
+      "dimensions": [
+        5.8827,
+        6.8044,
+        5.8458
+      ]
+    },
+    {
+      "name": "UtilityPole_Lamp",
+      "catalogPosition": [
+        49,
+        0,
+        0
+      ],
+      "dimensions": [
+        2.2,
+        6.9,
+        1.5837
+      ]
+    },
+    {
+      "name": "PottedPlant_A",
+      "catalogPosition": [
+        56,
+        0,
+        0
+      ],
+      "dimensions": [
+        1.4401,
+        1.2457,
+        1.2669
+      ]
+    },
+    {
+      "name": "PottedPlant_B",
+      "catalogPosition": [
+        59,
+        0,
+        0
+      ],
+      "dimensions": [
+        1.4401,
+        1.2457,
+        1.2669
+      ]
+    },
+    {
+      "name": "TukTuk_Parked",
+      "catalogPosition": [
+        64,
+        0,
+        0
+      ],
+      "dimensions": [
+        1.86,
+        2.23,
+        2.7975
+      ]
+    },
+    {
+      "name": "LotusTower",
+      "catalogPosition": [
+        70,
+        0,
+        0
+      ],
+      "dimensions": [
+        45.9494,
+        357.2788,
+        45.9494
+      ],
+      "scaleNote": "Simplified world-unit landmark scale based on published 356 m height; approximate silhouette, not surveyed geometry."
+    }
+  ]
+}

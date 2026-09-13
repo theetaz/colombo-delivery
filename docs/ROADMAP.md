@@ -50,10 +50,11 @@ Status: in progress. The first browser road scene and first controllable bicycle
 now run in a 900 × 900 m slice from the audited snapshot. The bicycle adds
 assisted pedal, coast, brake, and steer behaviour, a following camera, surface
 feedback, marked training obstacles, world-boundary collisions, reset, and a
-preserved map inspector. The next bounded checkpoint is hands-on review and
-tuning of road scale and ride feel. Open Stage 1 field checks do not block this
-technical prototype, but they remain required before destinations or routes are
-presented as validated.
+preserved map inspector. The initial bicycle checkpoint has been accepted for
+continued prototyping. Longer physical-device riding, physical multi-touch,
+marked-obstacle contact, tuning, and an agreed performance budget remain open.
+Open Stage 1 field checks do not block this technical prototype, but they remain
+required before destinations or routes are presented as validated.
 
 Generate a browser scene from the audited data and add the first bicycle. Use a
 metre-based local coordinate system derived from stored latitude and longitude.
@@ -72,6 +73,10 @@ Engineering checkpoints:
   feedback; tune the bounded prototype where needed.
 - [ ] Extend the reviewed slice into the complete Stage 2 area and meet all
   acceptance criteria below.
+- [ ] Review a bounded warm illustrated scenery and rider slice for scale,
+  palette, silhouette, camera readability, loading, and browser cost. Keep it
+  decorative so the canonical road, collision, and delivery geometry remains
+  unchanged.
 
 The bounded bicycle checkpoint uses custom assisted kinematics and a procedural
 model. It intentionally omits Rapier, route legality, traffic, delivery jobs,
@@ -91,10 +96,35 @@ Acceptance criteria:
 
 ## Stage 3 — Complete delivery loop
 
-Status: not started.
+Status: in progress through a bounded practice loop. Three deterministic jobs
+exercise accept, pickup, timed delivery, reward accounting, retry, reset
+cancellation, and aggregate browser persistence. A north-up minimap now shows
+the shared road slice, live bicycle heading, and delivery phase. Its generated
+road markers are not verified entrances or stopping places, its overview and
+direction display are not routing, and this checkpoint does not satisfy the
+complete-stage acceptance criteria below.
 
 Build job selection, pickup, navigation, delivery, payment, and local progress
 saving.
+
+Engineering checkpoints:
+
+- [x] Add a deterministic practice sequence with explicit stopped pickup and
+  drop-off actions, a simulation-time deadline, one-time rewards, and retry.
+- [x] Define pause, bicycle-reset cancellation, reload, corrupt-storage, and
+  unavailable-storage behaviour.
+- [x] Add a north-up practice minimap from the same bounded road slice, with
+  live bicycle heading and delivery-phase marker states.
+- [ ] Manually validate 10–20 real pickup and drop-off entrances and safe,
+  lawful stopping points.
+- [ ] Build legal bicycle routing, minimap guidance, and missed-turn
+  recalculation from the canonical road topology.
+- [x] Review the compact north-up practice minimap in production Chromium at
+  desktop and mobile viewport sizes.
+  Its shared road context, live heading, and phase-aware generated markers are
+  an orientation checkpoint and do not complete legal routing.
+- [ ] Replace practice deadlines with allowances based on verified legal routes,
+  vehicle performance, junction delay, and a play buffer.
 
 Acceptance criteria:
 
@@ -130,6 +160,15 @@ Status: not started.
 Add the garage, electric bicycle, and the first meaningful upgrade purchase.
 Extend progression to motorbikes and cars only after the core economy is tested.
 
+The scoped fleet and shared asset contract are recorded in
+[Vehicles and progression](VEHICLES.md). Bicycle gameplay is implemented, and
+its polished Blender visual has completed its bounded production review. The
+electric bicycle, 50 cc scooter, commuter motorbike, sport or superbike, car,
+and van remain planned; none is available through the current interface.
+The implemented courier also has limited saved face and palette presets in the
+[character study](CHARACTER_STUDY.md). This does not implement a garage,
+vehicle ownership, or free-form character creation.
+
 Acceptance criteria:
 
 - Completing jobs earns money that can be spent in the garage.
@@ -145,6 +184,20 @@ Status: not started.
 
 Improve recognizable surroundings, assess reusable Colombo Atlas assets, and
 expand through connected map sections.
+
+Before city-scale scenery work, the bounded Stage 2 visual study establishes a
+reproducible Blender-to-GLB path, a small shared-material asset kit, an isolated
+art preview, and placement rules. Its warm illustrated direction and validation
+gates are recorded in the [visual prototype report](VISUAL_PROTOTYPE.md). The
+study does not count as recognizable Colombo scenery or approve wider asset
+production.
+
+A follow-up [street quality study](STREET_QUALITY_STUDY.md) has completed its
+bounded desktop and mobile review. It adds richer original asset detail,
+lightweight procedural surface textures, an early-evening lighting pass, and a
+compact game HUD while keeping scenery decorative. Rain, traffic, a finished
+character and animation set, broader environment production, and
+representative-hardware performance remain future work.
 
 Acceptance criteria:
 

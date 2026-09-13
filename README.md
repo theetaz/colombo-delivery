@@ -11,13 +11,70 @@ Repository: [theetaz/colombo-delivery](https://github.com/theetaz/colombo-delive
 ## Project status
 
 The repository now contains the reproducible Stage 1 OpenStreetMap audit, a
-browser-rendered 3D road prototype, and the first controllable bicycle. The
+browser-rendered 3D road prototype, the first controllable bicycle, a bounded
+three-job practice delivery loop, and a warm illustrated visual slice. The
 bicycle uses approachable custom kinematics on the same 900 × 900 m Lotus Tower
 slice, with pedal, coast, brake, steer, a following camera, road and grass
 handling, marked training obstacles, world-boundary collisions, and reset. The
-original source inspector remains available. This is a road-scale and handling
-milestone; candidate entrances, bicycle access, stopping safety, route legality,
-junction details, and current street conditions still need manual validation.
+practice loop adds timed pickup and drop-off actions, three fixed rewards, and
+locally saved aggregate earnings and completions. The visual slice adds a
+reproducible ten-piece Blender asset kit, a dense 250 m roadside vignette, an
+isolated art preview, and a clearer rider silhouette. The original source inspector
+remains available. Its markers are generated practice stops; candidate
+entrances, bicycle access, stopping safety, route legality, junction details,
+and current street conditions still need manual validation.
+
+Ride mode also contains a compact north-up practice minimap drawn from the
+same saved road slice. It follows the bicycle's live position and heading and
+changes pickup and drop-off emphasis with the delivery phase. It is an
+orientation aid, not legal routing; its generated markers remain unverified
+practice locations.
+
+The current checkout includes a follow-up street-quality pass with richer
+project-authored asset detail, lightweight procedural road and ground surfaces,
+an early-evening scene treatment, and a compact dark game HUD. Its scope,
+provenance, reference gap, and reviewed production evidence are recorded in the
+[street quality study](docs/STREET_QUALITY_STUDY.md).
+
+The [vehicle and progression plan](docs/VEHICLES.md) defines distinct roles for
+the implemented bicycle and the planned electric bicycle, scooters, motorbikes,
+car, and van. Only bicycle gameplay exists today; future vehicles, prices,
+running costs, capacities, upgrades, and garage unlocks remain planned.
+The [courier character study](docs/CHARACTER_STUDY.md) records the implemented
+detail, limited preset appearance choices, material isolation, persistence,
+and production review without adding another playable character or changing
+bicycle behavior.
+
+## Courier character detail
+
+[![Courier Rider studio with appearance controls](docs/milestones/2026-09-13-character-detail-studio.jpg)](docs/CHARACTER_STUDY.md)
+
+*The reviewed Rider studio shows the detailed project-authored courier and its
+limited face and palette choices. The [character study](docs/CHARACTER_STUDY.md)
+records the asset and texture provenance, browser persistence, per-instance
+material isolation, responsive production checks, failure fallback, and the
+remaining rigid-part animation limits.*
+
+## Polished courier bicycle
+
+[![Completed first delivery with the polished courier bicycle and rider](docs/milestones/2026-09-13-courier-bicycle.jpg)](docs/VEHICLES.md)
+
+*The reviewed 1280 × 800 Ride frame shows the Blender-authored courier bicycle
+and rider after completing the first practice job. The
+[vehicle document](docs/VEHICLES.md) records its measured asset contract,
+contact-driven animation, procedural fallback, isolated preview, responsive
+browser validation, and the planned fleet roles. The electric bicycle,
+scooters, motorbikes, car, and van remain plans rather than available vehicles.*
+
+## Street quality study
+
+[![Reviewed production Ride view with the compact HUD and early-evening street treatment](docs/milestones/2026-09-13-street-quality.jpg)](docs/STREET_QUALITY_STUDY.md)
+
+*The reviewed 1280 × 800 Ride view shows the compact game HUD, textured street,
+denser original scenery, revised rider, and early-evening lighting. The
+[street quality study](docs/STREET_QUALITY_STUDY.md) records its original asset
+pipeline, browser validation, performance smoke sample, responsive frame, and
+remaining gap to the supplied reference.*
 
 Development happens in public. Follow the [roadmap](docs/ROADMAP.md) for planned
 stages, the [build timeline](docs/BUILD_TIMELINE.md) for a chronological record
@@ -30,6 +87,37 @@ The first playable target is a small, recognizable area around Lotus Tower. It
 will include a controllable bicycle, 10–20 verified pickup and drop-off points,
 one complete timed-delivery loop, saved earnings, and an electric-bicycle
 upgrade. The map can then expand through connected areas of Colombo.
+
+## North-up practice minimap
+
+[![Production Ride view with the north-up practice minimap and active drop-off](docs/milestones/2026-09-13-minimap-prototype.jpg)](docs/MINIMAP_PROTOTYPE.md)
+
+*The reviewed 1280 × 800 production Ride view shows the bicycle heading and
+active drop-off over the same saved road slice as the 3D world. The
+[minimap prototype report](docs/MINIMAP_PROTOTYPE.md) records its projection,
+delivery phases, responsive behaviour, validation, and strict practice-only
+limits.*
+
+## Warm illustrated visual prototype
+
+[![Production Ride view of the warm illustrated Colombo visual slice](docs/milestones/2026-09-13-visual-prototype.jpg)](docs/VISUAL_PROTOTYPE.md)
+
+*The reviewed 1280 × 800 production Ride view shows the denser 250 m street
+vignette, full-scale Lotus Tower at the mapped origin, revised rider, paved
+footway treatment, and delivery interface. The
+[visual prototype report](docs/VISUAL_PROTOTYPE.md) records the asset pipeline,
+placement contract, provenance, build measurements, validation, and remaining
+art and performance work.*
+
+## Bounded practice delivery loop
+
+[![Production view after completing the first practice delivery](docs/milestones/2026-09-13-delivery-prototype.jpg)](docs/DELIVERY_PROTOTYPE.md)
+
+*The 1280 × 800 production Ride view shows the first practice job completed,
+with LKR 240 and one completion saved. Open the
+[delivery prototype report](docs/DELIVERY_PROTOTYPE.md) for the exact jobs,
+controls, generated coordinates, timer, pause and reset rules, storage contract,
+validation, and limitations.*
 
 ## First controllable bicycle prototype
 
@@ -83,6 +171,23 @@ safety.*
 - [First controllable bicycle prototype](docs/BICYCLE_PROTOTYPE.md) records the
   exact spawn, controls, assisted handling constants, camera, surface and
   collision rules, validation, and limitations.
+- [Bounded practice delivery loop](docs/DELIVERY_PROTOTYPE.md) records the
+  three-job sequence, stop interaction, timer, pause and reset rules, browser
+  storage contract, validation, and limits.
+- [Warm illustrated visual prototype](docs/VISUAL_PROTOTYPE.md) records the
+  palette, scale, placement, inspiration, asset provenance, and review gates
+  for the bounded scenery and rider study.
+- [North-up practice minimap](docs/MINIMAP_PROTOTYPE.md) records the shared road
+  data contract, live bicycle heading, phase-aware practice markers, responsive
+  review gates, and routing limitations.
+- [Street quality study](docs/STREET_QUALITY_STUDY.md) records the follow-up
+  environment, surface, lighting, and compact-HUD pass and its remaining gap to
+  the supplied quality reference.
+- [Vehicles and progression](docs/VEHICLES.md) records the shared asset contract,
+  fleet roles, cargo and running-cost direction, upgrade principles, and the
+  validation gates required before planned vehicles enter the game.
+- [Courier character study](docs/CHARACTER_STUDY.md) records the rider-detail,
+  appearance, material-isolation, persistence, and review contract.
 - [Lotus Tower map-data audit](docs/MAP_DATA_AUDIT.md) records the study scope,
   reproducible method, results, gaps, and manual verification gates.
 - [Data sources](docs/DATA_SOURCES.md) records OSM provenance, tag
@@ -147,12 +252,17 @@ keys, brake with `S`, the down arrow, or space, press `R` to reset, and press
 `F` to switch to the preserved map inspector. See the
 [bicycle report](docs/BICYCLE_PROTOTYPE.md) for the handling model and the
 [road report](docs/ROAD_PROTOTYPE.md) for the 900 × 900 m geometry scope and
-provisional width and elevation rules.
+provisional width and elevation rules. In Ride mode, select **Accept job** or
+press `E` to start a practice delivery, then use the same action while stopped
+inside its pickup and drop-off markers. The
+[delivery report](docs/DELIVERY_PROTOTYPE.md) records the complete interaction,
+timer, reset, and storage rules.
 
 ## Next step
 
-Ride the prototype and review its road scale, acceleration, braking, steering,
-camera distance, grass slowdown, and recovery. Tune that experience from direct
-feedback before adding delivery jobs or expanding the map. Stage 1 access,
-entrance, stopping, junction, and current-street checks remain open throughout
-the prototype.
+Continue art polish and measure the bounded warm illustrated slice across
+representative hardware and longer rides. The pending practice-loop checks
+still include timeout and retry, reset cancellation, sustained keyboard control
+on a physical device, physical multi-touch, and marked-obstacle contact. Stage 1 access,
+entrance, stopping, junction, route, and current-street checks remain open; the
+practice markers, straight-line guidance, and minimap do not satisfy them.

@@ -1,9 +1,10 @@
 # Architecture
 
-The offline Stage 1 map audit, first Three.js road scene, and first controllable
-bicycle are implemented. The broader game architecture remains a proposal
-until vehicle, physics, routing, interface, and streaming choices pass focused
-prototypes and rider feedback.
+The offline Stage 1 map audit, first Three.js road scene, first controllable
+bicycle, bounded practice delivery loop, and north-up practice minimap are
+implemented. The broader game architecture remains a proposal until vehicle,
+physics, routing, interface, and streaming choices pass focused prototypes and
+rider feedback.
 
 ## Initial technical direction
 
@@ -104,7 +105,7 @@ assumption table, controls, validation results, and present limitations.
 The first bicycle runs on the existing 900 × 900 m road slice. Pure TypeScript
 in `src/game/bicycle.ts` owns its deterministic fixed-step state, input,
 surface classification, collision tests, spawn, reset, and tuning. The scene
-layer owns the procedural bicycle and obstacle visuals, following camera, and
+layer owns the bicycle and obstacle visuals, following camera, and
 the transition between Ride and Inspect map modes. The interface layer maps
 keyboard and on-screen controls to the shared input state and displays speed,
 surface, distance, local position, and contact feedback.
@@ -161,7 +162,68 @@ Visual detail should use multiple levels of detail, shared materials, instanced
 street props, compact textures, and optimized GLB assets. Performance budgets
 must be established on representative hardware after the first scene exists.
 
+## Bounded visual asset pipeline
+
+The warm illustrated prototype introduces
+`art/generate_colombo_scenery.py`, a reproducible Blender Python generator for
+a small project-authored scenery kit. It writes an editable `.blend`, a
+metre-scale Y-up GLB for Three.js, and a machine-readable manifest under
+`public/models/`. Blender source defines geometry, object origins, transforms,
+named materials, and exports; the GLB file is the runtime derivative. Runtime
+placement remains downstream of the road builder and cannot alter canonical
+road ribbons, collision geometry, delivery stop coordinates, or WGS84
+provenance.
+
+`src/world/scenery-placement.ts` owns deterministic decorative placement. It
+samples source distances 48–298 m along saved way `13884292`, derives a road
+normal and facing direction, and points each asset's local +Z front toward the
+road. It uses hardcoded conservative footprint budgets, outward setback
+attempts, an alternate-side fallback, and a 5 × 5 footprint sample against every
+ground-level centreline and road width. The Lotus Tower replaces the procedural
+marker at the map origin with scale 1. Scenery has no collider, and decorative
+positions do not describe real buildings, entrances, pavements, or stopping
+places.
+
+The separate `art-preview.html` Vite entry provides a narrow review surface for
+silhouette, palette, scale, framing, and material response before assets are
+judged inside the riding scene. It loads the production GLB with orbit controls
+and reports
+missing roots or a retryable loading failure. The riding scene reports a
+non-blocking scenery-loading notice so asset failure does not remove the road
+or delivery interaction. The full scene remains the authority for camera
+clearance, road and marker readability, loading, and performance. Repeated
+scenery should share geometry and materials or use instancing as the kit grows.
+See the
+[visual prototype report](VISUAL_PROTOTYPE.md) for the working palette,
+placement contract, provenance, references, and open validation.
+
 ## Delivery and navigation model
+
+The first delivery implementation is a bounded practice controller in
+`src/game/delivery.ts`. It generates three jobs deterministically by sampling
+distances along the longest ground-level rendered piece of saved source way
+`13884292`. Each stop retains local metre coordinates, inverse-projected WGS84
+coordinates, source feature identity, and distance along the source. This is a
+repeatable geometry contract for testing the interaction; it is not a routable
+topology or evidence of an entrance, safe stopping position, current access, or
+legal travel.
+
+The controller owns the available, pickup, delivery, failed, and completed
+phases. Pickup and drop-off require an explicit action while the bicycle is
+within 7 m and moving no faster than 0.15 m/s. Its deadline consumes only the
+scene's active bicycle-simulation delta, so pausing the ride also pauses the
+job. Bicycle reset cancels an active job before teleporting to the training
+spawn. The view layer owns the delivery card, relative straight-line guidance,
+pickup and drop-off marker visuals, keyboard and pointer actions, and accessible
+announcements.
+
+Browser persistence is deliberately narrow. The versioned
+`colombo-delivery.practice-progress.v1` record contains only non-negative safe
+integer earnings and completed-job totals. Active phase, current parcel,
+position, and remaining time are session state. Reads reject malformed or
+wrong-version values and fall back to zero; unavailable or failed storage does
+not prevent in-memory play. The fixed LKR rewards are practice counters and do
+not implement spending, upgrades, or economy progression.
 
 A delivery location contains its real coordinate plus a manually validated
 arrival point on a reachable road, path, entrance, or stopping area. Stage 1
@@ -179,14 +241,40 @@ geometry from the canonical road topology. Delivery time is calculated from the
 legal route, vehicle capability, expected junction delays, and a play buffer.
 It must not require routine speeding or red-light violations.
 
+The bounded practice minimap is an earlier interface checkpoint and does not
+implement that route-service design. It receives the same `RoadSlice` used by
+the 3D scene, projects its local east/south coordinates into a north-up compact
+view, and reads the live bicycle and delivery-controller state. The map remains
+fixed while the bicycle heading indicator rotates. Delivery phase controls
+which generated pickup or drop-off is emphasized. No separate road dataset,
+route graph, path search, direct off-road route line, route distance, or legal
+navigation claim is introduced. See the
+[minimap prototype report](MINIMAP_PROTOTYPE.md) for its interface contract and
+validation gates.
+
 ## Driving and traffic simulation
 
 The first bicycle establishes assisted forward motion, forgiving steering,
 surface-dependent speed, a following camera, bounded collisions, and recovery.
-Its procedural front wheel steers and its wheels and crank rotate with travel;
-rigid-body lean and balance remain later experiments. Later vehicles can share
+Its visual layer loads `models/courier_bicycle.glb`, validates the named wheel,
+steering, crank, rider-contact, limb, and cargo nodes, then swaps it in for the
+procedural fallback. Wheel travel, front steering, and pedalling state drive the
+visual without changing controller physics. A failed load remains visible and
+leaves the fallback usable. The exact hierarchy and contact transforms are in
+[Vehicles and progression](VEHICLES.md). Rigid-body lean and balance remain
+later experiments. Later vehicles can share
 input, camera, collision, and recovery responsibilities while defining their
 own acceleration, braking, handling, capacity, and energy characteristics.
+
+The Rider studio applies limited face and palette presets to the same validated
+asset. Mutable character materials are cloned per loaded courier so one
+instance cannot recolour another; geometry and immutable texture maps remain
+shareable. A versioned `colombo-delivery:courier-appearance` browser record
+accepts only known option keys and falls back to defaults when data is absent,
+blocked, malformed, or stale. This supports local cosmetic selection only and
+does not introduce multiplayer or a free-form character system. See the
+[courier character study](CHARACTER_STUDY.md) for the asset provenance,
+responsive review, and current animation limits.
 
 Traffic simulation should initially cover a small number of nearby vehicles.
 Signals use explicit game control phases tied to stop lines and approaches.
@@ -205,7 +293,8 @@ textures, and browser performance before copying or converting them.
 - Desktop performance budget and reference devices.
 - Rider feedback on the custom bicycle prototype before confirming handling
   changes or Rapier integration.
-- Art direction, scenery fidelity, weather, and time-of-day scope.
+- Whether the bounded warm illustrated study should become the production art
+  direction; scenery fidelity, weather, and time-of-day scope remain open.
 - Input support beyond keyboard and mouse, including gamepads and touch.
 - Save-data schema and the point at which a backend becomes necessary.
 - Runtime routing defaults for missing access tags under Sri Lankan law.

@@ -190,3 +190,247 @@ roadmap.
   camera, surface rules, collision model, procedural visual scope, validation,
   and current limitations in the
   [first controllable bicycle prototype report](BICYCLE_PROTOTYPE.md).
+
+## 2026-09-13
+
+- Added a bounded practice delivery controller with three deterministic jobs
+  sampled along the ground-level centreline of saved source way 13884292.
+- Added explicit available, pickup, delivery, completed, and failed phases.
+  Pickup and drop-off require an action within 7 m while moving no faster than
+  0.15 m/s; crossing a marker alone does not advance or award the job.
+- Added 75, 80, and 85 second deadlines and fixed LKR 240, 280, and 320 practice
+  rewards. Timeout supports retry, and each completion awards once.
+- Connected the deadline to active bicycle-simulation time. Inspect mode,
+  hidden documents, window blur or loss of focus, and editable inspector focus
+  pause both bicycle movement and the job timer.
+- Made bicycle reset cancel an active pickup or delivery before returning to the
+  saved spawn. Available, completed, and failed delivery state is unaffected by
+  reset, and saved aggregate progress is not erased.
+- Added pickup and drop-off beacons, straight-line distance and relative
+  direction, task and timer feedback, pointer and `E` actions, and
+  transition-only accessible announcements.
+- Added versioned browser persistence under
+  `colombo-delivery.practice-progress.v1` for aggregate earnings and completed
+  jobs only. Invalid, unavailable, blocked, or full storage falls back to
+  session play, and aggregate values saturate at the maximum safe integer.
+- Kept generated stops explicitly separate from verified destinations. The
+  markers do not establish entrances, legal or safe stopping, current access,
+  traffic conditions, or a lawful bicycle route; straight-line guidance is not
+  navigation.
+- Added four delivery-controller tests covering deterministic source geometry,
+  the state and interaction gates, one-time rewards, timeout, pause, retry,
+  reset cancellation, strict storage validation and failure handling, and
+  aggregate saturation. All 19 TypeScript tests, all 12 Python audit tests,
+  strict TypeScript checking, and the production build pass.
+- Reviewed the production build in Chromium at 1280 × 800 through accept,
+  pickup, keyboard riding and steering, braking, stopped handoff, completion,
+  reload persistence, a second-job Inspect pause, and reset cancellation.
+  Completion recorded LKR 240 and one job once; reload retained both totals.
+- Reviewed the 390 × 844 layout without horizontal overflow and verified
+  pointer-held pedal and brake plus reset. The scoped browser console and page
+  error capture remained empty. Timeout, retry, and storage-failure paths remain
+  model-tested rather than browser-tested end to end.
+- Saved the 1280 × 800 completed-job production view as a native JPEG at
+  `docs/milestones/2026-09-13-delivery-prototype.jpg`.
+- Recorded the exact jobs, marker coordinates, timer, pause, reset, storage,
+  validation, and limits in the
+  [bounded practice delivery report](DELIVERY_PROTOTYPE.md).
+- Recorded the next bounded visual study in the
+  [warm illustrated visual prototype report](VISUAL_PROTOTYPE.md), including
+  its working palette, metre-scale asset and placement contract, Paper Route
+  inspiration links, project-authored asset provenance, and explicit browser
+  review gates. The completed checks are recorded below; longer-ride
+  performance and final art review remain open.
+- Added reproducible asset generation and isolated-preview scripts, the editable
+  `art/colombo_scenery_kit.blend`, and the runtime GLB, manifest, and PNG under
+  `public/models/`. Blender 5.1.2 produced 10 roots, 51 exported nodes, 41
+  meshes, 14 materials, and 28,314 post-modifier triangles in an approximately
+  1.9 MB GLB. All artwork is original procedural project work without external
+  meshes or textures.
+- Added 25 deterministic decorative placements across source distances 48–298
+  m, including 14 façade or wall pieces and 11 shops. Placements derive
+  orientation and setbacks from saved road geometry, use hardcoded conservative
+  footprint budgets, and are filtered against every ground-level road. The full-scale
+  Lotus Tower sits separately at its real source origin.
+- Added an explicit `art-preview.html` Vite entry that loads all ten runtime
+  roots with orbit controls, runtime lighting, missing-root status, a safe retry
+  action, and a return link. The riding scene reports scenery loading and a
+  reload action on failure without blocking its road and delivery systems.
+- Reworked the procedural rider silhouette with a tapered body, helmet, parcel
+  bag, split limbs, hands at the handlebar, and shoes driven from the crank
+  pedal endpoints. Added warm sky, cloud, shadow, and decorative paved-footway
+  treatment without changing bicycle collision or map topology.
+- Passed all 20 TypeScript tests, strict TypeScript checking, and the production
+  build. Chrome visual review confirmed shop fronts, paved footway, gradient
+  sky, clouds, warm shadows, the revised rider, and all ten roots in the art
+  preview. Longer-ride performance and final art review remain open.
+- Completed the first delivery in production Chrome with keyboard input over 67
+  m, awarded LKR 240 once, and confirmed reload retained LKR 240 and one
+  completion. Desktop 1280 × 800 and mobile 390 × 844 checks had no horizontal
+  overflow on the Ride and preview pages. Aspect-aware framing kept all ten
+  preview roots visible in portrait while preserving orbit and zoom. Mobile
+  pointer-held pedal exceeded 4 km/h and reset returned the bicycle to 0 km/h.
+- Confirmed normal Ride and preview reloads had no scoped console warnings,
+  console errors, or page errors. Aborting the GLB request exposed `Failed to
+  fetch`; preview Retry restored all ten roots, while the Ride warning left
+  Accept and Collect usable.
+- Saved reviewed 1280 × 800 production Ride and isolated art-preview screenshots
+  at `docs/milestones/2026-09-13-visual-prototype.jpg` and
+  `docs/milestones/2026-09-13-art-preview.jpg`.
+- Recorded production outputs of 65.49 KB for the main entry (23.07 KB gzip),
+  628.32 KB for the shared JavaScript chunk (158.76 KB gzip), 3.06 KB for the
+  preview entry (1.70 KB gzip), 14.65 KB CSS (4.00 KB gzip), and 2,879.94 KB for
+  the saved GeoJSON artifact. Vite's expected
+  warning for the shared output above 500 KB remains visible.
+- Added the bounded north-up practice-minimap checkpoint using the existing
+  900 × 900 m road slice as its sole map input.
+- Defined the minimap contract around live bicycle position and heading,
+  phase-aware generated pickup and drop-off markers, compact responsive layout,
+  and preserved access to the full source inspector.
+- Added a cached Canvas road layer, live marker layer, visible legend, active
+  target status, resize-aware projection, and device-pixel-ratio scaling capped
+  at 2. Screens up to 720 px start with the minimap collapsed behind an
+  accessible Map toggle; Inspect mode hides it completely.
+- Added three focused minimap tests for full-slice north-up projection, finite
+  handling of degenerate bounds and tiny viewports, and marker states across
+  available, pickup, delivery, failed, and completed phases. All 23 TypeScript
+  tests, strict TypeScript checking, the production build, and the documentation
+  diff check pass.
+- Reviewed the production build in Chromium at 1280 × 800 through accept,
+  pickup, 67 m of bicycle movement, delivery, stopped handoff, and completion.
+  The minimap matched pickup, delivery, and completed phases, changed with live
+  movement, cleared terminal targets, hid in Inspect, and returned in Ride.
+- Reviewed the 390 × 844 layout with the minimap initially collapsed, then
+  expanded and hidden through its accessible toggle. The expanded map did not
+  block pointer-held Pedal or Reset. Resizing back to desktop restored the
+  visible non-collapsed map. Both viewport reviews had no horizontal overflow
+  and no scoped console warnings, console errors, or page errors.
+- Saved the reviewed desktop active-delivery and mobile completed-job frames at
+  `docs/milestones/2026-09-13-minimap-prototype.jpg` and
+  `docs/milestones/2026-09-13-minimap-mobile.jpg`.
+- Recorded production outputs of 70.10 KB for the main entry (24.58 KB gzip),
+  628.32 KB for the shared JavaScript chunk (158.76 KB gzip), 3.06 KB for the
+  preview entry (1.70 KB gzip), 16.84 KB CSS (4.42 KB gzip), and 2,879.94 KB for
+  the saved GeoJSON. Vite's expected shared-chunk advisory remains.
+- Kept its semantics explicit: this view supplies practice orientation only. It
+  does not implement legal bicycle routing, route distance, missed-turn
+  recalculation, or an off-road straight line presented as a route, and its
+  markers do not establish entrances, safe stopping, access, or current street
+  conditions.
+- Added the [north-up practice minimap report](MINIMAP_PROTOTYPE.md) with the
+  shared-coordinate contract, phase behaviour, reproduction steps, browser
+  results, build measurements, milestone images, and unresolved routing work.
+  Physical devices, other browsers, representative-hardware performance, and
+  longer rides remain open.
+- Added the bounded [street quality study](STREET_QUALITY_STUDY.md) as a
+  follow-up to the first warm illustrated visual prototype.
+- Extended the original project-authored Blender kit with richer modeled
+  façade, roof, shutter, awning, trim, and foliage detail without downloaded
+  meshes or texture inputs. Browser-generated asphalt, ground, and paving
+  textures add restrained surface variation without changing geometry or
+  collision.
+- Shifted the bounded street toward an early-evening warm and cool composition
+  with stronger depth, shadows, and a simple distant city layer.
+- Reworked Ride mode into a compact dark game HUD. It preserves the native
+  delivery action, keyboard and pointer controls, reset, practice minimap and
+  accessible names; it moves technical detail to Inspect and keeps scenery-load
+  failures persistently visible.
+- Tightened the mobile HUD with an icon-only accessible Reset control, a truly
+  compact collapsed minimap, a visible expanded-map legend, and an explicit
+  `Practice run` label when the longer caveat is hidden.
+- Finalized the quality asset export at approximately 3.4 MB with 65 nodes, 55
+  meshes, 20 materials, 28,028 vertices, and 47,822 triangles. Direct glTF base
+  colours and modeled details preserve the palette without image textures;
+  browser canvas textures remain responsible for asphalt, paving, and ground
+  variation.
+- Finalized 72 decorative scene placements: 29 mature trees, 26 frontage
+  pieces, one instanced shrub batch, and one instanced five-pool lamplight
+  batch.
+- Passed strict TypeScript checking, all 23 current tests, the production build,
+  and the documentation diff check. Production desktop and 390 × 844 mobile
+  review completed the first 67 m keyboard delivery, Inspect, minimap expand
+  and collapse, pointer pedal, Reset, and the persistent scenery-failure path
+  without horizontal overflow or scoped console/page errors.
+- Recorded a narrow 120-frame stationary local sample of 16.7 ms median and
+  17.1 ms at the 95th percentile. It is a smoke measurement rather than a
+  sustained-play or representative-hardware guarantee.
+- Saved the reviewed desktop, mobile, and neutral browser asset frames at
+  `docs/milestones/2026-09-13-street-quality.jpg`,
+  `docs/milestones/2026-09-13-street-quality-mobile.jpg`, and
+  `docs/milestones/2026-09-13-street-quality-assets.jpg`.
+- Recorded production outputs of 78.51 KB for the main entry (26.92 KB gzip),
+  630.17 KB for the shared JavaScript chunk (159.38 KB gzip), 3.06 KB for the
+  preview entry (1.70 KB gzip), 22.99 KB CSS (5.38 KB gzip), and 2,879.94 KB for
+  the saved GeoJSON. Vite's expected shared-output advisory remains.
+- Added the original Blender-authored `CourierBicycle` and rider, its editable
+  generator and `.blend`, metre-scale GLB, machine-readable manifest, and
+  four-view contact sheet without external meshes or image textures.
+- Validated final asset bounds of 0.69 × 1.94 × 1.76 m, a 1.08 m wheelbase and
+  0.34 m wheel radius. The 1.3 MB GLB contains 152 nodes, 127 meshes, 16
+  materials, 38,800 exported vertices, and 25,152 triangles.
+- Replaced the procedural visual after asynchronous hierarchy validation while
+  preserving the existing controller, delivery behavior, and a usable fallback
+  for missing or invalid assets. Added a separate persistent vehicle-load status
+  that does not overwrite scenery readiness.
+- Bound wheel travel, front steering, active crank motion, counter-rotating
+  pedal platforms, and rider limbs to the named export pivots and attachments.
+  Hands follow the steered grip transforms, feet follow the rotating pedal
+  transforms, and coasting, braking, Inspect and lost input hold the crank pose.
+- Added `bicycle-preview.html` with Idle, Pedal, Coast, Steer, Pause and Resume,
+  Front, Side and Rear presets, orbit, zoom, failure reporting, and responsive
+  bounds-based framing.
+- Added the [vehicle and progression document](VEHICLES.md) with the exact
+  bicycle contract and distinct planned roles for the electric bicycle, 50 cc
+  scooter, commuter motorbike, sport or superbike, car, and van. Those future
+  vehicles, capacities, prices, costs, upgrades, and unlocks remain unimplemented.
+- Passed all 27 tests, strict TypeScript checking, the production build, and the
+  documentation diff check. The generated-GLB test covers the root transform,
+  hierarchy, pivots, sole parentage, and wheel diameter.
+- Completed the first 67 m production keyboard delivery for LKR 240, reload,
+  Inspect and Ride switching, the 390 × 844 minimap/touch/reset flow, and the
+  isolated preview controls without horizontal overflow or scoped application
+  console/page errors.
+- Confirmed that an aborted bicycle-model request leaves a persistent warning,
+  preserves scenery readiness, and keeps the procedural fallback playable
+  through delivery actions; reload restores the polished model.
+- Independently sampled three steering angles and five travelled-distance poses
+  with zero hand-to-grip and foot-to-pedal anchor offset, and confirmed that
+  wheels continue rolling while the crank holds during coasting.
+- Saved the reviewed production, preview, and mobile frames at
+  `docs/milestones/2026-09-13-courier-bicycle.jpg`,
+  `docs/milestones/2026-09-13-courier-bicycle-preview.jpg`, and
+  `docs/milestones/2026-09-13-courier-bicycle-mobile.jpg`.
+- Recorded final production outputs of 73.06 KB for the main entry (25.19 KB
+  gzip), 10.25 KB for the bicycle visual (3.79 KB gzip), 3.16 KB for the bicycle
+  preview (1.69 KB gzip), 630.17 KB for shared JavaScript (159.38 KB gzip), and
+  23.35 KB CSS (5.43 KB gzip). Vite's expected shared-output advisory remains.
+- Refined the original courier with clearer face, hair, clothing, bag, and shoe
+  forms and added Classic, Soft, and Angular identity-scale face profiles.
+- Embedded ten deterministic 64 px neutral luminance maps and kept the asset
+  pipeline free of external mesh and texture inputs. The updated 2.1 MB GLB
+  measures 0.69 × 1.96 × 1.76 m and contains 241 nodes, 213 meshes, 16
+  materials, 59,036 exported vertices, and 46,616 triangles.
+- Added three skin, hair, outfit, and bag palettes to the Rider studio with live
+  preview, explicit save, versioned defensive persistence, and automatic game
+  loading. Mutable materials are isolated per courier instance while authored
+  texture maps remain intact.
+- Added a compact accessible **Customize rider** link to the Ride toolbar; its
+  visual label shortens to **Rider** on mobile.
+- Passed production Chromium review at 1280 × 800, 390 × 844, and 390 × 600 for
+  all five cosmetic selections, save/reload, game-to-studio return, completed
+  delivery progress, and responsive layout without horizontal overflow.
+- Confirmed corrupt and unavailable storage fall back safely and a forced GLB
+  failure remains visible, preserves independently loaded scenery and the
+  pedalable procedural fallback, and recovers on reload.
+- Passed all 29 tests, strict TypeScript checking, and the production build.
+  Artifact tests cover the final hierarchy, transforms, pivots, sole parentage,
+  wheel diameter, UVs, embedded images, profile scale, and outward winding.
+- Saved reviewed Rider studio, face, production, and mobile images at
+  `docs/milestones/2026-09-13-character-detail-studio.jpg`,
+  `docs/milestones/2026-09-13-character-detail-face.jpg`,
+  `docs/milestones/2026-09-13-character-detail-game.jpg`, and
+  `docs/milestones/2026-09-13-character-detail-mobile.jpg`.
+- Recorded production outputs of 73.17 KB for the main entry (25.24 KB gzip),
+  12.75 KB for the bicycle visual (4.81 KB gzip), 4.67 KB for the Rider studio
+  (2.24 KB gzip), 23.98 KB CSS (5.52 KB gzip), and 630.17 KB shared JavaScript
+  (159.38 KB gzip). Vite's expected shared-output advisory remains.

@@ -136,20 +136,306 @@ contact with the marked obstacles remain hands-on checks. Traffic, routing,
 route legality, delivery jobs, progression, curbs, buildings, and ramps between
 elevated road segments remain outside this milestone.
 
+## 2026-09-13 — Bounded practice delivery loop
+
+Status: implemented and verified in the current checkout; publication record is
+pending.
+
+This bounded slice adds three deterministic timed jobs to the bicycle scene.
+Each job requires explicit stopped actions inside its pickup and drop-off
+markers, awards a fixed practice reward once, and advances through a repeating
+sequence. Timeout and retry are explicit. Reset cancels an active job before
+returning the bicycle to its spawn, and pausing the ride also pauses the
+deadline.
+
+Only aggregate earnings and completed-job count are stored in a versioned
+browser record. Invalid or unavailable storage falls back safely, while active
+job phase, parcel state, position, and remaining time remain session state. See
+the [bounded practice delivery report](DELIVERY_PROTOTYPE.md) for the exact job
+definitions, generated coordinates, controls, timer rules, storage contract,
+verification, and limits.
+
+The current-checkout production preview is the
+[bounded practice delivery screenshot](milestones/2026-09-13-delivery-prototype.jpg).
+
+All 19 TypeScript tests and all 12 Python audit tests pass, along with strict
+TypeScript checking and the production build. The current build emits a
+607.99 KB minified JavaScript chunk that is 158.22 KB gzip and retains Vite's
+default chunk-size advisory.
+
+Production Chromium QA at 1280 × 800 completed the first job with real keyboard
+input, including pickup, steering, braking, stopped handoff, one-time reward,
+reload persistence, native keyboard button activation, Inspect pause, and reset
+cancellation. QA at 390 × 844 covered responsive layout, pointer-held pedal and
+brake, and reset without horizontal overflow. The scoped console and page-error
+capture remained empty. Timeout and storage-failure paths retain automated
+controller coverage rather than browser end-to-end coverage.
+
+The six pickup and drop-off markers are generated along saved source way
+13884292 for repeatable prototype testing. They are not verified real
+entrances, safe or legal stopping points, or evidence of a lawful bicycle
+route. Straight-line distance and direction do not implement routing. Traffic,
+route recalculation, an economy with spending, upgrades, and progression remain
+outside this milestone.
+
+The immutable implementation commit and artifact links will be added after the
+milestone is published. Earlier milestone sections and their pinned links remain
+the historical record for those builds.
+
+## 2026-09-13 — Warm illustrated visual slice
+
+Status: implemented and initially verified in the current checkout; longer-ride
+performance, final art review, and the publication record are pending.
+
+This bounded study targets a project-authored Blender Python asset kit,
+reproducible GLB exports, decorative Three.js placement around the existing
+Lotus Tower road slice, an isolated art preview, and a clearer temporary rider.
+It uses a warm matte palette, metre scale, simple softened geometry, and large
+readable silhouettes. The authoritative road, collision, delivery, and
+coordinate data remain unchanged.
+
+Blender 5.1.2 produced the reviewed 1.9 MB GLB with 10 roots, 51 exported nodes,
+41 meshes, 14 materials, and 28,314 post-modifier triangles. A separate
+reproducible Blender script renders the isolated asset preview. The placement
+module derives road-relative transforms and filters them against ground-level
+road clearance. The finished placement set forms a dense 250 m vignette and
+keeps the full-scale Lotus Tower at its source map origin. The
+[visual prototype report](VISUAL_PROTOTYPE.md) records the design target, exact
+asset paths, scale and placement contract, provenance, public inspiration
+references, completed checks, and validation still required. A production
+milestone screenshot and build measurements are recorded below. The pending
+delivery milestone above remains the record of the gameplay slice on which this
+visual work builds.
+
+The final placement test produces 25 cleared decorative pieces across source
+distances 48–298 m, including 14 façade or wall pieces and 11 shops. All 20
+TypeScript tests, strict TypeScript checking, and the production build pass.
+Chrome visual review confirmed the revised rider, shop fronts, paved footway,
+gradient sky, clouds, warm shadows, and all ten roots in the interactive art
+preview. Production Chrome at 1280 × 800 completed the first delivery with
+keyboard input over 67 m, awarded LKR 240 once, and retained LKR 240 and one
+completion after reload. Desktop 1280 × 800 and mobile 390 × 844 checks reported
+no horizontal overflow.
+Aspect-aware preview framing kept all ten roots visible at both sizes while
+preserving orbit and zoom.
+
+On the mobile Ride view, a held pedal exceeded 4 km/h and reset returned the
+bicycle to 0 km/h. Normal Ride and art-preview reloads produced no scoped
+console warnings, console errors, or page errors. An intentionally aborted GLB
+request showed `Failed to fetch` and a working Retry action in the preview; the
+Ride warning remained non-blocking while Accept and Collect stayed usable.
+
+The reviewed production frames are the
+[warm illustrated Ride screenshot](milestones/2026-09-13-visual-prototype.jpg)
+and [isolated art-preview screenshot](milestones/2026-09-13-art-preview.jpg).
+The build emits a 65.49 KB main entry (23.07 KB gzip), a 628.32 KB shared
+JavaScript chunk (158.76 KB gzip), a 3.06 KB preview entry (1.70 KB gzip), 14.65
+KB CSS (4.00 KB gzip), and the 2,879.94 KB saved GeoJSON artifact. The shared
+chunk retains Vite's expected warning for
+output above 500 KB. Performance across representative hardware, longer rides,
+and final art polish remain open.
+
+## 2026-09-13 — North-up practice minimap
+
+Status: implemented and verified in the current checkout; publication record
+is pending.
+
+This interface checkpoint adds a compact responsive north-up minimap to Ride
+mode. It reuses the same renderer-independent 900 × 900 m `RoadSlice` as the 3D
+world, follows the bicycle's live local position, rotates its bicycle indicator
+to show heading while keeping north fixed, and changes generated pickup and
+drop-off emphasis with the delivery phase. The
+[minimap prototype report](MINIMAP_PROTOTYPE.md) records the data contract,
+interaction semantics, review procedure, and limits.
+
+The minimap is practice guidance only. It does not add a route graph, legal
+bicycle routing, route distance, missed-turn recalculation, or an off-road
+straight line presented as a route. Its stops remain generated practice
+markers, not verified entrances or safe and lawful stopping points.
+
+All 23 TypeScript tests pass, including three focused minimap cases for bounded
+north-up projection, finite degenerate input, and delivery-phase marker states.
+Strict TypeScript checking, the production build, and the documentation diff
+check also pass.
+
+Production Chromium review at 1280 × 800 completed the first job through a 67 m
+ride and stopped handoff, with the minimap matching pickup, delivery, and
+completed phases. The canvas changed with bicycle movement, completed targets
+cleared, Inspect hid the map, and returning to Ride restored it. At 390 × 844
+the map started collapsed, expanded and hid through its accessible toggle, and
+returned to the visible non-collapsed desktop state after resizing. With the
+mobile map expanded, pointer-held Pedal exceeded 4 km/h and Reset returned the
+bicycle to 0.0 km/h. Both viewports had no horizontal overflow and the scoped
+console-warning, console-error, and page-error captures were empty.
+
+The reviewed frames are the
+[desktop active-delivery screenshot](milestones/2026-09-13-minimap-prototype.jpg)
+and [mobile completed-job screenshot](milestones/2026-09-13-minimap-mobile.jpg).
+The build emits a 70.10 KB main entry (24.58 KB gzip), a 628.32 KB shared
+JavaScript chunk (158.76 KB gzip), a 3.06 KB preview entry (1.70 KB gzip),
+16.84 KB CSS (4.42 KB gzip), and the 2,879.94 KB saved GeoJSON artifact. Vite's
+expected shared-chunk advisory remains. Physical devices, other browsers,
+representative-hardware performance, and longer rides remain open. Earlier
+delivery and visual entries remain the historical record for those checkpoints.
+
+## 2026-09-13 — Street quality study
+
+Status: implemented and verified in the current checkout; publication record
+is pending.
+
+This follow-up pass improves the bounded visual slice from the bicycle camera.
+It adds richer project-authored modeled detail, lightweight browser-generated
+asphalt, ground and paving surfaces, a warmer and cooler early-evening scene,
+and a compact dark Ride HUD. Speed, objective, time, reward, action and minimap
+remain available as small game overlays. Technical road and performance details
+remain in Inspect, while scenery-load failures stay visible in Ride.
+
+The [street quality study](STREET_QUALITY_STUDY.md) records the implementation,
+asset and surface provenance, accessibility behavior, and the remaining gap to
+the supplied reference. This is not a parity claim: a hand-painted texture set,
+rain, traffic, a finished character rig and animation set, dense hand-placed
+environment art, and longer performance review remain open.
+
+The final GLB is approximately 3.4 MB and contains 65 nodes, 55 meshes, 20
+materials, 28,028 vertices, and 47,822 triangles. The scene contains 72
+decorative placements: 29 mature trees, 26 frontage pieces, an instanced shrub
+batch, and an instanced batch of five lamplight pools. The kit uses direct glTF
+base colours and modeled surface detail without image textures; browser canvas
+textures provide asphalt, paving, and ground variation.
+
+Strict TypeScript checking, all 23 current tests, the production build, and the
+documentation diff check pass. Production review completed the first 67 m
+keyboard delivery for LKR 240 and one completion, switched through Inspect,
+and exercised the 390 × 844 minimap, pointer pedal, Reset, and persistent
+scenery-failure path without horizontal overflow or scoped console/page errors.
+
+A 120-frame stationary local sample measured 16.7 ms median and 17.1 ms at the
+95th percentile. This is a short smoke sample, not a sustained or
+representative-hardware performance guarantee. The reviewed artifacts are the
+[desktop Ride frame](milestones/2026-09-13-street-quality.jpg),
+[mobile Ride frame](milestones/2026-09-13-street-quality-mobile.jpg), and
+[neutral browser asset preview](milestones/2026-09-13-street-quality-assets.jpg).
+
+The production build emits a 78.51 KB main entry (26.92 KB gzip), a 630.17 KB
+shared JavaScript chunk (159.38 KB gzip), a 3.06 KB preview entry (1.70 KB
+gzip), 22.99 KB CSS (5.38 KB gzip), and the 2,879.94 KB saved GeoJSON artifact.
+Vite's expected shared-output advisory above 500 KB remains.
+
+## 2026-09-13 — Polished courier bicycle and rider
+
+Status: implemented and verified in the current checkout; publication record
+is pending.
+
+The procedural gameplay bicycle now swaps to an original Blender-authored
+courier bicycle and rider after its named hierarchy validates. The 1.3 MB GLB
+is 0.69 m wide, 1.94 m high and 1.76 m long, with a 1.08 m wheelbase and 0.34 m
+wheel radius. It contains 152 nodes, 127 meshes, 16 materials, 38,800 exported
+vertices and 25,152 triangles. Its direct Principled base colours use no image
+textures or external meshes.
+
+The visual binds travelled distance to the wheels, steering to the front
+assembly, and active pedalling to the crank, counter-rotating pedal platforms,
+and contact-driven limbs. Hands resolve the steered grip anchors and feet
+resolve the crank-mounted pedal anchors. Coasting, braking, Inspect and lost
+input hold the crank pose. Controller physics and delivery behavior remain
+unchanged. Invalid or failed loads keep the procedural bicycle usable, and a
+persistent vehicle status reports the failure independently from scenery.
+
+The isolated `bicycle-preview.html` entry supports Idle, Pedal, Coast, Steer,
+Pause and Resume, Front, Side and Rear presets, orbit, zoom, and responsive
+bounds-based framing. Production review completed the first 67 m keyboard job
+for LKR 240, retained the completion after reload, switched through Inspect,
+and passed the 390 × 844 minimap, touch Pedal, Reset and collapse flow without
+horizontal overflow. An aborted model request kept the warning visible through
+delivery actions and the fallback playable; reload restored the asset.
+
+All 27 tests, strict TypeScript checking, the production build, and the
+documentation diff check pass. Independent live-model checks measured zero
+hand-to-grip and foot-to-pedal anchor offset across three steering angles and
+five travel poses and confirmed that wheel travel continues while the crank
+holds during coasting. Scoped application console warnings, errors, and page
+errors were empty. The reviewed artifacts are the
+[completed first-job Ride frame](milestones/2026-09-13-courier-bicycle.jpg),
+[idle Side preview](milestones/2026-09-13-courier-bicycle-preview.jpg), and
+[mobile frame after Reset](milestones/2026-09-13-courier-bicycle-mobile.jpg).
+
+The build emits a 73.06 KB main entry (25.19 KB gzip), a 10.25 KB bicycle
+visual entry (3.79 KB gzip), a 3.16 KB bicycle-preview entry (1.69 KB gzip), a
+630.17 KB shared JavaScript chunk (159.38 KB gzip), and 23.35 KB CSS (5.43 KB
+gzip). Vite's expected shared-output advisory above 500 KB remains. The
+electric bicycle, 50 cc scooter, commuter motorbike, sport or superbike, car,
+and van remain planned and are not present in an unlock or garage interface.
+
+## 2026-09-13 — Courier character detail and appearance
+
+Status: implemented and verified in the current checkout; publication record
+is pending.
+
+The courier now has a more legible original face, three selectable profile
+roots, revised hair and clothing, detailed shoes and parcel bag, and ten small
+deterministic neutral luminance maps embedded in the GLB. The current 2.1 MB
+asset measures 0.69 × 1.96 × 1.76 m and contains 241 nodes, 213 meshes, 16
+materials, 59,036 exported vertices, and 46,616 triangles. Its editable Blender
+source is 423 KB, with no external mesh or texture inputs.
+
+The responsive Rider studio offers Classic, Soft, and Angular faces and three
+skin, hair, outfit, and bag palettes. Changes preview live and save explicitly
+to a versioned browser record. The game loads that appearance automatically,
+and its compact **Customize rider** link opens the studio. Mutable materials are
+cloned per courier instance while immutable geometry and textures remain
+shareable.
+
+Production Chromium review at 1280 × 800, 390 × 844, and 390 × 600 passed all
+five cosmetic selections, save and reload, the game/studio return path, the
+first 67 m delivery, and retained LKR 240 progress without horizontal overflow.
+Corrupt and unavailable storage fell back safely. A forced model failure kept
+the procedural bicycle playable, did not block scenery, remained visible
+through a save attempt, and recovered on reload.
+
+All 29 tests, strict TypeScript checking, and the production build pass.
+Artifact tests cover hierarchy, transforms, pivots, sole parentage, wheel size,
+UVs, embedded images, face-root scale, and winding. Live checks across three
+steering settings and five travel poses kept hand and foot attachment error
+below 2.63 × 10⁻¹⁵ m and preserved wheel motion with a held coasting crank.
+This verifies contact anchors rather than skin or cloth deformation.
+
+The reviewed artifacts are the [Rider studio](milestones/2026-09-13-character-detail-studio.jpg),
+[face close-up](milestones/2026-09-13-character-detail-face.jpg),
+[completed-delivery game view](milestones/2026-09-13-character-detail-game.jpg),
+and [mobile Rider studio](milestones/2026-09-13-character-detail-mobile.jpg). The
+production build emits a 73.17 KB main entry (25.24 KB gzip), a 12.75 KB bicycle
+visual entry (4.81 KB gzip), a 4.67 KB Rider-studio entry (2.24 KB gzip), 23.98
+KB CSS (5.52 KB gzip), and a 630.17 KB shared JavaScript chunk (159.38 KB gzip).
+The expected shared-output advisory remains.
+
+The character remains a rigid-part articulated model with limited preset
+customization. It has no skeletal skinning, facial animation, cloth or loose
+hair simulation, free-form editor, or multiplayer behavior.
+
 ## Current state
 
 The repository contains the product definition, Stage 1 audit pipeline, first
-browser-rendered 3D road prototype, and first controllable bicycle. The bicycle
+browser-rendered 3D road prototype, first controllable bicycle, and bounded
+practice delivery loop. The bicycle
 uses custom assisted kinematics in the same 900 × 900 m Lotus Tower slice, with
 pedal, coast, brake, steer, road and grass handling, a following camera, marked
 training obstacles, world-boundary collisions, reset, and the preserved source
-inspector. See the [bicycle prototype report](BICYCLE_PROTOTYPE.md) for its exact
-spawn, controls, tuning, validation, and limitations, and the
+inspector. The delivery exercise adds timed pickup and drop-off actions, fixed
+practice rewards, and local aggregate persistence. Ride mode also shows the
+shared road slice, live bicycle heading, and practice-stop phase in its compact
+north-up minimap. See the
+[minimap prototype report](MINIMAP_PROTOTYPE.md) for its behaviour and limits,
+the
+[delivery prototype report](DELIVERY_PROTOTYPE.md) for its exact behavior and
+limits, the [bicycle prototype report](BICYCLE_PROTOTYPE.md) for its spawn,
+controls, tuning, and validation, and the
 [road prototype report](ROAD_PROTOTYPE.md) for the underlying geometry and
 source contract.
 
-The current-checkout production image remains available as the
-[first controllable bicycle screenshot](milestones/2026-09-11-bicycle-prototype.jpg).
+The current-checkout production image is the
+[character-detail Ride screenshot](milestones/2026-09-13-character-detail-game.jpg).
+The earlier [bounded practice delivery screenshot](milestones/2026-09-13-delivery-prototype.jpg)
+remains available with its milestone record.
 
 The normal current static audit preview remains
 [the repository SVG](maps/lotus-tower-road-audit.svg); unlike the commit-pinned
@@ -167,17 +453,26 @@ Then open
 [http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
 That address works only while the local server is running.
 
-## Next bounded milestone — Ride-feel review and tuning
+## Next bounded milestone — Visual and practice review
 
-Ride the bicycle on the current road slice and judge the relationship between
-city scale, speed, steering, braking, camera distance, grass slowdown, obstacle
-clearance, and recovery. The review should cover sustained keyboard control and
-physical multi-touch input as well as browser contact with both marked training
-obstacles and the world boundary.
+Keep the minimap's practice status visible until mode-aware legal routing and
+field validation exist. Review its input and readability on physical devices
+and other browsers alongside longer-ride performance work.
 
-Use that feedback to tune the small assisted model before expanding the map or
-adding jobs. The review does not require Rapier, traffic, routing, route
-legality, progression, or ramps between elevated road segments.
+Continue art polish from hands-on feedback and measure runtime performance on
+representative hardware over longer rides. Keep checking the relationship among
+asset scale, road and marker readability, the following camera, and input feel.
+
+Review the complete three-job sequence in the production build, including
+pickup and drop-off actions, timeout and retry, reset cancellation, pause
+semantics, reward persistence, reload, and storage fallback. The remaining
+bicycle checks still include longer physical-device riding, physical
+multi-touch, both marked training obstacles, and the world boundary.
+
+Separately, manually verify candidate entrances, safe and legal stopping
+positions, bicycle access, and the first complete route before turning practice
+markers into destinations or straight-line guidance into navigation. Routing,
+traffic, and economy progression remain later systems.
 
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and

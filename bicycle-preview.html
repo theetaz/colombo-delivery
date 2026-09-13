@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Isolated animation preview for the Colombo Delivery courier bicycle." />
+    <title>Colombo Delivery · Bicycle preview</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body, main { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { color: #f7f1dd; background: #26384b; font: 600 14px/1.35 system-ui, sans-serif; }
+      main { display: grid; grid-template-columns: minmax(340px, 450px) minmax(0, 1fr); }
+      #bicycle-preview-canvas { position: relative; grid-column: 2; min-width: 0; min-height: 0; }
+      #bicycle-preview-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+      .preview-panel { position: relative; z-index: 2; grid-column: 1; grid-row: 1; min-width: 0; overflow: auto; padding: 24px; border-right: 1px solid #ffffff24; background: #17232b; box-shadow: 12px 0 35px #07101738; }
+      .preview-panel a { color: #f2c76e; text-decoration: none; }
+      .preview-panel h1 { margin: 5px 0 10px; font-size: clamp(20px, 3vw, 30px); }
+      .preview-controls { display: flex; flex-wrap: wrap; gap: 7px; }
+      button, select { padding: 8px 12px; border: 1px solid #ffffff2b; border-radius: 9px; color: inherit; background: #536878; font: inherit; cursor: pointer; }
+      button[aria-pressed="true"] { color: #263025; background: #f2c76e; }
+      .appearance-controls { display: grid; grid-template-columns: repeat(2, minmax(120px, 1fr)); gap: 7px; margin-top: 9px; }
+      .appearance-controls label { display: grid; gap: 3px; color: #c7d7db; font-size: 11px; }
+      #save-appearance { align-self: end; color: #263025; background: #f2c76e; }
+      #bicycle-preview-status { display: block; margin-top: 9px; color: #c7d7db; font-size: 12px; }
+      #appearance-status { display: block; min-height: 16px; margin-top: 3px; color: #f2c76e; font-size: 12px; }
+      @media (max-width: 720px) {
+        main { grid-template-columns: 1fr; grid-template-rows: minmax(0, 55dvh) minmax(0, 45dvh); }
+        #bicycle-preview-canvas { grid-column: 1; grid-row: 1; }
+        .preview-panel { grid-column: 1; grid-row: 2; padding: 14px; border-top: 1px solid #ffffff24; border-right: 0; box-shadow: 0 -10px 30px #07101738; }
+        .preview-panel h1 { margin: 3px 0 8px; font-size: 20px; }
+        .appearance-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Courier bicycle animation preview">
+      <div id="bicycle-preview-canvas"></div>
+      <section class="preview-panel">
+        <a href="./">← Return to ride</a>
+        <h1>Rider studio</h1>
+        <div class="preview-controls" role="group" aria-label="Animation pose">
+          <button data-pose="idle" aria-pressed="false">Idle</button>
+          <button data-pose="pedal" aria-pressed="true">Pedal</button>
+          <button data-pose="coast" aria-pressed="false">Coast</button>
+          <button data-pose="steer" aria-pressed="false">Steer</button>
+          <button id="preview-pause" aria-pressed="false">Pause</button>
+        </div>
+        <div class="preview-controls" role="group" aria-label="Camera angle" style="margin-top:7px">
+          <button data-camera="front">Front</button>
+          <button data-camera="side">Side</button>
+          <button data-camera="rear">Rear</button>
+          <button data-camera="face">Face</button>
+        </div>
+        <div class="appearance-controls" aria-label="Courier appearance">
+          <label>Face<select id="appearance-face"><option value="classic">Classic</option><option value="soft">Soft</option><option value="angular">Angular</option></select></label>
+          <label>Skin<select id="appearance-skin"><option value="warm">Warm</option><option value="deep">Deep</option><option value="golden">Golden</option></select></label>
+          <label>Hair<select id="appearance-hair"><option value="black">Black</option><option value="brown">Brown</option><option value="silver">Silver</option></select></label>
+          <label>Outfit<select id="appearance-outfit"><option value="sunrise">Sunrise</option><option value="ocean">Ocean</option><option value="forest">Forest</option></select></label>
+          <label>Bag<select id="appearance-bag"><option value="coral">Coral</option><option value="ochre">Ochre</option><option value="teal">Teal</option></select></label>
+          <button id="save-appearance">Apply &amp; save</button>
+        </div>
+        <span id="bicycle-preview-status" role="status">Procedural fallback visible · loading polished model…</span>
+        <span id="appearance-status" role="status"></span>
+      </section>
+    </main>
+    <script type="module" src="/src/scene/BicyclePreview.ts"></script>
+  </body>
+</html>

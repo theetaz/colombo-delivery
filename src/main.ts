@@ -3,7 +3,14 @@ import "./style.css";
 import roadNetworkUrl from "../data/derived/road_network.geojson?url";
 import sourceManifestRaw from "../data/osm/manifest.json?raw";
 import type { BicycleInput, BicycleState } from "./game/bicycle";
+import {
+  DeliveryController,
+  createPracticeJobs,
+  type DeliveryActionResult,
+  type DeliveryGuidance,
+} from "./game/delivery";
 import { RoadScene, type SceneMode } from "./scene/RoadScene";
+import { createPracticeMinimap } from "./ui/PracticeMinimap";
 import { buildRoadSlice } from "./world/road-slice";
 import type { GeoJsonFeatureCollection, Road, RoadSlice } from "./world/types";
 
@@ -54,9 +61,9 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   const sceneHost = element("div", "scene-host");
 
   const masthead = element("header", "masthead");
-  const eyebrow = element("p", "eyebrow", "900 m road feel study");
+  const eyebrow = element("p", "eyebrow", "Colombo courier");
   const title = element("h1", "title", "Colombo Delivery");
-  const subtitle = element("p", "subtitle", "Lotus Tower · bicycle prototype");
+  const subtitle = element("p", "subtitle", "Lotus Tower district");
   masthead.append(eyebrow, title, subtitle);
 
   const rideToolbar = element("div", "ride-toolbar");
@@ -68,7 +75,9 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   inspectModeButton.setAttribute("aria-pressed", "false");
   modeSwitch.append(rideModeButton, inspectModeButton);
   const resetBikeButton = textButton("Reset bicycle", "reset-bike-button", "reset-bike");
-  rideToolbar.append(modeSwitch, resetBikeButton);
+  const customizeRiderLink = element("a", "customize-rider-link", "Customize rider");
+  customizeRiderLink.href = `${import.meta.env.BASE_URL}bicycle-preview.html`;
+  rideToolbar.append(modeSwitch, customizeRiderLink, resetBikeButton);
 
   const toolbar = element("div", "camera-toolbar");
   toolbar.setAttribute("aria-label", "Camera controls");
@@ -79,7 +88,7 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     iconButton("Zoom out", "−", "zoom-out"),
   );
 
-  const sceneHint = element("p", "scene-hint", "W / ↑ pedal · A D steer · S / ↓ / Space brake · F inspect · R reset");
+  const sceneHint = element("p", "scene-hint", "W / ↑ pedal · A D steer · S / ↓ / Space brake · E handoff · F inspect · R reset");
   const attribution = element("a", "attribution", "© OpenStreetMap contributors");
   attribution.href = manifest.source.copyright_url;
   attribution.target = "_blank";
@@ -90,7 +99,9 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   const pieceSuffix = roadSlice.roads.length === sourceWayCount ? "" : ` · ${roadSlice.roads.length} pieces`;
   const countText = element("span", "status-count", `${sourceWayCount} OSM ways${pieceSuffix}`);
   const fpsText = element("span", "status-fps", "Measuring FPS…");
-  runtimeStatus.append(countText, fpsText);
+  const sceneryStatus = element("span", "status-scenery", "Loading street…");
+  const vehicleStatus = element("span", "status-vehicle", "Loading bicycle…");
+  runtimeStatus.append(countText, fpsText, sceneryStatus, vehicleStatus);
 
   const rideHud = element("section", "ride-hud");
   rideHud.setAttribute("aria-label", "Bicycle status");
@@ -112,6 +123,27 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   rideFeedback.setAttribute("aria-live", "polite");
   rideFeedback.setAttribute("aria-atomic", "true");
 
+  const deliveryPanel = element("section", "delivery-panel");
+  deliveryPanel.setAttribute("aria-label", "Practice delivery");
+  const deliveryTopline = element("div", "delivery-topline");
+  const deliveryLabel = element("span", "delivery-label", "Practice run");
+  const progressValue = element("span", "delivery-progress", "LKR 0 · 0 completed");
+  deliveryTopline.append(deliveryLabel, progressValue);
+  const deliveryTitle = element("h2", "delivery-title", "Choose a practice job");
+  const deliveryTask = element("p", "delivery-task", "A short timed handoff on the saved road slice.");
+  const deliveryStats = element("div", "delivery-stats");
+  const targetValue = element("strong", "delivery-stat-value", "Ready");
+  const timerValue = element("strong", "delivery-stat-value delivery-timer", "—");
+  deliveryStats.append(deliveryStat("Objective", targetValue), deliveryStat("Time", timerValue));
+  const deliveryAction = textButton("Accept job", "delivery-action", "delivery-action");
+  const deliveryCaveat = element("p", "delivery-caveat", "Practice points only · entrances, stopping safety, access and legal routes are not verified.");
+  const deliveryAnnouncement = element("p", "visually-hidden");
+  deliveryAnnouncement.setAttribute("aria-live", "polite");
+  deliveryAnnouncement.setAttribute("aria-atomic", "true");
+  deliveryPanel.append(deliveryTopline, deliveryTitle, deliveryTask, deliveryStats, deliveryAction, deliveryCaveat, deliveryAnnouncement);
+
+  const minimap = createPracticeMinimap(roadSlice);
+
   const rideControls = element("div", "ride-controls");
   rideControls.setAttribute("aria-label", "Bicycle controls");
   rideControls.append(
@@ -125,7 +157,7 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   inspector.setAttribute("aria-label", "Road inspector");
   inspector.append(buildInspectorHeader(), buildRoadPicker(roadSlice.roads), buildLayerControls(), buildDetailsEmpty(), buildSourceNote(manifest, roadSlice));
 
-  mapPanel.append(sceneHost, masthead, rideToolbar, toolbar, rideHud, rideFeedback, rideControls, sceneHint, attribution, runtimeStatus);
+  mapPanel.append(sceneHost, masthead, rideToolbar, toolbar, deliveryPanel, minimap.element, rideHud, rideFeedback, rideControls, sceneHint, attribution, runtimeStatus);
   host.append(mapPanel, inspector);
 
   const roadSelect = required<HTMLSelectElement>("#road-select");
@@ -134,7 +166,11 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   let currentMode: SceneMode = "ride";
   let previousState: BicycleState | null = null;
   let feedbackTimer = 0;
-  const scene = new RoadScene(sceneHost, roadSlice, {
+  const delivery = new DeliveryController(createPracticeJobs(roadSlice), safeLocalStorage());
+  let deliveryUiElapsed = 0;
+  let sceneReady = false;
+  let scene!: RoadScene;
+  scene = new RoadScene(sceneHost, roadSlice, {
     onRoadSelected: (roadId) => {
       roadSelect.value = roadId ?? "";
       renderRoadDetails(details, roadId ? roadSlice.roads.find((road) => road.id === roadId) ?? null : null);
@@ -142,12 +178,27 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     onFpsSample: (fps) => {
       fpsText.textContent = `${fps} FPS`;
     },
+    onSceneNotice: (message) => {
+      sceneryStatus.textContent = message.startsWith("Street scenery ready") ? "Street ready" : message;
+      runtimeStatus.dataset.sceneryReady = String(message.startsWith("Street scenery ready"));
+      host.dataset.sceneError = String(message.startsWith("Street scenery could not load"));
+      if (message.startsWith("Street scenery could not load")) showFeedback(message, "warning");
+    },
+    onVehicleVisualNotice: (message) => {
+      const ready = message.startsWith("Bicycle visual ready");
+      const failed = message.startsWith("Bicycle visual could not load");
+      vehicleStatus.textContent = ready ? "Bicycle ready" : message;
+      runtimeStatus.dataset.vehicleReady = String(ready);
+      host.dataset.vehicleError = String(failed);
+      if (failed) showPersistentFeedback(message, "warning");
+    },
     onBicycleState: (state) => {
       speedValue.textContent = (Math.abs(state.speed) * 3.6).toFixed(1);
       surfaceValue.textContent = state.surface === "road" ? "Road" : "Grass";
       surfaceValue.className = `metric-value surface-${state.surface}`;
       distanceValue.textContent = formatDistance(state.distanceTravelled);
       coordinateValue.textContent = `E ${formatSigned(state.x)} · S ${formatSigned(state.z)}`;
+      minimap.updateBicycle(state);
       if (previousState) {
         if (state.boundaryCollisions > previousState.boundaryCollisions) {
           showFeedback("Study boundary reached — turn back or press R / Reset bicycle.", "warning");
@@ -159,7 +210,73 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
       }
       previousState = state;
     },
+    onSimulationStep: (deltaSeconds, state) => {
+      const timedOut = delivery.step(deltaSeconds);
+      deliveryUiElapsed += deltaSeconds;
+      if (timedOut) {
+        deliveryAnnouncement.textContent = "Practice delivery timed out. Retry when ready.";
+        showFeedback("Time expired — retry the practice job.", "warning");
+      }
+      if (timedOut || deliveryUiElapsed >= 0.1) {
+        deliveryUiElapsed = 0;
+        renderDelivery(state);
+      }
+    },
   });
+  sceneReady = true;
+  renderDelivery(scene.getBicycleState());
+
+  function renderDelivery(state: BicycleState): void {
+    const deliveryState = delivery.getState();
+    const job = delivery.getCurrentJob();
+    const guidance = delivery.getGuidance(state);
+    progressValue.textContent = `LKR ${deliveryState.earningsLkr.toLocaleString("en-US")} · ${deliveryState.completedJobs} completed${delivery.isProgressSaved() ? "" : " · session only"}`;
+    deliveryTitle.textContent = job.label;
+    timerValue.textContent = deliveryState.phase === "pickup" || deliveryState.phase === "delivery"
+      ? formatTimer(deliveryState.secondsRemaining)
+      : "—";
+    deliveryPanel.dataset.phase = deliveryState.phase;
+    minimap.updateDelivery(job, deliveryState.phase);
+
+    if (deliveryState.phase === "available") {
+      deliveryTask.textContent = `Pickup → drop-off · ${job.rewardLkr} LKR · ${job.timeLimitSeconds}s`;
+      targetValue.textContent = "Ready";
+      deliveryAction.textContent = "Accept job";
+    } else if (deliveryState.phase === "failed") {
+      deliveryTask.textContent = "Time expired. Restart from the pickup.";
+      targetValue.textContent = "Timed out";
+      deliveryAction.textContent = "Retry job";
+    } else if (deliveryState.phase === "completed") {
+      deliveryTask.textContent = `Delivered · +${job.rewardLkr} LKR`;
+      targetValue.textContent = "Complete";
+      deliveryAction.textContent = "Next job";
+    } else {
+      const verb = deliveryState.phase === "pickup" ? "Collect parcel" : "Deliver parcel";
+      deliveryTask.textContent = `${verb} · stop inside the marker, then press E.`;
+      targetValue.textContent = guidance ? formatGuidance(guidance) : "—";
+      deliveryAction.textContent = guidance?.canAct ? `${verb} · E` : verb;
+    }
+
+    if (sceneReady) {
+      const target = guidance?.target ?? null;
+      scene.setDeliveryTarget(target, deliveryState.phase === "delivery" ? "dropoff" : "pickup");
+    }
+  }
+
+  function runDeliveryAction(): void {
+    const phase = delivery.getState().phase;
+    let result: DeliveryActionResult;
+    if (phase === "available" || phase === "completed") result = delivery.accept();
+    else if (phase === "failed") result = delivery.retry();
+    else result = delivery.attemptStopAction(scene.getBicycleState());
+
+    const message = deliveryResultMessage(result, delivery.getCurrentJob().rewardLkr);
+    if (message) {
+      deliveryAnnouncement.textContent = message;
+      showFeedback(message, result.changed ? "delivery" : "warning");
+    }
+    renderDelivery(scene.getBicycleState());
+  }
 
   function showFeedback(message: string, tone = "neutral"): void {
     window.clearTimeout(feedbackTimer);
@@ -171,6 +288,13 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
         : "Map inspection pauses the bicycle.";
       delete rideFeedback.dataset.tone;
     }, 2600);
+  }
+
+  function showPersistentFeedback(message: string, tone = "neutral"): void {
+    window.clearTimeout(feedbackTimer);
+    rideFeedback.textContent = message;
+    rideFeedback.dataset.tone = tone;
+    rideFeedback.classList.add("is-visible");
   }
 
   const inputNames: Array<keyof BicycleInput> = ["pedal", "brake", "left", "right"];
@@ -216,13 +340,15 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     inspector.hidden = mode === "ride";
     toolbar.hidden = mode === "ride";
     rideHud.hidden = mode === "inspect";
+    deliveryPanel.hidden = mode === "inspect";
+    minimap.setHidden(mode === "inspect");
     rideControls.hidden = mode === "inspect";
     rideModeButton.classList.toggle("is-active", mode === "ride");
     inspectModeButton.classList.toggle("is-active", mode === "inspect");
     rideModeButton.setAttribute("aria-pressed", String(mode === "ride"));
     inspectModeButton.setAttribute("aria-pressed", String(mode === "inspect"));
     sceneHint.textContent = mode === "ride"
-      ? "W / ↑ pedal · A D steer · S / ↓ / Space brake · F inspect · R reset"
+      ? "W / ↑ pedal · A D steer · S / ↓ / Space brake · E handoff · F inspect · R reset"
       : "Drag to orbit · right-drag to pan · scroll to zoom · click a road to inspect · F ride";
     showFeedback(mode === "ride" ? "Ride resumed." : "Map inspection pauses the bicycle.");
   };
@@ -233,9 +359,13 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
   rideModeButton.addEventListener("click", () => setMode("ride"));
   inspectModeButton.addEventListener("click", () => setMode("inspect"));
   resetBikeButton.addEventListener("click", () => {
+    const cancelled = delivery.cancel().changed;
     previousState = scene.resetBicycle();
-    showFeedback("Returned to the training start.");
+    deliveryAnnouncement.textContent = cancelled ? "Active practice job cancelled by bicycle reset." : "";
+    showFeedback(cancelled ? "Bicycle reset · active practice job cancelled." : "Returned to the training start.");
+    renderDelivery(previousState);
   });
+  deliveryAction.addEventListener("click", runDeliveryAction);
 
   required<HTMLButtonElement>("#reset-view").addEventListener("click", () => scene.resetCamera());
   required<HTMLButtonElement>("#top-view").addEventListener("click", () => scene.topView());
@@ -268,6 +398,7 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
 
   const onKeyDown = (event: KeyboardEvent): void => {
     if (isEditableTarget(event.target)) return;
+    if (isOrdinaryInteractiveTarget(event.target) && (event.code === "Space" || event.code === "Enter")) return;
     if (event.code === "KeyF") {
       event.preventDefault();
       if (!event.repeat) setMode(currentMode === "ride" ? "inspect" : "ride");
@@ -276,9 +407,17 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
     if (event.code === "KeyR") {
       event.preventDefault();
       if (!event.repeat) {
+        const cancelled = delivery.cancel().changed;
         previousState = scene.resetBicycle();
-        showFeedback("Returned to the training start.");
+        deliveryAnnouncement.textContent = cancelled ? "Active practice job cancelled by bicycle reset." : "";
+        showFeedback(cancelled ? "Bicycle reset · active practice job cancelled." : "Returned to the training start.");
+        renderDelivery(previousState);
       }
+      return;
+    }
+    if (event.code === "KeyE" && currentMode === "ride") {
+      event.preventDefault();
+      if (!event.repeat) runDeliveryAction();
       return;
     }
     if (currentMode !== "ride") return;
@@ -364,6 +503,7 @@ function mountPrototype(host: HTMLElement, roadSlice: RoadSlice, manifest: Sourc
 
   activeCleanup = () => {
     window.clearTimeout(feedbackTimer);
+    minimap.dispose();
     document.removeEventListener("keydown", onKeyDown);
     document.removeEventListener("keyup", onKeyUp);
     document.removeEventListener("visibilitychange", onVisibilityChange);
@@ -379,6 +519,57 @@ function metric(labelText: string, value: HTMLElement): HTMLElement {
   const item = element("div", "ride-metric");
   item.append(element("span", "metric-label", labelText), value);
   return item;
+}
+
+function deliveryStat(labelText: string, value: HTMLElement): HTMLElement {
+  const item = element("div", "delivery-stat");
+  item.append(element("span", "delivery-stat-label", labelText), value);
+  return item;
+}
+
+function formatTimer(seconds: number): string {
+  const rounded = Math.max(0, Math.ceil(seconds));
+  const minutes = Math.floor(rounded / 60);
+  return `${minutes}:${String(rounded % 60).padStart(2, "0")}`;
+}
+
+function formatGuidance(guidance: DeliveryGuidance): string {
+  const degrees = guidance.relativeBearingRadians * 180 / Math.PI;
+  const direction = Math.abs(degrees) <= 22.5
+    ? "ahead"
+    : degrees > 22.5 && degrees <= 67.5
+      ? "ahead right"
+      : degrees > 67.5 && degrees <= 112.5
+        ? "right"
+        : degrees > 112.5 && degrees <= 157.5
+          ? "behind right"
+          : degrees < -22.5 && degrees >= -67.5
+            ? "ahead left"
+            : degrees < -67.5 && degrees >= -112.5
+              ? "left"
+              : degrees < -112.5 && degrees >= -157.5
+                ? "behind left"
+                : "behind";
+  const stopHint = guidance.distanceMetres <= 7 && !guidance.stopped ? " · stop" : "";
+  return `${Math.round(guidance.distanceMetres)} m · ${direction}${stopHint}`;
+}
+
+function deliveryResultMessage(result: DeliveryActionResult, rewardLkr: number): string | null {
+  if (result.event === "accepted") return "Job accepted. Ride to the pickup marker, stop, then press E.";
+  if (result.event === "picked-up") return "Parcel collected. Ride to the drop-off marker.";
+  if (result.event === "delivered") return `Delivered. ${rewardLkr} LKR earned.`;
+  if (result.event === "retried") return "Practice job restarted. Ride to the pickup marker.";
+  if (result.event === "too-far") return "Move inside the marked circle before using the handoff.";
+  if (result.event === "moving") return "Brake to a full stop before using the handoff.";
+  return null;
+}
+
+function safeLocalStorage(): Storage | null {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
 }
 
 function textButton(label: string, className: string, id: string): HTMLButtonElement {
@@ -399,6 +590,10 @@ function holdButton(input: keyof BicycleInput, ariaLabel: string, glyph: string,
 
 function isEditableTarget(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && Boolean(target.closest("input, select, textarea, [contenteditable='true']"));
+}
+
+function isOrdinaryInteractiveTarget(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && Boolean(target.closest("button, a"));
 }
 
 function formatDistance(metres: number): string {
