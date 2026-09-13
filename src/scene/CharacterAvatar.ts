@@ -123,7 +123,9 @@ export class CharacterAvatar {
       const clones = source.map((material) => material.clone());
       object.material = Array.isArray(object.material) ? clones : clones[0]!;
       const itemSlot = findItemSlot(object);
-      if (itemSlot === "hair" || itemSlot === "bottom") clones.forEach((material) => this.wholeRegions.set(material, itemSlot));
+      if ((itemSlot === "hair" || itemSlot === "bottom") && !preservesSourceTint(object)) {
+        clones.forEach((material) => this.wholeRegions.set(material, itemSlot));
+      }
       for (const material of clones) {
         const region = SOURCE_MATERIAL_REGIONS[material.name];
         if (!region) continue;
@@ -257,6 +259,16 @@ function findItemSlot(object: THREE.Object3D): CharacterSlot | undefined {
     current = current.parent;
   }
   return undefined;
+}
+
+function preservesSourceTint(object: THREE.Object3D): boolean {
+  let current: THREE.Object3D | null = object;
+  while (current) {
+    if (current.userData.preserveSourceTint === true) return true;
+    if (/^Item_[^_]+_/.test(current.name)) return false;
+    current = current.parent;
+  }
+  return false;
 }
 
 function disposeObject(root: THREE.Object3D): void {

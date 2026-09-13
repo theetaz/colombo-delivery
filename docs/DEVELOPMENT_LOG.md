@@ -528,6 +528,22 @@ roadmap.
   bevel result.
 - Refit glasses and the necklace to measured eye depth and the source shirt
   surface after side review exposed guessed-depth floating.
+- Rejected the first long-trouser construction after browser review exposed
+  overlapping cut-short pieces, open upper-thigh tube lips, knee bands and
+  slits, and a jagged waist. Added an exported-mesh regression that requires
+  waist-to-ankle coverage and no open boundary edges through thighs or knees.
+- Reusing and merging source shorts and skin remained fragmented and cropped.
+  Rebuilt trousers from fitted volumes, smoothed them before voxel union, and
+  exported the result as one continuous welded garment.
+- Moved only the original lower-leg skin under the Shorts item. The first
+  partition reached high enough to capture inner-forearm triangles and opened
+  visible arm holes, so it was narrowed below 0.7 m. A source-tint marker
+  preserves skin color when bottoms change.
+- Accepted final artifact `7a251597…` at 7,967,904 bytes, 83 nodes, 53 meshes,
+  70 primitives, 12 materials, 16 textures/four images, 125,286 exported vertex
+  instances, and 144,207 triangles. Browser comparisons found no upper-body
+  change or calf response to Navy bottoms, while Golden skin changed the calf
+  region as intended. Browser Save/reload and all three shoe cuffs passed.
 - Exercised all 21 runtime selections, exact mandatory/optional visibility,
   invalid-option preservation, two-avatar material isolation, and independent
   disposal. These checks validate the static portal contract, not skinning or

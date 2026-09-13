@@ -594,6 +594,34 @@ traffic, and economy progression remain later systems.
   [outfit](milestones/2026-09-13-courier-studio-outfit.jpg), and
   [mobile](milestones/2026-09-13-courier-studio-mobile.jpg) frames.
 
+## 2026-09-13 — Continuous full-length courier trousers
+
+- Rejected the overlapping cut-short construction after production views
+  exposed upper-thigh tube lips, knee bands and slits, and a jagged waist.
+- Reusing and merging the source shorts and skin remained fragmented and
+  cropped. Rebuilt the option from fitted volumes smoothed before voxel union,
+  producing one connected waist-to-ankle garment with no open boundary edges
+  through the thigh and knee range. The final static catalog is
+  7,967,904 bytes with 83 nodes, 53 meshes, 70 primitives, 12 materials, 16
+  textures/four images, 125,286 exported vertex instances, and 144,207
+  triangles; SHA-256 is `7a2515972060d8e1011a69629196b8d6b339f14c353c4c83a65712002fe7701b`.
+- Moved the preserved lower-leg skin under the Shorts item with a source-tint
+  opt-out. The first partition captured inner-forearm triangles; narrowing it
+  below 0.7 m removed the arm holes. Geometry tests require one welded garment,
+  waist/ankle coverage, no mid-leg boundary, and the bounded skin partition.
+- Browser pixel comparisons retained the upper body exactly in the trouser
+  back view, changed no calf pixels for Navy bottoms, and changed 3,459 calf
+  pixels for Golden skin. Trousers plus Navy, Golden skin, and High-tops
+  persisted across browser reload; all three shoe cuffs passed side review.
+- Passed all 41 tests, the production build, and 1440 × 1000 and 390 × 844
+  browser checks without JavaScript/scoped console errors or horizontal
+  overflow. The static catalog remains unrigged; old shirt-hem and dark-shoe
+  paint refinement remain.
+- Saved reviewed [front](milestones/2026-09-13-trousers-fit-front.jpg),
+  [side](milestones/2026-09-13-trousers-fit-side.jpg),
+  [back](milestones/2026-09-13-trousers-fit-back.jpg), and
+  [mobile](milestones/2026-09-13-trousers-fit-mobile.jpg) frames.
+
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a

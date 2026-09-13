@@ -65,7 +65,7 @@ attaching dynamically at runtime. Choosing `none` hides the corresponding access
 viewer, and future runtime loader aligned without treating filenames as UI
 state.
 
-The accepted starter GLB is 6,453,452 bytes with 84 nodes, 54 meshes, 71
+The initial accepted starter snapshot was 6,453,452 bytes with 84 nodes, 54 meshes, 71
 primitives, 12 materials, 16 textures across four embedded images, 83,658
 exported vertex instances, and 60,303 triangles. Its SHA-256 is
 `3ae02ff97a39f77da73b4a35759b9ea9de1e1e8cdd38071b3555dd783eccfd60`.
@@ -177,9 +177,55 @@ source surface through a BVH-based projection, and transparent thumbnails made
 silhouette and fit errors easier to see than the first opaque cards.
 
 This is an accepted starter portal, not finished production character art.
-Localized trouser joins and an older shirt-hem surface remain visible, and dark
-shoe colors still reveal UV-mask seams. Those need focused mesh and paint
+An older shirt-hem surface remains visible, and dark shoe colors still reveal
+UV-mask seams. Those need focused mesh and paint
 refinement before a rigged game character can use the catalog.
+
+### Continuous-trouser refinement
+
+[![Continuous full-length trousers in the production portal](milestones/2026-09-13-trousers-fit-front.jpg)](milestones/2026-09-13-trousers-fit-front.jpg)
+
+Reviewed frames: [side fit and shoe cuff](milestones/2026-09-13-trousers-fit-side.jpg),
+[back fit](milestones/2026-09-13-trousers-fit-back.jpg), and
+[390 px mobile portal](milestones/2026-09-13-trousers-fit-mobile.jpg).
+
+The first long-trouser variant extended overlapping pieces from the cut-short
+source. Browser review exposed the construction: open upper-thigh tube lips,
+knee bands and slits, and a jagged waist interrupted the intended continuous
+garment. That version was rejected. The accepted replacement is one connected
+garment surface from waist to ankle without open boundaries through the thigh
+and knee range. Reusing and merging the source shorts and skin still produced
+fragmented, cropped surfaces, so the replacement uses fitted garment volumes,
+smooths them before a voxel union, and exports the resulting continuous shell.
+The final review GLB is 7,967,904 bytes with 83 nodes, 53
+meshes, 70 primitives, 12 materials, 16 textures across four images, 125,286
+exported vertex instances, and 144,207 triangles. Its SHA-256 is
+`7a2515972060d8e1011a69629196b8d6b339f14c353c4c83a65712002fe7701b`.
+
+The first post-union skin partition reached too high and captured inner-forearm
+triangles. Narrowing the partition to the measured lower body fixed the holes.
+The original lower-leg skin now lives under the Shorts item and carries an
+explicit source-tint opt-out. Selecting trousers hides that skin and selecting
+shorts restores it. Exported-mesh checks require one geometrically welded
+trouser component, waist-to-ankle coverage, no open thigh or knee edges, the
+lower-skin node under Shorts only, its original `Teen_Skin` material, and an
+upper bound below 0.7 m so forearms and torso cannot enter the partition.
+
+Browser Save/reload passed with Trousers, Navy, Golden skin, and High-top
+shoes. Against the previous accepted source, the front Shorts view changed six
+pixels with mean RGB difference 0.00000308 and the back changed 71 pixels with
+mean 0.00251 in a 696 × 932 comparison. The trouser-back upper body was
+pixel-identical, with no forearm holes. Navy bottom color changed zero pixels in
+the measured calf region, while Golden skin changed 3,459 pixels there with
+mean RGB difference 13.508. All three shoe cuffs passed side review. These
+measurements establish the focused geometry, visibility, and tint fix; they do
+not make the static catalog a production rig or remove the separately recorded
+shirt-hem and dark-shoe paint work.
+
+The final 1440 × 1000 and 390 × 844 production checks reported no JavaScript or
+scoped console errors and no horizontal overflow. The full suite passes all 41
+tests, including the new geometry and source-skin partition contracts, and the
+production build passes.
 
 The final export enables modifier application so the GLB contains the reviewed
 Subdivision and bevel result rather than a more angular base cage. Visual proof

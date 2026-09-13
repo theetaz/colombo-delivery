@@ -37,6 +37,15 @@ def subset(source,name,predicate,parent,mat=None):
   o.data.materials.clear();o.data.materials.append(mat)
   for polygon in o.data.polygons:polygon.material_index=0
  return o
+def body_partition(source,name,keep_lower,parent):
+ o=clone(source,name,parent);bm=bmesh.new();bm.from_mesh(o.data);bad=[]
+ for face in bm.faces:
+  center=face.calc_center_median();is_lower=face.material_index==0 and .17<center.z<.70 and abs(center.x)<.235
+  if is_lower!=keep_lower:bad.append(face)
+ bmesh.ops.delete(bm,geom=bad,context='FACES');bm.to_mesh(o.data);bm.free();o.data.update();transfer=o.modifiers.new('Approved corner normals','DATA_TRANSFER');transfer.object=source;transfer.use_loop_data=True;transfer.data_types_loops={'CUSTOM_NORMAL'};transfer.loop_mapping='POLYINTERP_NEAREST';bpy.context.view_layer.objects.active=o
+ try:bpy.ops.object.modifier_apply(modifier=transfer.name)
+ except RuntimeError:o.modifiers.remove(transfer)
+ return o
 def deform_face(o,kind):
  for v in o.data.vertices:
   x,y,z=v.co
@@ -108,7 +117,7 @@ def main():
   if source_root:
    for hidden in descendants(source_root):hidden.hide_viewport=True;hidden.hide_render=True
  root=empty('TeenCourierCustomization');root['upAxis']='+Y';root['forwardAxis']='-Z';root['heightMeters']=1.62;root['previewReady']=True;root['gameReady']=False;slots={s:empty(f'Slot_{s}',root) for s in IDS}
- body=clone(src['body'],'Body_Base',root)
+ body=body_partition(src['body'],'Body_Base',False,root)
  for id in IDS['face']:
   p=item('face',id,slots);o=clone(src['face'],f'Face_{id}',p)
   if id!='classic':deform_face(o,id)
@@ -119,7 +128,9 @@ def main():
   p=item('top',id,slots);create_top_variant(id,src['top'],p,{'cloth':None,'accent':material('Custom_Top_Trim',(.06,.34,.39)),'hardware':material('Custom_Hardware',(.12,.13,.14),.3,.35)})
  pants=material('Custom_Bottom',(.12,.14,.18))
  for id in IDS['bottom']:
-  p=item('bottom',id,slots);create_bottom_variant(id,src['bottom'],p,{'cloth':pants},src['body'])
+  p=item('bottom',id,slots)
+  if id=='shorts':lower=body_partition(src['body'],'Body_Lower_Shorts',True,p);lower['preserveSourceTint']=True
+  create_bottom_variant(id,src['bottom'],p,{'cloth':pants},src['body'])
  for id in IDS['shoes']:
   p=item('shoes',id,slots);o=clone(src['shoes'],f'Shoes_{id}',p)
   if id=='runner':o.scale.y=1.075;o.scale.z=.95

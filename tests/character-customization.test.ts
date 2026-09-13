@@ -100,6 +100,110 @@ test("customization GLB contains rendered catalog items and its embedded tint co
   }
 });
 
+test("trousers form continuous leg surfaces without open thigh or knee edges", () => {
+  const bytes = readFileSync("public/models/teen_courier_customization.glb");
+  const jsonLength = bytes.readUInt32LE(12);
+  const binHeader = 20 + jsonLength;
+  const bin = bytes.subarray(binHeader + 8, binHeader + 8 + bytes.readUInt32LE(binHeader));
+  const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString("utf8")) as {
+    nodes: { name?: string; mesh?: number; children?: number[] }[];
+    meshes: { primitives: { indices?: number; attributes: { POSITION?: number } }[] }[];
+    accessors: { bufferView: number; byteOffset?: number; componentType: number; count: number; type: string; min?: number[]; max?: number[] }[];
+    bufferViews: { byteOffset?: number; byteLength: number; byteStride?: number }[];
+  };
+  const itemIndex = gltf.nodes.findIndex(({ name }) => name === "Item_bottom_trousers");
+  assert.notEqual(itemIndex, -1, "trouser item root is required");
+  const meshIndices: number[] = [];
+  const visit = (index: number) => {
+    const node = gltf.nodes[index]!;
+    if (node.mesh !== undefined) meshIndices.push(node.mesh);
+    node.children?.forEach(visit);
+  };
+  visit(itemIndex);
+  assert.ok(meshIndices.length >= 1, "trousers need a rendered garment surface");
+
+  let garmentMinY = Infinity;
+  let garmentMaxY = -Infinity;
+  const edges = new Map<string, { count: number; vertices: [string, string] }>();
+  const positions = new Map<string, [number, number, number]>();
+  const neighbors = new Map<string, Set<string>>();
+  for (const meshIndex of meshIndices) for (const primitive of gltf.meshes[meshIndex]!.primitives) {
+    assert.notEqual(primitive.indices, undefined, "trouser surface must use indexed triangles");
+    const positionAccessor = gltf.accessors[primitive.attributes.POSITION!]!;
+    const indexAccessor = gltf.accessors[primitive.indices!]!;
+    garmentMinY = Math.min(garmentMinY, positionAccessor.min?.[1] ?? Infinity);
+    garmentMaxY = Math.max(garmentMaxY, positionAccessor.max?.[1] ?? -Infinity);
+    const positionView = gltf.bufferViews[positionAccessor.bufferView]!;
+    const positionOffset = (positionView.byteOffset ?? 0) + (positionAccessor.byteOffset ?? 0);
+    const positionStride = positionView.byteStride ?? 12;
+    const indexView = gltf.bufferViews[indexAccessor.bufferView]!;
+    const indexOffset = (indexView.byteOffset ?? 0) + (indexAccessor.byteOffset ?? 0);
+    const indexSize = indexAccessor.componentType === 5125 ? 4 : 2;
+    const readIndex = (offset: number) => indexSize === 4 ? bin.readUInt32LE(offset) : bin.readUInt16LE(offset);
+    const vertexKey = (vertex: number): string => {
+      const point = [0, 1, 2].map((axis) => bin.readFloatLE(positionOffset + vertex * positionStride + axis * 4)) as [number, number, number];
+      const key = point.map((value) => Math.round(value * 100_000)).join(":");
+      positions.set(key, point);
+      return key;
+    };
+    for (let offset = 0; offset < indexAccessor.count; offset += 3) {
+      const triangle = [0, 1, 2].map((corner) => vertexKey(readIndex(indexOffset + (offset + corner) * indexSize)));
+      for (const [first, second] of [[triangle[0]!, triangle[1]!], [triangle[1]!, triangle[2]!], [triangle[2]!, triangle[0]!]] as const) {
+        const vertices: [string, string] = first < second ? [first, second] : [second, first];
+        const key = `${vertices[0]}|${vertices[1]}`;
+        const edge = edges.get(key) ?? { count: 0, vertices };
+        edge.count += 1; edges.set(key, edge);
+        const firstNeighbors = neighbors.get(first) ?? new Set<string>(); firstNeighbors.add(second); neighbors.set(first, firstNeighbors);
+        const secondNeighbors = neighbors.get(second) ?? new Set<string>(); secondNeighbors.add(first); neighbors.set(second, secondNeighbors);
+      }
+    }
+  }
+  let middleBoundaryVertices = 0;
+  for (const edge of edges.values()) if (edge.count === 1) for (const vertex of edge.vertices) {
+    const y = positions.get(vertex)![1];
+    if (y > 0.24 && y < 0.72) middleBoundaryVertices += 1;
+  }
+  const unseen = new Set(neighbors.keys());
+  let components = 0;
+  while (unseen.size) {
+    components += 1;
+    const pending = [unseen.values().next().value!];
+    while (pending.length) {
+      const vertex = pending.pop()!;
+      if (!unseen.delete(vertex)) continue;
+      for (const neighbor of neighbors.get(vertex) ?? []) if (unseen.has(neighbor)) pending.push(neighbor);
+    }
+  }
+  assert.ok(garmentMinY < 0.18, "trousers must reach the ankle area");
+  assert.ok(garmentMaxY > 0.76, "trousers must reach the waist area");
+  assert.equal(components, 1, "trousers must be one geometrically connected garment");
+  assert.equal(middleBoundaryVertices, 0, "trousers must not open into tube lips or slits through thighs and knees");
+});
+
+test("source skin below the shorts follows the shorts slot without inheriting bottom tint", () => {
+  const bytes = readFileSync("public/models/teen_courier_customization.glb");
+  const jsonLength = bytes.readUInt32LE(12);
+  const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString("utf8")) as {
+    nodes: { name?: string; mesh?: number; children?: number[]; extras?: { preserveSourceTint?: boolean } }[];
+    meshes: { primitives: { material?: number; attributes: { POSITION?: number } }[] }[];
+    materials: { name?: string }[];
+    accessors: { min?: number[]; max?: number[] }[];
+  };
+  const shorts = gltf.nodes.find(({ name }) => name === "Item_bottom_shorts");
+  const trousers = gltf.nodes.find(({ name }) => name === "Item_bottom_trousers");
+  const lowerIndex = gltf.nodes.findIndex(({ name }) => name === "Body_Lower_Shorts");
+  assert.notEqual(lowerIndex, -1, "shorts need their original lower-body skin occluder");
+  assert.ok(shorts?.children?.includes(lowerIndex), "lower-body skin must hide with the shorts item");
+  assert.ok(!trousers?.children?.includes(lowerIndex), "lower-body skin must stay hidden with trousers");
+  const lower = gltf.nodes[lowerIndex]!;
+  assert.equal(lower.extras?.preserveSourceTint, true, "source skin must opt out of whole-bottom tint");
+  assert.notEqual(lower.mesh, undefined);
+  const materialNames = gltf.meshes[lower.mesh!]!.primitives.map(({ material }) => gltf.materials[material!]!.name);
+  assert.deepEqual([...new Set(materialNames)], ["Teen_Skin"]);
+  const upperY = Math.max(...gltf.meshes[lower.mesh!]!.primitives.map(({ attributes }) => gltf.accessors[attributes.POSITION!]!.max?.[1] ?? Infinity));
+  assert.ok(upperY < 0.7, "shorts-only skin partition must stay below the arms and torso");
+});
+
 test("manifest availability accepts known complete slots and rejects incompatible equipment", () => {
   const slots = Object.fromEntries(Object.entries(DEFAULT_CHARACTER_CATALOG).map(([slot, items]) => [slot, {
     default: items[0],

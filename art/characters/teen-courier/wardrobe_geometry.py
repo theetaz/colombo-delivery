@@ -184,86 +184,124 @@ def create_top_variant(
     return made
 
 
-def _hem_dimensions(source_bottom: bpy.types.Object, side: float) -> tuple[float, float, float, float]:
-    candidates = [v.co for v in source_bottom.data.vertices if v.co.x * side > 0 and v.co.z < .64]
-    if not candidates:
-        raise ValueError("Accepted shorts mesh has no usable leg hem samples")
-    # The reconstructed shorts include crotch and pocket panels in their
-    # bounds, so their full extents greatly overstate one leg opening. These
-    # fitted centers/radii match the accepted teen's actual leg silhouette.
-    center_x = .10 if side > 0 else -.10
-    center_y = .005
-    radius_x = .082
-    radius_y = .078
-    return center_x, center_y, radius_x, radius_y
-
-
-def _trouser_leg(
-    name: str,
-    side: float,
+def _continuous_trousers(
+    source_body: bpy.types.Object,
     source_bottom: bpy.types.Object,
     parent: bpy.types.Object,
     material: bpy.types.Material,
 ) -> bpy.types.Object:
-    segments = 28
-    # Centers and radii follow measured source-leg cross sections rather than
-    # a vertical tube. X mirrors for the left leg; Y slopes rearward at ankle.
-    # The continuation begins inside the accepted shorts hem, not at the
-    # waist, so it cannot protrude beside the shirt or widen the authored hip.
-    rings = [
-        (.720,.108,.000,.094,.111),
-        (.680,.109,.000,.095,.112),
-        (.640,.110,.000,.095,.112),
-        (.570,.115,-.005,.095,.110),
-        (.500,.120,-.005,.092,.112),
-        (.400,.135,-.050,.061,.071),
-        (.300,.141,-.066,.060,.061),
-        (.200,.154,-.076,.052,.057),
-        (.120,.165,-.079,.055,.070),
-        (.075,.166,-.080,.056,.072),
-    ]
+    """Author and union a fitted pelvis and two tapered full-length legs."""
     vertices: list[tuple[float, float, float]] = []
-    for ring_index, (z, cx_abs, cy, rx, ry) in enumerate(rings):
-        cx=side*cx_abs
+    faces: list[tuple[int, ...]] = []
+    segments = 32
+    # Cross-sections follow the measured approved body. Above the crotch the
+    # two volumes overlap and converge, forming a natural pelvis rather than
+    # two vertical pipes. The ankle ring meets all three shoe variants.
+    rings = [
+        (.115, .165, -.079, .060, .073),
+        (.200, .154, -.076, .060, .065),
+        (.250, .148, -.071, .064, .067),
+        (.300, .141, -.066, .068, .070),
+        (.350, .138, -.058, .071, .075),
+        (.400, .135, -.050, .075, .080),
+        (.450, .128, -.027, .083, .102),
+        (.500, .120, -.005, .090, .120),
+        (.620, .105, .000, .105, .120),
+        (.750, .080, .000, .110, .120),
+        (.800, .070, .000, .095, .108),
+    ]
+    for side in (-1, 1):
+        leg_start = len(vertices)
+        for z, cx_abs, cy, rx, ry in rings:
+            for index in range(segments):
+                angle = 2 * math.pi * index / segments
+                vertices.append((side * cx_abs + rx * math.cos(angle), cy + ry * math.sin(angle), z))
+        for ring_index in range(len(rings) - 1):
+            start = leg_start + ring_index * segments
+            nxt = start + segments
+            for index in range(segments):
+                following = (index + 1) % segments
+                faces.append((start + index, nxt + index, nxt + following, start + following))
+        bottom = len(vertices)
+        vertices.append((side * rings[0][1], rings[0][2], rings[0][0]))
+        for index in range(segments):
+            following = (index + 1) % segments
+            faces.append((bottom, leg_start + following, leg_start + index))
+        top_start = leg_start + (len(rings) - 1) * segments
+        top = len(vertices)
+        vertices.append((side * rings[-1][1], rings[-1][2], rings[-1][0]))
+        for index in range(segments):
+            following = (index + 1) % segments
+            faces.append((top, top_start + index, top_start + following))
+
+    # A closed hip/seat volume bridges the two leg forks before voxel union.
+    # It fills the waist and crotch cleanly while the overlapping upper-leg
+    # rings preserve two readable leg openings below it.
+    latitude_segments = 16
+    hip_start = len(vertices)
+    for latitude in range(latitude_segments + 1):
+        phi = -math.pi / 2 + math.pi * latitude / latitude_segments
         for index in range(segments):
             angle = 2 * math.pi * index / segments
-            # A shallow front crease gives the leg a cloth silhouette without
-            # imitating the body's skin-tight topology.
-            crease = -.004 * math.cos(2 * angle) * (ring_index / (len(rings) - 1))
-            vertices.append((cx + rx * math.cos(angle), cy + ry * math.sin(angle) + crease, z))
-    faces: list[tuple[int, int, int, int]] = []
-    for ring_index in range(len(rings) - 1):
+            vertices.append((
+                .205 * math.cos(phi) * math.cos(angle),
+                -.010 + .132 * math.cos(phi) * math.sin(angle),
+                .700 + .160 * math.sin(phi),
+            ))
+    for latitude in range(latitude_segments):
+        lower = hip_start + latitude * segments
+        upper = lower + segments
         for index in range(segments):
-            current = ring_index * segments + index
-            nxt = ring_index * segments + (index + 1) % segments
-            # Increasing angle is counter-clockwise when seen from above; this
-            # winding keeps the tube normals outward for normal back-face cull.
-            faces.append((current, current + segments, nxt + segments, nxt))
-    # Leave the hidden top open. A cap is unnecessary inside the hip shell and
-    # Catmull-Clark would pull a cap inward, revealing a dark horizontal gap.
-    # A narrow ankle-facing bottom closes the cloth without intersecting shoes.
-    bottom_center = len(vertices)
-    vertices.append((side*rings[-1][1], rings[-1][2], rings[-1][0]))
-    start = (len(rings) - 1) * segments
-    for index in range(segments):
-        faces.append((bottom_center, start + (index + 1) % segments, start + index))
-    mesh = bpy.data.meshes.new(f"{name}_Mesh")
+            following = (index + 1) % segments
+            faces.append((lower + index, upper + index, upper + following, lower + following))
+
+    mesh = bpy.data.meshes.new("Bottom_trousers_Mesh")
     mesh.from_pydata(vertices, [], faces)
     mesh.materials.append(material)
     mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(obj)
-    obj.parent = parent
-    for polygon in obj.data.polygons:
+    normals = bmesh.new()
+    normals.from_mesh(mesh)
+    bmesh.ops.recalc_face_normals(normals, faces=normals.faces)
+    normals.to_mesh(mesh)
+    normals.free()
+    mesh.update()
+
+    trousers = bpy.data.objects.new("Bottom_trousers", mesh)
+    bpy.context.collection.objects.link(trousers)
+    trousers.parent = parent
+
+    # Voxel union removes the internal overlap and yields one watertight
+    # waist/seat/crotch/leg surface with no tube lips or knee boundaries.
+    bpy.context.view_layer.objects.active = trousers
+    trousers.select_set(True)
+    contour = trousers.modifiers.new("Tailored section interpolation", "SUBSURF")
+    contour.subdivision_type = "CATMULL_CLARK"
+    contour.levels = 2
+    contour.render_levels = 2
+    bpy.ops.object.modifier_apply(modifier=contour.name)
+    remesh = trousers.modifiers.new("Continuous trouser topology", "REMESH")
+    remesh.mode = "VOXEL"
+    remesh.voxel_size = .005
+    remesh.use_smooth_shade = True
+    bpy.ops.object.modifier_apply(modifier=remesh.name)
+    normals = bmesh.new()
+    normals.from_mesh(trousers.data)
+    bmesh.ops.recalc_face_normals(normals, faces=normals.faces)
+    normals.to_mesh(trousers.data)
+    normals.free()
+    trousers.data.update()
+    smooth = trousers.modifiers.new("Relax cloth surface", "SMOOTH")
+    smooth.factor = .28
+    smooth.iterations = 3
+    bpy.ops.object.modifier_apply(modifier=smooth.name)
+    for polygon in trousers.data.polygons:
+        polygon.material_index = 0
         polygon.use_smooth = True
-    subdivision = obj.modifiers.new("Cloth contour", "SUBSURF")
-    subdivision.subdivision_type = "CATMULL_CLARK"
-    subdivision.levels = 1
-    subdivision.render_levels = 1
-    bevel = obj.modifiers.new("Soft cloth seam", "BEVEL")
-    bevel.width = .003
+
+    bevel = trousers.modifiers.new("Soft cloth edge", "BEVEL")
+    bevel.width = .0015
     bevel.segments = 2
-    return obj
+    return trousers
 
 
 def create_bottom_variant(
@@ -273,28 +311,15 @@ def create_bottom_variant(
     materials: Mapping[str, bpy.types.Material],
     source_body: bpy.types.Object | None = None,
 ) -> list[bpy.types.Object]:
-    """Create shorts or continuous, tapered cloth trousers.
+    """Create approved shorts or a new, continuous fitted trouser garment.
 
-    Required material key: ``cloth``. Trousers retain the accepted waist and
-    upper-seat topology, then continue each measured hem into a roomy leg.
+    Required material key: ``cloth``. The long variant is newly authored and
+    uses the reconstruction only for measured fit, never for visible topology.
     """
     if variant_id not in {"shorts", "trousers"}:
         raise ValueError(f"Unsupported bottom variant: {variant_id}")
-    base = _clone(source_bottom, f"Bottom_{variant_id}", parent)
     if variant_id == "shorts":
-        return [base]
+        return [_clone(source_bottom, f"Bottom_{variant_id}", parent)]
     if source_body is None:
         raise ValueError("Trousers require source_body for a continuous fitted shell")
-    cloth = materials["cloth"]
-    _single_material(base, cloth)
-    # Remove the reconstructed shorts' low, flared hem. The fitted legs begin
-    # at .64 and overlap this cut internally, leaving the authored waist, seat
-    # and upper crotch while avoiding a visible overskirt around the thighs.
-    _trim_vertices_below(base, .615)
-    # Keep the accepted waist, seat, pockets and crotch intact. The source is
-    # sparse below the hem, so stretching those few triangles tears the lower
-    # silhouette. Smooth fitted continuations overlap inside the original hem
-    # and read as one cloth garment without exposing skin or a hard shorts lip.
-    left = _trouser_leg("Trousers_Leg_L", -1, source_bottom, parent, cloth)
-    right = _trouser_leg("Trousers_Leg_R", 1, source_bottom, parent, cloth)
-    return [base, left, right]
+    return [_continuous_trousers(source_body, source_bottom, parent, materials["cloth"])]
