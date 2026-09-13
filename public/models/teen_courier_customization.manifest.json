@@ -151,6 +151,21 @@
             "thumbnail": "teen_courier_customization_previews/watch-sport.png"
           }
         ]
+      },
+      "backpack": {
+        "default": "none",
+        "items": [
+          {
+            "id": "none",
+            "label": "None",
+            "thumbnail": "teen_courier_customization_previews/necklace-none.png"
+          },
+          {
+            "id": "insulated",
+            "label": "Insulated delivery bag",
+            "thumbnail": "delivery_backpack_thumbnail.png"
+          }
+        ]
       }
     },
     "colorRegions": [
@@ -158,7 +173,8 @@
       "hair",
       "top",
       "bottom",
-      "shoes"
+      "shoes",
+      "backpack"
     ]
   },
   "items": {

@@ -283,9 +283,13 @@ inspection; and per-instance Skin, Shirt, and Shoes tint controls. Its responsiv
 split layout and clean front, head, side, and rear framing passed browser review.
 The default authored maps remain intact. Strong variants use the padded mask,
 with the faint skin transitions and dark shoe edges noted above. Controls for absent skin, animation, and
-morph features stay hidden rather than implying support. All 31 current tests
-and the production build pass. The game continues to use the checkpointed
-rigid-part bicycle courier.
+morph features stay hidden rather than implying support. The playable bicycle
+now loads a separate skinned `teen_courier_riding.glb` and
+binds it to the reviewed grip, pedal, saddle, and backpack attachment contract.
+That riding prototype is limited to the approved base appearance. Alternate
+static wardrobe meshes are not riding-ready. The pedal cycle and browser fit
+passed the [equipment milestone review](RIDER_EQUIPMENT.md). If the detailed rider
+cannot load, the checkpointed rigid-part courier remains the gameplay fallback.
 
 Failure review keeps the new viewer isolated from the playable game. If the
 static character GLB returns an error, the viewer shows a clear load message,
@@ -294,11 +298,11 @@ fails, the static asset still renders and customization controls remain hidden.
 The existing game continues to report both street and bicycle assets ready.
 
 The full replacement remains incomplete. It still requires reconstruction
-rights confirmation, reviewed retopology and skin weights, a fitted bicycle
-pose, the intended facial controls, production-game integration, failure and
-storage checks for the new asset, final screenshots, and recorded remaining art
-limitations. Static preview tints demonstrate separated material regions; they
-are not yet saved hero customization in the game.
+rights confirmation, the intended facial controls, full wardrobe skinning,
+and fine finger-grip refinement. The riding report records production-browser
+review, final screenshots, and remaining contact limitations. Static wardrobe options demonstrate
+separated meshes and saved appearance data; only the approved base appearance
+currently has a dedicated riding rig.
 The current mesh has no face morphs and its eye and mouth topology has not been
 rebuilt for expression deformation. The expression sheet remains direction for
 that future work.

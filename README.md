@@ -56,20 +56,21 @@ material isolation, responsive production checks, failure fallback, and the
 remaining rigid-part animation limits. This is a preserved technical prototype,
 not the target hero-character quality.*
 
-The next [teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md)
-starts from an original 2D identity and requires genuine 3D reconstruction,
-Blender cleanup and retopology, a skinned rig, facial blend shapes, and verified
-skin, shirt, and shoe customization before it can replace that prototype. The
-current `character-preview.html` inspection route shows the static reconstructed
-cleanup and its separated skin, shirt, and shoe material regions; it is not yet
-the game rider.
+The [teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md)
+starts from an original 2D identity and continues through 3D reconstruction,
+Blender cleanup, and a dedicated cycling rig. The detailed base character now
+has a riding variant; `character-preview.html` retains the standing inspection
+route. Facial expressions and skinning every modular garment remain future
+work.
 
 The [Courier Studio customization portal](docs/CHARACTER_CUSTOMIZATION.md)
-provides a manifest-driven starter wardrobe with 21 preview choices,
-independent optional accessories, five color regions, and an explicit locally
-saved look. Its static catalog is a browser
-review candidate rather than an unlocked game inventory; multiplayer and
-game-rider integration remain later work.
+provides a manifest-driven starter wardrobe with 23 preview choices,
+independent optional accessories, six color regions, and an explicit locally
+saved look. The [delivery backpack and rider report](docs/RIDER_EQUIPMENT.md)
+records the Blender-modeled insulated bag, fitted standing and riding harnesses,
+pedal animation, and review lessons. Backpack selection and color transfer to
+the ride. The modular wardrobe remains a static preview catalog; multiplayer
+and full wardrobe transfer remain later work.
 
 ## Polished courier bicycle
 
@@ -204,6 +205,8 @@ safety.*
   validation gates required before planned vehicles enter the game.
 - [Courier character study](docs/CHARACTER_STUDY.md) records the rider-detail,
   appearance, material-isolation, persistence, and review contract.
+- [Delivery backpack and bicycle rider](docs/RIDER_EQUIPMENT.md) records the
+  insulated bag, riding rig, contact fitting, and customization boundary.
 - [Teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md) records
   the corrected hero-character brief, production stages, browser review gates,
   and current preproduction status.

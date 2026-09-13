@@ -6,9 +6,61 @@ import * as THREE from "three";
 import {
   attachmentPositionInRoot,
   bicycleHeadingToVisualRotation,
+  bicycleVisualLoadStatus,
   COURIER_BICYCLE_CONTRACT,
+  hasSavedCharacterLook,
+  prepareImportedBicycleForRiding,
   validateCourierBicycleRig,
 } from "../src/scene/BicycleVisual";
+import { setDeliveryBackpackColor } from "../src/scene/DeliveryBackpack";
+import { RIDING_DELIVERY_BACKPACK_MODEL_URL } from "../src/scene/DeliveryBackpack";
+import { DEFAULT_CHARACTER_APPEARANCE } from "../src/customizer/appearance";
+
+test("custom rider equipment defaults only when no saved look exists", () => {
+  assert.equal(hasSavedCharacterLook({ getItem: () => null }), false);
+  assert.equal(hasSavedCharacterLook({ getItem: () => "{}" }), false);
+  assert.equal(hasSavedCharacterLook({ getItem: () => "not JSON" }), false);
+  assert.equal(hasSavedCharacterLook({ getItem: () => JSON.stringify(DEFAULT_CHARACTER_APPEARANCE) }), true);
+  assert.equal(hasSavedCharacterLook({ getItem: () => { throw new Error("blocked"); } }), false);
+  assert.equal(hasSavedCharacterLook(null), false);
+});
+
+test("seated riding keeps the imported kickstand stowed", () => {
+  const root = new THREE.Group();
+  const kickstand = new THREE.Group();
+  kickstand.name = "Kickstand";
+  root.add(kickstand);
+  prepareImportedBicycleForRiding(root);
+  assert.equal(kickstand.visible, false);
+});
+
+test("visual readiness status reports the stable final asset combination", () => {
+  assert.equal(bicycleVisualLoadStatus("ready", "ready", "ready"), "Bicycle, detailed rider, and delivery backpack ready");
+  assert.equal(bicycleVisualLoadStatus("ready", "ready", "failed"), "Bicycle and detailed rider ready · delivery backpack unavailable");
+  assert.equal(bicycleVisualLoadStatus("ready", "failed", "ready"), "Bicycle ready · detailed rider unavailable, fallback courier active");
+});
+
+test("backpack tint changes authored fabric while preserving hardware", () => {
+  const root = new THREE.Group();
+  const fabric = new THREE.MeshStandardMaterial({ color: 0x168c85 });
+  fabric.name = "DeliveryBackpack_Teal";
+  const hardware = new THREE.MeshStandardMaterial({ color: 0x333333 });
+  hardware.name = "DeliveryBackpack_Hardware";
+  root.add(new THREE.Mesh(new THREE.BoxGeometry(), fabric), new THREE.Mesh(new THREE.BoxGeometry(), hardware));
+  setDeliveryBackpackColor(root, "#D85E3F");
+  assert.equal(fabric.color.getHexString(), "d85e3f");
+  assert.equal(hardware.color.getHexString(), "333333");
+});
+
+test("riding backpack variant preserves the attachment and material contract", async () => {
+  const bytes = await readFile(new URL(`../public/${RIDING_DELIVERY_BACKPACK_MODEL_URL}`, import.meta.url));
+  const jsonLength = bytes.readUInt32LE(12);
+  const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString("utf8")) as GlbDocument;
+  assert.ok(gltf.nodes.some(({ name }) => name === "DeliveryBackpack"));
+  for (const name of ["DeliveryBackpack_Teal", "DeliveryBackpack_TealDark", "DeliveryBackpack_Hardware"]) {
+    assert.ok(gltf.materials.some((material) => material.name === name), `missing riding backpack material ${name}`);
+  }
+});
 
 test("courier bicycle contract reports missing animation and attachment nodes", () => {
   const incomplete = new THREE.Group();

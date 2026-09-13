@@ -2,12 +2,15 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 import type { BicycleState, PrototypeObstacle } from "../game/bicycle";
+import { CHARACTER_APPEARANCE_STORAGE_KEY, loadCharacterAppearance, validateCharacterAppearance } from "../customizer/appearance";
 import {
   applyCourierAppearance,
   cloneCharacterMaterials,
   loadCourierAppearance,
   type CourierAppearance,
 } from "./bicycle-appearance";
+import { disposeDeliveryBackpack, loadDeliveryBackpack, RIDING_DELIVERY_BACKPACK_MODEL_URL, setDeliveryBackpackColor } from "./DeliveryBackpack";
+import { RidingCourier } from "./RidingCourier";
 
 const WHEEL_RADIUS = 0.34;
 const WHEELBASE = 1.08;
@@ -74,6 +77,34 @@ export function bicycleHeadingToVisualRotation(heading: number): number {
   return -heading;
 }
 
+export function hasSavedCharacterLook(storage?: Pick<Storage, "getItem"> | null): boolean {
+  if (storage === null) return false;
+  try {
+    const source = storage === undefined ? (typeof localStorage === "undefined" ? null : localStorage) : storage;
+    const raw = source?.getItem(CHARACTER_APPEARANCE_STORAGE_KEY);
+    return raw != null && validateCharacterAppearance(JSON.parse(raw)) !== null;
+  } catch {
+    return false;
+  }
+}
+
+export type AssetLoadState = "pending" | "ready" | "failed";
+
+export function bicycleVisualLoadStatus(bicycle: AssetLoadState, rider: AssetLoadState, backpack: AssetLoadState): string {
+  if (bicycle === "failed") return "Polished bicycle unavailable · procedural fallback active";
+  if (bicycle === "pending") return "Procedural fallback visible · loading polished bicycle…";
+  if (rider === "failed") return "Bicycle ready · detailed rider unavailable, fallback courier active";
+  if (rider === "pending") return "Bicycle ready · loading detailed rider…";
+  if (backpack === "failed") return "Bicycle and detailed rider ready · delivery backpack unavailable";
+  if (backpack === "pending") return "Bicycle and detailed rider ready · loading delivery backpack…";
+  return "Bicycle, detailed rider, and delivery backpack ready";
+}
+
+export function prepareImportedBicycleForRiding(root: THREE.Object3D): void {
+  const kickstand = root.getObjectByName("Kickstand");
+  if (kickstand) kickstand.visible = false;
+}
+
 export function attachmentPositionInRoot(root: THREE.Object3D, attachment: THREE.Object3D, updateMatrices = true): THREE.Vector3 {
   if (updateMatrices) root.updateMatrixWorld(true);
   return root.worldToLocal(attachment.getWorldPosition(new THREE.Vector3()));
@@ -96,10 +127,49 @@ export class BicycleVisual {
   private lastDistance = 0;
   private latestState: BicycleState | null = null;
   private appearance: CourierAppearance;
+  private readonly ridingCourier: RidingCourier;
+  private deliveryBackpack: THREE.Object3D | null = null;
+  private backpackEnabled: boolean;
+  private backpackColor: THREE.ColorRepresentation;
+  private detailedRiderReady = false;
+  private detailedRiderFailed = false;
+  private bicycleLoadFailed = false;
+  private saddleAdjusted = false;
+  private backpackLoadFailed = false;
+  private backpackLoaded = false;
 
   constructor(private readonly onLoadNotice?: (message: string) => void, modelUrl = `${import.meta.env.BASE_URL}${BICYCLE_MODEL_URL}`, appearance = loadCourierAppearance()) {
     this.appearance = { ...appearance };
+    const savedCharacterLook = hasSavedCharacterLook();
+    const characterLook = loadCharacterAppearance();
+    this.backpackEnabled = savedCharacterLook ? characterLook.backpack === "insulated" : true;
+    this.backpackColor = characterLook.colors.backpack;
     this.group.name = "Rider bicycle";
+    this.ridingCourier = new RidingCourier();
+    this.ridingCourier.group.visible = false;
+    void this.ridingCourier.ready.then((ready) => {
+      if (this.disposed) return;
+      if (!ready) {
+        this.detailedRiderFailed = true;
+        this.reportLoadState();
+        return;
+      }
+      this.detailedRiderReady = true;
+      this.hideImportedCourier();
+      this.reportLoadState();
+    });
+    void loadDeliveryBackpack(`${import.meta.env.BASE_URL}${RIDING_DELIVERY_BACKPACK_MODEL_URL}`).then((backpack) => {
+      if (this.disposed) { disposeDeliveryBackpack(backpack); return; }
+      this.deliveryBackpack = backpack;
+      this.backpackLoaded = true;
+      setDeliveryBackpackColor(backpack, this.backpackColor);
+      this.ridingCourier.setBackpack(this.backpackEnabled ? backpack : null);
+      this.reportLoadState();
+    }).catch(() => {
+      if (this.disposed) return;
+      this.backpackLoadFailed = true;
+      this.reportLoadState();
+    });
 
     const rubber = new THREE.MeshStandardMaterial({ color: 0x171a19, roughness: 0.82 });
     const metal = new THREE.MeshStandardMaterial({ color: 0xd8ddd7, roughness: 0.38, metalness: 0.7 });
@@ -264,6 +334,7 @@ export class BicycleVisual {
     this.fallback.name = "Procedural bicycle fallback";
     this.fallback.add(...this.group.children);
     this.group.add(this.fallback);
+    this.group.add(this.ridingCourier.group);
     this.ready = this.loadImportedModel(modelUrl);
   }
 
@@ -283,10 +354,41 @@ export class BicycleVisual {
     for (const pedal of this.pedalPlatforms) pedal.rotation.x = -this.crankAngle;
     this.updateRiderPose(this.crankAngle);
     this.updateImportedRig(state, wheelRotation);
+    this.ridingCourier.update({
+      crankAngle: this.crankAngle,
+      steering: state.steering,
+      pedaling: motion.pedal ?? true,
+      deltaSeconds: motion.deltaSeconds,
+    });
   }
 
   dispose(): void {
+    if (this.disposed) return;
     this.disposed = true;
+    this.ridingCourier.setBackpack(null);
+    if (this.deliveryBackpack) disposeDeliveryBackpack(this.deliveryBackpack);
+    this.deliveryBackpack = null;
+    this.ridingCourier.dispose();
+    if (this.importedRig) {
+      disposeBicycleResources(this.importedRig.root);
+      this.importedRig.root.removeFromParent();
+      this.importedRig = null;
+    }
+    disposeBicycleResources(this.fallback);
+  }
+
+  setBackpackEnabled(enabled: boolean): void {
+    this.backpackEnabled = enabled;
+    this.ridingCourier.setBackpack(enabled ? this.deliveryBackpack : null);
+  }
+
+  getBackpackEnabled(): boolean {
+    return this.backpackEnabled;
+  }
+
+  setBackpackColor(color: THREE.ColorRepresentation): void {
+    this.backpackColor = color;
+    if (this.deliveryBackpack) setDeliveryBackpackColor(this.deliveryBackpack, color);
   }
 
   setAppearance(appearance: CourierAppearance): void {
@@ -317,20 +419,42 @@ export class BicycleVisual {
           node.receiveShadow = true;
         }
       });
+      prepareImportedBicycleForRiding(gltf.scene);
       const appearanceMaterials = cloneCharacterMaterials(gltf.scene);
       applyCourierAppearance(gltf.scene, appearanceMaterials, this.appearance);
       this.importedRig = { root: gltf.scene, nodes: validation.nodes, appearanceMaterials };
       this.group.add(gltf.scene);
       if (this.latestState) this.updateImportedRig(this.latestState, -this.latestState.distanceTravelled / WHEEL_RADIUS);
       this.fallback.visible = false;
-      this.onLoadNotice?.("Bicycle visual ready · polished courier");
+      this.hideImportedCourier();
+      this.reportLoadState();
       return true;
     } catch (error) {
       if (this.disposed) return false;
-      const detail = error instanceof Error ? error.message : "unknown model error";
-      this.onLoadNotice?.(`Bicycle visual could not load (${detail}) · procedural fallback active`);
+      this.bicycleLoadFailed = true;
+      this.reportLoadState();
       return false;
     }
+  }
+
+  private hideImportedCourier(): void {
+    if (!this.importedRig || !this.detailedRiderReady) return;
+    const riderNames = /^(?:Bag|CourierBag|CargoReflector$|Face_Profile_|Foot_|Forearm_|Hand_|Helmet|Hip_|Neck$|Rider_|Shirt_|Shorts_|Shoulder_|UpperArm_)/;
+    const bicycleRoot = this.importedRig.root.getObjectByName("CourierBicycle") ?? this.importedRig.root;
+    for (const child of bicycleRoot.children) if (riderNames.test(child.name)) child.visible = false;
+    if (!this.saddleAdjusted) {
+      const saddle = bicycleRoot.getObjectByName("Saddle");
+      if (saddle) saddle.position.y -= 0.04;
+      this.saddleAdjusted = true;
+    }
+    this.ridingCourier.group.visible = true;
+  }
+
+  private reportLoadState(): void {
+    const bicycle: AssetLoadState = this.importedRig ? "ready" : this.bicycleLoadFailed ? "failed" : "pending";
+    const rider: AssetLoadState = this.detailedRiderReady ? "ready" : this.detailedRiderFailed ? "failed" : "pending";
+    const backpack: AssetLoadState = this.backpackLoaded ? "ready" : this.backpackLoadFailed ? "failed" : "pending";
+    this.onLoadNotice?.(bicycleVisualLoadStatus(bicycle, rider, backpack));
   }
 
   private updateImportedRig(state: BicycleState, wheelRotation: number): void {

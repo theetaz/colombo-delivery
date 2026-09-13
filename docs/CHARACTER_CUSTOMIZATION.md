@@ -15,16 +15,17 @@ clothing, shoes, accessories, and colors to change. This first catalog is a
 review candidate. It has not yet been approved as the final wardrobe or been
 connected to the playable bicycle rider.
 
-The starter contract provides 21 choices: three faces, three hairstyles, three tops, two
+The catalog provides 23 choices: three faces, three hairstyles, three tops, two
 bottoms, three pairs of shoes, two styles of sunglasses, one necklace, and one
-watch, plus three independent **None** choices. Eighteen choices have visible
+watch, plus an insulated backpack. Nineteen choices have visible
 geometry. Tops, bottoms, and shoes always have a selection. Sunglasses, necklace,
-and watch each have an independent **None** choice. Item names are generic and
+watch, and backpack each have an independent **None** choice. Item names are generic and
 carry no brand or product affiliation.
 
-Skin, hair, top, bottom, and shoe colors each provide a small named palette and
-an exact six-digit hexadecimal color input. Custom colors are appearance data;
-they do not create new catalog equipment or alter the source textures.
+Skin, hair, top, bottom, shoe, and backpack colors each provide a small named
+palette and an exact six-digit hexadecimal color input. Custom colors are
+appearance data; they do not create new catalog equipment or alter the source
+textures.
 
 The portal provides Front, Face, Side, and Back framing plus orbit and zoom.
 Its responsive split layout stacks the viewer and controls on narrow screens.
@@ -65,6 +66,12 @@ attaching dynamically at runtime. Choosing `none` hides the corresponding access
 viewer, and future runtime loader aligned without treating filenames as UI
 state.
 
+The backpack is an independent Accessories slot with `none` and `insulated`
+choices. Its separate identity-root GLB attaches in approved teen coordinates,
+so equipping it preserves the selected face, hair, garments, shoes, accessories,
+and their colors. Backpack fabric has its own color region; authored dark trim,
+reflective accents, lining, and hardware retain their material roles.
+
 The initial accepted starter snapshot was 6,453,452 bytes with 84 nodes, 54 meshes, 71
 primitives, 12 materials, 16 textures across four embedded images, 83,658
 exported vertex instances, and 60,303 triangles. Its SHA-256 is
@@ -74,10 +81,14 @@ metrics and do not describe the separate rig-review asset.
 
 ## Saved look contract
 
-`src/customizer/appearance.ts` owns the versioned `CharacterAppearanceV1`
+`src/customizer/appearance.ts` owns the versioned `CharacterAppearance`
 record and stores an explicitly saved look at
-`colombo-delivery:character-look`. It records one item per slot plus normalized
-`#RRGGBB` values for the five color regions. Unknown versions, unknown or
+`colombo-delivery:character-look`. Version 2 records one item per slot plus
+normalized `#RRGGBB` values for the six color regions, including backpack.
+Version 1 records migrate in memory to version 2 with `backpack: "none"` and
+the authored backpack color. The migration preserves every valid existing
+face, hair, top, bottom, shoes, accessory, and color selection and does not
+rewrite storage until the user explicitly saves. Unknown versions, unknown or
 currently unavailable items, partial records, malformed colors, malformed
 JSON, and unavailable browser storage all return a valid catalog fallback.
 Saving and resetting report failure to the caller instead of hiding it.
@@ -161,6 +172,12 @@ asset uploader, interchangeable garment simulation, facial blend shapes, or a
 game-ready rig. The reconstructed teenage courier and its rig-review artifact
 remain separate review stages. Publication of the Tripo-derived reconstruction
 also remains pending confirmation of the applicable account terms.
+
+Riding currently uses the approved base courier only. Static customizer face,
+hair, garment, shoe, and accessory variants are not claimed to deform with the
+bicycle rig. Backpack attachment is designed to follow that approved base;
+final bicycle animation and browser rider acceptance are documented separately
+after their review completes.
 
 An early catalog experiment replaced the approved courier silhouette with a
 primitive head and body and was rejected before acceptance. The catalog asset

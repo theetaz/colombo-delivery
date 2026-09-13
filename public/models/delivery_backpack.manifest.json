@@ -1,0 +1,59 @@
+{
+  "asset": "delivery_backpack",
+  "version": 1,
+  "description": "Original unbranded teal and ochre insulated courier backpack for the approved teen character.",
+  "source": "art/characters/teen-courier/delivery_backpack.blend",
+  "builder": "art/characters/teen-courier/delivery_backpack.py",
+  "runtime": "public/models/delivery_backpack.glb",
+  "thumbnail": "public/models/delivery_backpack_thumbnail.png",
+  "fitChecks": [
+    "public/models/delivery_backpack_fit_back.png",
+    "public/models/delivery_backpack_fit_profile.png",
+    "public/models/delivery_backpack_fit_front.png"
+  ],
+  "root": "DeliveryBackpack",
+  "placement": {
+    "mode": "teen-root identity",
+    "blenderAxes": "+Z up, +Y teen forward, backpack toward -Y",
+    "threeAxes": "+Y up, -Z teen forward, backpack toward +Z",
+    "nominalDimensionsMeters": [0.41, 0.22, 0.57],
+    "exportBoundsBlenderMeters": {
+      "min": [-0.222, -0.391, 0.7455],
+      "max": [0.222, 0.136, 1.427]
+    },
+    "blenderCenterMeters": [0.0, -0.245, 1.03],
+    "threeCenterMeters": [0.0, 1.03, 0.245]
+  },
+  "anchorsBlenderMeters": {
+    "back": [0.0, -0.125, 1.11],
+    "shoulderL": [-0.13, -0.115, 1.275],
+    "shoulderR": [0.13, -0.115, 1.275],
+    "lowerL": [-0.16, -0.11, 0.81],
+    "lowerR": [0.16, -0.11, 0.81],
+    "sternum": [0.0, 0.116, 1.07]
+  },
+  "materials": [
+    "DeliveryBackpack_Teal",
+    "DeliveryBackpack_TealDark",
+    "DeliveryBackpack_Ochre",
+    "DeliveryBackpack_Reflective",
+    "DeliveryBackpack_Hardware",
+    "DeliveryBackpack_Lining"
+  ],
+  "features": [
+    "insulated shell and lid seal",
+    "padded contact panel",
+    "two routed shoulder straps",
+    "adjustable sternum strap and buckle",
+    "lid zipper piping",
+    "front flap with seams and buckles",
+    "reflective front, side, and strap accents",
+    "reinforced base",
+    "carry handle",
+    "side compression webbing"
+  ],
+  "meshCount": 24,
+  "triangleCount": 4964,
+  "sha256": "9f021f2fac96b6718cd9b1a2304bb7cf482c7b0f2399c6b76a11a7386387c5fa",
+  "bytes": 307884
+}

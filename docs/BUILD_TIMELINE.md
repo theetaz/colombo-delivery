@@ -685,6 +685,62 @@ Reviewed frames: [front](milestones/2026-09-13-trousers-natural-front.jpg),
 [back](milestones/2026-09-13-trousers-natural-back.jpg), and
 [mobile Olive recolor](milestones/2026-09-13-trousers-natural-mobile.png).
 
+## 2026-09-13 — Insulated delivery backpack and teenage bicycle rider
+
+Status: playable prototype implemented and browser verified.
+
+Modeled an original insulated delivery backpack in Blender and added it as an
+independent piece of equipment in the character studio. The teal fabric body,
+ochre lid, closures, reflectors, padding, and fitted shoulder harness retain
+separate materials. The bag can be equipped, removed, and recolored without
+replacing the approved character or wardrobe. Existing saved looks migrate in
+memory to version 2, keeping their previous choices and no bag equipped.
+
+The standing fit passed browser front, side, rear, removal, and recolor checks,
+including a 390 × 844 mobile viewport. Review rejected a protruding zipper,
+rear-only straps, and a floating rectangular harness before measuring the
+shirt surface for the final wrap. The standalone browser asset has 4,964
+triangles and occupies 307,884 bytes.
+
+The bicycle pass reuses the existing Blender vehicle and preserves the approved
+teen's textured mesh. Review exposed shoulder tears, unreachable grips, and
+twisting shoes in the previous skeleton. A compact skeleton, forward seated
+posture, and separate foot orientation address those defects. Level shoes
+still hovered above the pedals in an intermediate export, showing why contact
+markers must come from visible mesh surfaces rather than desired targets.
+Browser loading also exposed colon sanitization in joint names; a real-loader
+regression now checks the names used by the animation solver.
+
+Front review then caught sideways knees that the side view concealed. Knee
+plane calibration keeps each knee on its own side throughout the cycle. Full
+steering exposed inverted wrists and long finger triangles; an anatomical
+two-bone arm solve, surface-based palm markers, bounded influence cleanup, and
+a continuous wrist weight transition corrected those failures. The resulting
+19-bone rider and fitted harness are inspectable in the main game and preview.
+
+All 54 tests and the production build pass. Final production review covered
+front, side, rear, close-up steering, coast, equipment removal/replacement,
+mobile layout, and actual missing-rider fallback/recovery. The full-lock
+palm-center miss remains at most 33.749 mm; finger articulation and fine grip
+closure remain explicit later refinements. The existing large shared chunk
+warning remains.
+
+The [equipment report](RIDER_EQUIPMENT.md) records construction, reproducible
+Blender commands, the animation contract, and the customization boundary. The
+standing modular wardrobe remains unskinned; this riding pass uses the approved
+base outfit with independent backpack selection and color.
+
+Reviewed backpack frames: [front](milestones/2026-09-13-delivery-backpack-front.jpg),
+[side](milestones/2026-09-13-delivery-backpack-side.jpg),
+[rear](milestones/2026-09-13-delivery-backpack-back.jpg), and
+[mobile](milestones/2026-09-13-delivery-backpack-mobile.png).
+
+Reviewed riding frames: [front](milestones/2026-09-13-delivery-rider-front.jpg),
+[side](milestones/2026-09-13-delivery-rider-side.jpg),
+[rear](milestones/2026-09-13-delivery-rider-back.jpg),
+[mobile](milestones/2026-09-13-delivery-rider-mobile.jpg), and
+[Colombo game](milestones/2026-09-13-delivery-rider-game.jpg).
+
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a

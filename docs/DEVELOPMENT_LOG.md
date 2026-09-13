@@ -593,3 +593,34 @@ roadmap.
   `docs/milestones/2026-09-13-trousers-natural-*`. The garment remains
   unskinned and not bicycle-deformation validated; its solid-color details have
   no baked fabric texture.
+- Added an original Blender-modeled insulated delivery backpack as independent
+  equipment, with a removable torso harness, insulated lid, closures, padding,
+  and reflective details. Reviewed front, side, rear, color changes, removal,
+  and mobile controls in the standing character studio.
+- Rejected protruding zipper piping and floating strap paths, then fitted the
+  harness against measured shirt depth. The frozen standalone export contains
+  24 meshes and 4,964 triangles in 307,884 bytes.
+- Migrated saved looks to version 2 without automatic storage writes. Legacy
+  looks preserve their existing appearance and start without a backpack; an
+  unavailable optional bag leaves the rest of the saved wardrobe usable.
+- Prepared the approved teenage mesh for the existing bicycle. Iterative
+  review caught unreachable grips, contaminated shoulder/hand deformation,
+  pointed shoes, and floating sole contacts. Rebuilt the riding skeleton from
+  measured joints and kept those failures in the equipment report.
+- Added a real glTF-loader regression after browser name sanitization exposed
+  missing runtime joints that structural export tests did not detect.
+- Corrected knee bend planes, rigid shoe orientation, actual sole/palm contact
+  markers, and steering elbow planes. Removed cross-body finger influences and
+  blended wrist weights into the forearm after close-up browser review exposed
+  stretching and a hard wrist boundary. Generated a separate riding harness
+  while preserving the standing equipment export.
+- Accepted the 19-bone rider as a playable prototype after desktop, mobile,
+  front, side, rear, close-up steering, coast, equipment removal, main-game
+  loading, and missing-rider fallback/recovery checks. All 54 tests and the
+  production build pass; the existing shared chunk warning remains. The final
+  rider hash is `8cd56b8c87ae04f80a29653d43f921c313021257dd003e10c96400ea29105329`.
+- Recorded remaining fine-grip work: the palm-center miss reaches 33.749 mm at
+  full steering, fingers remain consolidated, and modular garment transfer is
+  not implemented. Saved final review frames under
+  `docs/milestones/2026-09-13-delivery-rider-*` and construction details in
+  `docs/RIDER_EQUIPMENT.md`.

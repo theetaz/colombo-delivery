@@ -7,6 +7,7 @@ import {
   CHARACTER_ITEM_LABELS,
   CHARACTER_SLOT_ITEMS,
   DEFAULT_CHARACTER_CATALOG,
+  catalogWithBackpackAvailability,
   readCatalogAvailability,
 } from "../src/customizer/catalog";
 import {
@@ -40,10 +41,27 @@ test("starter catalog exposes every required garment and independent optional No
   assert.deepEqual(CHARACTER_SLOT_ITEMS.sunglasses, ["none", "round", "squareframe"]);
   assert.deepEqual(CHARACTER_SLOT_ITEMS.necklace, ["none", "chain"]);
   assert.deepEqual(CHARACTER_SLOT_ITEMS.watch, ["none", "sport"]);
+  assert.deepEqual(CHARACTER_SLOT_ITEMS.backpack, ["none", "insulated"]);
   for (const palette of Object.values(CHARACTER_COLOR_PALETTES)) {
     assert.ok(palette.length >= 3);
     assert.ok(palette.every(({ color }) => /^#[0-9A-F]{6}$/.test(color)));
   }
+});
+
+test("a failed optional backpack load removes only that equipment choice", () => {
+  const unavailable = catalogWithBackpackAvailability(DEFAULT_CHARACTER_CATALOG, false);
+  assert.deepEqual(unavailable.backpack, ["none"]);
+  assert.deepEqual(unavailable.face, DEFAULT_CHARACTER_CATALOG.face);
+  assert.deepEqual(catalogWithBackpackAvailability(DEFAULT_CHARACTER_CATALOG, true), DEFAULT_CHARACTER_CATALOG);
+});
+
+test("an unavailable optional backpack preserves the rest of a saved look", () => {
+  const selected = { ...DEFAULT_CHARACTER_APPEARANCE, face: "angular" as const, hair: "quiff" as const, backpack: "insulated" as const };
+  const catalog = catalogWithBackpackAvailability(DEFAULT_CHARACTER_CATALOG, false);
+  const loaded = loadCharacterAppearance({ getItem: () => JSON.stringify(selected) }, catalog);
+  assert.equal(loaded.face, "angular");
+  assert.equal(loaded.hair, "quiff");
+  assert.equal(loaded.backpack, "none");
 });
 
 test("published customization manifest matches the typed starter catalog", () => {
@@ -81,11 +99,12 @@ test("customization GLB contains rendered catalog items and its embedded tint co
     return triangles;
   };
   for (const [slot, items] of Object.entries(DEFAULT_CHARACTER_CATALOG)) for (const id of items) {
-    if (id === "none") continue;
+    if (id === "none" || slot === "backpack") continue;
     const index = gltf.nodes.findIndex(({ name }) => name === `Item_${slot}_${id}`);
     assert.notEqual(index, -1, `missing Item_${slot}_${id}`);
     assert.ok(descendantTriangles(index) > 0, `Item_${slot}_${id} must render triangles`);
   }
+  assert.ok(existsSync("public/models/delivery_backpack.glb"), "standalone insulated backpack asset is required");
   const root = gltf.nodes.find(({ name }) => name === "TeenCourierCustomization");
   const tint = root?.extras?.customization as { maskTextureIndex?: number; channels?: unknown } | undefined;
   assert.ok(Number.isInteger(tint?.maskTextureIndex), "root needs an embedded tint-mask contract");
@@ -94,7 +113,7 @@ test("customization GLB contains rendered catalog items and its embedded tint co
   assert.deepEqual(tint?.channels, { skin: "r", shirt: "g", shoes: "b" });
 
   const manifest = JSON.parse(readFileSync("public/models/teen_courier_customization.manifest.json", "utf8"));
-  assert.deepEqual(manifest.customization.colorRegions, ["skin", "hair", "top", "bottom", "shoes"]);
+  assert.deepEqual(manifest.customization.colorRegions, ["skin", "hair", "top", "bottom", "shoes", "backpack"]);
   for (const definition of Object.values(manifest.customization.slots) as { items: { thumbnail?: string }[] }[]) {
     for (const { thumbnail } of definition.items) if (thumbnail) assert.ok(existsSync(`public/models/${thumbnail}`), `missing thumbnail ${thumbnail}`);
   }
@@ -258,11 +277,11 @@ test("appearance validation normalizes colors and rejects unknown IDs, versions,
     sunglasses: "round" as const,
     necklace: "chain" as const,
     watch: "sport" as const,
-    colors: { skin: "#aabbcc", hair: "#010203", top: "#abcdef", bottom: "#123456", shoes: "#fedcba" },
+    colors: { skin: "#aabbcc", hair: "#010203", top: "#abcdef", bottom: "#123456", shoes: "#fedcba", backpack: "#0a7b75" },
   };
   const validated = validateCharacterAppearance(selected);
-  assert.deepEqual(validated?.colors, { skin: "#AABBCC", hair: "#010203", top: "#ABCDEF", bottom: "#123456", shoes: "#FEDCBA" });
-  assert.equal(validateCharacterAppearance({ ...selected, version: 2 }), null);
+  assert.deepEqual(validated?.colors, { skin: "#AABBCC", hair: "#010203", top: "#ABCDEF", bottom: "#123456", shoes: "#FEDCBA", backpack: "#0A7B75" });
+  assert.equal(validateCharacterAppearance({ ...selected, version: 3 }), null);
   assert.equal(validateCharacterAppearance({ ...selected, top: "logo-tee" }), null);
   assert.equal(validateCharacterAppearance({ ...selected, colors: { ...selected.colors, shoes: "white" } }), null);
   assert.equal(normalizeHexColor("#012abc"), "#012ABC");
@@ -274,6 +293,7 @@ test("saved looks round-trip, reset cleanly, and fail safely when storage is mal
   const selected = cloneCharacterAppearance(DEFAULT_CHARACTER_APPEARANCE);
   selected.hair = "crop";
   selected.sunglasses = "squareframe";
+  selected.backpack = "insulated";
   selected.colors.top = "#A94F3D";
   assert.equal(saveCharacterAppearance(selected, storage), true);
   assert.deepEqual(loadCharacterAppearance(storage), selected);
@@ -290,6 +310,16 @@ test("saved looks round-trip, reset cleanly, and fail safely when storage is mal
   assert.deepEqual(loadCharacterAppearance(null), DEFAULT_CHARACTER_APPEARANCE);
 });
 
+test("version 1 saved looks migrate in memory without rewriting storage", () => {
+  const storage = memoryStorage();
+  const legacy = { ...DEFAULT_CHARACTER_APPEARANCE, version: 1, backpack: undefined };
+  delete (legacy as { backpack?: unknown }).backpack;
+  const raw = JSON.stringify(legacy);
+  storage.values.set(CHARACTER_APPEARANCE_STORAGE_KEY, raw);
+  assert.deepEqual(loadCharacterAppearance(storage), { ...DEFAULT_CHARACTER_APPEARANCE, backpack: "none" });
+  assert.equal(storage.values.get(CHARACTER_APPEARANCE_STORAGE_KEY), raw);
+});
+
 test("a look becomes invalid when its selected item is absent and fallback stays within manifest availability", () => {
   const limited = { ...DEFAULT_CHARACTER_CATALOG, hair: ["crop"] as const };
   const selected = { ...DEFAULT_CHARACTER_APPEARANCE, hair: "quiff" as const };
@@ -299,8 +329,9 @@ test("a look becomes invalid when its selected item is absent and fallback stays
 
 test("appearance equality compares canonical fields rather than property insertion order", () => {
   const reordered = {
-    colors: { shoes: "#E2E0D8", bottom: "#414147", top: "#267789", hair: "#241B19", skin: "#A86D52" },
+    colors: { backpack: "#168C85", shoes: "#E2E0D8", bottom: "#414147", top: "#267789", hair: "#241B19", skin: "#A86D52" },
     watch: "none" as const,
+    backpack: "none" as const,
     necklace: "none" as const,
     sunglasses: "none" as const,
     shoes: "canvas" as const,
@@ -308,7 +339,7 @@ test("appearance equality compares canonical fields rather than property inserti
     top: "crewtee" as const,
     hair: "wavy" as const,
     face: "classic" as const,
-    version: 1 as const,
+    version: 2 as const,
   };
   assert.equal(characterAppearancesEqual(DEFAULT_CHARACTER_APPEARANCE, reordered), true);
 });

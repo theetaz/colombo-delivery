@@ -7,6 +7,7 @@ export const CHARACTER_SLOT_ITEMS = {
   sunglasses: ["none", "round", "squareframe"],
   necklace: ["none", "chain"],
   watch: ["none", "sport"],
+  backpack: ["none", "insulated"],
 } as const;
 
 export type CharacterSlot = keyof typeof CHARACTER_SLOT_ITEMS;
@@ -19,12 +20,13 @@ export type ShoesId = CharacterItemId<"shoes">;
 export type SunglassesId = CharacterItemId<"sunglasses">;
 export type NecklaceId = CharacterItemId<"necklace">;
 export type WatchId = CharacterItemId<"watch">;
+export type BackpackId = CharacterItemId<"backpack">;
 
-export const CHARACTER_COLOR_REGIONS = ["skin", "hair", "top", "bottom", "shoes"] as const;
+export const CHARACTER_COLOR_REGIONS = ["skin", "hair", "top", "bottom", "shoes", "backpack"] as const;
 export type CharacterColorRegion = (typeof CHARACTER_COLOR_REGIONS)[number];
 
 export const AUTHORED_CHARACTER_COLORS: Record<CharacterColorRegion, `#${string}`> = {
-  skin: "#A86D52", hair: "#241B19", top: "#267789", bottom: "#414147", shoes: "#E2E0D8",
+  skin: "#A86D52", hair: "#241B19", top: "#267789", bottom: "#414147", shoes: "#E2E0D8", backpack: "#168C85",
 };
 
 export const CHARACTER_COLOR_PALETTES = {
@@ -53,6 +55,11 @@ export const CHARACTER_COLOR_PALETTES = {
     { id: "graphite", label: "Graphite", color: "#35383D" },
     { id: "rust", label: "Rust", color: "#9A4C35" },
   ],
+  backpack: [
+    { id: "teal", label: "Teal", color: AUTHORED_CHARACTER_COLORS.backpack },
+    { id: "coral", label: "Coral", color: "#D85E3F" },
+    { id: "ochre", label: "Ochre", color: "#C18A2F" },
+  ],
 } as const satisfies Record<CharacterColorRegion, readonly { id: string; label: string; color: `#${string}` }[]>;
 
 export const CHARACTER_SLOT_DEFINITIONS = {
@@ -64,6 +71,7 @@ export const CHARACTER_SLOT_DEFINITIONS = {
   sunglasses: { label: "Sunglasses", category: "accessories", optional: true },
   necklace: { label: "Necklace", category: "accessories", optional: true },
   watch: { label: "Watch", category: "accessories", optional: true },
+  backpack: { label: "Backpack", category: "accessories", optional: true },
 } as const satisfies Record<CharacterSlot, { label: string; category: "face" | "hair" | "tops" | "bottoms" | "shoes" | "accessories"; optional: boolean }>;
 
 export const CHARACTER_ITEM_LABELS = {
@@ -75,6 +83,7 @@ export const CHARACTER_ITEM_LABELS = {
   sunglasses: { none: "None", round: "Round", squareframe: "Square frame" },
   necklace: { none: "None", chain: "Chain" },
   watch: { none: "None", sport: "Sport" },
+  backpack: { none: "None", insulated: "Insulated delivery bag" },
 } as const satisfies { [Slot in CharacterSlot]: Record<CharacterItemId<Slot>, string> };
 
 export type CharacterCatalogAvailability = {
@@ -90,6 +99,7 @@ export const DEFAULT_CHARACTER_CATALOG: CharacterCatalogAvailability = {
   sunglasses: [...CHARACTER_SLOT_ITEMS.sunglasses],
   necklace: [...CHARACTER_SLOT_ITEMS.necklace],
   watch: [...CHARACTER_SLOT_ITEMS.watch],
+  backpack: [...CHARACTER_SLOT_ITEMS.backpack],
 };
 
 export interface CharacterCustomizationManifest {
@@ -141,6 +151,13 @@ export function readCatalogAvailability(value: unknown): CharacterCatalogAvailab
 
 export function catalogSupports<Slot extends CharacterSlot>(catalog: CharacterCatalogAvailability, slot: Slot, item: CharacterItemId<Slot>): boolean {
   return (catalog[slot] as readonly string[]).includes(item);
+}
+
+export function catalogWithBackpackAvailability(
+  catalog: CharacterCatalogAvailability,
+  available: boolean,
+): CharacterCatalogAvailability {
+  return available ? catalog : { ...catalog, backpack: ["none"] };
 }
 
 export function characterItemLabel<Slot extends CharacterSlot>(slot: Slot, item: CharacterItemId<Slot>): string {

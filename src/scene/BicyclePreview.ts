@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import type { BicycleState } from "../game/bicycle";
 import { BicycleVisual } from "./BicycleVisual";
-import { loadCourierAppearance, saveCourierAppearance, type CourierAppearance } from "./bicycle-appearance";
+import { cloneCharacterAppearance, loadCharacterAppearance, saveCharacterAppearance } from "../customizer/appearance";
 
 type PreviewPose = "idle" | "pedal" | "coast" | "steer";
 
@@ -56,13 +56,14 @@ contactShadow.position.set(0, 0.146, 0.04);
 scene.add(contactShadow);
 
 let loadMessage = "Procedural fallback visible · loading polished model…";
-let appearance = loadCourierAppearance();
+let appearance = cloneCharacterAppearance(loadCharacterAppearance());
 const bicycle = new BicycleVisual((message) => {
   loadMessage = message;
   status.textContent = `${message} · drag to orbit · scroll to zoom`;
 });
 bicycle.group.rotation.y = 0.2;
 scene.add(bicycle.group);
+bicycle.setBackpackColor(appearance.colors.backpack);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0.95, 0);
@@ -78,25 +79,23 @@ void bicycle.ready.then(() => {
   frameBicycle(cameraView);
 });
 
-const appearanceControls: { [Key in Exclude<keyof CourierAppearance, "version">]: HTMLSelectElement } = {
-  face: document.querySelector<HTMLSelectElement>("#appearance-face")!,
-  skin: document.querySelector<HTMLSelectElement>("#appearance-skin")!,
-  hair: document.querySelector<HTMLSelectElement>("#appearance-hair")!,
-  outfit: document.querySelector<HTMLSelectElement>("#appearance-outfit")!,
-  bag: document.querySelector<HTMLSelectElement>("#appearance-bag")!,
-};
-for (const key of Object.keys(appearanceControls) as Array<keyof typeof appearanceControls>) {
-  const select = appearanceControls[key];
-  select.value = appearance[key];
-  select.addEventListener("change", () => {
-    appearance = { ...appearance, [key]: select.value } as CourierAppearance;
-    bicycle.setAppearance(appearance);
-    appearanceStatus.textContent = "Unsaved appearance changes";
-  });
-}
+const backpackSelect = document.querySelector<HTMLSelectElement>("#appearance-backpack")!;
+const backpackColor = document.querySelector<HTMLInputElement>("#appearance-backpack-color")!;
+appearance.backpack = bicycle.getBackpackEnabled() ? "insulated" : "none";
+backpackSelect.value = appearance.backpack;
+backpackColor.value = appearance.colors.backpack;
+backpackSelect.addEventListener("change", () => {
+  appearance.backpack = backpackSelect.value === "insulated" ? "insulated" : "none";
+  bicycle.setBackpackEnabled(appearance.backpack === "insulated");
+  appearanceStatus.textContent = "Unsaved appearance changes";
+});
+backpackColor.addEventListener("input", () => {
+  appearance.colors.backpack = backpackColor.value.toUpperCase();
+  bicycle.setBackpackColor(appearance.colors.backpack);
+  appearanceStatus.textContent = "Unsaved appearance changes";
+});
 saveAppearanceButton?.addEventListener("click", () => {
-  bicycle.setAppearance(appearance);
-  const saved = saveCourierAppearance(appearance);
+  const saved = saveCharacterAppearance(appearance);
   appearanceStatus.textContent = saved ? "Appearance applied and saved for the ride" : "Appearance applied · browser storage unavailable";
 });
 

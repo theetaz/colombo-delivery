@@ -1,0 +1,177 @@
+{
+  "asset": "teen_courier_riding.glb",
+  "status": "browser-verified-prototype",
+  "source": "art/characters/teen-courier/teen_courier_rig_review.blend",
+  "identity": "Approved detailed teen courier mesh and textures; provider skin rebuilt as a clean minimal riding rig.",
+  "contract": {
+    "units": "meters",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "wheelRadius": 0.34,
+    "wheelbase": 1.08
+  },
+  "animation": {
+    "name": "PedalCycle",
+    "frames": [
+      0,
+      24
+    ],
+    "fps": 24,
+    "durationSeconds": 1.0,
+    "loopClosure": true
+  },
+  "contacts": {
+    "seat": [
+      0,
+      1.03,
+      0.25
+    ],
+    "saddleRuntimeYOffset": -0.04,
+    "grips": {
+      "L": [
+        -0.22,
+        1.04,
+        -0.41
+      ],
+      "R": [
+        0.22,
+        1.04,
+        -0.41
+      ]
+    },
+    "crank": [
+      0,
+      0.45,
+      0.06
+    ],
+    "radius": 0.18
+  },
+  "attachments": {
+    "backpack": "Backpack_Attach",
+    "torsoBone": "bone_3"
+  },
+  "rig": {
+    "boneCount": 19,
+    "skinCount": 1,
+    "animationCount": 1,
+    "ridingWeightRepair": {
+      "providerCleanup": {
+        "syncedSeamVertices": 0,
+        "shoulderVertices": 134,
+        "handVertices": 2284,
+        "contaminatedFingerVertices": 1262,
+        "recoveredVertices": 0
+      },
+      "minimalRig": {
+        "boneCount": 19,
+        "boneMap": {
+          "root": "tripo::Root",
+          "spine": [
+            "tripo::Spine_0",
+            "bone_3",
+            "bone_4"
+          ],
+          "head": "tripo::Head_0",
+          "clavicles": {
+            "L": "bone_8",
+            "R": "bone_29"
+          },
+          "arms": {
+            "L": [
+              "tripo::1_Left_Limb_0",
+              "tripo::1_Left_Limb_1",
+              "tripo::1_Left_Limb_2"
+            ],
+            "R": [
+              "tripo::1_Right_Limb_0",
+              "tripo::1_Right_Limb_1",
+              "tripo::1_Right_Limb_2"
+            ]
+          },
+          "legs": {
+            "L": [
+              "tripo::0_Left_Limb_0",
+              "tripo::0_Left_Limb_1",
+              "tripo::0_Left_Limb_2"
+            ],
+            "R": [
+              "tripo::0_Right_Limb_0",
+              "tripo::0_Right_Limb_1",
+              "tripo::0_Right_Limb_2"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "customization": {
+    "supported": "approved detailed base appearance",
+    "unsupported": "standalone unskinned modular wardrobe selections"
+  },
+  "review": {
+    "frames": [
+      "teen_courier_riding_review/pedal-00.png",
+      "teen_courier_riding_review/pedal-06.png",
+      "teen_courier_riding_review/pedal-12.png",
+      "teen_courier_riding_review/pedal-18.png"
+    ],
+    "browserVerified": "2026-09-13",
+    "report": "docs/RIDER_EQUIPMENT.md",
+    "maximumPalmResidualMeters": 0.033749,
+    "maximumHandOrientationErrorDegrees": 0.0509,
+    "limitations": [
+      "Base appearance only; modular wardrobe remains unskinned",
+      "Fine finger articulation and full-lock grip closure remain prototype limitations"
+    ]
+  },
+  "kneePlane": {
+    "leftXRange": [
+      -0.15061607956886292,
+      -0.10512745380401611
+    ],
+    "rightXRange": [
+      0.07699453830718994,
+      0.11052262037992477
+    ],
+    "limitAbsX": 0.2
+  },
+  "ridingBackpack": {
+    "asset": "delivery_backpack_riding.glb",
+    "bytes": 326928,
+    "sha256": "34c3a8a2b8e913545115efc8bf2c4c64f8c10cf1a8605d663c1391de14df8901",
+    "fit": {
+      "DeliveryBackpack_ShoulderStrap_L": {
+        "vertices": 1664.0,
+        "moved": 1142.0,
+        "before_median_m": 0.03140630945563316,
+        "after_median_m": 0.008000006899237633,
+        "after_p75_m": 0.018818184733390808
+      },
+      "DeliveryBackpack_ShoulderStrap_R": {
+        "vertices": 1664.0,
+        "moved": 1158.0,
+        "before_median_m": 0.0651039406657219,
+        "after_median_m": 0.008000008761882782,
+        "after_p75_m": 0.027228504419326782
+      },
+      "DeliveryBackpack_LowerWebbing_L": {
+        "vertices": 27.0,
+        "moved": 18.0,
+        "before_median_m": 0.06076459586620331,
+        "after_median_m": 0.008000009693205357,
+        "after_p75_m": 0.03199176862835884
+      },
+      "DeliveryBackpack_LowerWebbing_R": {
+        "vertices": 27.0,
+        "moved": 18.0,
+        "before_median_m": 0.07487291842699051,
+        "after_median_m": 0.008000006899237633,
+        "after_p75_m": 0.04671776667237282
+      }
+    }
+  },
+  "hashes": {
+    "glbSha256": "8cd56b8c87ae04f80a29653d43f921c313021257dd003e10c96400ea29105329",
+    "blendSha256": "00dfe2cc9acc5e7385168723c06feb7a88bf6ad1442b3e9e14f4dbfd4177ca8d"
+  }
+}

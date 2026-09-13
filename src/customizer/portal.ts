@@ -5,6 +5,7 @@ import {
   CHARACTER_SLOT_DEFINITIONS,
   CHARACTER_COLOR_PALETTES,
   characterItemLabel,
+  catalogWithBackpackAvailability,
   DEFAULT_CHARACTER_CATALOG,
   readCatalogAvailability,
   type CharacterCatalogAvailability,
@@ -138,7 +139,7 @@ function renderCatalog(): void {
     nodes.push(...catalog[slot].map((id) => makeCard(slot, id)));
   }
   grid.replaceChildren(...nodes);
-  const region = CATEGORY_REGION[activeCategory];
+  const region = activeCategory === "accessories" ? "backpack" : CATEGORY_REGION[activeCategory];
   colorSection.hidden = !region;
   if (region) renderColors(region);
 }
@@ -220,7 +221,14 @@ async function loadAvatar(): Promise<void> {
     }
     else throw new Error(`Customization manifest request failed (${manifestResponse.status})`);
     for (const slot of Object.keys(catalog) as CharacterSlot[]) {
-      for (const item of catalog[slot]) if (!next.setOption(slot, item as never)) throw new Error(`Model is missing ${slot}/${item}`);
+      for (const item of catalog[slot]) {
+        if (next.setOption(slot, item as never)) continue;
+        if (slot === "backpack") {
+          catalog = catalogWithBackpackAvailability(catalog, false);
+          break;
+        }
+        throw new Error(`Model is missing ${slot}/${item}`);
+      }
     }
     let raw: string | null = null;
     try {

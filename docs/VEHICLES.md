@@ -115,6 +115,17 @@ the same runtime visual with Idle, Pedal, Coast, and Steer controls plus orbit
 and zoom. Final export size, mesh counts, screenshots, and production-browser
 results will be added only after review.
 
+The runtime also loads `models/teen_courier_riding.glb` as the detailed rider
+and binds its hands and feet to the bicycle contact anchors. This
+rider uses the approved base face, hair, crew tee, shorts, and canvas shoes.
+The static wardrobe's alternate faces, garments, shoes, and accessories are not
+skinned riding variants and are not transferred onto this rig. The standalone
+insulated backpack follows the rider's `Backpack_Attach` node. The pedal cycle
+and browser fit passed prototype review; the procedural courier remains the
+usable fallback if the detailed rider cannot load. The
+[equipment report](RIDER_EQUIPMENT.md) records the 54 passing tests, fitting
+lessons, screenshots, and remaining full-lock palm drift and finger detail.
+
 ## Implemented bicycle behavior
 
 The existing bicycle controller remains the gameplay authority for spawn,

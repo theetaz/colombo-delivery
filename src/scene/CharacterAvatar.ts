@@ -7,12 +7,14 @@ import {
   type CharacterSlot,
   type CharacterColorRegion,
 } from "../customizer/catalog";
+import { disposeDeliveryBackpack, loadDeliveryBackpack, setDeliveryBackpackColor } from "./DeliveryBackpack";
 
 export { CHARACTER_CATALOG };
 
 const DEFAULTS: Record<CharacterSlot, string> = {
   face: "classic", hair: "wavy", top: "crewtee", bottom: "shorts",
   shoes: "canvas", sunglasses: "none", necklace: "none", watch: "none",
+  backpack: "none",
 };
 
 const SOURCE_MATERIAL_REGIONS: Partial<Record<string, CharacterColorRegion>> = {
@@ -43,6 +45,8 @@ export class CharacterAvatar {
     color: { value: new THREE.Color(color) }, mix: { value: 0 }, valueScale: { value: 1 },
   }])) as TintState;
   private maskTexture?: THREE.Texture;
+  private backpack?: THREE.Object3D;
+  private backpackColor: THREE.ColorRepresentation = AUTHORED_CHARACTER_COLORS.backpack;
   private generation = 0;
 
   async load(url = `${import.meta.env.BASE_URL}models/teen_courier_customization.glb`): Promise<void> {
@@ -55,6 +59,16 @@ export class CharacterAvatar {
     }
     this.model = gltf.scene;
     this.group.add(this.model);
+    try {
+      const backpack = await loadDeliveryBackpack();
+      if (generation !== this.generation) { disposeDeliveryBackpack(backpack); return; }
+      this.backpack = backpack;
+      setDeliveryBackpackColor(backpack, this.backpackColor);
+      this.group.add(backpack);
+    } catch {
+      // The wardrobe remains usable if the optional standalone equipment asset fails.
+    }
+    if (generation !== this.generation) return;
     this.indexItems();
     this.isolateMaterials();
     if (!await this.installSourcePreservingTints(gltf, generation)) return;
@@ -65,6 +79,12 @@ export class CharacterAvatar {
 
   setOption<S extends CharacterSlot>(slot: S, id: CharacterOption<S>): boolean {
     if (!(CHARACTER_CATALOG[slot] as readonly string[]).includes(id)) return false;
+    if (slot === "backpack") {
+      if (id === "insulated" && !this.backpack) return false;
+      if (this.backpack) this.backpack.visible = id === "insulated";
+      this.selection.backpack = id;
+      return true;
+    }
     const roots = this.itemRoots.get(slot);
     if (!roots) return false;
     if (id !== "none" && !roots.has(id)) return false;
@@ -74,6 +94,11 @@ export class CharacterAvatar {
   }
 
   setColor(region: CharacterColorRegion, color: THREE.ColorRepresentation): void {
+    if (region === "backpack") {
+      this.backpackColor = color;
+      if (this.backpack) setDeliveryBackpackColor(this.backpack, color);
+      return;
+    }
     const target = new THREE.Color(color);
     const authored = new THREE.Color(AUTHORED_CHARACTER_COLORS[region]);
     const useAuthored = target.getHex() === authored.getHex();
@@ -101,6 +126,7 @@ export class CharacterAvatar {
   private indexItems(): void {
     this.itemRoots.clear();
     for (const slot of Object.keys(CHARACTER_CATALOG) as CharacterSlot[]) {
+      if (slot === "backpack") continue;
       const items = new Map<string, THREE.Object3D>();
       for (const id of CHARACTER_CATALOG[slot]) {
         if (id === "none") continue;
@@ -168,6 +194,11 @@ export class CharacterAvatar {
   }
 
   private clearModel(): void {
+    if (this.backpack) {
+      this.group.remove(this.backpack);
+      disposeDeliveryBackpack(this.backpack);
+      this.backpack = undefined;
+    }
     if (!this.model) return;
     const geometries = new Set<THREE.BufferGeometry>();
     const materials = new Set<THREE.Material>();
