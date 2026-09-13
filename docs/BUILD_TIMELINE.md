@@ -746,9 +746,10 @@ date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a
 moving branch link.
 
-## 2026-09-13 — Standalone commuter bicycle rebuild started
+## 2026-09-13 — Standalone commuter bicycle approved; stationary rider fit started
 
-Status: first bicycle-only model exported; awaiting human review.
+Status: bicycle-only model human-approved at its frozen hash; stationary rider
+fit awaiting separate human review.
 
 Final human review rejected the earlier detailed rider's inverted wrists,
 clothing distortion, saddle fit, and grip presentation despite its passing
@@ -764,6 +765,44 @@ automated screenshots and pixel scoring are not acceptance gates. See
 The first review export is 529,760 bytes and 13,844 triangles. It uses a 1.093 m wheelbase, 69.5° head angle, 0.045 m perpendicular fork rake, and named mechanical pivots. Structural validation passed; no render-based acceptance was performed.
 
 The standalone `bicycle-model-review.html` viewer provides camera presets,
-independent wheel/crank controls, steering, and local feedback notes. All 57
-tests and the production build pass. Visual approval is pending the user's
-feedback; fitting the character remains the next stage.
+independent wheel/crank controls, steering, and local feedback notes. All 58
+tests and the production build pass. On 2026-09-13, the user approved the
+bicycle and asked to move the character onto it. That approval is bound to GLB
+SHA-256
+`ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`;
+future generator output returns to `awaiting-human-review` until its hash is
+approved separately.
+
+Stage 2 now fits the unchanged detailed teenage courier to the frozen saddle,
+grip centreline references, and pedal surfaces in a single stationary pose. A
+uniform 1.08 scale produces a 1.7496 m rider while preserving the source
+proportions; per-bone and
+nonuniform scaling remain excluded. Measured patch-to-anchor residuals and
+structural checks support the review but do not establish visual quality or
+grip-surface clearance. No pedalling, steering-pose animation, bag, or physics binding proceeds
+until the user approves this separate [stationary rider fit](RIDER_FIT.md).
+
+Independent numeric review held the first stationary export before human
+handoff. The terminal-hand IK and wrist-orientation controls competed, and the
+pelvis marker did not yet isolate the posterior sitting patch. The frozen
+candidate separates the arm solve from explicit wrist orientation and measures
+the posterior support patch.
+
+The frozen review GLB is 3,260,140 bytes with one mesh, seven nodes, no skin or
+animation, and identity root. The approved bicycle and seatpost remain
+unchanged. Its patch-to-target residuals are 13.546 mm at the posterior
+pelvis/saddle-centre reference, 21.074 and 30.304 mm at the radius-adjusted grip
+tops, and 1.192 and 4.687 mm at the pedal tops. The palm misses remain above
+20 mm and need visual judgment. Individual limb lengths remain within `8.81e-7`
+of their uniformly scaled rest values. The candidate GLB SHA-256 is
+`01a52f9343bf605f7510f1d4be4d7ac9368942d11bcca52679f92d45201107d3`.
+
+The `/rider-fit-review.html` route loads the candidate and frozen bicycle at
+identity for short human inspection. Its camera presets, rider visibility
+toggle, and local notes support that decision without animation, screenshots,
+or computer-vision scoring. All 58 tests, strict TypeScript checking, the
+production build, and documentation diff check pass. Node textured-asset tests
+emit expected blob texture-decode warnings outside a browser, and Vite retains
+its expected large shared-chunk advisory. Status remains
+`awaiting-human-review`; the 21–30 mm palm residuals remain a visible refinement
+question for the user's quick review.

@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Focused human review of the Colombo Delivery commuter bicycle model."
+      content="Static human review of the seated courier fit on the approved commuter bicycle."
     />
-    <title>Colombo Delivery · Bicycle model review</title>
+    <title>Colombo Delivery · Rider fit review</title>
     <style>
       * {
         box-sizing: border-box;
@@ -78,18 +78,14 @@
       button[aria-pressed="true"],
       button.primary {
         background: #315d53;
-        color: white;
+        color: #fff;
         border-color: #315d53;
       }
       label {
         display: flex;
-        align-items: center;
         gap: 9px;
-        margin: 9px 0;
-        color: #414c49;
-      }
-      input[type="range"] {
-        flex: 1;
+        align-items: center;
+        margin: 12px 0;
       }
       textarea {
         width: 100%;
@@ -99,9 +95,8 @@
         border-radius: 8px;
         padding: 10px;
         font: inherit;
-        background: #fff;
       }
-      #review-status {
+      #fit-status {
         display: block;
         min-height: 20px;
         margin-top: 12px;
@@ -128,6 +123,10 @@
         color: #4b5753;
         font-size: 12px;
       }
+      a {
+        color: #315d53;
+        font-weight: 700;
+      }
       @media (max-width: 720px) {
         main {
           grid-template-columns: 1fr;
@@ -140,7 +139,7 @@
         .panel {
           grid-row: 2;
           padding: 16px;
-          border-right: 0;
+          border: 0;
           border-top: 1px solid #d7d0c2;
         }
         h1 {
@@ -152,17 +151,12 @@
   <body>
     <main>
       <section class="panel">
-        <span class="eyebrow"
-          >Approved bicycle · revision commuter-bicycle-v2/1</span
-        >
-        <h1>Commuter bicycle</h1>
-        <p>
-          Inspect the bicycle’s shape, proportions, materials, and moving parts.
-          This page demonstrates the model mechanics only.
-        </p>
-        <p>
-          <a href="./rider-fit-review.html">Review the seated courier fit →</a>
-        </p>
+        <a href="./bicycle-model-review.html">← Approved bicycle</a>
+        <div class="eyebrow">
+          Awaiting fit review · teen-courier-seated-v2/1
+        </div>
+        <h1>Courier seating fit</h1>
+        <p>Check seating, hands and feet before animation.</p>
         <div class="group">
           <h2>View</h2>
           <div class="buttons" role="group" aria-label="Camera view">
@@ -171,50 +165,32 @@
             ><button data-view="drive">Drive side</button
             ><button data-view="opposite">Opposite side</button
             ><button data-view="rear">Rear</button
-            ><button id="reset-view">Reset</button>
+            ><button id="fit-reset">Reset</button>
           </div>
-        </div>
-        <div class="group">
-          <h2>Mechanical demonstration</h2>
-          <label><input id="spin-wheels" type="checkbox" /> Spin wheels</label>
           <label
-            ><input id="run-drivetrain" type="checkbox" /> Turn crank and
-            pedals</label
+            ><input id="show-rider" type="checkbox" checked /> Show rider</label
           >
-          <label for="steering"
-            >Steering
-            <input
-              id="steering"
-              type="range"
-              min="-1"
-              max="1"
-              step="0.01"
-              value="0"
-          /></label>
-          <p>
-            Wheel and crank demonstrations are independent for inspection;
-            freehub and chain linkage are not simulated here.
-          </p>
-          <button id="stop-reset">Stop &amp; reset mechanics</button>
         </div>
         <div class="group">
           <h2>What should change?</h2>
           <textarea
-            id="review-notes"
-            placeholder="Check the frame shape, proportions, materials, and moving parts. Record anything you want changed…"
-            aria-label="Bicycle review notes"
+            id="fit-notes"
+            placeholder="Check saddle contact, hand placement, foot placement, posture, and scale…"
+            aria-label="Rider fit review notes"
           ></textarea>
           <div class="buttons">
-            <button id="copy-notes">Copy notes</button
-            ><button id="download-notes">Download .txt</button>
+            <button id="copy-fit-notes">Copy notes</button
+            ><button id="download-fit-notes">Download .txt</button>
           </div>
         </div>
-        <span id="review-status" role="status">Loading commuter bicycle…</span>
+        <span id="fit-status" role="status"
+          >Loading approved bicycle and seated courier…</span
+        >
       </section>
-      <div class="canvas" id="bicycle-model-canvas">
+      <div class="canvas" id="rider-fit-canvas">
         <span class="hint">Drag to orbit · scroll to zoom</span>
       </div>
     </main>
-    <script type="module" src="/src/scene/BicycleModelReview.ts"></script>
+    <script type="module" src="/src/scene/RiderFitReview.ts"></script>
   </body>
 </html>

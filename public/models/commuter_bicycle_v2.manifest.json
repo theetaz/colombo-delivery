@@ -2,7 +2,13 @@
   "formatVersion": 2,
   "revision": "commuter-bicycle-v2/1",
   "asset": "commuter_bicycle_v2",
-  "reviewStatus": "awaiting-human-review",
+  "reviewStatus": "human-approved",
+  "humanApproval": {
+    "date": "2026-09-13",
+    "scope": "bicycle-only visual form and components at the frozen GLB hash",
+    "approvedGlbSha256": "ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125",
+    "note": "Approved by the user to proceed to stationary character fitting. This does not approve a rider pose, animation, or simulation binding."
+  },
   "generator": "art/bicycles/commuter-v2/generator.py",
   "sourceBlend": "art/bicycles/commuter-v2/commuter_bicycle_v2.blend",
   "provenance": "Original unbranded procedural project artwork. No external meshes or textures.",

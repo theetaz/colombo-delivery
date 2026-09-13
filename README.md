@@ -1,6 +1,6 @@
 # Colombo Delivery
 
-> **Current art status:** Final human review rejected the earlier bicycle proportions and components, inverted wrists, clothing distortion, saddle fit, and grip presentation. The [standalone bicycle rebuild](docs/BICYCLE_REBUILD.md) supersedes that visual target; historical results remain below.
+> **Current art status:** The standalone commuter bicycle is human-approved at its frozen GLB hash. A separate [stationary rider fit](docs/RIDER_FIT.md) is the active review stage. Pedalling, steering poses, and simulation binding wait for that fit approval; historical results remain below.
 
 
 Colombo Delivery is a planned browser-based 3D driving game built around real
@@ -210,6 +210,9 @@ safety.*
   appearance, material-isolation, persistence, and review contract.
 - [Delivery backpack and bicycle rider](docs/RIDER_EQUIPMENT.md) records the
   insulated bag, riding rig, contact fitting, and customization boundary.
+- [Stationary rider fit](docs/RIDER_FIT.md) records the approved-bicycle anchor
+  contract, measured contact checks, and separate human-review gate before any
+  animation or simulation work.
 - [Teenage courier character pipeline](docs/CHARACTER_ART_PIPELINE.md) records
   the corrected hero-character brief, production stages, browser review gates,
   and current preproduction status.
@@ -294,8 +297,9 @@ practice markers, straight-line guidance, and minimap do not satisfy them.
 
 ### Bicycle art rebuild
 
-Final human review rejected the detailed riding prototype's wrists, clothing
-deformation, saddle fit, and grip presentation despite its passing engineering
-checks. Bicycle art is restarting with a standalone commuter model; the current
-game remains unchanged until human review approves it. See the
-[bicycle rebuild workflow](docs/BICYCLE_REBUILD.md).
+The user approved the standalone commuter bicycle at frozen GLB SHA-256
+`ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`.
+The original teenage courier appearance is now being fitted to its stationary
+seat, grip, and pedal anchors. The current game remains unchanged, and animation
+or physics work waits for separate fit approval. See the
+[bicycle rebuild](docs/BICYCLE_REBUILD.md) and [rider fit](docs/RIDER_FIT.md).

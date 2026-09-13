@@ -82,7 +82,7 @@ void new GLTFLoader()
     mechanics = new BicycleMechanics(result.nodes);
     scene.add(loaded);
     frame("three-quarter");
-    status.textContent = "Awaiting your review · model ready";
+    status.textContent = "Bicycle approved · model ready";
   })
   .catch((error) => {
     if (!disposed)

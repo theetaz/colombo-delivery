@@ -1,0 +1,149 @@
+{
+  "formatVersion": 1,
+  "revision": "teen-courier-seated-v2/1",
+  "reviewStatus": "awaiting-human-review",
+  "asset": "teen_courier_seated_v2.glb",
+  "source": "art/characters/teen-courier/teen_courier_rig_review.blend",
+  "sourceIdentity": "Original detailed teen face, hair, textured body and outfit preserved.",
+  "approvedBicycle": {
+    "asset": "commuter_bicycle_v2.glb",
+    "sha256": "ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125",
+    "steer": 0,
+    "crankPhase": 0
+  },
+  "contract": {
+    "soleRoot": "TeenCourierSeatedV2",
+    "units": "metres",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "rightSide": "+X",
+    "rootTransform": "identity",
+    "static": true,
+    "skinExported": false,
+    "animations": 0
+  },
+  "fit": {
+    "uniformCharacterScale": 1.08,
+    "fittedHeightM": 1.7496,
+    "seatpostAdjustmentM": 0.0,
+    "gripRadiusM": 0.017,
+    "gripTargetDefinition": "17 mm above the grip centerline on the palmar contact surface",
+    "limbLengthRatios": {
+      "tripo::1_Left_Limb_0": 0.9999996332123064,
+      "tripo::1_Left_Limb_1": 1.0000001384647024,
+      "tripo::1_Right_Limb_0": 1.0000001880606035,
+      "tripo::1_Right_Limb_1": 1.000000201714737,
+      "tripo::0_Left_Limb_0": 1.0000006515399293,
+      "tripo::0_Left_Limb_1": 0.9999997801065816,
+      "tripo::0_Right_Limb_0": 1.0000008803525307,
+      "tripo::0_Right_Limb_1": 1.0000006737038611
+    },
+    "kneeXBlenderM": {
+      "L": -0.12067533284425735,
+      "R": 0.12171155214309692
+    },
+    "contactPositionsBlenderZUp": {
+      "PelvisContact": [
+        -0.002563,
+        -0.271469,
+        1.031126
+      ],
+      "Palm_L_Contact": [
+        -0.282208,
+        0.323409,
+        1.02382
+      ],
+      "Palm_R_Contact": [
+        0.278363,
+        0.319159,
+        1.031294
+      ],
+      "Sole_L_Contact": [
+        -0.113106,
+        -0.267439,
+        0.299079
+      ],
+      "Sole_R_Contact": [
+        0.114305,
+        0.070286,
+        0.295953
+      ]
+    },
+    "targetPositionsBlenderZUp": {
+      "PelvisContact": [
+        0.0,
+        -0.282,
+        1.023
+      ],
+      "Palm_L_Contact": [
+        -0.286,
+        0.334,
+        1.006
+      ],
+      "Palm_R_Contact": [
+        0.286,
+        0.334,
+        1.006
+      ],
+      "Sole_L_Contact": [
+        -0.112,
+        -0.267,
+        0.299
+      ],
+      "Sole_R_Contact": [
+        0.112,
+        0.073,
+        0.299
+      ]
+    },
+    "residualsM": {
+      "PelvisContact": 0.013546,
+      "Palm_L_Contact": 0.021074,
+      "Palm_R_Contact": 0.030304,
+      "Sole_L_Contact": 0.001192,
+      "Sole_R_Contact": 0.004687
+    },
+    "contactMethod": "centroids of evaluated posed mesh surface regions; targets are recorded separately"
+  },
+  "boundsBlenderZUp": {
+    "min": [
+      -0.343608,
+      -0.5351,
+      0.288358
+    ],
+    "max": [
+      0.376463,
+      0.49654,
+      1.901333
+    ]
+  },
+  "weightCleanup": {
+    "syncedSeamVertices": 0,
+    "shoulderVertices": 134,
+    "handVertices": 2284,
+    "contaminatedFingerVertices": 1262,
+    "recoveredVertices": 0
+  },
+  "generation": {
+    "nodeCount": 7,
+    "meshCount": 1,
+    "glbBytes": 3260140
+  },
+  "validation": {
+    "status": "passed",
+    "checks": [
+      "sole identity root",
+      "static unskinned export",
+      "no animations",
+      "surface-derived contacts recorded separately from targets",
+      "approved bicycle unchanged",
+      "uniform scale only",
+      "GLB under 5 MB"
+    ]
+  },
+  "sha256": {
+    "glb": "01a52f9343bf605f7510f1d4be4d7ac9368942d11bcca52679f92d45201107d3",
+    "blend": "6657c7028387f8080d68d71a47986d50cc86c3a21cc1eae3daa2cc1328f6efe2",
+    "generator": "a7fb3cddab23a02b7590974516245ff075f54415559390feeff2e8988c010010"
+  }
+}

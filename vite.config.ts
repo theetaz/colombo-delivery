@@ -9,6 +9,7 @@ export default defineConfig({
         artPreview: "art-preview.html",
         bicyclePreview: "bicycle-preview.html",
         bicycleModelReview: "bicycle-model-review.html",
+        riderFitReview: "rider-fit-review.html",
         characterPreview: "character-preview.html",
         characterCustomizer: "character-customizer.html",
       },

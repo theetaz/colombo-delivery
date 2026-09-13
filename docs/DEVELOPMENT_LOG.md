@@ -632,4 +632,49 @@ roadmap.
 - Exported the first standalone commuter bicycle review model at 529,760 bytes
   and 13,844 triangles. Its 1.093 m wheelbase, 69.5° head angle, 0.045 m
   perpendicular rake, +X drivetrain, inclined steering pivot, and exact contact
-  nodes passed structural validation. Visual status remains awaiting review.
+  nodes passed structural validation.
+- Recorded the user's 2026-09-13 bicycle-only approval against frozen GLB
+  SHA-256
+  `ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`.
+  Regenerated candidates intentionally return to `awaiting-human-review`; the
+  approval does not transfer across hashes.
+- Started the separate stationary fit of the unchanged detailed teenage courier
+  against the approved saddle, grip, and pedal anchors. This stage measures
+  representative pelvis, palm, and sole mesh patches against their targets. A
+  uniform 1.08 character scale preserves the source proportions and gives the
+  1.7496 m rider natural reach; per-bone and nonuniform scaling are
+  excluded. Grip targets lie on the rubber-cylinder centrelines, so residuals
+  are fitting signals rather than surface-clearance measurements. Those numbers
+  do not establish natural appearance. Pedalling, steering poses, bag
+  fitting, and simulation binding remain blocked until the user approves the
+  stationary pose in `rider-fit-review.html`.
+- Added the static `/rider-fit-review.html` route with front, three-quarter,
+  drive-side, opposite-side, and rear views, rider visibility comparison, and
+  local copy/download notes. It loads the rider and frozen bicycle separately
+  at identity and does not run animation, inverse kinematics, or simulation.
+- Held the first stationary export before human handoff after independent
+  numeric review found competing terminal-hand IK and wrist orientation plus an
+  imprecise pelvis contact patch. Updated the focused loader check to recompute
+  residuals against the manifest's radius-adjusted grip-top targets and verify
+  those targets against the approved centreline anchors and 0.017 m grip radius.
+  The corrected frozen export separates the arm solve from explicit wrist
+  orientation and measures the posterior sitting patch.
+- Exported the frozen stationary review candidate as a 3,260,140-byte static,
+  unskinned GLB with one mesh, seven nodes, no animations, and identity root.
+  The approved bicycle and its seatpost remain unchanged. The GLB SHA-256 is
+  `01a52f9343bf605f7510f1d4be4d7ac9368942d11bcca52679f92d45201107d3`.
+- Recorded final patch-to-target residuals of 13.546 mm at the posterior
+  pelvis/saddle-centre reference, 21.074 and 30.304 mm at the radius-adjusted
+  left and right grip-top targets, and 1.192 and 4.687 mm at the pedal tops.
+  Individual limb-length ratios differ from their uniformly scaled rest values
+  by at most `8.81e-7`. The palm misses remain above 20 mm and therefore need
+  direct visual judgment; these numbers do not approve the fit.
+- Passed the final focused GLTFLoader test and strict TypeScript check. The test
+  verifies the identity static contract, absent skin and animation, required
+  surface markers, approved bicycle hash, finite bounds, recorded residuals,
+  and derivation of grip-top targets from the approved centreline anchors.
+- Passed all 58 tests and the production build against the frozen candidate.
+  Node textured-asset tests emit expected blob texture-decode warnings outside
+  a browser, and Vite retains its expected large shared-chunk advisory. The
+  stationary pose still awaits human review, especially at the 21–30 mm palm
+  residuals.
