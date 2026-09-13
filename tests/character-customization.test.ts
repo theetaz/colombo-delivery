@@ -100,27 +100,36 @@ test("customization GLB contains rendered catalog items and its embedded tint co
   }
 });
 
-test("trousers form continuous leg surfaces without open thigh or knee edges", () => {
+test("trouser shell is continuous and its detached tailoring details stay associated and recolorable", () => {
   const bytes = readFileSync("public/models/teen_courier_customization.glb");
   const jsonLength = bytes.readUInt32LE(12);
   const binHeader = 20 + jsonLength;
   const bin = bytes.subarray(binHeader + 8, binHeader + 8 + bytes.readUInt32LE(binHeader));
   const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString("utf8")) as {
-    nodes: { name?: string; mesh?: number; children?: number[] }[];
-    meshes: { primitives: { indices?: number; attributes: { POSITION?: number } }[] }[];
+    nodes: { name?: string; mesh?: number; children?: number[]; translation?: [number, number, number]; rotation?: number[]; scale?: number[]; matrix?: number[]; extras?: { garment?: string; garmentRole?: string } }[];
+    meshes: { primitives: { indices?: number; material?: number; attributes: { POSITION?: number } }[] }[];
+    materials: { name?: string }[];
     accessors: { bufferView: number; byteOffset?: number; componentType: number; count: number; type: string; min?: number[]; max?: number[] }[];
     bufferViews: { byteOffset?: number; byteLength: number; byteStride?: number }[];
   };
   const itemIndex = gltf.nodes.findIndex(({ name }) => name === "Item_bottom_trousers");
   assert.notEqual(itemIndex, -1, "trouser item root is required");
-  const meshIndices: number[] = [];
-  const visit = (index: number) => {
-    const node = gltf.nodes[index]!;
-    if (node.mesh !== undefined) meshIndices.push(node.mesh);
-    node.children?.forEach(visit);
-  };
-  visit(itemIndex);
-  assert.ok(meshIndices.length >= 1, "trousers need a rendered garment surface");
+  const item = gltf.nodes[itemIndex]!;
+  const shell = item.children?.map((index) => gltf.nodes[index]!).find(({ name }) => name === "Bottom_trousers");
+  assert.notEqual(shell?.mesh, undefined, "trousers need a named primary garment shell");
+  const details = item.children?.map((index) => gltf.nodes[index]!).filter(({ name }) => name !== "Bottom_trousers") ?? [];
+  assert.ok(details.length > 0, "trousers need authored tailoring details");
+  for (const detail of details) {
+    assert.deepEqual(detail.extras, { garment: "trousers", garmentRole: "detail" }, `${detail.name} must declare its trouser-detail role`);
+    assert.notEqual(detail.mesh, undefined, `${detail.name} must render geometry`);
+    const materialNames = gltf.meshes[detail.mesh!]!.primitives.map(({ material }) => gltf.materials[material!]!.name);
+    assert.deepEqual([...new Set(materialNames)], ["Custom_Bottom"], `${detail.name} must follow bottom recoloring`);
+  }
+  const meshIndices = [shell!.mesh!];
+  assert.equal(shell!.rotation, undefined, "primary trouser shell must not export a local rotation");
+  assert.equal(shell!.scale, undefined, "primary trouser shell must not export a local scale");
+  assert.equal(shell!.matrix, undefined, "primary trouser shell must use a directly inspectable translation transform");
+  const shellTranslation = shell!.translation ?? [0, 0, 0];
 
   let garmentMinY = Infinity;
   let garmentMaxY = -Infinity;
@@ -131,8 +140,8 @@ test("trousers form continuous leg surfaces without open thigh or knee edges", (
     assert.notEqual(primitive.indices, undefined, "trouser surface must use indexed triangles");
     const positionAccessor = gltf.accessors[primitive.attributes.POSITION!]!;
     const indexAccessor = gltf.accessors[primitive.indices!]!;
-    garmentMinY = Math.min(garmentMinY, positionAccessor.min?.[1] ?? Infinity);
-    garmentMaxY = Math.max(garmentMaxY, positionAccessor.max?.[1] ?? -Infinity);
+    garmentMinY = Math.min(garmentMinY, (positionAccessor.min?.[1] ?? Infinity) + shellTranslation[1]);
+    garmentMaxY = Math.max(garmentMaxY, (positionAccessor.max?.[1] ?? -Infinity) + shellTranslation[1]);
     const positionView = gltf.bufferViews[positionAccessor.bufferView]!;
     const positionOffset = (positionView.byteOffset ?? 0) + (positionAccessor.byteOffset ?? 0);
     const positionStride = positionView.byteStride ?? 12;
@@ -141,7 +150,7 @@ test("trousers form continuous leg surfaces without open thigh or knee edges", (
     const indexSize = indexAccessor.componentType === 5125 ? 4 : 2;
     const readIndex = (offset: number) => indexSize === 4 ? bin.readUInt32LE(offset) : bin.readUInt16LE(offset);
     const vertexKey = (vertex: number): string => {
-      const point = [0, 1, 2].map((axis) => bin.readFloatLE(positionOffset + vertex * positionStride + axis * 4)) as [number, number, number];
+      const point = [0, 1, 2].map((axis) => bin.readFloatLE(positionOffset + vertex * positionStride + axis * 4) + shellTranslation[axis]!) as [number, number, number];
       const key = point.map((value) => Math.round(value * 100_000)).join(":");
       positions.set(key, point);
       return key;
@@ -176,6 +185,7 @@ test("trousers form continuous leg surfaces without open thigh or knee edges", (
   }
   assert.ok(garmentMinY < 0.18, "trousers must reach the ankle area");
   assert.ok(garmentMaxY > 0.76, "trousers must reach the waist area");
+  assert.ok([...edges.values()].every(({ count }) => count <= 2), "trouser shell must not contain non-manifold edges");
   assert.equal(components, 1, "trousers must be one geometrically connected garment");
   assert.equal(middleBoundaryVertices, 0, "trousers must not open into tube lips or slits through thighs and knees");
 });
@@ -191,7 +201,15 @@ test("source skin below the shorts follows the shorts slot without inheriting bo
   };
   const shorts = gltf.nodes.find(({ name }) => name === "Item_bottom_shorts");
   const trousers = gltf.nodes.find(({ name }) => name === "Item_bottom_trousers");
+  const bodyBase = gltf.nodes.find(({ name }) => name === "Body_Base");
+  const shortsGarmentIndex = gltf.nodes.findIndex(({ name }) => name === "Bottom_shorts");
   const lowerIndex = gltf.nodes.findIndex(({ name }) => name === "Body_Lower_Shorts");
+  assert.notEqual(shortsGarmentIndex, -1, "shorts need their authored garment mesh");
+  assert.ok(shorts?.children?.includes(shortsGarmentIndex), "authored shorts must remain in the shorts item");
+  const shortsGarment = gltf.nodes[shortsGarmentIndex]!;
+  assert.notEqual(shortsGarment.mesh, undefined);
+  const shortsMaterialNames = gltf.meshes[shortsGarment.mesh!]!.primitives.map(({ material }) => gltf.materials[material!]!.name);
+  assert.deepEqual([...new Set(shortsMaterialNames)], ["Teen_Shorts"]);
   assert.notEqual(lowerIndex, -1, "shorts need their original lower-body skin occluder");
   assert.ok(shorts?.children?.includes(lowerIndex), "lower-body skin must hide with the shorts item");
   assert.ok(!trousers?.children?.includes(lowerIndex), "lower-body skin must stay hidden with trousers");
@@ -199,7 +217,10 @@ test("source skin below the shorts follows the shorts slot without inheriting bo
   assert.equal(lower.extras?.preserveSourceTint, true, "source skin must opt out of whole-bottom tint");
   assert.notEqual(lower.mesh, undefined);
   const materialNames = gltf.meshes[lower.mesh!]!.primitives.map(({ material }) => gltf.materials[material!]!.name);
-  assert.deepEqual([...new Set(materialNames)], ["Teen_Skin"]);
+  assert.deepEqual([...new Set(materialNames)], ["Teen_Skin", "Teen_Shoes"], "shorts-only lower body must retain its original ankle filler without inheriting bottom tint");
+  assert.notEqual(bodyBase?.mesh, undefined);
+  const bodyBaseMaterialNames = gltf.meshes[bodyBase!.mesh!]!.primitives.map(({ material }) => gltf.materials[material!]!.name);
+  assert.ok(!bodyBaseMaterialNames.includes("Teen_Shoes"), "always-visible body must exclude the shorts-only ankle filler");
   const upperY = Math.max(...gltf.meshes[lower.mesh!]!.primitives.map(({ attributes }) => gltf.accessors[attributes.POSITION!]!.max?.[1] ?? Infinity));
   assert.ok(upperY < 0.7, "shorts-only skin partition must stay below the arms and torso");
 });

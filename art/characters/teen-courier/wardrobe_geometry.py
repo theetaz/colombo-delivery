@@ -189,119 +189,188 @@ def _continuous_trousers(
     source_bottom: bpy.types.Object,
     parent: bpy.types.Object,
     material: bpy.types.Material,
-) -> bpy.types.Object:
-    """Author and union a fitted pelvis and two tapered full-length legs."""
-    vertices: list[tuple[float, float, float]] = []
-    faces: list[tuple[int, ...]] = []
-    segments = 32
-    # Cross-sections follow the measured approved body. Above the crotch the
-    # two volumes overlap and converge, forming a natural pelvis rather than
-    # two vertical pipes. The ankle ring meets all three shoe variants.
-    rings = [
-        (.115, .165, -.079, .060, .073),
-        (.200, .154, -.076, .060, .065),
-        (.250, .148, -.071, .064, .067),
-        (.300, .141, -.066, .068, .070),
-        (.350, .138, -.058, .071, .075),
-        (.400, .135, -.050, .075, .080),
-        (.450, .128, -.027, .083, .102),
-        (.500, .120, -.005, .090, .120),
-        (.620, .105, .000, .105, .120),
-        (.750, .080, .000, .110, .120),
-        (.800, .070, .000, .095, .108),
-    ]
-    for side in (-1, 1):
-        leg_start = len(vertices)
-        for z, cx_abs, cy, rx, ry in rings:
-            for index in range(segments):
-                angle = 2 * math.pi * index / segments
-                vertices.append((side * cx_abs + rx * math.cos(angle), cy + ry * math.sin(angle), z))
-        for ring_index in range(len(rings) - 1):
-            start = leg_start + ring_index * segments
-            nxt = start + segments
-            for index in range(segments):
-                following = (index + 1) % segments
-                faces.append((start + index, nxt + index, nxt + following, start + following))
-        bottom = len(vertices)
-        vertices.append((side * rings[0][1], rings[0][2], rings[0][0]))
-        for index in range(segments):
-            following = (index + 1) % segments
-            faces.append((bottom, leg_start + following, leg_start + index))
-        top_start = leg_start + (len(rings) - 1) * segments
-        top = len(vertices)
-        vertices.append((side * rings[-1][1], rings[-1][2], rings[-1][0]))
-        for index in range(segments):
-            following = (index + 1) % segments
-            faces.append((top, top_start + index, top_start + following))
+) -> list[bpy.types.Object]:
+    """Extend the approved connected shorts shell into fitted woven trousers."""
+    # Start from the approved shorts shell.  Its waist, hip, seat and crotch
+    # already fit the character; extending its two hem loops avoids inventing
+    # a second pelvis and guarantees shared garment topology.
+    trousers = _clone(source_bottom, "Bottom_trousers", parent)
+    bm = bmesh.new()
+    bm.from_mesh(trousers.data)
+    shorts_material = next(
+        (index for index, candidate in enumerate(source_bottom.data.materials) if candidate and candidate.name == "Teen_Shorts"),
+        None,
+    )
+    if shorts_material is None:
+        raise ValueError("Original bottom has no Teen_Shorts material")
+    shorts_faces = [face for face in bm.faces if face.material_index == shorts_material]
+    shorts_verts = {vertex for face in shorts_faces for vertex in face.verts}
+    components: list[set[bmesh.types.BMVert]] = []
+    unseen = set(shorts_verts)
+    while unseen:
+        pending = [next(iter(unseen))]
+        component: set[bmesh.types.BMVert] = set()
+        while pending:
+            vertex = pending.pop()
+            if vertex not in unseen:
+                continue
+            unseen.remove(vertex)
+            component.add(vertex)
+            for edge in vertex.link_edges:
+                for neighbor in edge.verts:
+                    if neighbor in unseen and any(face.material_index == shorts_material for face in edge.link_faces):
+                        pending.append(neighbor)
+        components.append(component)
+    shell = max(components, key=len)
+    remove_faces = [face for face in bm.faces if face.material_index != shorts_material or any(vertex not in shell for vertex in face.verts)]
+    bmesh.ops.delete(bm, geom=remove_faces, context="FACES")
+    loose = [vertex for vertex in bm.verts if not vertex.link_faces]
+    if loose:
+        bmesh.ops.delete(bm, geom=loose, context="VERTS")
 
-    # A closed hip/seat volume bridges the two leg forks before voxel union.
-    # It fills the waist and crotch cleanly while the overlapping upper-leg
-    # rings preserve two readable leg openings below it.
-    latitude_segments = 16
-    hip_start = len(vertices)
-    for latitude in range(latitude_segments + 1):
-        phi = -math.pi / 2 + math.pi * latitude / latitude_segments
-        for index in range(segments):
-            angle = 2 * math.pi * index / segments
-            vertices.append((
-                .205 * math.cos(phi) * math.cos(angle),
-                -.010 + .132 * math.cos(phi) * math.sin(angle),
-                .700 + .160 * math.sin(phi),
-            ))
-    for latitude in range(latitude_segments):
-        lower = hip_start + latitude * segments
-        upper = lower + segments
-        for index in range(segments):
-            following = (index + 1) % segments
-            faces.append((lower + index, upper + index, upper + following, lower + following))
+    boundary = [edge for edge in bm.edges if len(edge.link_faces) == 1]
+    hem_edges = [edge for edge in boundary if max(vertex.co.z for vertex in edge.verts) < .60]
+    edge_groups: list[list[bmesh.types.BMEdge]] = []
+    remaining = set(hem_edges)
+    while remaining:
+        group = []
+        pending = [next(iter(remaining))]
+        while pending:
+            edge = pending.pop()
+            if edge not in remaining:
+                continue
+            remaining.remove(edge)
+            group.append(edge)
+            vertices = set(edge.verts)
+            pending.extend(other for other in list(remaining) if vertices.intersection(other.verts))
+        edge_groups.append(group)
+    if len(edge_groups) != 2:
+        bm.free()
+        raise ValueError(f"Expected two closed trouser hem loops, found {len(edge_groups)}")
 
-    mesh = bpy.data.meshes.new("Bottom_trousers_Mesh")
-    mesh.from_pydata(vertices, [], faces)
-    mesh.materials.append(material)
-    mesh.update()
-    normals = bmesh.new()
-    normals.from_mesh(mesh)
-    bmesh.ops.recalc_face_normals(normals, faces=normals.faces)
-    normals.to_mesh(mesh)
-    normals.free()
-    mesh.update()
+    for group in edge_groups:
+        adjacency = {}
+        for edge in group:
+            a, b = edge.verts
+            adjacency.setdefault(a, []).append(b)
+            adjacency.setdefault(b, []).append(a)
+        if any(len(neighbors) != 2 for neighbors in adjacency.values()):
+            bm.free()
+            raise ValueError("Trouser hem boundary is not a closed degree-two loop")
+        start = next(iter(adjacency))
+        ordered = [start]
+        previous = None
+        current = start
+        while True:
+            choices = [vertex for vertex in adjacency[current] if vertex is not previous]
+            following = choices[0]
+            if following is start:
+                break
+            ordered.append(following)
+            previous, current = current, following
+        center_x = sum(vertex.co.x for vertex in ordered) / len(ordered)
+        center_y = sum(vertex.co.y for vertex in ordered) / len(ordered)
+        source = [vertex.co.copy() for vertex in ordered]
+        previous_ring = ordered
+        # Loose straight chinos: gentle thigh ease followed by a restrained
+        # taper, with tiny opposing knee/cuff shifts for lived-in asymmetry.
+        sections = [
+            (.470, 1.00, 1.00, 0, 0),
+            (.410, .94, .91, .002, .002),
+            (.340, .88, .84, -.002, .004),
+            (.270, .83, .79, .001, .002),
+            (.200, .79, 1.05, -.002, -.010),
+            (.105, .86, 1.20, .001, -.012),
+        ]
+        side = -1 if center_x < 0 else 1
+        for z, scale_x, scale_y, x_shift, y_shift in sections:
+            ring = []
+            for point in source:
+                ring.append(bm.verts.new((
+                    center_x + (point.x - center_x) * scale_x + side * x_shift,
+                    center_y + (point.y - center_y) * scale_y + y_shift,
+                    z,
+                )))
+            for index in range(len(ring)):
+                following = (index + 1) % len(ring)
+                bm.faces.new((previous_ring[index], previous_ring[following], ring[following], ring[index]))
+            previous_ring = ring
+        inner = []
+        for vertex in previous_ring:
+            inner.append(bm.verts.new((
+                center_x + (vertex.co.x - center_x) * .88,
+                center_y + (vertex.co.y - center_y) * .86,
+                vertex.co.z + .006,
+            )))
+        for index in range(len(inner)):
+            following = (index + 1) % len(inner)
+            bm.faces.new((previous_ring[index], previous_ring[following], inner[following], inner[index]))
 
-    trousers = bpy.data.objects.new("Bottom_trousers", mesh)
-    bpy.context.collection.objects.link(trousers)
-    trousers.parent = parent
-
-    # Voxel union removes the internal overlap and yields one watertight
-    # waist/seat/crotch/leg surface with no tube lips or knee boundaries.
-    bpy.context.view_layer.objects.active = trousers
-    trousers.select_set(True)
-    contour = trousers.modifiers.new("Tailored section interpolation", "SUBSURF")
-    contour.subdivision_type = "CATMULL_CLARK"
-    contour.levels = 2
-    contour.render_levels = 2
-    bpy.ops.object.modifier_apply(modifier=contour.name)
-    remesh = trousers.modifiers.new("Continuous trouser topology", "REMESH")
-    remesh.mode = "VOXEL"
-    remesh.voxel_size = .005
-    remesh.use_smooth_shade = True
-    bpy.ops.object.modifier_apply(modifier=remesh.name)
-    normals = bmesh.new()
-    normals.from_mesh(trousers.data)
-    bmesh.ops.recalc_face_normals(normals, faces=normals.faces)
-    normals.to_mesh(trousers.data)
-    normals.free()
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(trousers.data)
+    bm.free()
     trousers.data.update()
-    smooth = trousers.modifiers.new("Relax cloth surface", "SMOOTH")
-    smooth.factor = .28
-    smooth.iterations = 3
-    bpy.ops.object.modifier_apply(modifier=smooth.name)
+    _single_material(trousers, material)
     for polygon in trousers.data.polygons:
-        polygon.material_index = 0
         polygon.use_smooth = True
-
-    bevel = trousers.modifiers.new("Soft cloth edge", "BEVEL")
-    bevel.width = .0015
+    contour = trousers.modifiers.new("Tailored cloth contour", "SUBSURF")
+    contour.subdivision_type = "CATMULL_CLARK"
+    contour.levels = 1
+    contour.render_levels = 1
+    bevel = trousers.modifiers.new("Woven cloth edge softness", "BEVEL")
+    bevel.width = .0012
     bevel.segments = 2
-    return trousers
+    trousers["garment"] = "trousers"
+    trousers["garmentRole"] = "shell"
+    made = [trousers]
+
+    projector = _SurfaceProjector(trousers, parent)
+
+    def fitted_seam(name: str, path, depth=.00105, back=False):
+        points = []
+        for x, z in path:
+            if back:
+                hit, normal, _, _ = projector.tree.ray_cast(Vector((x, -.45, z)), Vector((0, 1, 0)), 1.0)
+                if hit is None or normal is None:
+                    continue
+                points.append(parent.matrix_world.inverted() @ (trousers.matrix_world @ (hit + normal.normalized() * .0015)))
+            else:
+                point, _ = projector.point(x, z, .0015)
+                points.append(point)
+        if len(points) < 2:
+            return
+        data = bpy.data.curves.new(name, "CURVE")
+        data.dimensions = "3D"
+        data.bevel_depth = depth
+        data.bevel_resolution = 2
+        spline = data.splines.new("BEZIER")
+        spline.bezier_points.add(len(points) - 1)
+        for handle, point in zip(spline.bezier_points, points):
+            handle.co = point
+            handle.handle_left_type = "AUTO"
+            handle.handle_right_type = "AUTO"
+        detail = bpy.data.objects.new(name, data)
+        bpy.context.collection.objects.link(detail)
+        detail.parent = parent
+        data.materials.append(material)
+        detail["garment"] = "trousers"
+        detail["garmentRole"] = "detail"
+        made.append(detail)
+
+    fitted_seam("Trousers_Waist_Stitch", [(-.150,.790),(-.075,.799),(0,.800),(.075,.799),(.150,.790)], .00125)
+    fitted_seam("Trousers_Fly", [(0,.766),(.001,.738),(-.003,.708),(-.008,.687)], .0010)
+    fitted_seam("Trousers_Pocket_L", [(-.158,.758),(-.140,.728),(-.116,.699)], .0011)
+    fitted_seam("Trousers_Pocket_R", [(.158,.758),(.140,.728),(.116,.699)], .0011)
+    fitted_seam("Trousers_Back_Pocket_L", [(-.140,.714),(-.098,.707),(-.058,.710)], .0010, True)
+    fitted_seam("Trousers_Back_Pocket_R", [(.140,.714),(.098,.707),(.058,.710)], .0010, True)
+    for side in (-1, 1):
+        s=float(side)
+        # Asymmetric short folds break the perfect tube highlight without
+        # changing the clean straight-leg silhouette.
+        fitted_seam(f"Trousers_Knee_Crease_{side}", [(s*.142,.405),(s*.119,.393),(s*.096,.386)], .00085)
+        fitted_seam(f"Trousers_Ankle_Crease_{side}", [(s*.128,.190),(s*.111,.176),(s*.097,.165)], .00075)
+    return made
+
 
 
 def create_bottom_variant(
@@ -322,4 +391,4 @@ def create_bottom_variant(
         return [_clone(source_bottom, f"Bottom_{variant_id}", parent)]
     if source_body is None:
         raise ValueError("Trousers require source_body for a continuous fitted shell")
-    return [_continuous_trousers(source_body, source_bottom, parent, materials["cloth"])]
+    return _continuous_trousers(source_body, source_bottom, parent, materials["cloth"])

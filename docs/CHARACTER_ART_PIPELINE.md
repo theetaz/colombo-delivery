@@ -180,9 +180,26 @@ browser. The bridge
 shortens the handoff; it does not replace garment construction, retopology,
 weight review, or browser validation.
 
-For the next trouser pass, refine cuff thickness, add restrained folds and seam
-detail, verify the fit against all three shoe options, and review the exported
-browser GLB from front, side, back, and mobile views.
+The continuous-shell trouser repair removed open thigh and knee gaps but its
+first accepted shape remained too ballooned through the pelvis, dropped the
+crotch too low, reduced the legs to nearly featureless pipes, and closed them
+with rounded cuffs. The completed woven-garment pass corrects the waist, seat,
+crotch, thigh, knee, calf, and hem as one readable silhouette.
+
+The accepted low-resolution construction starts with the actual connected
+authored-shorts component: 245 vertices and 440 faces preserving the waist,
+hips, seat, and crotch. Its two existing hem loops extend through six connected
+tapered rings with slight knee and cuff asymmetry, shared faces, and connected
+inset ankle-hem rims. Recalculated normals, one subdivision level, a 1.2 mm
+bevel, projected pockets and fly, a waistband stitch, and restrained knee and
+ankle creases complete the static preview shape. This reuse of approved
+geometry replaces the rejected ellipsoid-and-cylinder union, whose invented
+pelvis shape created hard hips and an inflated crotch.
+
+Browser review covers front, side, back, mobile, all three shoe choices, Shorts
+restoration, and trouser recoloring. The garment remains a static catalog item
+until later rig and bicycle-pose checks establish deformation quality, and its
+solid-color details do not provide a baked fabric texture.
 
 ### 4. Build a deformation rig
 

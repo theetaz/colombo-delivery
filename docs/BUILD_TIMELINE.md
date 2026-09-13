@@ -639,6 +639,52 @@ traffic, and economy progression remain later systems.
   detail, fit all three shoe options, and review the exported GLB in browser
   front, side, back, and mobile views.
 
+## 2026-09-13 — Natural woven-trouser refinement
+
+Status: implemented and verified.
+
+The continuous full-length trouser milestone above solved the open thigh and
+knee gaps, fragmented joins, and lower-leg visibility errors. Review of that
+closed shell then exposed a different set of fit problems: the pelvis was
+ballooned, the crotch hung too low, the legs read as featureless pipes, and the
+rounded closed cuffs did not meet the shoes like a believable woven garment.
+Those shortcomings remain part of the public record rather than being folded
+into the earlier structural repair.
+
+The [customizer before view](milestones/2026-09-13-trousers-natural-before.jpg)
+captures that starting point. Browser export also
+caught and rejected a candidate with missing hip faces and leg slits before the
+final topology was accepted.
+
+The approved low-resolution foundation isolates the connected component of the
+authored shorts, containing 245 vertices and 440 faces. This preserves its
+natural waist, hips, seat, and crotch, then extends the two real hem loops
+through six connected tapered rings to the ankle. Slight asymmetric knee and
+cuff shifts, connected inset hem rims, a waistband stitch, flat fly, pockets,
+and restrained knee and ankle creases give the woven garment a readable shape.
+The finished surface uses recalculated normals, one subdivision level, and a
+1.2 mm bevel.
+
+The final ankle correction moves the necessary low original geometry from the
+always-visible body into the Shorts-only lower-body group alongside its skin,
+with source tint preserved. Trousers therefore hide it while Shorts restore it;
+all three shoe-item meshes remain untouched. The frozen browser GLB is
+6,609,268 bytes with SHA-256
+`3298dc6476dfee603dc9b90e081a5789d00fc7bddcfba370349abcdfd55ee31f`.
+
+Production browser review at 1440 × 1000 and 390 × 844 passed front, side, back,
+and mobile views without hip holes, leg slits, exposed ankle wedges, console
+warnings, console errors, or an error overlay. Canvas, Runner, and High-top
+shoes remained intact with both Trousers and Shorts. Charcoal-to-Olive trouser
+recoloring preserved the upper body. All 41 tests and the production build pass.
+The static garment remains unskinned and has not been deformation-tested on the
+bicycle; its solid-color detail geometry has no baked fabric texture.
+
+Reviewed frames: [front](milestones/2026-09-13-trousers-natural-front.jpg),
+[side](milestones/2026-09-13-trousers-natural-side.jpg),
+[back](milestones/2026-09-13-trousers-natural-back.jpg), and
+[mobile Olive recolor](milestones/2026-09-13-trousers-natural-mobile.png).
+
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
 implementation commit. Artifact links will use that commit hash rather than a

@@ -559,3 +559,37 @@ roadmap.
   the [official guide](https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-blender),
   preserve a source copy, and check the mesh and materials before garment
   cleanup and browser-export review.
+- Began a separate natural woven-trouser refinement after the continuous-shell
+  repair passed its structural checks but visual review found a ballooned
+  pelvis, dropped crotch, featureless pipe-like legs, and rounded closed cuffs.
+  The completed replacement reshapes the waist, seat, crotch, thighs, calves,
+  and hems.
+- Saved the customizer's starting fit as
+  `docs/milestones/2026-09-13-trousers-natural-before.jpg`. Rejected the first
+  reshaped GLB after browser export exposed missing hip faces and leg slits;
+  the final construction based on approved geometry corrected its topology and
+  normals.
+- Approved a low-resolution foundation built from the actual connected
+  authored-shorts component: 245 vertices and 440 faces preserving the natural
+  waist, hips, seat, and crotch. Extended its two real hem loops into tapered
+  legs with shared faces and connected inset ankle-hem rims. This reuse of
+  approved geometry replaces a rejected ellipsoid-and-cylinder union that
+  produced hard hips and an inflated crotch.
+- Extended each source hem through six connected tapered rings with subtle knee
+  and cuff asymmetry, inset ankle rims, recalculated normals, one subdivision
+  level, and a 1.2 mm bevel. Added projected pocket and fly details, waistband
+  stitching, and restrained knee and ankle creases.
+- Moved necessary low original geometry out of the always-visible body and into
+  the Shorts-only lower-body group beside its source-tint-preserving skin. This
+  removed ankle wedges under Trousers while preserving Shorts; all Canvas,
+  Runner, and High-top shoe meshes remain unchanged.
+- Froze the 6,609,268-byte browser GLB at SHA-256
+  `3298dc6476dfee603dc9b90e081a5789d00fc7bddcfba370349abcdfd55ee31f`.
+  Production browser review at 1440 × 1000 and 390 × 844 passed front, side,
+  back, mobile Olive recoloring, all three shoes with Trousers and Shorts, and
+  upper-body color isolation without console warnings, console errors, or an
+  error overlay. All 41 tests and the production build pass.
+- Saved the final front, side, back, and mobile review frames as
+  `docs/milestones/2026-09-13-trousers-natural-*`. The garment remains
+  unskinned and not bicycle-deformation validated; its solid-color details have
+  no baked fabric texture.

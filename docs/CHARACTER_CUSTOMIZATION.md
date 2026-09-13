@@ -238,3 +238,49 @@ uses measured eye depth and source-surface projection. The
 [`accessory side proof`](../public/models/teen_courier_customization_accessories_side.png)
 records that alignment; the anchors remain references rather than a dynamic
 attachment system.
+
+### Natural woven-trouser refinement
+
+[![Natural woven-trouser refinement in the production portal](milestones/2026-09-13-trousers-natural-front.jpg)](milestones/2026-09-13-trousers-natural-front.jpg)
+
+The continuous-trouser work above remains the structural checkpoint that
+removed open mid-leg boundaries and restored correct lower-skin visibility.
+Its joined shell was not the final fit: subsequent front, side, and back review
+found excess pelvis volume, a dropped crotch, largely cylindrical legs without
+useful shaping, and rounded sealed cuffs that met the shoes unnaturally.
+The [customizer before view](milestones/2026-09-13-trousers-natural-before.jpg)
+preserves that review state. A first reshaped export was rejected because the
+browser revealed missing hip faces and leg slits, returning the garment for
+topology and normal correction before silhouette review.
+
+A new pass makes the option read as tailored woven trousers, with a controlled
+waist and seat, a higher and clearer crotch, shaped thighs and calves, and inset
+hems that break cleanly over each shoe.
+
+The approved low-resolution foundation isolates the actual connected component
+of the authored shorts: 245 vertices and 440 faces retaining their waist, hips,
+seat, and crotch. The two real hem loops extend through six connected tapered
+rings using shared faces, ending in connected inset ankle-hem rims. Slight knee
+and cuff asymmetry, projected pocket and fly details, a waistband stitch, and
+restrained knee and ankle creases clarify the woven form. This avoids rebuilding
+the pelvis from ellipsoids and cylinders, an earlier approach rejected for hard
+hips and an inflated crotch.
+
+The ankle fix assigns necessary low original geometry to the Shorts-only lower
+body alongside its skin and preserves its source tint. Trousers hide that
+geometry and Shorts restore it. Canvas, Runner, and High-top shoe meshes are
+unchanged. The frozen 6,609,268-byte GLB has SHA-256
+`3298dc6476dfee603dc9b90e081a5789d00fc7bddcfba370349abcdfd55ee31f`.
+
+Production review at 1440 × 1000 and 390 × 844 passed front, side, back, and
+mobile framing without hip holes, leg slits, exposed ankle wedges, console
+warnings, console errors, or an error overlay. All three shoes remained intact
+with both Trousers and Shorts, and Charcoal-to-Olive recoloring preserved the
+upper body. All 41 tests and the production build pass. Reviewed frames:
+[front](milestones/2026-09-13-trousers-natural-front.jpg),
+[side](milestones/2026-09-13-trousers-natural-side.jpg),
+[back](milestones/2026-09-13-trousers-natural-back.jpg), and
+[mobile Olive](milestones/2026-09-13-trousers-natural-mobile.png).
+
+The garment remains unskinned and has not been deformation-tested on the
+bicycle. Its solid-color detail geometry has no baked fabric texture.
