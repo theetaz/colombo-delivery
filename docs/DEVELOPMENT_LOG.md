@@ -454,7 +454,7 @@ roadmap.
   hashes in a local provenance record.
 - Created a first 1.62 m grounded Blender cleanup and static review export with
   separate skin, hair, shirt, shorts, and shoes material regions.
-- Embedded a 2048 px RGB customization mask for skin, shirt, and shoes. Browser
+- Embedded a 4096 px RGB customization mask for skin, shirt, and shoes. Browser
   controls change hue and saturation while preserving authored texture value;
   direct base-colour multiplication remains unsupported.
 - Added `character-preview.html` for Full body, Head, Side, Back, orbit, and
@@ -499,3 +499,39 @@ roadmap.
   and shared JavaScript emits 644.17 KB (163.17 KB gzip).
 - Saved reviewed reconstruction, face, colour, mobile, and bounded rig-pose
   frames under `docs/milestones/2026-09-13-teen-courier-*.jpg`.
+- Began a manifest-driven character customization portal with one canonical
+  registry for item IDs, labels, categories, and color palettes.
+- Added strict saved-look validation for mandatory clothing, independent
+  optional accessories, exact hexadecimal colors, catalog changes, record
+  versions, malformed JSON, and unavailable browser storage.
+- Corrected the reconstruction pipeline record to the final 4096 px RGB mask.
+  The portal catalog remains a static preview-stage candidate; its rig and game
+  readiness are not implied by browser availability.
+- Preserved the authored atlas during recoloring by applying its RGB mask across
+  every mapped source material and restricting whole hair/bottom tint to the
+  selected item hierarchy. Corrected a semantic split that initially recolored
+  iris geometry with hair; the repeated hair-only pixel check left both irises,
+  mouth, cheeks, and shirt unchanged while changing the fringe.
+- Added real-asset checks for 18 non-None item roots with rendered triangles,
+  all manifest thumbnails, the embedded tint-mask reference, five color
+  regions, catalog labels, unknown IDs, versioning, and storage failure.
+- Froze the accepted starter catalog at 6,453,452 bytes, 84 nodes, 54 meshes,
+  71 primitives, 12 materials, 16 textures, four embedded images, 83,658
+  exported vertex instances, 60,303 triangles, and 21 RGBA thumbnails.
+- Replaced guessed hair and leg splits with measured eye/leg regions, crown
+  adjacency, and source-surface shirt fitting. This corrected iris recoloring,
+  incomplete fringe tint, and exposed calves; transparent thumbnails helped
+  expose the errors. Local trouser joins, the older shirt hem, and dark-shoe
+  UV-mask seams remain explicit art work.
+- Enabled modifier application in the final GLB export after browser review
+  revealed that the earlier export omitted the smoother Blender subdivision and
+  bevel result.
+- Refit glasses and the necklace to measured eye depth and the source shirt
+  surface after side review exposed guessed-depth floating.
+- Exercised all 21 runtime selections, exact mandatory/optional visibility,
+  invalid-option preservation, two-avatar material isolation, and independent
+  disposal. These checks validate the static portal contract, not skinning or
+  bicycle deformation.
+- Passed 1440 × 1000 and 390 × 844 production review, saved-look reload,
+  independent accessory removal, draft-only Reset, corrupt and blocked storage,
+  missing-manifest retry, existing-game loading, all 39 tests, and the build.

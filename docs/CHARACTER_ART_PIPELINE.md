@@ -73,7 +73,7 @@ at `public/models/teen_courier.glb`. Its `TeenCourier` root is grounded, uses +Y
 up and -Z forward, and measures 0.71 × 1.62 × 0.32 m in the browser. Its single
 mesh has five named primitives: `Teen_Skin`, `Teen_Hair`, `Teen_Shirt`,
 `Teen_Shorts`, and `Teen_Shoes`. The original base-colour, normal, and ORM maps
-remain embedded. A 2048 × 2048 RGB customization mask assigns skin to red,
+remain embedded. A 4096 × 4096 RGB customization mask assigns skin to red,
 shirt to green, and shoes to blue on UV set 0. The browser changes hue and
 saturation within the selected channel and applies value relative to the
 authored map;

@@ -1,0 +1,303 @@
+{
+  "asset": "teen_courier_customization.glb",
+  "root": "TeenCourierCustomization",
+  "customization": {
+    "previewReady": true,
+    "rigReady": false,
+    "gameReady": false,
+    "maskTextureIndex": 15,
+    "slots": {
+      "face": {
+        "default": "classic",
+        "items": [
+          {
+            "id": "classic",
+            "label": "Classic",
+            "thumbnail": "teen_courier_customization_previews/face-classic.png"
+          },
+          {
+            "id": "soft",
+            "label": "Soft",
+            "thumbnail": "teen_courier_customization_previews/face-soft.png"
+          },
+          {
+            "id": "angular",
+            "label": "Angular",
+            "thumbnail": "teen_courier_customization_previews/face-angular.png"
+          }
+        ]
+      },
+      "hair": {
+        "default": "wavy",
+        "items": [
+          {
+            "id": "wavy",
+            "label": "Wavy",
+            "thumbnail": "teen_courier_customization_previews/hair-wavy.png"
+          },
+          {
+            "id": "crop",
+            "label": "Crop",
+            "thumbnail": "teen_courier_customization_previews/hair-crop.png"
+          },
+          {
+            "id": "quiff",
+            "label": "Quiff",
+            "thumbnail": "teen_courier_customization_previews/hair-quiff.png"
+          }
+        ]
+      },
+      "top": {
+        "default": "crewtee",
+        "items": [
+          {
+            "id": "crewtee",
+            "label": "Crew tee",
+            "thumbnail": "teen_courier_customization_previews/top-crewtee.png"
+          },
+          {
+            "id": "polo",
+            "label": "Polo",
+            "thumbnail": "teen_courier_customization_previews/top-polo.png"
+          },
+          {
+            "id": "buttonshirt",
+            "label": "Button shirt",
+            "thumbnail": "teen_courier_customization_previews/top-buttonshirt.png"
+          }
+        ]
+      },
+      "bottom": {
+        "default": "shorts",
+        "items": [
+          {
+            "id": "shorts",
+            "label": "Shorts",
+            "thumbnail": "teen_courier_customization_previews/bottom-shorts.png"
+          },
+          {
+            "id": "trousers",
+            "label": "Trousers",
+            "thumbnail": "teen_courier_customization_previews/bottom-trousers.png"
+          }
+        ]
+      },
+      "shoes": {
+        "default": "canvas",
+        "items": [
+          {
+            "id": "canvas",
+            "label": "Canvas",
+            "thumbnail": "teen_courier_customization_previews/shoes-canvas.png"
+          },
+          {
+            "id": "runner",
+            "label": "Runner",
+            "thumbnail": "teen_courier_customization_previews/shoes-runner.png"
+          },
+          {
+            "id": "hightop",
+            "label": "High-top",
+            "thumbnail": "teen_courier_customization_previews/shoes-hightop.png"
+          }
+        ]
+      },
+      "sunglasses": {
+        "default": "none",
+        "items": [
+          {
+            "id": "none",
+            "label": "None",
+            "thumbnail": "teen_courier_customization_previews/sunglasses-none.png"
+          },
+          {
+            "id": "round",
+            "label": "Round",
+            "thumbnail": "teen_courier_customization_previews/sunglasses-round.png"
+          },
+          {
+            "id": "squareframe",
+            "label": "Square frame",
+            "thumbnail": "teen_courier_customization_previews/sunglasses-squareframe.png"
+          }
+        ]
+      },
+      "necklace": {
+        "default": "none",
+        "items": [
+          {
+            "id": "none",
+            "label": "None",
+            "thumbnail": "teen_courier_customization_previews/necklace-none.png"
+          },
+          {
+            "id": "chain",
+            "label": "Chain",
+            "thumbnail": "teen_courier_customization_previews/necklace-chain.png"
+          }
+        ]
+      },
+      "watch": {
+        "default": "none",
+        "items": [
+          {
+            "id": "none",
+            "label": "None",
+            "thumbnail": "teen_courier_customization_previews/watch-none.png"
+          },
+          {
+            "id": "sport",
+            "label": "Sport",
+            "thumbnail": "teen_courier_customization_previews/watch-sport.png"
+          }
+        ]
+      }
+    },
+    "colorRegions": [
+      "skin",
+      "hair",
+      "top",
+      "bottom",
+      "shoes"
+    ]
+  },
+  "items": {
+    "face": [
+      {
+        "id": "classic",
+        "label": "Classic",
+        "thumbnail": "teen_courier_customization_previews/face-classic.png"
+      },
+      {
+        "id": "soft",
+        "label": "Soft",
+        "thumbnail": "teen_courier_customization_previews/face-soft.png"
+      },
+      {
+        "id": "angular",
+        "label": "Angular",
+        "thumbnail": "teen_courier_customization_previews/face-angular.png"
+      }
+    ],
+    "hair": [
+      {
+        "id": "wavy",
+        "label": "Wavy",
+        "thumbnail": "teen_courier_customization_previews/hair-wavy.png"
+      },
+      {
+        "id": "crop",
+        "label": "Crop",
+        "thumbnail": "teen_courier_customization_previews/hair-crop.png"
+      },
+      {
+        "id": "quiff",
+        "label": "Quiff",
+        "thumbnail": "teen_courier_customization_previews/hair-quiff.png"
+      }
+    ],
+    "top": [
+      {
+        "id": "crewtee",
+        "label": "Crew tee",
+        "thumbnail": "teen_courier_customization_previews/top-crewtee.png"
+      },
+      {
+        "id": "polo",
+        "label": "Polo",
+        "thumbnail": "teen_courier_customization_previews/top-polo.png"
+      },
+      {
+        "id": "buttonshirt",
+        "label": "Button shirt",
+        "thumbnail": "teen_courier_customization_previews/top-buttonshirt.png"
+      }
+    ],
+    "bottom": [
+      {
+        "id": "shorts",
+        "label": "Shorts",
+        "thumbnail": "teen_courier_customization_previews/bottom-shorts.png"
+      },
+      {
+        "id": "trousers",
+        "label": "Trousers",
+        "thumbnail": "teen_courier_customization_previews/bottom-trousers.png"
+      }
+    ],
+    "shoes": [
+      {
+        "id": "canvas",
+        "label": "Canvas",
+        "thumbnail": "teen_courier_customization_previews/shoes-canvas.png"
+      },
+      {
+        "id": "runner",
+        "label": "Runner",
+        "thumbnail": "teen_courier_customization_previews/shoes-runner.png"
+      },
+      {
+        "id": "hightop",
+        "label": "High-top",
+        "thumbnail": "teen_courier_customization_previews/shoes-hightop.png"
+      }
+    ],
+    "sunglasses": [
+      {
+        "id": "none",
+        "label": "None",
+        "thumbnail": "teen_courier_customization_previews/sunglasses-none.png"
+      },
+      {
+        "id": "round",
+        "label": "Round",
+        "thumbnail": "teen_courier_customization_previews/sunglasses-round.png"
+      },
+      {
+        "id": "squareframe",
+        "label": "Square frame",
+        "thumbnail": "teen_courier_customization_previews/sunglasses-squareframe.png"
+      }
+    ],
+    "necklace": [
+      {
+        "id": "none",
+        "label": "None",
+        "thumbnail": "teen_courier_customization_previews/necklace-none.png"
+      },
+      {
+        "id": "chain",
+        "label": "Chain",
+        "thumbnail": "teen_courier_customization_previews/necklace-chain.png"
+      }
+    ],
+    "watch": [
+      {
+        "id": "none",
+        "label": "None",
+        "thumbnail": "teen_courier_customization_previews/watch-none.png"
+      },
+      {
+        "id": "sport",
+        "label": "Sport",
+        "thumbnail": "teen_courier_customization_previews/watch-sport.png"
+      }
+    ]
+  },
+  "contract": {
+    "units": "meters",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "heightMeters": 1.62
+  },
+  "anchors": [
+    "Anchor_Eyes",
+    "Anchor_Neck",
+    "Anchor_Wrist_L"
+  ],
+  "provenance": "Derived from the approved original project teen reconstruction; variant deformation and added garment/accessory geometry authored in Blender.",
+  "limitations": [
+    "Static preview geometry. Items are not skinned or validated for bicycle deformation.",
+    "Original PBR surfaces are preserved; new solid-color detail geometry has no baked texture maps."
+  ]
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Build and save a courier look for Colombo Delivery." />
+    <title>Colombo · Courier Studio</title>
+    <link rel="stylesheet" href="/src/customizer/portal.css" />
+  </head>
+  <body>
+    <main class="studio-shell">
+      <header class="topbar">
+        <a class="wordmark" href="./"><span>Colombo</span><strong>Courier Studio</strong></a>
+        <div class="save-tools">
+          <span id="save-state" role="status">Loading your look…</span>
+          <button id="reset-look" class="quiet" type="button">Reset</button>
+          <button id="save-look" class="primary" type="button" disabled>Save look</button>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="Interactive courier preview">
+        <div id="avatar-canvas"></div>
+        <div class="stage-note"><strong>Drag to orbit</strong><span>Scroll or pinch to zoom</span></div>
+        <div class="stage-views" role="group" aria-label="Camera view">
+          <button type="button" data-view="front" aria-pressed="true">Front</button>
+          <button type="button" data-view="side" aria-pressed="false">Side</button>
+          <button type="button" data-view="back" aria-pressed="false">Back</button>
+          <button type="button" data-view="face" aria-pressed="false">Face</button>
+        </div>
+        <div id="load-card" class="load-card" role="status">
+          <span class="load-rule"></span><strong>Preparing your courier</strong><span>Loading the wardrobe…</span>
+        </div>
+      </section>
+
+      <aside class="wardrobe" aria-label="Courier wardrobe">
+        <div class="wardrobe-heading"><p>Build your look</p><h1>Choose what feels like you.</h1></div>
+        <nav id="category-tabs" class="category-tabs" aria-label="Customization categories" hidden></nav>
+        <div id="catalog-scroll" class="catalog-scroll" hidden>
+          <div id="option-grid" class="option-grid"></div>
+          <section id="color-section" class="color-section" hidden>
+            <div><p>Color</p><span id="color-label">Authored</span></div>
+            <div id="swatches" class="swatches" role="group" aria-label="Color choices"></div>
+            <label class="custom-color">Custom <input id="custom-color" type="color" value="#ffffff" /></label>
+          </section>
+        </div>
+        <div id="error-card" class="error-card" hidden>
+          <strong>We couldn’t load the wardrobe.</strong><span>Your saved choices are safe.</span>
+          <button id="retry-load" type="button">Try again</button>
+        </div>
+      </aside>
+    </main>
+    <script type="module" src="/src/customizer/portal.ts"></script>
+  </body>
+</html>

@@ -19,6 +19,21 @@ rider feedback.
 - Browser storage for prototype progress; a backend only when accounts, shared
   leaderboards, or trusted result validation are required.
 
+## Character catalog and appearance state
+
+The customization preview separates authored equipment availability from the
+saved selection. `src/customizer/catalog.ts` owns known slot IDs, generic labels,
+categories, and palette metadata. A GLB companion manifest narrows those known
+IDs to equipment that is actually preview-ready. Required clothing slots must
+remain populated; sunglasses, necklace, and watch each retain an independent
+`none` item.
+
+`src/customizer/appearance.ts` validates the complete versioned look before it
+crosses the storage boundary. The loader rejects partial, unknown-version, or
+unavailable selections and produces defaults from the active manifest. This is
+local prototype state. It does not establish an account, trusted inventory,
+multiplayer replication, rig compatibility, or game readiness.
+
 Reference documentation: [Three.js game structure](https://threejs.org/manual/en/game.html)
 and [Rapier JavaScript setup](https://rapier.rs/docs/user_guides/javascript/getting_started_js/).
 

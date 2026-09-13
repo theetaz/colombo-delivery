@@ -64,6 +64,13 @@ current `character-preview.html` inspection route shows the static reconstructed
 cleanup and its separated skin, shirt, and shoe material regions; it is not yet
 the game rider.
 
+The [Courier Studio customization portal](docs/CHARACTER_CUSTOMIZATION.md)
+provides a manifest-driven starter wardrobe with 21 preview choices,
+independent optional accessories, five color regions, and an explicit locally
+saved look. Its static catalog is a browser
+review candidate rather than an unlocked game inventory; multiplayer and
+game-rider integration remain later work.
+
 ## Polished courier bicycle
 
 [![Completed first delivery with the polished courier bicycle and rider](docs/milestones/2026-09-13-courier-bicycle.jpg)](docs/VEHICLES.md)

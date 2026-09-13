@@ -445,7 +445,7 @@ material, 24,191 vertices, 17,681 triangles, and embedded 4096 px base-colour,
 ORM, and normal maps, with no rig, animation, or morph targets. A first Blender
 cleanup produces a grounded 1.62 m, +Y-up, -Z-forward review GLB with separate
 skin, hair, shirt, shorts, and shoes material regions. It preserves the authored
-4K PBR maps and adds an embedded 2048 px RGB mask for value-preserving skin,
+4K PBR maps and adds an embedded 4096 px RGB mask for value-preserving skin,
 shirt, and shoe hue/saturation controls.
 
 A subsequent biped-rig result contains one skin and 60 nodes but no animation
@@ -557,6 +557,42 @@ Separately, manually verify candidate entrances, safe and legal stopping
 positions, bicycle access, and the first complete route before turning practice
 markers into destinations or straight-line guidance into navigation. Routing,
 traffic, and economy progression remain later systems.
+
+## 2026-09-13 — Static Courier Studio customization portal
+
+- Defined a typed starter catalog covering faces, hair, tops, bottoms, shoes,
+  sunglasses, necklace, and watch, with independent `none` accessory choices.
+- Added a richer manifest contract so the portal only exposes known equipment
+  that the loaded asset declares preview-ready. Rig-ready and game-ready remain
+  separate manifest states.
+- Added five named color palettes plus validated custom `#RRGGBB` colors and a
+  versioned local saved-look record with safe malformed and unavailable-storage
+  fallbacks.
+- Delivered 21 choices: 18 visible face, hair, clothing, shoe, and accessory
+  items plus independent `none` choices for sunglasses, necklace, and watch.
+- Accepted the starter static GLB at 6,453,452 bytes, 84 nodes, 54 meshes, 71
+  primitives, 12 materials, 16 textures, four embedded images, 83,658 exported
+  vertex instances, and 60,303 triangles, with 21 transparent thumbnails.
+- Reused the approved RGB atlas mask on all source materials and limited whole
+  hair/bottom recoloring to the corresponding item ancestry. A hair-only browser
+  comparison recorded no change in either iris, the mouth, cheeks, or shirt
+  while confirming a visible fringe change.
+- Exercised all 21 runtime choices, exact slot visibility, invalid-option
+  preservation, per-avatar material isolation, and independent disposal.
+- Kept the catalog as a review candidate. Multiplayer, inventory progression,
+  game-rider replacement, and final wardrobe approval remain outside this
+  milestone.
+- Recorded remaining localized trouser joins, the older shirt-hem surface, and
+  dark-shoe UV-mask seams as art refinement rather than presenting the starter
+  portal as a production rig or finished wardrobe.
+- Passed the production portal at 1440 × 1000 and 390 × 844 without overflow,
+  JavaScript exceptions, or scoped console errors. Save/reload, independent
+  accessory removal, draft-only Reset, corrupt JSON, blocked storage, missing
+  manifest retry, the existing game load, all 39 tests, and the build passed.
+- Saved reviewed [desktop](milestones/2026-09-13-courier-studio-desktop.jpg),
+  [Face](milestones/2026-09-13-courier-studio-face.jpg),
+  [outfit](milestones/2026-09-13-courier-studio-outfit.jpg), and
+  [mobile](milestones/2026-09-13-courier-studio-mobile.jpg) frames.
 
 Future completed milestones will be appended here in delivery order with their
 date, outcome, preview or artifacts, validation, remaining limitations, and
