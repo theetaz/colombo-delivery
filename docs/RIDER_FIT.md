@@ -4,23 +4,102 @@
 
 The standalone commuter bicycle remains human-approved and frozen at SHA-256
 `ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125`.
-Revision `teen-courier-seated-v2/2` is ready for human review. An interim
-revision fixed the torso tear but was held because cumulative trunk rotations
-left the head looking down. The final candidate distributes the spine pose and
-measures back, neck, and gaze directions independently. No pedalling, steering
-animation, backpack fitting, or simulation binding is included.
+Human review rejected `teen-courier-seated-v2/2`. Work has reset to a clean rig
+and a smaller upper-body checkpoint: compare the original standing character,
+the new neutral rig, and one forward-lean pose in
+`/character-rig-review.html`. This checkpoint covers the head, torso, and
+shoulders only. Hands and legs remain neutral; the character is not mounted on
+the bicycle, fully fitted, or animated.
 
 Human review rejected the previous rider because its torso stretched into a
 large triangle and the waist separated. Identity transforms, contact markers,
 knee positions, and unchanged bone lengths had passed, but those checks did not
 measure strain in the visible skin surface.
 
+Later edge and cross-section checks caught large tears, yet human review still
+rejected the overall body construction. Numeric checks can guard known failure
+modes without proving that the anatomy or silhouette looks right. The new rig
+preserves the original face, hair, and UVs while rebuilding weights from named
+anatomical regions rather than reusing the provider weights or repeating broad
+coordinate-box corrections. Human acceptance of the limited upper-body
+checkpoint remains pending before hand, leg, bicycle-fit, or animation work
+resumes.
+
+The approved cleanup mesh has 8,951 vertices, 17,681 polygons, and 14
+disconnected components. It has no exact-position duplicate vertices; visible
+shoulder and sleeve boundaries include real gaps of roughly 7–8 mm. The old
+coincident-vertex seam pass therefore changed zero vertices and could not fix
+those boundaries. The reset records explicit seam-boundary correspondences and
+uses smooth anatomical weighting while keeping persisted rest vertex IDs for a
+rigid face and hair lock. It does not claim retopology, a manifold mesh, or an
+automatically accepted result.
+
+The neutral checkpoint GLB retains the clean skin so the rig hierarchy and rest
+weights can be inspected. The forward-lean checkpoint is a separate static,
+unskinned bake of evaluated geometry, ensuring the browser displays the authored
+lean without implying an animation contract. The editable Blender source keeps
+the 21-bone rig. Both browser variants expose stable `TeenCourier_CleanRig`,
+`TeenCourier_Body`, and `HeadFocus` nodes for consistent switching and camera
+framing.
+
+Two export checks changed the checkpoint before handoff. The first lean export
+retained a skin with no animation and therefore reopened in its rest pose; the
+review variant now bakes evaluated lean geometry explicitly. The first
+persisted head label also omitted parts of the chin and mouth. It was rebuilt
+from the complete face, jaw, mouth, and `Face_Fairing` source membership before
+the rigid head lock was regenerated. These findings reinforce that a valid rig
+hierarchy or export command alone does not prove the browser is showing the
+intended deformation.
+
+The first baked lean also copied evaluated normals rather than preserving the
+original rigid face shading. That allowed the neighboring neck deformation to
+rotate some chin and upper-neck normals by about 10°. The final export maps the
+original neutral split normals through the rigid head transform and validates
+the actual GLB by triangle UV corners. Its maximum protected face-and-hair
+normal error is `0.000348416`, while human appearance review remains required.
+
+### Clean-rig checkpoint reproduction
+
+Rebuild the provisional upper-body checkpoint from the repository root:
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender -b art/characters/teen-courier/teen_courier_cleanup.blend --python art/characters/teen-courier/clean-rig/build_clean_rig.py
+node --import tsx --test tests/character-clean-rig.test.ts
+npm run build
+```
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `art/characters/teen-courier/clean-rig/teen_courier_clean_rig.blend` | `d55b1b6d98ae9ffb0bc9cfcc485cee5ec8719ef549efb54c883b6c2c9138b29f` |
+| `public/models/teen_courier_clean_rig_neutral.glb` | `64f17c6995455898f4c167cd9db2c0aebfa10cabfe700f9fb927476eff827b70` |
+| `public/models/teen_courier_clean_rig_upper_body.glb` | `d9a6f860b472b199bcf7233f0cf1b2c3012d752d88b82ea2f4825e672919b1c0` |
+| `public/models/teen_courier_clean_rig.manifest.json` | `b0e552278d1278305702ab420e5ea3f88ba167705c307216ca6f4802ff07e61a` |
+
+The source retains 21 named bones and the neutral export retains one skin. The
+forward-lean browser artifact is static and unskinned, with 0.140679 m of chest
+forward displacement and 0.144570 m at `HeadFocus` in Blender +Y. Weight sums
+are normalized, 265 boundary seam pairs have zero weight mismatch, and their
+posed gap increase is below `1.5e-8` m. These are engineering checks for the
+limited checkpoint, not an appearance approval.
+
+Final verification passed all 60 tests and the production build. The local
+review page serves the same neutral and lean GLB bytes recorded above. Visual
+review is handed to the user; no screenshot or computer-vision check was used.
+
 The artistic target is
 [`seated-pose-guide-v2.png`](../public/references/rider-fit/seated-pose-guide-v2.png).
 It describes the intended calm posture and silhouette. It is not a generated
 mesh, dimensional authority, or acceptance result.
 
-## Shared coordinate and contact contract
+The seated-v2 measurements below are retained as a rejected engineering record.
+They do not describe the active clean-rig checkpoint or confer approval.
+
+## Historical rejected seated-v2 record
+
+The following coordinate contract, repair notes, measurements, and reproduction
+steps describe the rejected seated-v2 artifact only.
+
+### Coordinate and contact contract
 
 The bicycle and rider share one identity coordinate frame: metres, +Y up, -Z
 forward, and +X on the rider's right. The bicycle is at steering angle zero and
@@ -41,7 +120,7 @@ targets sit 0.017 m above the centreline anchors. Pedal anchors include the
 platform's 0.010 m top-face offset. These targets define reproducible fitting
 measurements; they do not prove visible contact or clearance by themselves.
 
-## Repair
+### Repair attempts
 
 The failure came from a bone-rotation helper that included the translated
 armature matrix when converting a world rotation. That introduced an unwanted
@@ -71,7 +150,7 @@ The browser artifact is baked as a static, unskinned GLB under identity root
 `TeenCourierSeatedV2`. The editable Blender source retains the rig, approved
 bicycle, and packed pose guide.
 
-## Measured fit
+### Measured fit
 
 Contact points come from the evaluated posed mesh rather than desired IK points.
 The repaired residuals are:
@@ -103,11 +182,11 @@ human review. Zero palm point residual records alignment of the measured point
 and target; it does not certify full physical clearance between the hand and
 grip meshes.
 
-## Review and reproduction
+### Reproduction
 
-Open `/rider-fit-review.html` for a brief human inspection of the repaired rider
-on the unchanged bicycle. Animation stays blocked until that review passes. No
-screenshot comparison or computer-vision score is an acceptance gate.
+The `/rider-fit-review.html` route retains the rejected rider on the unchanged
+bicycle for historical comparison. It is not the active approval route. No
+screenshot comparison or computer-vision score was used as an acceptance gate.
 
 Rebuild from the repository root:
 
@@ -128,5 +207,5 @@ The GLB is 3,260,968 bytes. Its Blender +Z-up bounds run from
 `[-0.372615, -0.489609, 0.288090]` to
 `[0.358099, 0.488315, 1.785441]` metres. The focused structural/contact test and
 all 58 tests pass, as does the production build. These are the frozen
-engineering measurements for the new handoff. Final appearance remains pending
-human approval.
+engineering measurements for the rejected handoff. Human review did not accept
+its appearance.

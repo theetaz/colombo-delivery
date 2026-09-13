@@ -850,3 +850,26 @@ and maximum 2.0711; whole-mesh maximum strain is 9.354 at a small ankle seam.
 Zero palm residual does not certify full hand-to-grip clearance. The approved
 bicycle remains unchanged, no animation is present, and human approval is
 pending.
+
+### Clean-rig upper-body reset
+
+Human review rejected the full-body stationary result even after its known
+surface checks passed. Character work returned to a newly constructed rig that
+preserves the original face, hair, and UVs without reusing the provider's old
+weights. The 8,951-vertex cleanup mesh contains 14 disconnected components, no
+exact-position duplicates, and real shoulder/sleeve gaps around 7–8 mm; the old
+seam-sync pass changed zero vertices. The replacement records explicit seam
+boundary correspondences, uses smooth weights, and locks face/hair rest IDs.
+The new `/character-rig-review.html` checkpoint compares the original standing
+model, a new neutral rig, and one forward lean. Review is limited to the head,
+torso, and shoulders; hands and legs remain neutral, and bicycle mounting,
+full-body fitting, and animation remain blocked pending human acceptance. No
+retopology, manifold, or automatic quality claim is made.
+
+The export audit found that a skinned lean with no animation reopened at rest,
+so the browser lean became an explicit evaluated static bake. It also replaced
+a stale head label that omitted chin and mouth membership. A later shading
+check found that copying evaluated normals changed some rigid chin and upper
+neck normals by about 10°; the final bake transforms original neutral split
+normals with the rigid head and checks actual exported triangle corners. Human
+appearance approval remains pending.

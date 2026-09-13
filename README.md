@@ -1,6 +1,6 @@
 # Colombo Delivery
 
-> **Current art status:** The standalone commuter bicycle is human-approved at its frozen GLB hash. A separate [stationary rider fit](docs/RIDER_FIT.md) is the active review stage. Pedalling, steering poses, and simulation binding wait for that fit approval; historical results remain below.
+> **Current art status:** The standalone commuter bicycle remains human-approved. The full-body stationary rider was rejected, and replacement work has reset to a clean rig. The active checkpoint reviews only the original standing character, a new neutral rig, and an upper-body forward lean in [`character-rig-review.html`](character-rig-review.html). Hands, legs, bicycle fitting, and animation wait for human approval; see the [rider fit record](docs/RIDER_FIT.md).
 
 
 Colombo Delivery is a planned browser-based 3D driving game built around real

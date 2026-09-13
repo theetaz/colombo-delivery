@@ -10,6 +10,7 @@ export default defineConfig({
         bicyclePreview: "bicycle-preview.html",
         bicycleModelReview: "bicycle-model-review.html",
         riderFitReview: "rider-fit-review.html",
+        characterRigReview: "character-rig-review.html",
         characterPreview: "character-preview.html",
         characterCustomizer: "character-customizer.html",
       },

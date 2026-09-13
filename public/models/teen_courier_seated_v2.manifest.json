@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "revision": "teen-courier-seated-v2/2",
-  "reviewStatus": "awaiting-human-review",
+  "reviewStatus": "rejected-by-human-review",
   "asset": "teen_courier_seated_v2.glb",
   "source": "art/characters/teen-courier/teen_courier_rig_review.blend",
   "poseReference": "public/references/rider-fit/seated-pose-guide-v2.png",

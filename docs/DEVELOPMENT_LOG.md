@@ -702,3 +702,26 @@ roadmap.
   Maximum exported edge is 0.203747 m; sole residuals are 2.240 and 5.033 mm.
   The approved bicycle is unchanged, animation remains blocked, and the static
   pose awaits human review.
+- Rejected the second stationary full-body rider after human review. Its
+  geometry checks guarded known tears but did not establish acceptable anatomy
+  or silhouette. Started a new rig preserving the original face, hair, and UVs.
+  The source audit found 8,951 vertices, 17,681 polygons, 14 disconnected
+  components, no exact-position duplicates, and real shoulder/sleeve gaps near
+  7–8 mm, explaining why the earlier seam-sync changed zero vertices. The new
+  method records seam-boundary correspondences, applies smooth weights, and
+  locks persisted face/hair rest IDs without claiming retopology or manifold
+  output. Added `/character-rig-review.html` for a limited comparison of
+  original standing, new neutral, and upper-body forward-lean states. Hands and
+  legs are deliberately neutral; there is no bicycle fit or animation in this
+  provisional checkpoint.
+- Corrected three export-specific clean-rig defects before review: the first
+  skinned/no-animation lean reopened at rest, the persisted head label omitted
+  chin and mouth membership, and evaluated baked normals changed rigid facial
+  shading. The final lean is an evaluated static bake; the rebuilt head label
+  includes the complete face, jaw, mouth, and `Face_Fairing` membership; and
+  original neutral split normals are transformed with the rigid head. Actual
+  exported protected face-and-hair corner normals differ by at most
+  `0.000348416`. This remains numerical evidence rather than visual approval.
+- Passed all 60 tests and the production build for the clean-rig checkpoint.
+  Confirmed that the local review page serves the frozen neutral and lean GLB
+  bytes, and handed the upper-body comparison over for human visual feedback.

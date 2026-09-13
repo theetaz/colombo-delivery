@@ -109,7 +109,7 @@ Promise.allSettled([
     });
     scene.add(pair);
     frame("three-quarter");
-    status.textContent = "Awaiting your fit feedback · static pose ready";
+    status.textContent = "Rejected fit loaded for comparison · use the clean-rig checkpoint";
   })
   .catch((error) => {
     if (!disposed)
