@@ -1,0 +1,28 @@
+{
+  "formatVersion": 1,
+  "status": "working concept references; not runtime 3D assets",
+  "provenance": "Original fictional project concept artwork made with built-in image generation. No imported reference character or external texture source.",
+  "assets": [
+    {
+      "file": "teen-courier-v1.png",
+      "purpose": "three-quarter standing character direction",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "f445e5b8ff034929b783c8eea9c3cf2f2d35a72bb8580207301404c3c89243d1"
+    },
+    {
+      "file": "teen-courier-turnaround-v1.png",
+      "purpose": "front, side, and back proportion reference",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "41440975d63454afb9c27d4fe3c7dd2e25d53d1f3c236b7f7657eaed5dd8431f"
+    },
+    {
+      "file": "teen-courier-expressions-v1.png",
+      "purpose": "neutral, smile, focus, surprise, concern, and blink expression reference",
+      "width": 1224,
+      "height": 1285,
+      "sha256": "1d7952578153a245166f170881d52ca45d5da063e110c6bb7d59ad9f9aa69992"
+    }
+  ]
+}
