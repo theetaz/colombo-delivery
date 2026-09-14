@@ -22,10 +22,10 @@
     ]
   },
   "Mount": {
-    "lowestVertexMetres": -0.0011667665094137192,
+    "lowestVertexMetres": -0.0010099238716065884,
     "maxEdgeStretch": [
-      2.6261003781188856,
-      24,
+      2.879969460182133,
+      57,
       [
         2922,
         2924
@@ -33,10 +33,10 @@
     ]
   },
   "Dismount": {
-    "lowestVertexMetres": -0.0011667665094137192,
+    "lowestVertexMetres": -0.0007299290737137198,
     "maxEdgeStretch": [
-      2.6261003781188856,
-      60,
+      2.5540885393756256,
+      45,
       [
         2922,
         2924
@@ -54,5 +54,22 @@
       ]
     ]
   },
-  "assetSha256": "685ee6f9c3dab8b9ac1af8d6e8d8bc113aaf011129dc50933816601190950daa"
+  "assetSha256": "b055b159a48304e94ca9afe5f5389e58a785572a64203eb89f4c89437524cffa",
+  "saddleClearance": {
+    "Mount": {
+      "firstFrame": 21,
+      "lastFrame": 66,
+      "stepFrames": 0.5,
+      "samples": 91,
+      "intersections": []
+    },
+    "Dismount": {
+      "firstFrame": 21,
+      "lastFrame": 66,
+      "stepFrames": 0.5,
+      "samples": 91,
+      "intersections": []
+    }
+  },
+  "bicycleSha256": "f04dff2d91caabf51e91352d6ddd3f44fa274d6e19dc14a4db02efd7b7d397b5"
 }

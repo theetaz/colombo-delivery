@@ -35,8 +35,8 @@ It is an isolated movement prototype, not the Colombo road game. It does not
 yet simulate a freely balancing two-wheel rigid body, tire slip, suspension,
 ragdolls, uneven ground, stairs, traffic or collisions with moving vehicles.
 Turning on foot currently rotates the character rather than playing dedicated
-turn-in-place clips. Mounting is authored for this bicycle and can need further
-anatomical polish. Dismounting reverses that movement. The parked bicycle is
+turn-in-place clips. Mounting and dismounting are authored separately for this bicycle and can
+need further anatomical polish. The parked bicycle is
 stabilized by the controller; it does not fall over.
 
 ## Assets and rebuilding
@@ -54,7 +54,7 @@ From the parent asset directory:
 /Applications/Blender.app/Contents/MacOS/Blender --factory-startup -b --python-exit-code 1 --python cyclist/scripts/validate_movement.py
 ```
 
-Then run `npm test` and `npm run build` in `../viewer`. Tests exercise the
+Then run `npm test` and `npm run build` in `viewer/` from that parent directory. Tests exercise the
 walk/ride state sequence, parking, proximity, speed and clearance restrictions,
 pause, click-to-walk and boundaries. The exported clips are loaded by Three.js
 to verify their durations, loop seams and matching transition endpoints.
@@ -98,3 +98,47 @@ more than 55 mm of heel/ankle rise before swing. Four Blender side frames were
 reviewed. Sampled maximum edge stretch fell from 1.83 to 1.47; minimum sampled
 vertex height is about -0.8 mm. These are deformation/contact checks, not a
 claim that the gait has been validated against motion capture.
+
+
+### Mounting, dismounting and saddle clearance
+
+Both transitions now establish hand and ground contacts before the leg crosses
+the bicycle. The rider steps forward of the saddle, keeps the support shoe
+planted, flexes the raised leg through a higher arc, and then transfers onto
+the pedals and seat. Getting off uses its own timing: move off the saddle,
+plant the left shoe, bring the right leg across, land, then release the hands.
+The palm closes as it reaches the grip and opens after support is established.
+Forearm pronation shares the palm rotation rather than leaving all rotation
+at the wrist. Shape-preserving curves remove the stop at every intermediate
+pose while repeated foot/hand targets retain their contact holds.
+
+The Blender validator now tests the deformed rider against the actual fitted
+saddle at 91 samples per clip, covering frames 21–66 in half-frame increments.
+There are no surface intersections in those sampled swing intervals. Intended
+seated contact at the endpoints is excluded. The report includes hashes of both
+GLBs so these results cannot silently refer to different assets. This is a
+saddle regression, not a whole-bicycle/self-collision guarantee.
+
+The browser-asset test checks the planted left shoe and both hand targets at
+five points during each swing (8 mm tolerance), as well as matching clip
+endpoints and independent dismount timing. The controller still supplies balance;
+there is no dynamic balance or contact-force solver in this prototype. The pose
+and contact improvements do not imply motion-capture accuracy.
+
+### Validation and review
+
+- `npm test`: 19 tests pass, including the exported-asset and steering regressions.
+- `npm run build`: production build passes for all three viewer entry pages.
+- Blender: deformation/ground samples pass; 182 sampled swing poses have no
+  rider/saddle surface intersections. Side renders were reviewed for walking,
+  mounting and dismounting.
+- Browser: the movement page was checked at 1280×800 and 390×844. The desktop
+  sequence mounted, steered both ways, pedaled, braked, dismounted and walked
+  away. The get-off action was disabled while moving. Pause/resume and the
+  phone mounting control were checked. No warning/error console entries were
+  reported in the clean review tab.
+
+Remaining limits are assisted balance on a flat courtyard, a rigid shoe rather
+than separately articulated toes, simplified hands, and no full-body collision
+or biomechanical force solver. Further visual tuning should use this page and
+its slow-motion/pause controls before road integration.

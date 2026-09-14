@@ -46,6 +46,11 @@ test('bicycle fit preserves the approved source and articulated parts',async()=>
 test('movement clips preserve the approved rig and connect without root jumps',async()=>{
   const report=JSON.parse(await readFile(new URL('movement-check.json',directory),'utf8'));
   assert.equal(report.assetSha256,createHash('sha256').update(await readFile(new URL('courier-movement.glb',directory))).digest('hex'));
+  assert.equal(report.bicycleSha256,createHash('sha256').update(await readFile(new URL('bicycle-fitted.glb',directory))).digest('hex'));
+  for(const name of ['Mount','Dismount']){
+    assert.equal(report.saddleClearance[name].samples,91);
+    assert.deepEqual(report.saddleClearance[name].intersections,[],`${name} has a saddle intersection`);
+  }
   const model=await loadGeometry('courier-movement.glb'),mixer=new AnimationMixer(model.scene);
   const clips=Object.fromEntries(model.animations.map(c=>[c.name.split('|').at(-1),c]));
   for(const [name,duration] of Object.entries({Idle:2,Walk:1,Mount:3.5,Dismount:3.5,Pedal:2}))assert.ok(Math.abs(clips[name]?.duration-duration)<.00001,name);
@@ -71,4 +76,21 @@ test('walking plants the stance shoe and rolls from heel contact to toe push-off
   assert.ok(strike.rotation.angleTo(flat.rotation)>.15,'heel strike has no shoe roll');
   assert.ok(push.rotation.angleTo(late.rotation)>.30,'trailing foot has no toe push-off');
   assert.ok(push.position.y>late.position.y+.055,'heel does not rise during push-off');
+});
+
+test('mount and dismount keep a ground support and hand contacts through the leg swing',async()=>{
+  const model=await loadGeometry('courier-movement.glb'),mixer=new AnimationMixer(model.scene);
+  function sample(name,time){
+    mixer.stopAllAction();const action=mixer.clipAction(model.animations.find(c=>c.name.endsWith(name))).play();
+    action.paused=true;action.time=time;mixer.update(0);model.scene.updateMatrixWorld(true);
+    return name=>model.scene.getObjectByName(name).getWorldPosition(new Vector3());
+  }
+  for(const name of ['Mount','Dismount'])for(const progress of [.36,.43,.50,.57,.64]){
+    const point=sample(name,progress*3.5);
+    assert.ok(point('Foot_L').distanceTo(new Vector3(-.38,.11648,-.05))<.008,`${name} loses the planted left shoe at ${progress}`);
+    for(const [side,sign] of [['L',-1],['R',1]])
+      assert.ok(point('Hand_'+side).distanceTo(new Vector3(sign*.287,1.037,-.260))<.008,`${name} loses ${side} hand contact at ${progress}`);
+  }
+  const mountMiddle=sample('Mount',2.45)('Foot_R'),dismountReverse=sample('Dismount',1.05)('Foot_R');
+  assert.ok(mountMiddle.distanceTo(dismountReverse)>.015,'dismount must have separately authored timing');
 });

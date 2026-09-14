@@ -54,7 +54,7 @@ export function createMovementYard(host,onReady,onState,onError){
       actorLean.rotation.z=state.lean;actorLean.position.y=.349*(1-Math.cos(state.lean));
     }
     contacts.restore();mixer.update(0);contacts.capture();
-    const gripAmount=onFoot?0:state.mode==='mount'?smooth(state.elapsed/MOUNT_SECONDS/.65):state.mode==='dismount'?smooth((1-state.elapsed/MOUNT_SECONDS)/.65):1;
+    const gripAmount=onFoot?0:state.mode==='mount'?smooth((state.elapsed/MOUNT_SECONDS-.05)/.24):state.mode==='dismount'?1-smooth((state.elapsed/MOUNT_SECONDS-.76)/.24):1;
     rider.traverse(o=>{if(o.morphTargetDictionary?.HandlebarGrip!==undefined)o.morphTargetInfluences[o.morphTargetDictionary.HandlebarGrip]=gripAmount;});
     bikeRoot.position.set(state.bike.x,0,state.bike.z);bikeRoot.rotation.y=state.bike.yaw;bikeLean.rotation.z=state.lean;bikeLean.position.y=.349*(1-Math.cos(state.lean));
     for(const name of ['FrontWheel','RearWheel'])bike.getObjectByName(name).quaternion.copy(restRotations.get(name)).multiply(new THREE.Quaternion().setFromAxisAngle(X,state.wheelAngle));
