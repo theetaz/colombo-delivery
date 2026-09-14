@@ -133,3 +133,27 @@ test('retimed legs keep their velocity through consecutive step and cycle joins'
     }
   }
 });
+
+test('the pelvis makes one rise and fall per step without extra rebounds',async()=>{
+  const s=await sampler('Walk');let previous,sign=0,turns=0;
+  for(let i=0;i<=1000;i++){
+    s.pose(i/1000);const height=s.point('Pelvis').y;
+    if(previous!==undefined&&Math.abs(height-previous)>2e-6){
+      const next=Math.sign(height-previous);if(sign&&next!==sign)turns++;sign=next;
+    }
+    previous=height;
+  }
+  assert.equal(turns,4,'the pelvis rebounds between the two normal weight transfers');
+});
+
+test('each knee folds once from push-off into swing instead of pumping twice',async()=>{
+  const s=await sampler('Walk');
+  for(const side of ['L','R']){
+    let previous=-Infinity;
+    for(let i=350;i<=700;i++){
+      s.pose((i/1000+(side==='R'?.5:0))%1);
+      const knee=s.flexion('Thigh_'+side,'Shin_'+side,'Foot_'+side);
+      assert.ok(knee>=previous-.04,'knee straightens again before completing its swing');previous=knee;
+    }
+  }
+});

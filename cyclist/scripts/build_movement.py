@@ -1,7 +1,6 @@
 """Add locomotion clips to a copy of the approved cyclist without rebinding it."""
 from pathlib import Path
 import bpy, math, json, sys, tempfile
-import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from glb_animation import replace_animation
 from mathutils import Vector, Matrix, Quaternion
@@ -140,30 +139,47 @@ def relaxed_arms(t,amount=1):
 def ease5(t):
     t=max(0,min(1,t));return t*t*t*(10+t*(-15+6*t))
 
-def stance_shoe(p,sign):
-    # Limit roll speed so the ankle continues backwards until it leaves ground.
+def quintic(a,b,va,vb,aa,ab,u,duration):
+    # Join position, velocity and acceleration; do not ease to rest at contact.
+    return (a*(1-ease5(u))+b*ease5(u)
+            +va*duration*(u-6*u**3+8*u**4-3*u**5)
+            +vb*duration*(-4*u**3+7*u**4-3*u**5)
+            +aa*duration**2*.5*(u*u-3*u**3+3*u**4-u**5)
+            +ab*duration**2*.5*(u**3-2*u**4+u**5))
+
+def shoe_roll(p):
     if p<.10:
-        pitch=math.radians(12)*(1-ease5(p/.10));pivot=-.08
+        u=p/.10;angle=math.radians(12);contact_rate=-3
+        pitch=quintic(angle,0,contact_rate,0,0,0,u,.10)
+        rate=(-angle*30*u*u*(1-u)**2+contact_rate*.10*(1-18*u*u+32*u**3-15*u**4))/.10
+        acceleration=(-angle*60*u*(1-u)*(1-2*u)+contact_rate*.10*(-36*u+96*u*u-60*u**3))/.10**2
     else:
-        pitch=-math.radians(42)*ease5((p-.34)/.21);pivot=.222
-    contact=Vector((0,pivot,-.11648))
-    correction=contact-Matrix.Rotation(pitch,3,'X')@contact
-    return Vector((sign*.105,(.22-p)*STRIDE,.11648))+correction,pitch
+        u=max(0,min(1,(p-.34)/.34));angle=-math.radians(55)
+        pitch=angle*ease5(u);rate=angle*30*u*u*(1-u)**2/.34
+        acceleration=angle*60*u*(1-u)*(1-2*u)/.34**2
+    return pitch,rate,acceleration
+
+def stance_shoe(p,sign):
+    pitch,rate,acceleration=shoe_roll(p);pivot=-.08 if p<.10 else .222
+    s=math.sin(pitch);c=math.cos(pitch);height=.11648
+    ankle=Vector((sign*.105,(.22-p)*STRIDE+pivot*(1-c)-height*s,height*c-pivot*s))
+    dy=pivot*s-height*c;dz=-height*s-pivot*c
+    velocity=Vector((0,-STRIDE+dy*rate,dz*rate))
+    accel=Vector((0,(pivot*c+height*s)*rate*rate+dy*acceleration,
+                  (-height*c+pivot*s)*rate*rate+dz*acceleration))
+    return ankle,pitch,velocity,accel,rate,acceleration
 
 def shoe(p,sign):
-    if p<.55:return stance_shoe(p,sign)
-    u=(p-.55)/.45;e=ease5(u)
-    start,start_pitch=stance_shoe(.55,sign);end,end_pitch=stance_shoe(0,sign)
-    # Interpolate the airborne ankle itself, rather than moving its pivot while
-    # rolling it. Match stance velocity AND acceleration at both contacts.
-    ankle=start.lerp(end,e)
-    ankle.y+=(-STRIDE*.45)*(u-e)
-    ankle.z+=.065*64*u**3*(1-u)**3
-    # Keep clearance while the knee folds, then let the heel descend only as
-    # the leg draws back under the body. This avoids a locked-knee snap.
-    ankle.z+=.032*ease5((p-.55)/.08)*(1-ease5((p-.65)/.10))
-    ankle.z+=.014*ease5((p-.82)/.09)*(1-ease5((p-.94)/.06))
-    return ankle,start_pitch+(end_pitch-start_pitch)*e
+    if p<.55:return stance_shoe(p,sign)[:2]
+    u=(p-.55)/.45
+    start,sp,sv,sa,sr,saa=stance_shoe(.55,sign)
+    end,ep,ev,ea,er,eaa=stance_shoe(0,sign)
+    ankle=quintic(start,end,sv,ev,sa,ea,u,.45)
+    # Broad clearance arcs replace short corrective bumps that made the knee
+    # bend, straighten, then bend again within one swing.
+    ankle.z+=.04*64*u**3*(1-u)**3
+    ankle.z+=.04*u**8*(1-u)**3/((8/11)**8*(3/11)**3)
+    return ankle,quintic(sp,ep,sr,er,saa,eaa,u,.45)
 
 def support_height(p,knee_degrees):
     ankle,_=shoe(p,-1)
@@ -172,35 +188,13 @@ def support_height(p,knee_degrees):
     reach2=a*a+b*b+2*a*b*math.cos(math.radians(knee_degrees))
     return ankle.z+math.sqrt(reach2-(ankle.x-hip.x)**2-(ankle.y-hip.y)**2)-hip.z
 
-# Periodic cubic pelvis curve: shared velocities and accelerations across the
-# weight transfers, without the old sequence of easing to a halt at each pose.
-HIP_PHASES=[0,.10,.22,.32,.43]
-HIP_VALUES=[support_height(0,12),support_height(.10,20),support_height(.22,12),support_height(.32,10),.907]
-def periodic_spline(xs,ys,period):
-    count=len(xs);h=[(xs[(i+1)%count]-xs[i])%period for i in range(count)]
-    matrix=np.zeros((count,count));rhs=np.zeros(count)
-    for i in range(count):
-        prev=(i-1)%count;following=(i+1)%count
-        matrix[i,prev]=h[prev];matrix[i,i]=2*(h[prev]+h[i]);matrix[i,following]=h[i]
-        rhs[i]=6*((ys[following]-ys[i])/h[i]-(ys[i]-ys[prev])/h[prev])
-    curvature=np.linalg.solve(matrix,rhs)
-    def sample(t):
-        t%=period;i=max(i for i,x in enumerate(xs) if x<=t);j=(i+1)%count
-        b=(t-xs[i])/h[i];a=1-b
-        return a*ys[i]+b*ys[j]+((a*a*a-a)*curvature[i]+(b*b*b-b)*curvature[j])*h[i]*h[i]/6
-    return sample
-base_hip_height=periodic_spline(HIP_PHASES,HIP_VALUES,.5)
-# At contact the pelvis continues upward while the heel draws backwards. Match
-# those velocities so the almost-straight knee does not snap into flexion.
-contact_slope=.46
-slope_delta=contact_slope-(base_hip_height(.0001)-base_hip_height(-.0001))/.0002
+# Two low-frequency harmonics retain the upright weight transfer without the
+# extra 4 mm rebound in the previous pelvis spline. Heights are metres for this
+# rig, with clearance reserved for a softly extended supporting knee.
 def hip_height(t):
-    p=t%.5;correction=0
-    if p<.10:
-        u=p/.10;correction=.10*slope_delta*(u-6*u**3+8*u**4-3*u**5)
-    elif p>.43:
-        u=(p-.43)/.07;correction=.07*slope_delta*(-4*u**3+7*u**4-3*u**5)
-    return base_hip_height(p)+correction
+    phase=4*math.pi*(t-.005)
+    return (.92677-.017025*math.cos(phase)+.006143*math.sin(phase)
+            +.005371*math.cos(2*phase)+.004539*math.sin(2*phase))
 
 def stand(t):
     reset();pelvis_at(Vector((0,0,support_height(.22,7))))

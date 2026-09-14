@@ -284,3 +284,35 @@ through consecutive step/loop joins. Browser checks at 1280×720 covered playbac
 from 100%, phase selection, comparison, slow motion, and courtyard walking.
 No warning/error console entries were reported. This is a timing adjustment
 for visual review, not a new gait or physics simulation.
+
+## Removing motion within the step that looked like jitter — 15 September 2026
+
+The timing adjustment did not remove all visible jitter. A local browser sample
+of 90 animation frames had a median interval of 16.7 ms and a maximum of 17.6 ms,
+with none above 25 ms. This did not reproduce a frame stall. Examining the asset
+revealed an extra pelvis rebound of roughly 4 mm and a knee that bent, partly
+straightened, then bent again during the same push-off/swing.
+
+The Blender Walk now uses two smooth, low-frequency pelvis harmonics, producing
+one rise and fall per step. The foot keeps rotating through toe-off and heel
+contact instead of coming to angular rest at both boundaries. Its airborne
+path matches position, velocity and acceleration to the contact paths, and two
+broad clearance arcs replace the short corrective bumps. Together these let
+the knee fold once into swing and extend into landing. The source and browser
+GLB were rebuilt; the shared runtime timing and the other six clips remain
+unchanged.
+
+- All 28 tests pass, including new regressions for pelvis rebounds and repeated
+  knee folding, plus the existing posture, foot-contact and loop-continuity
+  checks. The production build passes.
+- Blender validation passes. The support knee at 30% is about 7.3 degrees,
+  swing peaks near 67.2 degrees, and the torso stays within 1.3 degrees of
+  vertical. The asset report includes the new GLB hash.
+- Sampling every exported skinned vertex at 193 poses found a lowest point of
+  about -0.46 mm, within the 3 mm ground tolerance. A direct track comparison
+  confirms that Idle, Stand, Mount, Dismount, Pedal and WalkBefore are unchanged.
+- The walking study was reloaded and inspected at 1280×720 using the push-off
+  pose and quarter-speed playback. No browser warning/error entries appeared.
+
+The browser measurement describes this local run, not all devices. Visual
+review of `/walking.html` remains the acceptance check for the procedural gait.
