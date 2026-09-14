@@ -20,4 +20,3 @@ export async function loadGeometry(file){
   const bytes=Buffer.concat([header,json,tail]);
   return new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.length),'');
 }
-

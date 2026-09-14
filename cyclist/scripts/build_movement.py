@@ -69,14 +69,28 @@ def idle(t=0,offset=Vector((0,0,0))):
     arms(offset)
 def walk(t):
     reset();phase=t*math.tau
-    pelvis_at(Vector((.008*math.sin(phase),0,.890-.014*math.cos(2*phase))),math.radians(3))
-    rotate('Chest',math.radians(2)*math.sin(phase),'Z')
+    # Lower during double support, rise over the planted leg, then transfer
+    # weight. One clip cycle travels one metre in the runtime.
+    pelvis_at(Vector((-.014*math.sin(phase),0,.903-.015*math.cos(2*phase))),math.radians(4))
+    rotate('Pelvis',math.radians(1.5)*math.sin(phase),'Z')
+    rotate('Chest',-math.radians(3)*math.sin(phase),'Z')
     for side,sign in [('L',-1),('R',1)]:
         p=(t+(0 if side=='L' else .5))%1
-        if p<.6:y=.3-p;z=0
+        if p<.6:
+            y=.3-p;z=0
+            if p<.10:
+                pitch=math.radians(14)*(1-smooth(p/.10));pivot=-.08
+            else:
+                pitch=-math.radians(28)*smooth((p-.38)/.22);pivot=.21
         else:
-            u=(p-.6)/.4;y=-.3+.6*smooth(u);z=.105*math.sin(math.pi*u)
-        foot(side,Vector((sign*.105,y-.0952,z+.11648)),Vector((sign*.16,.45,.58)))
+            u=(p-.6)/.4;y=-.3+.6*smooth(u);z=.075*math.sin(math.pi*u)**2
+            pitch=math.radians(-28+42*smooth(u));pivot=.21-.29*smooth(u)
+        # Rock the shoe around its heel/toe contact, not around a floating ankle.
+        contact=Vector((0,pivot,-.11648))
+        correction=contact-Matrix.Rotation(pitch,3,'X')@contact
+        ankle=Vector((sign*.105,y-.0952,z+.11648))+correction
+        foot(side,ankle,Vector((sign*.16,.45,.58)))
+        rotate('Foot_'+side,pitch)
     arms(Vector((0,0,0)),phase)
 def mount(t):
     if t<=0:idle(0,Vector((-.6,-.2,0)));return

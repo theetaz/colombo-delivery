@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {AnimationMixer,Vector3} from 'three';
+import {AnimationMixer,Vector3,Quaternion} from 'three';
 import {loadGeometry} from './test-assets.js';
 
 const directory=new URL('../../public/cyclist/',import.meta.url);
@@ -58,4 +58,17 @@ test('movement clips preserve the approved rig and connect without root jumps',a
   match(sample('Mount',0),sample('Idle',0),new Vector3(-.6,0,.2));
   match(sample('Dismount',3.5),sample('Mount',0));
   match(sample('Idle',0),sample('Idle',2));match(sample('Walk',0),sample('Walk',1));
+});
+
+test('walking plants the stance shoe and rolls from heel contact to toe push-off',async()=>{
+  const model=await loadGeometry('courier-movement.glb'),mixer=new AnimationMixer(model.scene);
+  const action=mixer.clipAction(model.animations.find(c=>c.name.endsWith('Walk'))).play();action.paused=true;
+  const foot=model.scene.getObjectByName('Foot_L');
+  function pose(time){action.time=time;mixer.update(0);model.scene.updateMatrixWorld(true);
+    return {position:foot.getWorldPosition(new Vector3()).add(new Vector3(0,0,-time)),rotation:foot.getWorldQuaternion(new Quaternion()).normalize()};}
+  const strike=pose(0),flat=pose(.125),late=pose(.333333),push=pose(.5416667);
+  assert.ok(flat.position.distanceTo(late.position)<.005,'stance foot slides despite matched travel');
+  assert.ok(strike.rotation.angleTo(flat.rotation)>.15,'heel strike has no shoe roll');
+  assert.ok(push.rotation.angleTo(late.rotation)>.30,'trailing foot has no toe push-off');
+  assert.ok(push.position.y>late.position.y+.055,'heel does not rise during push-off');
 });

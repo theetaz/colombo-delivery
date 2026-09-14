@@ -83,3 +83,18 @@ References reviewed: [PaperRoute's articulated riding and contact studies](https
 and [Bikeability's ride guide](https://www.bikeability.org.uk/wp-content/uploads/2024/06/Ride_Guide_V10.pdf).
 These inform the pose/contact decisions; this implementation does not reproduce
 PaperRoute's assets or claim to use its animation source.
+
+### Walking contact and push-off
+
+The Walk clip now rolls the shoe through heel contact, a flat support phase,
+and toe push-off. The heel rises around the toe contact before the leg swings
+forward. Pelvis rise and side-to-side weight transfer follow the support leg;
+chest rotation counterbalances the hips. The swing arc is lower than before.
+Walking distance still drives clip phase so cadence follows travel speed.
+
+The exported-geometry regression checks flat-stance slip below 5 mm, visible
+heel-to-flat rotation, at least 0.30 radians of push-off shoe rotation, and
+more than 55 mm of heel/ankle rise before swing. Four Blender side frames were
+reviewed. Sampled maximum edge stretch fell from 1.83 to 1.47; minimum sampled
+vertex height is about -0.8 mm. These are deformation/contact checks, not a
+claim that the gait has been validated against motion capture.
