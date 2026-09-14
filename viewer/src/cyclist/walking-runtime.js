@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {WALK_STRIDE_METRES,WALK_SPEED_METRES_PER_SECOND} from './walking.js';
+import {WALK_STRIDE_METRES,WALK_SPEED_METRES_PER_SECOND,walkTiming,walkClockPhase} from './walking.js';
 
 export function createWalkingStudy(host,onReady,onPhase,onError){
-  let disposed=false,raf,last=0,report=0,mixer,actions,phase=0,paused=false,previous=false,slow=false,angle='Side';
+  let disposed=false,raf,last=0,report=0,mixer,actions,phase=0,cycle=0,paused=false,previous=false,slow=false,angle='Side';
   const scene=new THREE.Scene();scene.background=new THREE.Color('#e4ecea');scene.fog=new THREE.Fog('#e4ecea',10,28);
   const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
@@ -29,7 +29,8 @@ export function createWalkingStudy(host,onReady,onPhase,onError){
   function apply(){
     if(!actions)return;
     actions.Walk.setEffectiveWeight(previous?0:1);actions.WalkBefore.setEffectiveWeight(previous?1:0);
-    actions.Walk.time=actions.WalkBefore.time=phase;mixer.update(0);
+    for(const a of Object.values(actions))a.time=phase*a.getClip().duration;
+    mixer.update(0);
   }
   new GLTFLoader().loadAsync('/cyclist/courier-movement.glb').then(model=>{
     if(disposed){release(model.scene);return;}
@@ -39,10 +40,18 @@ export function createWalkingStudy(host,onReady,onPhase,onError){
   }).catch(e=>{if(!disposed)onError(e);});
   function render(now){
     if(disposed)return;const dt=last?Math.min(.05,(now-last)/1000):0;last=now;
-    if(actions&&!paused&&!document.hidden){const travel=dt*WALK_SPEED_METRES_PER_SECOND*(slow?.25:1);phase=(phase+travel/(previous?1:WALK_STRIDE_METRES))%1;marks.position.z=(marks.position.z+travel)%1;}
+    if(actions&&!paused&&!document.hidden){
+      const travel=dt*WALK_SPEED_METRES_PER_SECOND*(slow?.25:1),stride=previous?1:WALK_STRIDE_METRES;
+      const beforeOffset=previous?0:walkTiming(cycle).offset;
+      cycle=(cycle+travel/stride)%1;
+      const timing=previous?{phase:cycle,offset:0}:walkTiming(cycle);phase=timing.phase;
+      // Match floor travel to the retimed foot, including the small within-step
+      // body advance, rather than letting planted shoes drift over the marks.
+      marks.position.z=((marks.position.z+travel+timing.offset-beforeOffset)%1+1)%1;
+    }
     apply();controls.update();renderer.render(scene,camera);if(now-report>80){onPhase(phase);report=now;}raf=requestAnimationFrame(render);
   }
   raf=requestAnimationFrame(render);
   function release(root){const resources=new Set();root.traverse(o=>{if(o.geometry)resources.add(o.geometry);for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[]){resources.add(m);for(const v of Object.values(m))if(v?.isTexture)resources.add(v);}});for(const r of resources)r.dispose();}
-  return{pause(value){paused=value;},seek(value){phase=Math.max(0,Math.min(1,value));apply();onPhase(phase);},before(value){previous=value;apply();},slow(value){slow=value;},view(value){angle=value;frameCamera();},dispose(){disposed=true;cancelAnimationFrame(raf);observer.disconnect();controls.dispose();mixer?.stopAllAction();release(scene);environment.dispose();renderer.dispose();renderer.domElement.remove();}};
+  return{pause(value){paused=value;},seek(value){phase=Math.max(0,Math.min(1,value));cycle=previous?phase:walkClockPhase(phase);apply();onPhase(phase);},before(value){previous=value;cycle=previous?phase:walkClockPhase(phase);apply();},slow(value){slow=value;},view(value){angle=value;frameCamera();},dispose(){disposed=true;cancelAnimationFrame(raf);observer.disconnect();controls.dispose();mixer?.stopAllAction();release(scene);environment.dispose();renderer.dispose();renderer.domElement.remove();}};
 }

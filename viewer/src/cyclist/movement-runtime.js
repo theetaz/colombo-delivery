@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import {walkPhase} from './walking.js';
+import {WALK_STRIDE_METRES,walkTiming} from './walking.js';
 import {createRiderContacts} from './rider-contacts.js';
 import {createMovement,stepMovement,interact,setWalkTarget,movementStatus,OBSTACLES,MOUNT_SECONDS,smooth} from './movement-model.js';
 
@@ -49,8 +49,13 @@ export function createMovementYard(host,onReady,onState,onError){
       const upright=state.mode==='approach'?1-smooth((state.elapsed-state.transition.duration+.1)/.3):standWeight;
       action('Stand',state.clock%2,(1-walkWeight)*upright);
       action('Idle',state.clock%2,(1-walkWeight)*(1-upright));
-      action('Walk',walkPhase(state.walkDistance),walkWeight);
+      const timing=walkTiming(state.walkDistance/WALK_STRIDE_METRES);
+      action('Walk',timing.phase*actions.Walk.getClip().duration,walkWeight);
       actorRoot.position.set(state.player.x,0,state.player.z);actorRoot.rotation.y=state.player.yaw;actorLean.rotation.z=0;actorLean.position.y=0;
+      // Follow the retimed stance foot with a small, periodic body advance.
+      // Fade it with walking so standing and bicycle transition poses stay put.
+      actorRoot.position.x-=Math.sin(state.player.yaw)*timing.offset*walkWeight;
+      actorRoot.position.z-=Math.cos(state.player.yaw)*timing.offset*walkWeight;
     }else{
       walkWeight=0;standWeight=0;actorRoot.position.set(state.bike.x,0,state.bike.z);actorRoot.rotation.y=state.bike.yaw;
       if(state.mode==='mount')action('Mount',Math.min(state.elapsed,MOUNT_SECONDS));

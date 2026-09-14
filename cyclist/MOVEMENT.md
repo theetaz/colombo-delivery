@@ -255,3 +255,32 @@ Review the updated walk in `/movement.html`, or use `/walking.html` for side,
 front and slow-motion inspection. This remains a procedural flat-ground walk;
 the visual feel still needs user review, particularly during short starts,
 stops and turns that blend between poses.
+
+## Step handoff timing — 15 September 2026
+
+The phase inspection poses were accepted, but consecutive steps still felt as
+though they briefly settled before continuing. The study already played one
+continuous clip: the phase buttons seek within it, rather than queue separate
+animations. There was no timer or restart delay to remove.
+
+This pass changes only playback timing. A smooth periodic phase adjustment
+passes through each heel-contact handoff faster and redistributes that time
+within the step. For the interval spanning the final 10% and first 10% of the
+source cycle, playback now takes about 162 ms instead of 196 ms at normal speed.
+The full cycle still covers 1.32 m at the same average 123 steps/min. No Blender
+poses, exported asset data, arm motion, or bicycle clips were edited.
+
+Both the walking study and courtyard use the shared timing curve. Its velocity
+stays positive and matches across step and cycle boundaries. Floor travel in
+the study and a small courtyard body advance (at most 2.64 cm) follow the same
+curve, preserving foot contact. This offset fades with the walk blend. Seeking
+uses the inverse timing curve so named poses, scrubbing and previous-version
+comparison remain aligned with the original animation.
+
+Validation: all 26 tests and the production build pass. New checks cover
+forward/reverse playback at 24, 60 and 144 fps, quarter speed, cycle overshoot,
+exact phase selection, both planted feet (5 mm tolerance), and leg velocity
+through consecutive step/loop joins. Browser checks at 1280×720 covered playback
+from 100%, phase selection, comparison, slow motion, and courtyard walking.
+No warning/error console entries were reported. This is a timing adjustment
+for visual review, not a new gait or physics simulation.
