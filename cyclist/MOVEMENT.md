@@ -4,6 +4,11 @@ Open **http://127.0.0.1:5175/movement.html** with the adjacent viewer running.
 The approved pedal inspection page is still at `/cyclist.html`; its character,
 bicycle and pedal files are unchanged.
 
+For walking posture review, open **http://127.0.0.1:5175/walking.html**.
+Use **Straight support**, then **Compare previous walk**, to compare the same
+step from the side. Front/three-quarter views, quarter speed, pause and a
+keyboard-accessible timeline are available. The courtyard uses the updated gait.
+
 ## Controls
 
 - Click a clear point on the ground to walk there. Drag to orbit; scroll to zoom.
@@ -22,8 +27,9 @@ bicycle and pedal files are unchanged.
 
 ## What is implemented
 
-The same textured character uses Idle, Walk, Mount, Dismount and the approved
-Pedal clips. Walking speed drives the gait. Mount/dismount clips share exact
+The same textured character uses Stand, Walk, Mount, Dismount and the approved
+Pedal clip. The original Idle pose remains as the transition endpoint; WalkBefore
+is retained only for comparison. Walking distance drives the gait. Mount/dismount clips share exact
 standing and seated endpoints; the controller changes the character's origin
 at those matching endpoints. One character remains present through every state.
 The rider is independent of the bicycle while walking and follows it while
@@ -41,8 +47,8 @@ stabilized by the controller; it does not fall over.
 
 ## Assets and rebuilding
 
-`courier-movement.blend` contains the five animation actions on a copy of the
-approved rig. `../viewer/public/cyclist/courier-movement.glb` is its browser
+`courier-movement.blend` contains seven animation actions on a copy of the
+approved rig and opens on the upright Stand pose. `../viewer/public/cyclist/courier-movement.glb` is its browser
 export. It reuses the existing geometry, textures, skin weights and grip shape;
 no new character reconstruction was requested. The source and rights notes in
 `README.md` apply to this derived local testing asset too.
@@ -142,3 +148,67 @@ Remaining limits are assisted balance on a flat courtyard, a rigid shoe rather
 than separately articulated toes, simplified hands, and no full-body collision
 or biomechanical force solver. Further visual tuning should use this page and
 its slow-motion/pause controls before road integration.
+
+
+## Walking posture correction — 15 September 2026
+
+The earlier contact pass did not resolve the crouched silhouette or unnatural
+arm movement. The supporting knee remained around 32–44 degrees flexed. The
+hand-target solver also held each wrist at a constant height and forced the
+elbows through roughly 34–59 degrees of flexion.
+
+### Research and animation decisions
+
+- [Collins, Adamczyk and Kuo: Dynamic arm swinging in human walking](https://pmc.ncbi.nlm.nih.gov/articles/PMC2817299/)
+  combines a passive walking model with human experiments. Normal arm swing
+  counters leg motion with low shoulder effort. The updated animation uses
+  shoulder-led pendulums, opposite arm/leg timing, soft elbows and palms that
+  follow the forearms. It does not simulate the paper's dynamics.
+- [Knee Kinematics of Healthy Adults Measured Using Biplane Radiography](https://pubmed.ncbi.nlm.nih.gov/32491153/)
+  measured 39 knees and found substantial individual variation. Its full-cycle
+  knee motion and the distinction between support and swing guide the pose
+  targets: yield after contact, extend in mid-stance, and bend during swing.
+  The authored angles are artistic targets for this rig, not a clinical norm
+  or a retargeted motion-capture recording.
+
+Pelvis height now comes from the character's actual leg lengths and support
+foot position. The persistent four-degree pelvis lean is removed. A new Stand
+clip keeps the resting character upright too. The shoe rolls from the heel to
+its measured toe region, with a smooth swing trajectory that joins the planted
+foot's relative velocity at contact. One full cycle covers 1.32 m, giving about
+123 steps/min at the courtyard's unchanged 1.35 m/s speed; previously it was
+162 steps/min. Both the preview and courtyard use that same distance scale.
+
+The original Idle, Mount, Dismount and Pedal animation tracks are unchanged.
+The courtyard blends between the upright Stand and the existing transition
+endpoint; this pass does not re-author the bicycle movements. The comparison
+clip was checked against the previous exported Walk and matches its animation
+tracks exactly. It adds animation data rather than a second character mesh.
+
+### Validation
+
+- The exported Three.js asset reaches about 8 degrees of support-knee flexion
+  at 30% of the cycle, compared with about 32 degrees before. The more densely
+  keyed Blender source measures about 5 degrees there. Sampling/interpolation
+  accounts for the difference. The swing knee peaks around 64 degrees.
+- Elbow flexion is roughly 8–18 degrees, with under 5 degrees of relative wrist
+  rotation variation. Tests also check opposite arm/leg timing and a wrist
+  trajectory that rises and falls instead of staying on a horizontal line.
+- Walking/standing deformation is sampled every half frame. The lowest walking
+  vertex is about -0.4 mm, within the new 3 mm floor tolerance. Maximum sampled
+  walking edge stretch is 1.72. The flat stance still passes the 5 mm travel-slip
+  check. The report is tied to the exported GLB by its SHA-256.
+- `npm test`: 21 passing tests, including support/swing knee behavior, upright
+  standing, torso alignment, arm coordination, contacts and existing movement
+  regressions. `npm run build` passes for all four entry pages.
+- Browser review: side and front poses, previous/updated comparison at the same
+  phase, playback, quarter speed, pause and keyboard timeline scrubbing. The
+  walking page fits 1280×800 and 390×844 viewports. The courtyard loads the new
+  standing pose and reaches a clicked ground destination. No browser warning
+  or error entries were reported during these checks.
+
+This remains a procedural flat-ground walk with the existing skin weights and
+rigid shoes. Short turns and starts/stops still use blending rather than separate
+foot-placement clips; toe articulation and cloth deformation remain simplified.
+The comparison page is the place to judge the visible improvement before
+continuing to the other movement work.

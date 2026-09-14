@@ -87,7 +87,8 @@ def idle(t=0,offset=Vector((0,0,0))):
     for side,sign in [('L',-1),('R',1)]:
         foot(side,offset+Vector((sign*.11,-.0952,.11648)),offset+Vector((sign*.15,.28,.55)))
     arms(offset)
-def walk(t):
+# Previous gait is retained only for the walking comparison control.
+def walk_before(t):
     reset();phase=t*math.tau
     # Lower during double support, rise over the planted leg, then transfer
     # weight. One clip cycle travels one metre in the runtime.
@@ -112,6 +113,79 @@ def walk(t):
         foot(side,ankle,Vector((sign*.16,.45,.58)))
         rotate('Foot_'+side,pitch)
     arms(Vector((0,0,0)),phase)
+
+# One full left/right cycle covers 1.32 m. Keep this in sync with walking.js.
+STRIDE=1.32
+
+def relaxed_arms(t,amount=1):
+    # Shoulder-led pendulums: the right arm advances with the left leg.
+    # Unlike hand-target IK, this does not pin the wrists to a horizontal line.
+    for side,sign in [('L',-1),('R',1)]:
+        swing=sign*math.cos(math.tau*(t-.02))*amount
+        shoulder=rig.pose.bones['UpperArm_'+side].head.copy()
+        upper_angle=math.radians(17)*swing
+        elbow_angle=math.radians(13+5*swing)
+        upper=Vector((sign*.085,math.sin(upper_angle),-math.cos(upper_angle))).normalized()
+        lower=Vector((sign*.04,math.sin(upper_angle+elbow_angle),-math.cos(upper_angle+elbow_angle))).normalized()
+        elbow=shoulder+upper*rig.data.bones['UpperArm_'+side].length
+        wrist=elbow+lower*rig.data.bones['Forearm_'+side].length
+        place('UpperArm_'+side,shoulder,elbow)
+        place('Forearm_'+side,elbow,wrist)
+        # The palm follows the forearm, without a separate wrist oscillation.
+        place('Hand_'+side,wrist,wrist+lower*rig.data.bones['Hand_'+side].length)
+
+def shoe(p,sign):
+    if p<.6:
+        y=(.22-p)*STRIDE;z=0
+        if p<.10:
+            pitch=math.radians(12)*(1-smooth(p/.10));pivot=-.08
+        else:
+            pitch=-math.radians(55)*smooth((p-.38)/.22);pivot=.222
+    else:
+        u=(p-.6)/.4
+        # Hermite swing meets the stance velocity at both ends. A foot must
+        # still be travelling backwards relative to the hip at heel strike.
+        y0=(.22-.6)*STRIDE;y1=.22*STRIDE;m=-STRIDE*.4
+        y=(2*u**3-3*u*u+1)*y0+(u**3-2*u*u+u)*m+(-2*u**3+3*u*u)*y1+(u**3-u*u)*m
+        z=.10*math.sin(math.pi*u)**2
+        pitch=math.radians(-55+67*smooth(u));pivot=.222-.302*smooth(u)
+    contact=Vector((0,pivot,-.11648))
+    correction=contact-Matrix.Rotation(pitch,3,'X')@contact
+    return Vector((sign*.105,y,z+.11648))+correction,pitch
+
+def support_height(p,knee_degrees):
+    ankle,_=shoe(p,-1)
+    hip=rig.data.bones['Thigh_L'].head_local-rig.data.bones['Pelvis'].head_local
+    a=rig.data.bones['Thigh_L'].length;b=rig.data.bones['Shin_L'].length
+    reach2=a*a+b*b+2*a*b*math.cos(math.radians(knee_degrees))
+    return ankle.z+math.sqrt(reach2-(ankle.x-hip.x)**2-(ankle.y-hip.y)**2)-hip.z
+
+CONTACT_HEIGHT=support_height(0,9)
+HIP_HEIGHTS=[(0,(0,0,CONTACT_HEIGHT)),(.10,(0,0,support_height(.10,18))),
+            (.30,(0,0,support_height(.30,6))),(.40,(0,0,support_height(.40,9))),
+            (.50,(0,0,CONTACT_HEIGHT))]
+
+def stand(t):
+    reset();pelvis_at(Vector((0,0,support_height(.22,7))))
+    rotate('Chest',math.radians(.25)*math.sin(t*math.tau))
+    for side,sign in [('L',-1),('R',1)]:
+        foot(side,Vector((sign*.105,0,.11648)),Vector((sign*.105,.45,.55)))
+    relaxed_arms(t,0)
+
+def walk(t):
+    reset();phase=t*math.tau
+    # Compute pelvis height from this rig's leg lengths. The support knee
+    # yields briefly after contact, then extends as the body passes over it.
+    hip=path(t%.5,HIP_HEIGHTS);hip.x=-.008*math.sin(phase)
+    pelvis_at(hip)
+    rotate('Pelvis',math.radians(2)*math.cos(phase),'Z')
+    rotate('Chest',-math.radians(4)*math.cos(phase),'Z')
+    for side,sign in [('L',-1),('R',1)]:
+        p=(t+(0 if side=='L' else .5))%1
+        ankle,pitch=shoe(p,sign)
+        foot(side,ankle,Vector((sign*.105,.45,.58)))
+        rotate('Foot_'+side,pitch)
+    relaxed_arms(t)
 def seated_pose():
     for p in rig.pose.bones:p.matrix=seated[p.name];update()
 
@@ -155,16 +229,16 @@ def transition_pose(t,getting_off=False):
 def mount(t):transition_pose(t)
 def dismount(t):transition_pose(t,True)
 
-clips=[('Idle',48,lambda t:idle(t)),('Walk',24,walk),('Mount',84,mount),('Dismount',84,dismount)]
+clips=[('Idle',48,lambda t:idle(t)),('Stand',48,stand),('WalkBefore',24,walk_before),('Walk',48,walk),('Mount',84,mount),('Dismount',84,dismount)]
 for name,frames,pose in clips:
     rig.animation_data_clear()
     for frame in range(frames+1):
         bpy.context.scene.frame_set(frame);pose(frame/frames)
         for p in rig.pose.bones:
             p.rotation_mode='QUATERNION'
-            for prop in ('location','rotation_quaternion','scale'):p.keyframe_insert(prop,frame=frame)
+            for prop in ('location','rotation_quaternion','scale'):p.keyframe_insert(prop,frame=frame/2 if name=='Walk' else frame)
     action=rig.animation_data.action;action.name=name;action.use_fake_user=True
-rig.animation_data.action=next(a for a in bpy.data.actions if a.name=='Idle')
+rig.animation_data.action=next(a for a in bpy.data.actions if a.name=='Stand')
 bpy.context.scene.frame_start=0;bpy.context.scene.frame_end=84;bpy.context.scene.frame_set(0)
 body.data.shape_keys.key_blocks['HandlebarGrip'].value=0
 bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);body.select_set(True);bpy.context.view_layer.objects.active=rig

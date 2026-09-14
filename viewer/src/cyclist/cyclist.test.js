@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {AnimationMixer,Vector3,Quaternion} from 'three';
 import {loadGeometry} from './test-assets.js';
+import {WALK_STRIDE_METRES} from './walking.js';
 
 const directory=new URL('../../public/cyclist/',import.meta.url);
 
@@ -53,7 +54,7 @@ test('movement clips preserve the approved rig and connect without root jumps',a
   }
   const model=await loadGeometry('courier-movement.glb'),mixer=new AnimationMixer(model.scene);
   const clips=Object.fromEntries(model.animations.map(c=>[c.name.split('|').at(-1),c]));
-  for(const [name,duration] of Object.entries({Idle:2,Walk:1,Mount:3.5,Dismount:3.5,Pedal:2}))assert.ok(Math.abs(clips[name]?.duration-duration)<.00001,name);
+  for(const [name,duration] of Object.entries({Idle:2,Stand:2,Walk:1,WalkBefore:1,Mount:3.5,Dismount:3.5,Pedal:2}))assert.ok(Math.abs(clips[name]?.duration-duration)<.00001,name);
   function sample(name,time){mixer.stopAllAction();const a=mixer.clipAction(clips[name]);a.play();a.paused=true;a.time=time;mixer.update(0);model.scene.updateMatrixWorld(true);
     const points={};model.scene.traverse(o=>{if(o.isBone)points[o.name]=o.getWorldPosition(new Vector3());});return points;}
   function match(a,b,offset=new Vector3()){
@@ -70,7 +71,7 @@ test('walking plants the stance shoe and rolls from heel contact to toe push-off
   const action=mixer.clipAction(model.animations.find(c=>c.name.endsWith('Walk'))).play();action.paused=true;
   const foot=model.scene.getObjectByName('Foot_L');
   function pose(time){action.time=time;mixer.update(0);model.scene.updateMatrixWorld(true);
-    return {position:foot.getWorldPosition(new Vector3()).add(new Vector3(0,0,-time)),rotation:foot.getWorldQuaternion(new Quaternion()).normalize()};}
+    return {position:foot.getWorldPosition(new Vector3()).add(new Vector3(0,0,-time*WALK_STRIDE_METRES)),rotation:foot.getWorldQuaternion(new Quaternion()).normalize()};}
   const strike=pose(0),flat=pose(.125),late=pose(.333333),push=pose(.5416667);
   assert.ok(flat.position.distanceTo(late.position)<.005,'stance foot slides despite matched travel');
   assert.ok(strike.rotation.angleTo(flat.rotation)>.15,'heel strike has no shoe roll');

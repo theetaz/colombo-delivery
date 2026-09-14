@@ -1,17 +1,19 @@
 """Sample the new movement clips without touching the approved pedal study."""
 from pathlib import Path
-import bpy,json,hashlib
+import bpy,json,hashlib,math
 from mathutils.bvhtree import BVHTree
+from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[1]
 bpy.ops.wm.open_mainfile(filepath=str(ROOT/'courier-movement.blend'))
 rig=bpy.data.objects['CyclistRig'];body=bpy.data.objects['CourierSurface']
 report={}
-for name in ['Idle','Walk','Mount','Dismount','Pedal']:
+for name in ['Idle','Stand','Walk','Mount','Dismount','Pedal']:
     rig.animation_data.action=bpy.data.actions[name]
     low,high=map(int,rig.animation_data.action.frame_range)
     max_stretch=(0,0,[]);minimum=10
-    for frame in range(low,high+1,3):
-        bpy.context.scene.frame_set(frame);bpy.context.view_layer.update()
+    frames=[f/2 for f in range(low*2,high*2+1)] if name in ('Walk','Stand') else range(low,high+1,3)
+    for frame in frames:
+        bpy.context.scene.frame_set(int(frame),subframe=frame%1);bpy.context.view_layer.update()
         obj=body.evaluated_get(bpy.context.evaluated_depsgraph_get());mesh=obj.to_mesh()
         minimum=min(minimum,min(v.co.z for v in mesh.vertices))
         for edge in body.data.edges:
@@ -21,10 +23,29 @@ for name in ['Idle','Walk','Mount','Dismount','Pedal']:
             if ratio>max_stretch[0]:max_stretch=(ratio,frame,[a,b])
         obj.to_mesh_clear()
     report[name]={'lowestVertexMetres':minimum,'maxEdgeStretch':max_stretch}
+assert report['Walk']['lowestVertexMetres']>-.003,'Walking shoe penetrates the floor by more than 3 mm'
+
+def knee(side):
+    hip=rig.pose.bones['Thigh_'+side].head;ankle=rig.pose.bones['Foot_'+side].head;joint=rig.pose.bones['Shin_'+side].head
+    return 180-math.degrees((hip-joint).angle(ankle-joint))
+kinematics={}
+for name in ['WalkBefore','Walk']:
+    rig.animation_data.action=bpy.data.actions[name]
+    elbows=[];swing=[];trunk=[]
+    for i in range(101):
+        frame=24*i/100;bpy.context.scene.frame_set(int(frame),subframe=frame%1);bpy.context.view_layer.update()
+        for side in ['L','R']:
+            upper=rig.pose.bones['UpperArm_'+side].head;elbow=rig.pose.bones['Forearm_'+side].head;hand=rig.pose.bones['Hand_'+side].head
+            elbows.append(180-math.degrees((upper-elbow).angle(hand-elbow)))
+            if .6<=(i/100+(0 if side=='L' else .5))%1:swing.append(knee(side))
+        trunk.append(math.degrees((rig.pose.bones['Head'].head-rig.pose.bones['Pelvis'].head).angle(Vector((0,0,1)))))
+    bpy.context.scene.frame_set(7,subframe=.2);bpy.context.view_layer.update()
+    kinematics[name]={'supportKneeAt30PercentDegrees':knee('L'),'elbowFlexionDegrees':[min(elbows),max(elbows)],'peakSwingKneeDegrees':max(swing),'maxTrunkFromVerticalDegrees':max(trunk)}
+report['walkingKinematics']=kinematics
 report['assetSha256']=hashlib.sha256((ROOT.parent/'viewer/public/cyclist/courier-movement.glb').read_bytes()).hexdigest()
 print(json.dumps(report,indent=2),flush=True)
-assert all(v['lowestVertexMetres']>-.04 for v in report.values() if isinstance(v,dict)),'A movement passes below the ground'
-assert all(v['maxEdgeStretch'][0]<4 for v in report.values() if isinstance(v,dict)),'Severe skin stretching in a new movement'
+assert all(v['lowestVertexMetres']>-.04 for v in report.values() if isinstance(v,dict) and 'lowestVertexMetres' in v),'A movement passes below the ground'
+assert all(v['maxEdgeStretch'][0]<4 for v in report.values() if isinstance(v,dict) and 'lowestVertexMetres' in v),'Severe skin stretching in a new movement'
 
 # Test the actual deformed surface against the fitted saddle throughout the
 # leg swing. Deliberate seated contact at the clip endpoints is excluded.
