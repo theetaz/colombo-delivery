@@ -1,6 +1,9 @@
 """Add locomotion clips to a copy of the approved cyclist without rebinding it."""
 from pathlib import Path
-import bpy, math, json
+import bpy, math, json, sys, tempfile
+import numpy as np
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from glb_animation import replace_animation
 from mathutils import Vector, Matrix, Quaternion
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -134,24 +137,33 @@ def relaxed_arms(t,amount=1):
         # The palm follows the forearm, without a separate wrist oscillation.
         place('Hand_'+side,wrist,wrist+lower*rig.data.bones['Hand_'+side].length)
 
-def shoe(p,sign):
-    if p<.6:
-        y=(.22-p)*STRIDE;z=0
-        if p<.10:
-            pitch=math.radians(12)*(1-smooth(p/.10));pivot=-.08
-        else:
-            pitch=-math.radians(55)*smooth((p-.38)/.22);pivot=.222
+def ease5(t):
+    t=max(0,min(1,t));return t*t*t*(10+t*(-15+6*t))
+
+def stance_shoe(p,sign):
+    # Limit roll speed so the ankle continues backwards until it leaves ground.
+    if p<.10:
+        pitch=math.radians(12)*(1-ease5(p/.10));pivot=-.08
     else:
-        u=(p-.6)/.4
-        # Hermite swing meets the stance velocity at both ends. A foot must
-        # still be travelling backwards relative to the hip at heel strike.
-        y0=(.22-.6)*STRIDE;y1=.22*STRIDE;m=-STRIDE*.4
-        y=(2*u**3-3*u*u+1)*y0+(u**3-2*u*u+u)*m+(-2*u**3+3*u*u)*y1+(u**3-u*u)*m
-        z=.10*math.sin(math.pi*u)**2
-        pitch=math.radians(-55+67*smooth(u));pivot=.222-.302*smooth(u)
+        pitch=-math.radians(42)*ease5((p-.34)/.21);pivot=.222
     contact=Vector((0,pivot,-.11648))
     correction=contact-Matrix.Rotation(pitch,3,'X')@contact
-    return Vector((sign*.105,y,z+.11648))+correction,pitch
+    return Vector((sign*.105,(.22-p)*STRIDE,.11648))+correction,pitch
+
+def shoe(p,sign):
+    if p<.55:return stance_shoe(p,sign)
+    u=(p-.55)/.45;e=ease5(u)
+    start,start_pitch=stance_shoe(.55,sign);end,end_pitch=stance_shoe(0,sign)
+    # Interpolate the airborne ankle itself, rather than moving its pivot while
+    # rolling it. Match stance velocity AND acceleration at both contacts.
+    ankle=start.lerp(end,e)
+    ankle.y+=(-STRIDE*.45)*(u-e)
+    ankle.z+=.065*64*u**3*(1-u)**3
+    # Keep clearance while the knee folds, then let the heel descend only as
+    # the leg draws back under the body. This avoids a locked-knee snap.
+    ankle.z+=.032*ease5((p-.55)/.08)*(1-ease5((p-.65)/.10))
+    ankle.z+=.014*ease5((p-.82)/.09)*(1-ease5((p-.94)/.06))
+    return ankle,start_pitch+(end_pitch-start_pitch)*e
 
 def support_height(p,knee_degrees):
     ankle,_=shoe(p,-1)
@@ -160,10 +172,35 @@ def support_height(p,knee_degrees):
     reach2=a*a+b*b+2*a*b*math.cos(math.radians(knee_degrees))
     return ankle.z+math.sqrt(reach2-(ankle.x-hip.x)**2-(ankle.y-hip.y)**2)-hip.z
 
-CONTACT_HEIGHT=support_height(0,9)
-HIP_HEIGHTS=[(0,(0,0,CONTACT_HEIGHT)),(.10,(0,0,support_height(.10,18))),
-            (.30,(0,0,support_height(.30,6))),(.40,(0,0,support_height(.40,9))),
-            (.50,(0,0,CONTACT_HEIGHT))]
+# Periodic cubic pelvis curve: shared velocities and accelerations across the
+# weight transfers, without the old sequence of easing to a halt at each pose.
+HIP_PHASES=[0,.10,.22,.32,.43]
+HIP_VALUES=[support_height(0,12),support_height(.10,20),support_height(.22,12),support_height(.32,10),.907]
+def periodic_spline(xs,ys,period):
+    count=len(xs);h=[(xs[(i+1)%count]-xs[i])%period for i in range(count)]
+    matrix=np.zeros((count,count));rhs=np.zeros(count)
+    for i in range(count):
+        prev=(i-1)%count;following=(i+1)%count
+        matrix[i,prev]=h[prev];matrix[i,i]=2*(h[prev]+h[i]);matrix[i,following]=h[i]
+        rhs[i]=6*((ys[following]-ys[i])/h[i]-(ys[i]-ys[prev])/h[prev])
+    curvature=np.linalg.solve(matrix,rhs)
+    def sample(t):
+        t%=period;i=max(i for i,x in enumerate(xs) if x<=t);j=(i+1)%count
+        b=(t-xs[i])/h[i];a=1-b
+        return a*ys[i]+b*ys[j]+((a*a*a-a)*curvature[i]+(b*b*b-b)*curvature[j])*h[i]*h[i]/6
+    return sample
+base_hip_height=periodic_spline(HIP_PHASES,HIP_VALUES,.5)
+# At contact the pelvis continues upward while the heel draws backwards. Match
+# those velocities so the almost-straight knee does not snap into flexion.
+contact_slope=.46
+slope_delta=contact_slope-(base_hip_height(.0001)-base_hip_height(-.0001))/.0002
+def hip_height(t):
+    p=t%.5;correction=0
+    if p<.10:
+        u=p/.10;correction=.10*slope_delta*(u-6*u**3+8*u**4-3*u**5)
+    elif p>.43:
+        u=(p-.43)/.07;correction=.07*slope_delta*(-4*u**3+7*u**4-3*u**5)
+    return base_hip_height(p)+correction
 
 def stand(t):
     reset();pelvis_at(Vector((0,0,support_height(.22,7))))
@@ -176,7 +213,7 @@ def walk(t):
     reset();phase=t*math.tau
     # Compute pelvis height from this rig's leg lengths. The support knee
     # yields briefly after contact, then extends as the body passes over it.
-    hip=path(t%.5,HIP_HEIGHTS);hip.x=-.008*math.sin(phase)
+    hip=Vector((-.008*math.sin(phase),0,hip_height(t)))
     pelvis_at(hip)
     rotate('Pelvis',math.radians(2)*math.cos(phase),'Z')
     rotate('Chest',-math.radians(4)*math.cos(phase),'Z')
@@ -229,15 +266,33 @@ def transition_pose(t,getting_off=False):
 def mount(t):transition_pose(t)
 def dismount(t):transition_pose(t,True)
 
-clips=[('Idle',48,lambda t:idle(t)),('Stand',48,stand),('WalkBefore',24,walk_before),('Walk',48,walk),('Mount',84,mount),('Dismount',84,dismount)]
+clips=[('Idle',48,lambda t:idle(t)),('Stand',48,stand),('WalkBefore',24,walk_before),('Walk',96,walk),('Mount',84,mount),('Dismount',84,dismount)]
 for name,frames,pose in clips:
     rig.animation_data_clear()
+    previous_rotations={}
     for frame in range(frames+1):
-        bpy.context.scene.frame_set(frame);pose(frame/frames)
+        sample_frame=frame/4 if name=='Walk' else frame
+        bpy.context.scene.frame_set(int(sample_frame),subframe=sample_frame%1);pose(frame/frames)
         for p in rig.pose.bones:
             p.rotation_mode='QUATERNION'
-            for prop in ('location','rotation_quaternion','scale'):p.keyframe_insert(prop,frame=frame/2 if name=='Walk' else frame)
+            if name=='Walk':
+                if p.name in previous_rotations and p.rotation_quaternion.dot(previous_rotations[p.name])<0:p.rotation_quaternion.negate()
+                previous_rotations[p.name]=p.rotation_quaternion.copy()
+            for prop in ('location','rotation_quaternion','scale'):p.keyframe_insert(prop,frame=sample_frame)
     action=rig.animation_data.action;action.name=name;action.use_fake_user=True
+    if name=='Walk':
+        for layer in action.layers:
+            for strip in layer.strips:
+                for curve in strip.channelbag(action.slots[0]).fcurves:
+                    keys=curve.keyframe_points
+                    # Matching wrap tangents prevent an artificial pause each lap.
+                    for i,key in enumerate(keys):
+                        before=keys[i-1] if i>0 else keys[-2]
+                        after=keys[i+1] if i<len(keys)-1 else keys[1]
+                        slope=(after.co.y-before.co.y)/.5
+                        key.handle_left_type=key.handle_right_type='FREE'
+                        key.handle_left=(key.co.x-1/12,key.co.y-slope/12)
+                        key.handle_right=(key.co.x+1/12,key.co.y+slope/12)
 rig.animation_data.action=next(a for a in bpy.data.actions if a.name=='Stand')
 bpy.context.scene.frame_start=0;bpy.context.scene.frame_end=84;bpy.context.scene.frame_set(0)
 body.data.shape_keys.key_blocks['HandlebarGrip'].value=0
@@ -245,4 +300,10 @@ bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);body.select_se
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'courier-movement.blend'),compress=True)
 bpy.ops.export_scene.gltf(filepath=str(OUT/'courier-movement.glb'),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='ACTIONS',export_force_sampling=True,export_anim_slide_to_zero=True)
+# Keep all other clips in their existing form. Preserve the Walk's authored
+# subframe keys and cubic tangents instead of resampling it to 24 linear keys.
+with tempfile.TemporaryDirectory(prefix='colombo-walk-export-') as directory:
+    curved=Path(directory)/'curves.glb'
+    bpy.ops.export_scene.gltf(filepath=str(curved),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='ACTIONS',export_force_sampling=False,export_anim_slide_to_zero=True)
+    replace_animation(OUT/'courier-movement.glb',curved,'Walk')
 print('MOVEMENT_EXPORTED',flush=True)

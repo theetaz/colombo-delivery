@@ -212,3 +212,46 @@ rigid shoes. Short turns and starts/stops still use blending rather than separat
 foot-placement clips; toe articulation and cloth deformation remain simplified.
 The comparison page is the place to judge the visible improvement before
 continuing to the other movement work.
+
+## Walking continuity — 15 September 2026
+
+The upright walk still showed a braking effect as the legs changed direction.
+The trailing ankle briefly reversed during push-off, the knee approached full
+extension too abruptly, and the browser export reduced the authored motion to
+24 linear segments per cycle.
+
+The revised foot path joins stance and swing with continuous velocity and
+acceleration. Heel roll, toe push-off and the airborne arc use smooth curves;
+small clearance adjustments let the knee fold after push-off and release into
+heel contact without locking. The authored timing uses 55% stance and 45% swing.
+Pelvis height follows a periodic cubic curve with a shared contact velocity,
+so weight transfer continues through the loop boundary. These are targets for
+this character, rather than prescribed human gait measurements.
+
+The Walk export now retains 97 keys and
+[glTF cubic spline interpolation](https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/Specification.adoc#appendix-c-spline-interpolation).
+`scripts/glb_animation.py` replaces only that animation in the standard export.
+It aligns quaternion signs and computes periodic tangents in the exported
+coordinate system, preventing discontinuities introduced by bone conversion.
+The other six animation clips retain identical track values and timings. The
+upright torso, relaxed arm swing, 1.32 m stride and 1.35 m/s travel speed remain.
+
+### Validation
+
+- `npm test`: 23 tests pass. New checks sample the actual Three.js animation
+  for false planted-ankle reversals, terminal knee motion and continuous knee
+  velocity at all 96 key boundaries, including the loop seam.
+- The exported support knee remains above 4 degrees throughout the sampled
+  cycle, avoiding lockout. Existing posture, arm, contact and transition
+  regressions pass.
+- Blender validation passes and updates the asset hash in `movement-check.json`.
+  An additional check of every exported skinned vertex at 193 poses found a
+  minimum height of about -0.37 mm, within the 3 mm ground tolerance.
+- A direct comparison confirms that Idle, Stand, Mount, Dismount, Pedal and
+  WalkBefore retain their previous animation tracks. The production build
+  passes for all four viewer pages.
+
+Review the updated walk in `/movement.html`, or use `/walking.html` for side,
+front and slow-motion inspection. This remains a procedural flat-ground walk;
+the visual feel still needs user review, particularly during short starts,
+stops and turns that blend between poses.

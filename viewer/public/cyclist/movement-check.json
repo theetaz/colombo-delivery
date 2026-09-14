@@ -22,10 +22,10 @@
     ]
   },
   "Walk": {
-    "lowestVertexMetres": -0.00038799422327429056,
+    "lowestVertexMetres": -0.0002588331117294729,
     "maxEdgeStretch": [
-      1.719011355257263,
-      21.5,
+      1.671865272606101,
+      20.5,
       [
         2921,
         2924
@@ -76,16 +76,16 @@
       "maxTrunkFromVerticalDegrees": 2.4006140581037863
     },
     "Walk": {
-      "supportKneeAt30PercentDegrees": 4.666776382968237,
+      "supportKneeAt30PercentDegrees": 7.232810152250323,
       "elbowFlexionDegrees": [
-        8.386661329497258,
-        18.145662936368154
+        8.386538386092212,
+        18.14577221939487
       ],
-      "peakSwingKneeDegrees": 64.12310865506568,
+      "peakSwingKneeDegrees": 67.03223648673584,
       "maxTrunkFromVerticalDegrees": 1.230828689853447
     }
   },
-  "assetSha256": "40773cca0d9c2cbf337593e9f73646defcbc06f5d146637f0a3fdfec51eb003f",
+  "assetSha256": "d200d1d391941cf1e439ad982dde22df8d7f6d77826e7171cb86c0049cee9e95",
   "saddleClearance": {
     "Mount": {
       "firstFrame": 21,

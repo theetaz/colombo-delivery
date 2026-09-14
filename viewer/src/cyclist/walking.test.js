@@ -49,3 +49,29 @@ test('arms counter the opposite step with soft elbows and stable wrists',async()
   assert.ok(s.point('Foot_L').z<s.point('Foot_R').z,'left heel should lead at contact');
   assert.ok(s.point('Hand_R').z<s.point('Hand_L').z,'right hand should lead with the left foot');
 });
+
+test('the planted ankle has no false reversal and the terminal knee releases smoothly',async()=>{
+  const s=await sampler('Walk');let previousFoot=-Infinity,previousKnee=Infinity;
+  for(let i=0;i<=480;i++){
+    const t=i/480;s.pose(t);
+    const knee=s.flexion('Thigh_L','Shin_L','Foot_L');
+    assert.ok(knee>4,'leg reaches its lockout and snaps back');
+    if(t<=.55){
+      const z=s.point('Foot_L').z;
+      assert.ok(z>=previousFoot-.0001,'planted ankle reverses direction during push-off');previousFoot=z;
+    }
+    if(t>=.90){
+      assert.ok(knee<=previousKnee+.05,'terminal swing brakes and bends back before contact');previousKnee=knee;
+    }
+  }
+});
+
+test('walking joint velocity is continuous at exported keys and across the loop',async()=>{
+  const s=await sampler('Walk'),epsilon=.00001;
+  function angle(t){s.pose((t%1+1)%1);return s.flexion('Thigh_L','Shin_L','Foot_L');}
+  // Sample physical joint motion rather than just checking interpolation labels.
+  for(let i=0;i<96;i++){
+    const t=i/96,center=angle(t),incoming=(center-angle(t-epsilon))/epsilon,outgoing=(angle(t+epsilon)-center)/epsilon;
+    assert.ok(Math.abs(outgoing-incoming)<3,`knee velocity jumps at phase ${t}`);
+  }
+});
