@@ -60,3 +60,26 @@ pause, click-to-walk and boundaries. The exported clips are loaded by Three.js
 to verify their durations, loop seams and matching transition endpoints.
 `movement-check.json` samples the Blender deformation and ground clearance.
 These checks do not replace visual review of the movement.
+
+## Refinement record — 15 September 2026
+
+### Steering contacts
+
+The earlier runtime added a world-axis steering rotation to the hand after
+posing the arm. Reusing a held animation frame could accumulate that correction
+because unchanged animation tracks are cached. The revised runtime restores
+its authored arm pose before sampling, solves the elbow and shoulder toward
+the grip, and derives the palm orientation directly from the grip transform.
+Only the two arm chains are modified. The feet retain their pedal pose while
+the entire rider and bicycle lean together.
+
+Validation loads the exported rider and fitted bicycle and exercises 720 steering
+samples across three headings, including bank. Hand contact stays within 5 mm;
+ankle positions and orientations remain unchanged relative to the frame at a
+fixed crank angle. Repeated coasting frames do not accumulate wrist rotation.
+
+References reviewed: [PaperRoute's articulated riding and contact studies](https://www.paperroute.lol/devlog/),
+[Three.js animation-track caching behavior](https://github.com/mrdoob/three.js/issues/25518),
+and [Bikeability's ride guide](https://www.bikeability.org.uk/wp-content/uploads/2024/06/Ride_Guide_V10.pdf).
+These inform the pose/contact decisions; this implementation does not reproduce
+PaperRoute's assets or claim to use its animation source.

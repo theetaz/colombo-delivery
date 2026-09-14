@@ -2,11 +2,12 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {createRiderContacts} from './rider-contacts.js';
 import {createMovement,stepMovement,interact,setWalkTarget,movementStatus,OBSTACLES,MOUNT_SECONDS,smooth} from './movement-model.js';
 
 const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),TAU=Math.PI*2;
 export function createMovementYard(host,onReady,onState,onError){
-  let state=createMovement(),disposed=false,raf=0,last=0,report=0,ready=false,mixer,rider,bike,actions={},walkWeight=0,timeScale=1,viewportFit=1;
+  let state=createMovement(),disposed=false,raf=0,last=0,report=0,ready=false,mixer,rider,bike,actions={},walkWeight=0,timeScale=1,viewportFit=1,contacts;
   const keyboard=new Set(),touch={forward:0,turn:0},scene=new THREE.Scene();
   scene.background=new THREE.Color('#e4ecea');scene.fog=new THREE.Fog('#e4ecea',35,85);
   const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(host.clientWidth,host.clientHeight);
@@ -35,26 +36,9 @@ export function createMovementYard(host,onReady,onState,onError){
   }
   const marker=new THREE.Mesh(new THREE.RingGeometry(.14,.21,32),new THREE.MeshBasicMaterial({color:0x36c9bc,transparent:true,opacity:.9,side:THREE.DoubleSide}));marker.rotation.x=-Math.PI/2;marker.position.y=.012;marker.visible=false;scene.add(marker);
   const actorRoot=new THREE.Group(),bikeRoot=new THREE.Group(),actorLean=new THREE.Group(),bikeLean=new THREE.Group();actorRoot.add(actorLean);bikeRoot.add(bikeLean);scene.add(actorRoot,bikeRoot);
-  const restRotations=new Map(),wristOffsets=new Map(),frontRest=new THREE.Quaternion();
+  const restRotations=new Map(),frontRest=new THREE.Quaternion();
   function emit(){onState(movementStatus(state));}
   function action(name,time,weight=1){const a=actions[name];if(!a)return;a.enabled=true;a.paused=true;a.setEffectiveWeight(weight);a.time=Math.max(0,Math.min(time,a.getClip().duration));}
-  function rotateBoneWorld(bone,from,to){
-    const delta=new THREE.Quaternion().setFromUnitVectors(from.normalize(),to.normalize()),world=bone.getWorldQuaternion(new THREE.Quaternion()),parent=bone.parent.getWorldQuaternion(new THREE.Quaternion());
-    bone.quaternion.copy(parent.invert().multiply(delta.multiply(world)));bone.updateWorldMatrix(false,true);
-  }
-  function followHandlebar(side,sign){
-    const a=rider.getObjectByName('UpperArm_'+side),b=rider.getObjectByName('Forearm_'+side),hand=rider.getObjectByName('Hand_'+side),grip=bike.getObjectByName('Grip_'+side+'_Attach');
-    const root=a.getWorldPosition(new THREE.Vector3()),elbow=b.getWorldPosition(new THREE.Vector3()),end=hand.getWorldPosition(new THREE.Vector3());
-    const desired=grip.localToWorld(wristOffsets.get(side).clone()),direction=desired.clone().sub(root),l1=root.distanceTo(elbow),l2=elbow.distanceTo(end),d=Math.min(direction.length(),l1+l2-.00001);direction.normalize();
-    const along=(l1*l1-l2*l2+d*d)/(2*d),pole=actorLean.localToWorld(new THREE.Vector3(sign*.50,1.05,.05)).sub(root);pole.addScaledVector(direction,-pole.dot(direction)).normalize();
-    const joint=root.clone().addScaledVector(direction,along).addScaledVector(pole,Math.sqrt(Math.max(0,l1*l1-along*along)));
-    const handRotation=hand.getWorldQuaternion(new THREE.Quaternion());
-    rotateBoneWorld(a,elbow.sub(root),joint.clone().sub(root));
-    const newElbow=b.getWorldPosition(new THREE.Vector3()),newEnd=hand.getWorldPosition(new THREE.Vector3());
-    rotateBoneWorld(b,newEnd.sub(newElbow),desired.clone().sub(newElbow));
-    const steering=new THREE.Quaternion().setFromAxisAngle(Y,state.steer),parent=hand.parent.getWorldQuaternion(new THREE.Quaternion());
-    hand.quaternion.copy(parent.invert().multiply(steering.multiply(handRotation)));hand.updateWorldMatrix(false,true);
-  }
   function pose(dt){
     for(const a of Object.values(actions)){a.enabled=false;a.setEffectiveWeight(0);}
     const onFoot=state.mode==='foot'||state.mode==='approach';
@@ -69,7 +53,7 @@ export function createMovementYard(host,onReady,onState,onError){
       else action('Pedal',(((state.phase/TAU)%1)+1)%1*2);
       actorLean.rotation.z=state.lean;actorLean.position.y=.349*(1-Math.cos(state.lean));
     }
-    mixer.update(0);
+    contacts.restore();mixer.update(0);contacts.capture();
     const gripAmount=onFoot?0:state.mode==='mount'?smooth(state.elapsed/MOUNT_SECONDS/.65):state.mode==='dismount'?smooth((1-state.elapsed/MOUNT_SECONDS)/.65):1;
     rider.traverse(o=>{if(o.morphTargetDictionary?.HandlebarGrip!==undefined)o.morphTargetInfluences[o.morphTargetDictionary.HandlebarGrip]=gripAmount;});
     bikeRoot.position.set(state.bike.x,0,state.bike.z);bikeRoot.rotation.y=state.bike.yaw;bikeLean.rotation.z=state.lean;bikeLean.position.y=.349*(1-Math.cos(state.lean));
@@ -78,7 +62,7 @@ export function createMovementYard(host,onReady,onState,onError){
     for(const name of ['Pedal_L','Pedal_R'])bike.getObjectByName(name).rotation.x=state.phase;
     bike.getObjectByName('FrontAssembly').quaternion.copy(frontRest).multiply(new THREE.Quaternion().setFromAxisAngle(Y,state.steer));
     scene.updateMatrixWorld(true);
-    if(state.mode==='ride')for(const [side,sign] of [['L',-1],['R',1]])followHandlebar(side,sign);
+    if(state.mode==='ride'||state.mode==='settle')contacts.solve();
     marker.visible=Boolean(state.target);if(state.target)marker.position.set(state.target.x,.012,state.target.z);
     const distance=Math.hypot(state.player.x-state.bike.x,state.player.z-state.bike.z),weight=onFoot?.5*(1-smooth((distance-2.5)/2.5)):1;
     const target=new THREE.Vector3(state.player.x+(state.bike.x-state.player.x)*weight,1,state.player.z+(state.bike.z-state.player.z)*weight),delta=target.sub(focus).multiplyScalar(1-Math.exp(-dt*5));
@@ -94,7 +78,9 @@ export function createMovementYard(host,onReady,onState,onError){
     for(const name of ['FrontWheel','RearWheel'])restRotations.set(name,bike.getObjectByName(name).quaternion.clone());
     frontRest.copy(bike.getObjectByName('FrontAssembly').quaternion);
     scene.updateMatrixWorld(true);
-    for(const [side,sign] of [['L',-1],['R',1]])wristOffsets.set(side,bike.getObjectByName('Grip_'+side+'_Attach').worldToLocal(new THREE.Vector3(sign*.287,1.037,-.260)));
+    for(const a of Object.values(actions))a.setEffectiveWeight(0);
+    action('Pedal',0);mixer.update(0);scene.updateMatrixWorld(true);
+    contacts=createRiderContacts(rider,bike);
     ready=true;onReady();emit();
   }).catch(e=>{if(!disposed)onError(e);});
   const axis=()=>({forward:touch.forward+(keyboard.has('KeyW')||keyboard.has('ArrowUp')?1:0)-(keyboard.has('KeyS')||keyboard.has('ArrowDown')?1:0),turn:touch.turn+(keyboard.has('KeyA')||keyboard.has('ArrowLeft')?1:0)-(keyboard.has('KeyD')||keyboard.has('ArrowRight')?1:0)});
