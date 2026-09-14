@@ -1,0 +1,23 @@
+{
+  "name": "Colombo Roads \u2014 Lotus Tower and Fort v1",
+  "bounds_metres": [
+    -1300,
+    -450,
+    500,
+    1350
+  ],
+  "origin": [
+    79.85832,
+    6.92703
+  ],
+  "crs": "+proj=aeqd +lat_0=6.92703 +lon_0=79.85832 +datum=WGS84 +units=m",
+  "osm_query_bbox": [
+    6.921960785902438,
+    79.84555670443991,
+    6.940237180058791,
+    79.86384449962894
+  ],
+  "osm_query": "[out:json][timeout:40];way[\"highway\"](6.921960785902438,79.84555670443991,6.940237180058791,79.86384449962894)->.roads;(.roads;node(w.roads);node[\"highway\"~\"traffic_signals|stop|give_way|mini_roundabout\"](6.921960785902438,79.84555670443991,6.940237180058791,79.86384449962894);rel(bw.roads)[\"type\"=\"restriction\"];);out body geom;",
+  "context_snapshot": "2026-09-05",
+  "source_scene": "source/context.json"
+}

@@ -1,0 +1,272 @@
+{
+  "formatVersion": 2,
+  "revision": "commuter-bicycle-v2/1",
+  "asset": "commuter_bicycle_v2",
+  "reviewStatus": "human-approved",
+  "humanApproval": {
+    "date": "2026-09-13",
+    "scope": "bicycle-only visual form and components at the frozen GLB hash",
+    "approvedGlbSha256": "ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125",
+    "note": "Approved by the user to proceed to stationary character fitting. This does not approve a rider pose, animation, or simulation binding."
+  },
+  "generator": "art/bicycles/commuter-v2/generator.py",
+  "sourceBlend": "art/bicycles/commuter-v2/commuter_bicycle_v2.blend",
+  "provenance": "Original unbranded procedural project artwork. No external meshes or textures.",
+  "coordinateContract": {
+    "units": "metres",
+    "upAxis": "+Y",
+    "forwardAxis": "-Z",
+    "rightSide": "+X",
+    "origin": "ground plane beneath wheel contact patches",
+    "soleRoot": "CommuterBicycleV2"
+  },
+  "geometryReference": {
+    "manufacturer": "Cannondale",
+    "modelFamily": "Quick",
+    "size": "Medium",
+    "sourceType": "official manufacturer dealer book geometry table",
+    "url": "https://www.cannondale.com/-/media/files/manual-uploads/manuals/my20_cannondale_dealerbook.ashx",
+    "appliedMetrics": {
+      "headTubeAngleDegrees": 69.5,
+      "wheelbaseM": 1.093,
+      "chainstayM": 0.45,
+      "bottomBracketDropM": 0.06,
+      "forkRakeM": 0.045
+    },
+    "usage": "Dimensional proportion reference only; this asset does not reproduce brand identity or proprietary component shapes."
+  },
+  "metrics": {
+    "classification": {
+      "referenced": [
+        "wheelbaseM",
+        "headTubeAngleDegrees",
+        "forkRakeM",
+        "bottomBracketDropM",
+        "chainstayM"
+      ],
+      "authoredOrMeasured": [
+        "dimensionsM",
+        "boundsM",
+        "wheelRadiusM",
+        "bottomBracketHeightM"
+      ]
+    },
+    "dimensionsM": {
+      "widthX": 0.69237,
+      "heightY": 1.032,
+      "lengthZ": 1.79843
+    },
+    "boundsM": {
+      "min": [
+        -0.34619,
+        0.0,
+        -0.89879
+      ],
+      "max": [
+        0.34619,
+        1.032,
+        0.89965
+      ]
+    },
+    "wheelRadiusM": 0.349,
+    "wheelDiameterClass": "700C / ISO 622 with 38 mm commuter tires",
+    "wheelbaseM": 1.093,
+    "headTubeAngleDegrees": 69.5,
+    "steeringAxisRearwardTiltFromVerticalDegrees": 20.5,
+    "forkRakeM": 0.045,
+    "bottomBracketHeightM": 0.289,
+    "bottomBracketDropM": 0.06,
+    "chainstayM": 0.45
+  },
+  "articulation": {
+    "RearWheel": {
+      "axis": "local X",
+      "pivotM": [
+        0.0,
+        0.349,
+        0.543
+      ],
+      "restQuaternionXYZW": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    },
+    "FrontAssembly": {
+      "axis": "local Y",
+      "pivotM": [
+        0.0,
+        0.774,
+        -0.343057
+      ],
+      "axisWorldAtRest": [
+        0.0,
+        0.936672,
+        0.350207
+      ],
+      "restQuaternionXYZW": [
+        0.177944,
+        0.0,
+        0.0,
+        0.984041
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    },
+    "FrontWheel": {
+      "axis": "local X",
+      "pivotRelativeToFrontAssemblyM": [
+        0.0,
+        -0.470559,
+        -0.045
+      ],
+      "pivotWorldAtRestM": [
+        0.0,
+        0.349,
+        -0.55
+      ],
+      "restQuaternionXYZW": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    },
+    "Crank": {
+      "axis": "local X",
+      "pivotM": [
+        0.0,
+        0.289,
+        0.097
+      ],
+      "restQuaternionXYZW": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    },
+    "Pedal_L": {
+      "axis": "local X",
+      "parent": "Crank",
+      "pivotRelativeToCrankM": [
+        -0.112,
+        0.0,
+        0.17
+      ],
+      "restQuaternionXYZW": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    },
+    "Pedal_R": {
+      "axis": "local X",
+      "parent": "Crank",
+      "pivotRelativeToCrankM": [
+        0.112,
+        0.0,
+        -0.17
+      ],
+      "restQuaternionXYZW": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "runtimeComposition": "restQuaternion * localAxisDelta"
+    }
+  },
+  "attachments": [
+    "Grip_L_Attach",
+    "Grip_R_Attach",
+    "Seat_Attach",
+    "Pedal_L_Attach",
+    "Pedal_R_Attach"
+  ],
+  "attachmentTransforms": {
+    "Grip_L_Attach": {
+      "parent": "FrontAssembly",
+      "localPositionM": [
+        -0.286,
+        0.204556,
+        -0.066812
+      ]
+    },
+    "Grip_R_Attach": {
+      "parent": "FrontAssembly",
+      "localPositionM": [
+        0.286,
+        0.204556,
+        -0.066812
+      ]
+    },
+    "Seat_Attach": {
+      "parent": "CommuterBicycleV2",
+      "localPositionM": [
+        0.0,
+        1.023,
+        0.282
+      ]
+    },
+    "Pedal_L_Attach": {
+      "parent": "Pedal_L",
+      "localPositionM": [
+        0.0,
+        0.01,
+        0.0
+      ],
+      "surface": "platform top"
+    },
+    "Pedal_R_Attach": {
+      "parent": "Pedal_R",
+      "localPositionM": [
+        0.0,
+        0.01,
+        0.0
+      ],
+      "surface": "platform top"
+    }
+  },
+  "drivetrain": {
+    "side": "+X / rider right",
+    "chainrings": 2,
+    "cassetteSprockets": 7
+  },
+  "generation": {
+    "blenderVersion": "5.1.2",
+    "nodeCount": 32,
+    "meshCount": 20,
+    "materialCount": 7,
+    "vertexCount": 14907,
+    "triangleCount": 13844,
+    "glbBytes": 529760
+  },
+  "validation": {
+    "status": "passed",
+    "checks": [
+      "valid GLB 2.0 header and chunk length",
+      "CommuterBicycleV2 is the sole exported scene root",
+      "all required articulation and attachment nodes exist",
+      "wheel, steering, crank, and pedal parent relationships match the contract",
+      "evaluated source bounds touch the Y=0 ground plane",
+      "authored wheelbase is 1.093 m",
+      "perpendicular front-axle offset from the steering axis is 0.045 m",
+      "exported articulation rest quaternions match the declared transforms",
+      "manifest bounds are measured from final GLB POSITION vertices with exported node transforms",
+      "pedal contact anchors equal the visible 0.010 m platform top plane",
+      "triangle count is below 100,000",
+      "GLB is below 5,000,000 bytes"
+    ]
+  },
+  "sha256": {
+    "glb": "ae38a9e2670f4e8e6a5ce1079d89bd4289b5bbc0cc83b6389038aee901c62125",
+    "blend": "e916f8d594b209772900b6a9938446d4f89d58cfa94462612a1e4d662eec5ae2",
+    "generator": "9055a16cccff225dafec7d3ffb07e2e06075bef617be744ac01cf880ffd07ee1"
+  }
+}

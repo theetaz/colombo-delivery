@@ -1,0 +1,58 @@
+{
+  "Idle": {
+    "lowestVertexMetres": -0.0005443893023766577,
+    "maxEdgeStretch": [
+      1.4034750576161499,
+      12,
+      [
+        4970,
+        4971
+      ]
+    ]
+  },
+  "Walk": {
+    "lowestVertexMetres": -0.0010429915273562074,
+    "maxEdgeStretch": [
+      1.833818667367003,
+      3,
+      [
+        2921,
+        2924
+      ]
+    ]
+  },
+  "Mount": {
+    "lowestVertexMetres": -0.0011667665094137192,
+    "maxEdgeStretch": [
+      2.6261003781188856,
+      24,
+      [
+        2922,
+        2924
+      ]
+    ]
+  },
+  "Dismount": {
+    "lowestVertexMetres": -0.0011667665094137192,
+    "maxEdgeStretch": [
+      2.6261003781188856,
+      60,
+      [
+        2922,
+        2924
+      ]
+    ]
+  },
+  "Pedal": {
+    "lowestVertexMetres": 0.12887369096279144,
+    "maxEdgeStretch": [
+      2.1893284867045044,
+      40,
+      [
+        3161,
+        3162
+      ]
+    ]
+  },
+  "assetSha256": "1ba421b0e085bf72c4e2ce24db354d17c673d59dbf2051d60813d9183006943b"
+}

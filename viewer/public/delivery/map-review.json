@@ -1,0 +1,57 @@
+{
+  "reviewed_at": "2026-09-14T17:23:39.699010+00:00",
+  "scope": "Source data and exported geometry review, not a street survey",
+  "osm_timestamp": "2026-09-14T11:47:35Z",
+  "area_roads": 66,
+  "pilot_way_id": "13884292",
+  "pilot_road": "D. R. Wijewardene Mawatha",
+  "pilot_length_m": 580.0,
+  "checks": [
+    {
+      "label": "Continuous road surface",
+      "status": "pass",
+      "detail": "0.000 m of pilot centre line outside road triangles."
+    },
+    {
+      "label": "Building clearance",
+      "status": "pass",
+      "detail": "0 footprint overlaps above 0.05 m\u00b2 in the pilot carriageway."
+    },
+    {
+      "label": "Recorded one-way direction",
+      "status": "pass",
+      "detail": "27 forward graph edges match 27 source segments."
+    },
+    {
+      "label": "Gamini Hall roundabout graph",
+      "status": "pass",
+      "detail": "16 edges form a clockwise ring with 6 external directed connections. The delivery pilot stops short of this junction."
+    },
+    {
+      "label": "Bridge decks",
+      "status": "manual",
+      "detail": "3 nearby bridge ways remain provisional and are outside the delivery pilot."
+    },
+    {
+      "label": "Road width",
+      "status": "manual",
+      "detail": "6.4 m, estimated from two mapped lanes. No surveyed lane or kerb geometry."
+    },
+    {
+      "label": "Elevation",
+      "status": "manual",
+      "detail": "Regional terrain gives a maximum sampled grade of 10.4%. This is not a measured road profile."
+    },
+    {
+      "label": "Traffic controls",
+      "status": "manual",
+      "detail": "Source nodes cannot establish physical poles, stop lines or signal timing. No red-light fines are simulated in this pilot."
+    }
+  ],
+  "building_conflicts": [],
+  "geometry_changes": "None needed on the selected pilot centre line. Existing assets are preserved.",
+  "references": [
+    "https://wiki.openstreetmap.org/wiki/Key:oneway",
+    "https://wiki.openstreetmap.org/wiki/Tag:junction%3Droundabout"
+  ]
+}
