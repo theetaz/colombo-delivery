@@ -984,3 +984,28 @@ roadmap.
 - Updated the README, chronological timeline and composition guides to reflect
   the rejection and next production checkpoint. Runtime tests and builds were
   not repeated because this change contains documentation only.
+
+## 2026-09-15 — Blender Tripo installation and credential persistence
+
+- Installed official Tripo 3D 0.7.7 in Blender 5.1.2, using the published
+  stable GitHub release after finding the developer-page download was still
+  0.7.3. Preserved the existing Studio Bridge 1.0.32 installation.
+- Reused the configured Tripo API login and verified the add-on's read-only
+  account lookup. Saved add-on preferences and checked automatic credential
+  recovery in a fresh Blender process. Opened the authenticated Tripo Model
+  Generator panel for the artist handoff.
+- Corrected a local credential-serialization issue. The first scratch save
+  demonstrated that a skip-save property flag was insufficient. Replaced
+  serializable key storage with runtime-only getters/setters and purged legacy
+  key properties. Verified two-scene save/reload behavior and absence of the
+  literal key in the uncompressed saved file. Removed the scratch scene.
+- Restricted the add-on's credential file to its owner. Installation scripts,
+  credentials, configuration and validation logs remain outside this repository.
+  The local protection must be preserved and rechecked after an add-on update.
+- Verified the existing Studio Bridge's local listener and successful
+  WebSocket handshake after restart. Full Tripo Studio model transfer remains
+  untested. The API add-on's latest dropdown model is Version 3.0; newer CLI
+  model options remain part of the separate production workflow.
+- Submitted no generation, upload or paid processing. Existing project assets
+  and game code remain unchanged; runtime tests were not repeated for setup
+  documentation.

@@ -1143,3 +1143,25 @@ Validation is limited to documentation, command/source inspection and the
 read-only diagnostic. Existing game assets and runtime code are unchanged;
 the earlier 77-test result belongs to the living-street implementation above,
 not to a generated-asset trial.
+
+## 2026-09-15 — Blender Tripo add-on configured
+
+Installed the official stable Tripo 3D 0.7.7 release in Blender 5.1.2 and
+connected it to the existing Tripo API login. The developer download page
+still supplied 0.7.3, so the newer published GitHub release was used. The
+existing Tripo Studio Bridge 1.0.32 remains enabled alongside the API add-on.
+The [workstation setup guide](TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup)
+records where to find the generator and the current model-selection limits.
+
+A local credential-storage correction was necessary: the initial save test
+found that Blender's property flag alone did not prevent the key from being
+serialized into a scene. Runtime-only storage now keeps the key out of saved
+scene data. An uncompressed two-scene save/reload test confirmed the key was
+absent from file bytes while local credential recovery continued to work.
+The temporary test scene was removed, and project assets were unchanged.
+
+Status: installed, authenticated and reopened on the generator panel. Clean
+restart persistence and read-only account lookup passed. The Studio Bridge's
+local listener and WebSocket handshake passed; a transfer from Tripo Studio
+has not yet been exercised. No model generation, upload or paid processing
+was submitted. This is a workstation setup checkpoint, not asset acceptance.

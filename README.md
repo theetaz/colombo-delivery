@@ -53,6 +53,9 @@ Tripo-based asset workflow before further modeling. The
 now records source generation, cleanup, motion preparation, export and human
 review. CLI 0.4.0 is installed and authenticated; this documentation checkpoint
 does not include a new generated asset or an end-to-end pipeline trial.
+Tripo 3D 0.7.7 is also configured in Blender 5.1.2, alongside the existing
+Studio Bridge. Authentication, restart persistence and credential-free scene
+serialization have been verified; the first generated-asset trial remains open.
 
 ## Development checkpoints
 
@@ -78,6 +81,7 @@ does not include a new generated asset or an end-to-end pipeline trial.
 | 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; positive feedback prompted the living-street expansion. |
 | 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Expanded flora, buildings, address IDs, lighting and background traffic implemented. Human review rejected the visual result and requested a Tripo-based production workflow. |
 | 15 Sep | [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) | CLI 0.4.0 installation and authentication verified; V3 documentation and installed command behavior reviewed. Asset stages, recovery, Blender contracts and human review documented before a first pilot. |
+| 15 Sep | [Blender Tripo setup](docs/TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup) | Official Tripo 3D 0.7.7 installed and authenticated in Blender 5.1.2; restart, scene-save credential protection and local Studio Bridge connection checked. No generation submitted. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
