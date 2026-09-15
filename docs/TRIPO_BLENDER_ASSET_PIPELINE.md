@@ -147,5 +147,21 @@ animation clips or weather simulation.
 
 The browser review loads only local GLBs and their manifest, with no API key
 or live generation request. Wind and weather are visual review controls.
-Human appearance feedback remains required before these candidates replace
-street vegetation or the process expands to other asset families.
+Positive human feedback subsequently approved reuse of these candidates in
+the first assembled street. The isolated vegetation review remains available.
+
+## First street essentials
+
+The next bounded batch contains exactly five subjects: a neighborhood market,
+corner café, verandah house, compact apartment building and hibiscus shrub.
+These fill pickup, residential delivery and flowering planting roles. Existing
+trees, grass, courier, bicycle, road materials and street furniture are reused.
+Five P1 detailed-texture generations consumed 250 credits in total, with no
+regenerations or additional paid processing.
+
+The [environment package](../studies/colombo-road/environment/README.md) records
+uniform metre scaling, measured bounds, two LODs and packed Blender sources.
+Building fronts remain authored assumptions for human review; generation does
+not establish a door location. The [assembled street guide](FIRST_STREET_ENVIRONMENT.md)
+records placement and playtest expectations. Further generation should respond
+to a specific missing role found in this environment.

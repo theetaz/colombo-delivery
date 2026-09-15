@@ -71,7 +71,7 @@ export default function Review() {
         </a>
         <div>
           <h1>Colombo vegetation study</h1>
-          <p>Five generated sources, prepared for wind and weather review.</p>
+          <p>Five generated sources, prepared for wind and weather review. <a href="/environment.html">See them in the playable street</a>.</p>
         </div>
         <span className="review-state">
           <i className={error ? "error" : "ready"} />

@@ -1197,3 +1197,50 @@ validator pass. Ten GLB variants and five Blender downloads are available in
 the built viewer. Browser checks confirm asset and LOD switching, weather
 selection, direction and frozen wind time while paused. Visual quality has
 not been approved by these engineering checks.
+
+## 2026-09-15 — Essential assets and first assembled street
+
+Positive human feedback on the vegetation review approved reuse of those
+models. The next request was to generate only necessary missing assets and
+then assemble the game environment. The new batch contains one market,
+café, verandah house, apartment building and hibiscus shrub. Five successful
+Tripo P1 detailed-texture jobs consumed 250 credits, without paid retries or
+extra processing. Existing trees, grass, road materials, street furniture,
+Lotus Tower, courier and bicycle supply the other roles.
+
+The [environment package](../studies/colombo-road/environment/README.md)
+contains five packed editable Blender sources, ten runtime GLBs, source
+recipes and measured export metadata. Buildings retain their generated
+proportions under uniform scaling. The source model does not prove which
+surface is the entrance: front anchors are explicit assumptions awaiting
+human orientation review, and collision rectangles are conservative visual
+bounds that include overhangs.
+
+Preparation exposed a reduced market model floating roughly 10 cm above the
+ground. Grounding now uses vertices referenced by nondegenerate exported
+triangles after simplification, so unused geometry cannot hide a floating
+surface. The ten new GLBs pass binary checks for grounding, source and output
+hashes, triangle counts, finite geometry, texture dimensions and PBR channels;
+both shrub LODs also pass root-lock and wind-channel checks.
+
+The [Lake Garden Street guide](FIRST_STREET_ENVIRONMENT.md) records a 190 m
+authored Colombo-inspired corridor containing 12 buildings, 14 trees, 24 small
+planting groups and four fictional exterior delivery references. It preserves
+the selected garden, shops and lakeside direction, with separate walking and
+cycling exploration, named stop views, wind, rain and night lighting. Actual
+asset bounds determine building setbacks so deep models cannot occupy the
+pavement. The original geographic map and prior review pages remain intact.
+
+Status: new assets and their assembled appearance are prepared for human
+playtesting. This is a local environment study, not a surveyed Colombo road,
+multiplayer world or completed delivery economy. Further asset generation
+should follow a specific missing role found during that review.
+
+Validation: all 92 viewer tests and the production build pass. The ten new
+GLBs and five Blender downloads are served locally and match their production
+copies. Browser checks confirm complete asset loading, mount/dismount,
+named stop focus, lighting/weather selection, eight active night lights and
+an unchanged animation clock while paused. Identical textures are shared
+across LOD pairs, and both LODs use the same wind phase per placement. The
+approved courier, rider, fitted bicycle and original geographic files retain
+their hashes. No automated screenshots or appearance scoring were used.

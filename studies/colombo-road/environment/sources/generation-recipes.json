@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "provider": "Tripo API",
+  "operation": "text_to_model",
+  "generatedAt": "2026-09-15",
+  "provenance": "Project-directed generative sources created from original text prompts through the Tripo API. Buildings are fictional Colombo-inspired studies and do not represent surveyed places or real businesses. Use and distribution remain subject to the applicable Tripo terms and account plan; this record does not make a separate legal or licensing claim.",
+  "recipes": [
+    {
+      "assetId": "environment.neighborhood-market-01",
+      "taskId": "f9fc0da8-f55c-4132-8c7d-4669b726663a",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated complete single-storey small Colombo neighbourhood mini-market exterior, approximately 7 metres wide, front facade oriented toward positive Z, shown as full front-three-quarter geometry, broad practical awning, shaded wide entrance, open produce counter integrated into the shopfront, everyday local Sri Lankan street character, warm semi-real stylized Colombo game art matching tropical vegetation and the approved street direction, coherent clean architecture and readable silhouette. Exterior shell only with closed non-navigable interior. No platform, ground plane, soil, diorama, surrounding scene, other buildings, people, vehicles, pots, text, lettering, logos, branding, business names, cast shadow, or baked lighting. Original fictional streetscape asset, not a real or surveyed business.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 16000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 3454704, "sha256": "d09de955bf02fd700098b4cc7deccda6ec5380a3f65d0455434ef35e408acd0f"},
+        {"filename": "generated_image.jpeg", "bytes": 159765, "sha256": "3d1b38c98486049e0ed143b69363dc36b182456c1dd02903a51cddea88e3d1ad"},
+        {"filename": "rendered_image.webp", "bytes": 280452, "sha256": "94fbc61eac37c2b2a9d5a969305fd2f91a38aaad91e6ffcae765efa2140a57e9"}
+      ]
+    },
+    {
+      "assetId": "environment.corner-cafe-01",
+      "taskId": "d6f86bb1-410a-4ce3-bc10-e1d76da24e1b",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated complete narrow two-storey tropical Colombo shophouse cafe exterior, approximately 6 metres wide, front facade oriented toward positive Z, shown as full front-three-quarter geometry, shaded ground-floor entrance and modest cafe frontage, upper balcony, louvered windows and practical tropical sun protection, warm semi-real stylized Colombo game art matching tropical vegetation and the approved street direction, coherent clean architecture and readable silhouette. Exterior shell only with closed non-navigable interior. No platform, ground plane, soil, diorama, surrounding scene, other buildings, people, vehicles, pots, text, menus, lettering, logos, branding, business names, cast shadow, or baked lighting. Original fictional streetscape asset, not a real or surveyed business.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 16000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 3191712, "sha256": "974cd3b9298945fdd023b7e9501199df5828429d608e36844176f3dfec2186d9"},
+        {"filename": "generated_image.jpeg", "bytes": 159258, "sha256": "ee3de1d83c59e141fbee0c3581f4b48bb441522b6153f20d438b2221a1bd88b1"},
+        {"filename": "rendered_image.webp", "bytes": 333689, "sha256": "7ed894704f167fb964397547bb4e5c85c0c04bd1b958055983f9dead39ae6073"}
+      ]
+    },
+    {
+      "assetId": "environment.verandah-house-01",
+      "taskId": "9146007d-b6ab-4872-8b7e-055ca6a4e6fa",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated complete modest single-storey Sri Lankan tropical home exterior, approximately 8 metres wide, front facade oriented toward positive Z, shown as full front-three-quarter geometry, clay-tile pitched roof, deep shaded front verandah, warm stucco walls, louvered windows and a clear front door, practical lived-in residential proportions, warm semi-real stylized Colombo game art matching tropical vegetation and the approved street direction, coherent clean architecture and readable silhouette. Exterior shell only with closed non-navigable interior. No platform, ground plane, soil, diorama, surrounding scene, other buildings, people, vehicles, pots, text, lettering, logos, branding, cast shadow, or baked lighting. Original fictional streetscape asset, not a real or surveyed home.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 16000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 3070892, "sha256": "9a734794c513f28c749f3e5e8dda6ce80fef00f6c88da39586f095abfe695a01"},
+        {"filename": "generated_image.jpeg", "bytes": 260648, "sha256": "2f178866453d9bec5e5de0ba10e8cfacfae3a78e3b8ef9905090cca5997c41d2"},
+        {"filename": "rendered_image.webp", "bytes": 213735, "sha256": "aea79802ffd8f06297f4c6f8c88f1931110fe09463d0803c845d632e017dc31d"}
+      ]
+    },
+    {
+      "assetId": "environment.courtyard-apartments-01",
+      "taskId": "0cc0ca73-b957-4b04-b8bc-a8e750821f84",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated complete compact three-storey Colombo residential apartment exterior, approximately 9 metres wide, front facade oriented toward positive Z, shown as full front-three-quarter geometry, stacked verandah balconies, practical window shades, recessed ground-floor entrance and tropical urban proportions, warm semi-real stylized Colombo game art matching tropical vegetation and the approved street direction, coherent clean architecture and readable silhouette. Exterior shell only with closed non-navigable interior. No platform, ground plane, soil, courtyard diorama, surrounding scene, other buildings, people, vehicles, pots, text, lettering, logos, branding, cast shadow, or baked lighting. Original fictional streetscape asset, not a real or surveyed building.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 18000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 3695224, "sha256": "28598a46a2e3bbad9857275a9dc581b37986c0afc331d47ba01842105d1a47ae"},
+        {"filename": "generated_image.jpeg", "bytes": 224848, "sha256": "59e2c46f6cb64ad6158e124e2df8e1775ec78eb1fe1a7d442e18bcb0f5e45ed7"},
+        {"filename": "rendered_image.webp", "bytes": 314333, "sha256": "4e0f70b4afbfc6ecff3353256c8c657c957850184a6ff2d5e6671d6630fc4917"}
+      ]
+    },
+    {
+      "assetId": "environment.hibiscus-shrub-01",
+      "taskId": "96d65c10-5ff5-4375-9e7d-61c47f281726",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated loose leafy tropical hibiscus shrub asset, approximately 1.1 metres visual height, irregular natural branchy shape, varied green leaves and a restrained scattering of small coral-red hibiscus flowers, visible gaps between branches and leaf clusters, warm semi-real stylized Colombo game art matching the approved vegetation and street direction, coherent natural geometry and clean readable silhouette, complete shrub centered. No pot, planter, platform, soil, ground plane, diorama, surrounding scene, buildings, people, vehicles, text, logos, branding, cast shadow, or baked lighting.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 5000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 2806036, "sha256": "1b61a5a803dfec56d2848a703e5e94e2b74de30856357b81fadedb02d056aed6"},
+        {"filename": "generated_image.jpeg", "bytes": 165151, "sha256": "bee0bd0c584d8bff89f2d6385a1d34df136eda176430c561214e42468adc3f82"},
+        {"filename": "rendered_image.webp", "bytes": 236374, "sha256": "4f9634945e0b0f2ce8ad2e90d9450ccaa74be6c3050a0ea09788664c8f20c2b0"}
+      ]
+    }
+  ]
+}

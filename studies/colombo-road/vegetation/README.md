@@ -2,8 +2,9 @@
 
 These files are prepared from immutable Tripo source meshes. Each asset keeps a compressed, editable Blender file here and publishes independent LOD0 and LOD1 GLBs to `../viewer/public/vegetation`.
 
-Status: first candidates, awaiting human appearance feedback. The existing
-street composition has not been populated with these models.
+Status: positive human feedback approved these candidates for reuse. They now
+populate the separate [Lake Garden Street environment](../../../docs/FIRST_STREET_ENVIRONMENT.md).
+The earlier composition remains available for comparison.
 
 ## Review the kit
 

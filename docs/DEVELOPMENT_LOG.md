@@ -1047,3 +1047,45 @@ roadmap.
   collection controls. All 15 model/Blender download endpoints return the
   expected files and are included in the production build. No automated
   screenshots or visual-quality scoring were used.
+
+## 2026-09-15 — Essential street assets and environment assembly
+
+- Recorded positive vegetation feedback and approval to reuse the five
+  candidates. Limited the next batch to five missing roles: market, café,
+  verandah house, compact apartments and a flowering hibiscus shrub.
+- Generated exactly five P1 detailed-texture sources at 50 credits each.
+  Preserved immutable source hashes and task references. No regeneration,
+  extra variants or paid cleanup was submitted.
+- Prepared five packed Blender files and ten local GLBs, using uniform metre
+  scaling, 1024-pixel PBR textures and reduced triangle LODs. The shrub uses
+  the existing wind-mask and shadow-deformation contract.
+- Corrected reduced-mesh grounding after simplification exposed floating
+  market geometry. Ground checks now use nondegenerate exported triangle
+  vertices, and re-grounding happens before final shrub wind-mask authoring.
+- Assembled a new 190 m environment from 12 buildings, 14 trees and 24 smaller
+  planting groups. Building setbacks derive from actual bounds; unique
+  placement IDs link four fictional exterior delivery references to their
+  buildings. New generated front orientations still require human review.
+- Reused the approved courier, bicycle and movement assets. The first
+  integration review caught missing hand-grip and mechanical pose updates;
+  exploration must retain those established contacts and transition stages.
+- Preserved the district map, original prototypes and earlier composition
+  for comparison. Updated the README, timeline, asset guide and production
+  pipeline record. Human visual judgement remains the acceptance step.
+- Reused the approved movement state machine through an optional spatial
+  context, preserving the courtyard defaults. The street retains the approach,
+  mounting, braking, pedal settling and local dismount stages, the 2.8 gear
+  ratio, hand-grip morph, steering and foot-contact solver. Corridor tests
+  cover the complete sequence and stop behavior at its bounds.
+- Kept wind authoring in local asset units so scaled trees do not receive
+  scale twice, and kept phase identical between each placement's two LODs.
+  Matching material/texture slots share the same GPU texture objects after
+  byte-level comparison confirmed all 30 embedded texture pairs are identical.
+- Final validation: all 92 viewer tests and the production build pass. Both
+  asset validators pass, all 15 new download endpoints have the expected
+  lengths, and built GLBs/Blender files match the final source hashes.
+  Approved movement, rider, bicycle and original district hashes are unchanged.
+- Browser checks confirmed complete loading, mount/dismount, stop focus,
+  Sunny/Dusk/Night and weather controls, eight active night lights, and pause
+  with frozen time and blocked interaction. Initial follow views use about
+  153–156 draw calls. No automated visual-quality judgement was performed.

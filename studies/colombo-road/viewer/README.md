@@ -46,6 +46,13 @@ It does not modify the models or run either Blender script.
   strength and weather, and download the GLBs or editable Blender sources.
   This separate review leaves the street composition intact. See the
   [vegetation guide](../vegetation/README.md) for provenance and preparation.
+- **Lake Garden Street:** open http://127.0.0.1:5175/environment.html.
+  Explore the assembled 190 m street on foot or bicycle, compare Garden,
+  Shops and Lakeside views, and test night lighting, wind and rain. Four
+  fictional exterior address markers identify future delivery stops. This
+  page reuses approved movement assets; its assembled appearance awaits human
+  review. See the [environment guide](../../../docs/FIRST_STREET_ENVIRONMENT.md)
+  and [editable asset package](../environment/README.md).
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local
   storage; the export is the portable copy. Nothing is sent to a remote server.

@@ -1,0 +1,31 @@
+:root { font-family: "DM Sans", sans-serif; color: #f5f4ed; background: #15201c; }
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+button, select { font: inherit; }
+.environment-shell, .environment-canvas { position: fixed; inset: 0; }
+.environment-canvas canvas { width: 100%; height: 100%; display: block; }
+.environment-header { position: fixed; top: 22px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none; }
+.environment-header > div { padding: 16px 20px; border: 1px solid #ffffff24; border-radius: 14px; background: #10201ae8; backdrop-filter: blur(14px); }
+.environment-header h1 { margin: 2px 0; font-size: 24px; letter-spacing: -.03em; }
+.environment-header p { margin: 0; color: #bdc9c3; font-size: 13px; }
+.eyebrow { color: #f2b95e; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; }
+.environment-header nav { display: flex; gap: 8px; pointer-events: auto; }
+.environment-header a, .view-tabs button { color: #eef4ef; text-decoration: none; border: 1px solid #ffffff24; background: #10201ae8; border-radius: 999px; padding: 9px 13px; }
+.view-tabs { position: fixed; top: 124px; left: 24px; display: flex; gap: 7px; }
+.view-tabs button { cursor: pointer; }
+.view-tabs .follow { display: flex; gap: 6px; align-items: center; color: #142019; background: #f2b95e; }
+.environment-panel { position: fixed; right: 24px; top: 86px; width: 262px; max-height: calc(100dvh - 104px); overflow-y: auto; padding: 16px; border: 1px solid #ffffff24; border-radius: 15px; background: #10201aee; box-shadow: 0 18px 60px #0007; backdrop-filter: blur(16px); }
+.readiness, .transport, .environment-panel label { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.readiness { color: #c8d1cc; font-size: 12px; padding-bottom: 13px; border-bottom: 1px solid #ffffff1a; }
+.readiness i { width: 8px; height: 8px; border-radius: 50%; background: #f2b95e; flex: none; }.readiness i.ready { background: #6ed89a; }.readiness i.error { background: #ef766c; }
+.transport { margin: 15px 0 8px; }.transport span { display: flex; gap: 8px; align-items: center; }.transport strong { color: #f2b95e; font-size: 13px; }
+.movement-hint { margin: 0 0 8px; color: #aebcb5; font-size: 11px; }.movement-hint.action { color: #f2b95e; }
+.instructions { line-height: 2; color: #aebcb5; font-size: 11px; } kbd { color: white; border: 1px solid #ffffff35; border-radius: 4px; padding: 2px 5px; background: #ffffff0c; }
+.environment-panel label { margin: 8px 0; color: #cbd5d0; font-size: 12px; }.environment-panel label svg { margin-right: -70px; }
+.environment-panel select { color: white; background: #263a31; border: 1px solid #ffffff20; border-radius: 7px; padding: 6px 8px; }
+.pause { width: 100%; display: flex; justify-content: center; gap: 7px; margin: 14px 0; padding: 9px; color: #17231d; background: #f2b95e; border: 0; border-radius: 8px; cursor: pointer; }
+.stop-list { display: grid; gap: 5px; margin: 10px 0; }.stop-list > span { color: #93a69d; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }.stop-list button { display: flex; justify-content: space-between; color: #e7ece9; background: #ffffff0b; border: 1px solid #ffffff16; border-radius: 6px; padding: 6px 8px; text-align: left; }.stop-list small { color: #f2b95e; }
+button:disabled, select:disabled { opacity: .45; cursor: wait; }
+.environment-panel dl { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 0 0 12px; }.environment-panel dl div { background: #ffffff0b; border-radius: 7px; padding: 8px; }.environment-panel dt { color: #93a69d; font-size: 10px; }.environment-panel dd { margin: 2px 0 0; font-size: 16px; }.environment-panel small { color: #84968d; }
+.environment-shell footer { position: fixed; bottom: 18px; left: 24px; max-width: 560px; padding: 8px 12px; color: #c0cbc5; background: #10201ad9; border-radius: 8px; font-size: 11px; }
+@media (max-width: 760px) { .environment-header nav { display: none; }.environment-panel { top: auto; bottom: 18px; right: 12px; width: min(290px, calc(100vw - 24px)); }.environment-shell footer { display: none; }.view-tabs { top: 122px; max-width: calc(100vw - 32px); overflow: auto; }.environment-header { left: 12px; right: 12px; }.environment-header > div { padding: 12px 14px; } }

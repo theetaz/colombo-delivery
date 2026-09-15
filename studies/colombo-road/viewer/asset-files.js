@@ -25,4 +25,9 @@ export const assetFiles = [
   {file:'vegetation/vegetation.coconut-palm-01.blend', label:'Coconut palm editable source', kind:'Blender'},
   {file:'vegetation/vegetation.short-grass-01.blend', label:'Short grass editable source', kind:'Blender'},
   {file:'vegetation/vegetation.tall-grass-01.blend', label:'Tall grass editable source', kind:'Blender'},
+  {file:'environment/environment.neighborhood-market-01.blend', label:'Neighborhood market editable source', kind:'Blender'},
+  {file:'environment/environment.corner-cafe-01.blend', label:'Corner cafe editable source', kind:'Blender'},
+  {file:'environment/environment.verandah-house-01.blend', label:'Verandah house editable source', kind:'Blender'},
+  {file:'environment/environment.courtyard-apartments-01.blend', label:'Courtyard apartments editable source', kind:'Blender'},
+  {file:'environment/environment.hibiscus-shrub-01.blend', label:'Hibiscus shrub editable source', kind:'Blender'},
 ];

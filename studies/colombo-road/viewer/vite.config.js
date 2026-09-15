@@ -45,5 +45,5 @@ export default defineConfig({
       }
     }
   }],
-  build:{chunkSizeWarningLimit:1000,rollupOptions:{input:{transitions:fileURLToPath(new URL('./transitions.html',import.meta.url)),main:fileURLToPath(new URL('./index.html',import.meta.url)),streetComposition:fileURLToPath(new URL('./street-composition.html',import.meta.url)),vegetationReview:fileURLToPath(new URL('./vegetation-review.html',import.meta.url)),cyclist:fileURLToPath(new URL('./cyclist.html',import.meta.url)),walking:fileURLToPath(new URL('./walking.html',import.meta.url)),movement:fileURLToPath(new URL('./movement.html',import.meta.url))}}}
+  build:{chunkSizeWarningLimit:1000,rollupOptions:{input:{transitions:fileURLToPath(new URL('./transitions.html',import.meta.url)),main:fileURLToPath(new URL('./index.html',import.meta.url)),streetComposition:fileURLToPath(new URL('./street-composition.html',import.meta.url)),environment:fileURLToPath(new URL('./environment.html',import.meta.url)),vegetationReview:fileURLToPath(new URL('./vegetation-review.html',import.meta.url)),cyclist:fileURLToPath(new URL('./cyclist.html',import.meta.url)),walking:fileURLToPath(new URL('./walking.html',import.meta.url)),movement:fileURLToPath(new URL('./movement.html',import.meta.url))}}}
 });
