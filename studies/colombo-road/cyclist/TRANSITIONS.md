@@ -1,5 +1,10 @@
 # Bicycle mounting and dismounting study
 
+Human review approved the revised Mount and Dismount clips on 15 September
+2026. The approval is tied to the leg-corrected `939c56b` animation checkpoint;
+it does not apply to the earlier rejected transition pass or to the separate
+rejected main-project stationary rider studies.
+
 Open **http://127.0.0.1:5175/transitions.html** with the viewer running.
 The courtyard at `/movement.html` uses these same clips. Walking and pedaling
 retain the exact animation tracks approved before this study.

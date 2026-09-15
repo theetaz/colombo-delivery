@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
-import {Map,Camera,Download,Maximize,Navigation,Landmark,PanelLeft,Info,RefreshCw,X} from 'lucide-react';
+import {Map,Camera,Download,Maximize,Navigation,Landmark,PanelLeft,Info,RefreshCw,X,CarFront,Trees} from 'lucide-react';
 import {createViewer} from './createViewer.js';
 import {LayersPanel,InspectPanel,AssetsPanel} from './Panels.jsx';
 import {assetFiles} from '../asset-files.js';
@@ -12,8 +12,9 @@ function loadReviews(){try{return JSON.parse(localStorage.getItem(storageKey))||
 export default function App(){
   const host=useRef(null),viewer=useRef(null),modelsRef=useRef({});
   const [manifest,setManifest]=useState(null),[network,setNetwork]=useState(null),[models,setModels]=useState({});
-  const [tab,setTab]=useState(()=>window.location.hash==='#drive'?'Drive':'Layers'),[mode,setMode]=useState('full'),[layers,setLayers]=useState(defaultLayers);
-  const [overlays,setOverlays]=useState({centreLines:false,boundary:false}),[wireframe,setWireframe]=useState(false);
+  const [tab,setTab]=useState(()=>window.location.hash==='#drive'?'Drive':'Layers'),[mode,setMode]=useState('full'),[layers,setLayers]=useState(()=>window.location.hash==='#street'?{...defaultLayers,markers:false}:defaultLayers);
+  const [overlays,setOverlays]=useState({centreLines:false,boundary:false,trafficFlow:false}),[wireframe,setWireframe]=useState(false);
+  const [dressed,setDressed]=useState(true);
   const [progress,setProgress]=useState({full:0}),[fatal,setFatal]=useState(''),[notice,setNotice]=useState('');
   const [selection,setSelection]=useState(null),[camera,setCamera]=useState('overview'),[panelOpen,setPanelOpen]=useState(false);
   const [reviews,setReviews]=useState(loadReviews),[storageOkay,setStorageOkay]=useState(true);
@@ -33,10 +34,11 @@ export default function App(){
         onPick:value=>{if(alive){setSelection(value);setTab('Inspect');}},
         onCamera:value=>{if(alive)setCamera(value);},
         onDelivery:value=>{if(alive)setDrive(value);},
+        onNotice:message=>{if(alive)setNotice(message);},
         onError:message=>{if(alive)setFatal(message);}
       });
       Promise.all([loadJSON('manifest.json'),loadJSON('road-network.json')]).then(async([m,n])=>{
-        if(!alive)return;setManifest(m);setNetwork(n);await viewer.current.load(n,m);
+        if(!alive)return;setManifest(m);setNetwork(n);await viewer.current.load(n,m);if(alive&&window.location.hash==='#street')viewer.current?.preset('street');
       }).catch(error=>{if(alive)setFatal(error.message);});
       fetch('/delivery/map-review.json').then(r=>r.ok?r.json():null).then(value=>{if(alive)setRouteReview(value);}).catch(()=>{});
     } catch(error){setFatal(`3D view could not start: ${error.message}`);}
@@ -45,6 +47,7 @@ export default function App(){
   useEffect(()=>{viewer.current?.setLayers(layers);},[layers]);
   useEffect(()=>{viewer.current?.setOverlays(overlays);},[overlays]);
   useEffect(()=>{viewer.current?.setWireframe(wireframe);},[wireframe]);
+  useEffect(()=>{viewer.current?.setDressed(dressed);},[dressed]);
   useEffect(()=>{
     try{localStorage.setItem(storageKey,JSON.stringify(reviews));setStorageOkay(true);}catch{setStorageOkay(false);}
   },[reviews]);
@@ -56,7 +59,7 @@ export default function App(){
   }
   async function startDrive(){
     setStartingDrive(true);setDriveError('');setSelection(null);
-    setLayers({...defaultLayers,markers:false});setOverlays({centreLines:false,boundary:false});setWireframe(false);
+    setLayers({...defaultLayers,markers:false});setOverlays({centreLines:false,boundary:false,trafficFlow:false});setWireframe(false);
     try{await changeMode('full');await viewer.current.startDelivery();setPanelOpen(false);}
     catch(error){setDriveError(`Could not start the delivery test: ${error.message}`);}
     finally{setStartingDrive(false);}
@@ -113,7 +116,7 @@ export default function App(){
   }
   return <div className="app-shell">
     <header className="app-header"><div className="brand"><Map size={28} strokeWidth={1.4}/><h1>Colombo <span>/ Asset review</span></h1></div>
-      <div className="header-actions"><button className="button" aria-label="Save view" title="Save view as PNG" onClick={capture} disabled={!modelReady||busyCapture}><Camera size={16}/><span>{busyCapture?'Saving…':'Save view'}</span></button>
+      <div className="header-actions"><a className="button" href="/street-composition.html"><Trees size={16}/><span>Street study</span></a><button className="button" aria-label="Save view" title="Save view as PNG" onClick={capture} disabled={!modelReady||busyCapture}><Camera size={16}/><span>{busyCapture?'Saving…':'Save view'}</span></button>
         <button className="button primary" aria-label="Export review" title="Export review as JSON" onClick={exportReview} disabled={!ready}><Download size={16}/><span>Export review</span></button></div></header>
     <main className="workspace">
       <aside className={`sidebar ${panelOpen?'open':''}`} aria-label="Asset review controls">
@@ -121,7 +124,7 @@ export default function App(){
           <button className="close-panel icon-button" aria-label="Close controls" onClick={()=>setPanelOpen(false)}><X size={18}/></button>
         </nav>
         <div className="panel-content">
-          {tab==='Layers'&&<LayersPanel {...{manifest,mode,layers,setLayers,overlays,setOverlays,wireframe,setWireframe}} setMode={changeMode}/>}
+          {tab==='Layers'&&<LayersPanel {...{manifest,mode,layers,setLayers,overlays,setOverlays,wireframe,setWireframe,dressed,setDressed}} setMode={changeMode}/>}
           {tab==='Inspect'&&<InspectPanel {...{network,selection,reviews,storageOkay}} onSelect={selectFeature} onFocus={s=>{viewer.current?.focus(s);setPanelOpen(false);}} onReview={review}/>}
           {tab==='Assets'&&<AssetsPanel {...{manifest,models,fileChecks,checkingFiles,dataChecks,checkingData,checkError}} onFileChecks={checkFiles} onDataChecks={checkData}/>}
           {tab==='Drive'&&<DeliveryPanel drive={drive} review={routeReview} ready={ready} starting={startingDrive} error={driveError} onStart={startDrive} onExit={exitDrive} onAssist={value=>viewer.current?.setDriveAssist(value)}/>}
@@ -133,6 +136,7 @@ export default function App(){
         {!drive?.active&&<div className="camera-toolbar" aria-label="Camera presets">
           <button disabled={!ready} className={camera==='overview'?'active':''} onClick={()=>viewer.current?.preset('overview')}><Map size={17}/><span>Overview</span></button>
           <button disabled={!ready} className={camera==='top'?'active':''} onClick={()=>viewer.current?.preset('top')}><Navigation size={16}/><span>Top down</span></button>
+          <button disabled={!ready} className={camera==='street'?'active':''} onClick={()=>{if(mode!=='full')changeMode('full');setLayers(l=>({...l,roads:true,buildings:true,markers:false}));setOverlays({centreLines:false,boundary:false,trafficFlow:false});viewer.current?.preset('street');}}><CarFront size={16}/><span>Street</span></button>
           <button disabled={!ready} className={camera==='tower'?'active':''} onClick={()=>{if(mode!=='full')changeMode('full');setLayers(l=>({...l,tower:true}));viewer.current?.preset('tower');}}><Landmark size={16}/><span>Tower</span></button>
           <button disabled={!ready} title="Fit the entire district" aria-label="Fit the entire district" onClick={()=>viewer.current?.preset('overview')}><Maximize size={17}/></button>
         </div>}

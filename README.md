@@ -26,14 +26,53 @@ with all 11 original study commits preserved in history.
 
 Human review approved the study's walking cycle, and the previously approved
 pedaling track is preserved unchanged. This does not approve the cyclist study
-as final character quality. The revised mounting and dismounting animations are
-ready for human testing and are not approved yet.
+as final character quality. The revised mounting and dismounting animations
+were human-approved on 15 September 2026 at the leg-corrected `939c56b`
+checkpoint.
 The study reuses the approved bicycle design with a fitted saddle. Earlier
 full-body stationary rider fits and clean-rig checkpoint 1 in the original app
 were rejected; later diagnostic experiments did not produce a review candidate.
 Those rejected historical prototypes do not describe the newer study's approved
 walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 [study movement record](studies/colombo-road/cyclist/MOVEMENT.md).
+
+The latest environment checkpoint combines the selected green neighborhood,
+small-shop street and lakeside concepts in a
+[190 m street composition](studies/colombo-road/streets/composition/README.md).
+It includes editable Blender architecture and landscape kits, textured roads
+and pavements, and three street-level review views. Positive human feedback
+on this composition prompted a larger environment experiment.
+
+The [living-street expansion](studies/colombo-road/streets/composition/ASSET_GUIDE.md)
+adds tropical planting varieties, supermarket and residential exteriors,
+night-time path lighting and background vehicles. A stable asset and place
+registry links selected delivery locations to exterior building entrances.
+Human feedback rejected the expansion's visual result and requested a
+Tripo-based asset workflow before further modeling. The
+[Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md)
+now records source generation, cleanup, motion preparation, export and human
+review. Tripo CLI 0.4.0 and the Blender 5.1.2 workstation are configured.
+The first [generated vegetation kit](studies/colombo-road/vegetation/README.md)
+takes three tree silhouettes and two grass forms through source generation,
+Blender preparation and an independent browser review. Positive human feedback
+approved their reuse in the first assembled street.
+
+The new [Lake Garden Street environment](docs/FIRST_STREET_ENVIRONMENT.md)
+reuses that vegetation, the approved courier and bicycle, and existing road
+materials. Five new Tripo sources supply a market, café, verandah house,
+apartment building and flowering shrub. The 190 m authored corridor contains
+12 building placements, 14 trees, 24 smaller planting groups and four fictional
+exterior delivery references. Human feedback approved the assembled environment
+on 15 September and requested a playable game in these surroundings. This is a
+Colombo-inspired pilot; its buildings and addresses are not surveyed locations.
+
+The [single-player game](docs/SINGLEPLAYER_GAME.md) now connects that street to
+a three-job delivery shift, the approved walking and cycling controls, local
+traffic, a compact minimap and saved browser progress. Open **Play** to collect
+and deliver parcels; environment and asset inspection remain on separate pages.
+Player commands, simulation state and rendering are separate responsibilities
+in preparation for multiplayer. Accounts, WebSockets and a shared server world
+are later milestones. This game checkpoint is ready for human playtesting.
 
 ## Development checkpoints
 
@@ -52,8 +91,17 @@ walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 | 14 Sep | [Rider source audit](docs/BUILD_TIMELINE.md#2026-09-14--clean-rig-revision-2-repair-and-source-audit) | Rejected rigs and deformation evidence preserved; the audit corrected the construction history. Revision 2 failed engineering bounds and was not sent for human review. |
 | 15 Sep | [First-district study baseline](docs/BUILD_TIMELINE.md#2026-09-15--standalone-study-baseline-preserved) | Standalone 1.8 × 1.8 km map from a 14 September OSM snapshot, review viewer, limited car delivery pilot, cyclist asset, and movement testbed preserved. |
 | 15 Sep | [Walking approval](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md) | Upright gait refined through planted contacts, momentum handoffs, smooth curves, and removal of repeated pelvis/knee motion; human-approved result preserved. |
-| 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; human testing remains pending. |
+| 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; the `939c56b` revision is human-approved. |
 | 15 Sep | [Study consolidation](docs/BUILD_TIMELINE.md#2026-09-15--colombo-road-and-movement-study-consolidated) | Map data, Blender sources, browser assets, tests, 37 milestone captures, and original commit history moved into this repository. |
+| 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added; review requested a more realistic visual direction. |
+| 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explored; a combination of A, B and C was selected. |
+| 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; positive feedback prompted the living-street expansion. |
+| 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Expanded flora, buildings, address IDs, lighting and background traffic implemented. Human review rejected the visual result and requested a Tripo-based production workflow. |
+| 15 Sep | [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) | CLI 0.4.0 installation and authentication verified; V3 documentation and installed command behavior reviewed. Asset stages, recovery, Blender contracts and human review documented before a first pilot. |
+| 15 Sep | [Blender Tripo setup](docs/TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup) | Official Tripo 3D 0.7.7 installed and authenticated in Blender 5.1.2; restart, scene-save credential protection and local Studio Bridge connection checked. No generation submitted. |
+| 15 Sep | [Generated vegetation review](studies/colombo-road/vegetation/README.md) | Three Tripo tree candidates and two grass candidates, editable Blender sources, two LODs per asset, wind masks and a separate weather review. Positive human feedback approved reuse in the street environment. |
+| 15 Sep | [Essential assets and assembled street](docs/FIRST_STREET_ENVIRONMENT.md) | Five necessary source models prepared in Blender and combined with existing assets in an explorable 190 m street. Positive human feedback approved the environment and requested the single-player game. |
+| 15 Sep | [Single-player delivery shift](docs/SINGLEPLAYER_GAME.md) | Three timed jobs, local progress, left-hand ambient traffic and a focused game interface reuse the approved environment and animations. Multiplayer boundaries are documented; human gameplay feedback is the next review. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -73,7 +121,12 @@ npm run study:dev
 
 Open these local pages:
 
+- [Play the single-player delivery game](http://127.0.0.1:5175/play.html)
 - [Map and limited car-delivery pilot](http://127.0.0.1:5175/#drive)
+- [Dressed street study](http://127.0.0.1:5175/#street)
+- [Combined garden, shops and lakeside composition](http://127.0.0.1:5175/street-composition.html)
+- [Vegetation, wind and weather review](http://127.0.0.1:5175/vegetation-review.html)
+- [Lake Garden Street environment](http://127.0.0.1:5175/environment.html)
 - [Walk and ride courtyard](http://127.0.0.1:5175/movement.html)
 - [Bicycle transition review](http://127.0.0.1:5175/transitions.html)
 - [Walking review](http://127.0.0.1:5175/walking.html)
@@ -122,8 +175,8 @@ live map data.
 
 [![Approved walking study](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/01-walking-side.png)](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md)
 
-*The approved walking checkpoint is preserved separately from the later,
-still-pending bicycle transition review.*
+*The walking checkpoint is preserved separately from the later, approved
+`939c56b` bicycle transition review.*
 
 [![Completed first practice delivery](docs/milestones/2026-09-13-courier-bicycle.jpg)](docs/DELIVERY_PROTOTYPE.md)
 
@@ -190,6 +243,13 @@ Then open
   walking, and transition previews.
 - [Character art pipeline](docs/CHARACTER_ART_PIPELINE.md) — hero-character
   direction, reconstruction stages, and remaining rights/review gates.
+- [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) —
+  model selection, source preservation, task recovery, editable assets and
+  human review before reuse.
+- [Vegetation kit](studies/colombo-road/vegetation/README.md) — generated tree
+  and grass sources, Blender preparation, wind data and review controls.
+- [First street environment](docs/FIRST_STREET_ENVIRONMENT.md) — essential
+  exterior assets, placement rules and the walking/cycling playtest.
 - [Vehicles and progression](docs/VEHICLES.md) — implemented bicycle contract
   and planned vehicle roles.
 - [Data sources](docs/DATA_SOURCES.md) — OSM provenance, interpretation,
@@ -197,8 +257,13 @@ Then open
 
 ## Next checkpoints
 
-The immediate review gate is human testing of the corrected mount/dismount
-sequences. The standalone district still needs street-level accuracy review,
+The next environment checkpoint is human playtesting of Lake Garden Street:
+building frontage orientation and proportions, planting variety, pavement
+clearance, walking/cycling contacts and night lighting. Refine these assets
+from that feedback before spending on further families. The earlier
+living-street result is preserved as a rejected experiment.
+The mount/dismount sequences are already human-approved at `939c56b`.
+The standalone district still needs street-level accuracy review,
 bridge and lane refinement, routing rules, collisions, traffic, and integration
 before it can become city gameplay. The original practice loop still needs
 verified pickup/drop-off locations and the Stage 1 field checks before its

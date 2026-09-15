@@ -12,17 +12,22 @@ export function Toggle({label,checked,onChange,color,disabled=false}){
   </label>;
 }
 
-export function LayersPanel({manifest,mode,setMode,layers,setLayers,overlays,setOverlays,wireframe,setWireframe}){
+export function LayersPanel({manifest,mode,setMode,layers,setLayers,overlays,setOverlays,wireframe,setWireframe,dressed,setDressed}){
   return <><section className="panel-section">
     <h2>Scene layers</h2><p className="subtle">Lotus Tower &amp; Fort</p>
     <div className="segmented" aria-label="Model selection">
       <button aria-pressed={mode==='full'} onClick={()=>setMode('full')}>Full district</button>
       <button aria-pressed={mode==='roads'} onClick={()=>setMode('roads')}>Roads only</button>
     </div>
+    <div className="segmented street-style" aria-label="Street presentation">
+      <button aria-pressed={!dressed} onClick={()=>setDressed(false)}>Source</button>
+      <button aria-pressed={dressed} onClick={()=>setDressed(true)}>Dressed streets</button>
+    </div>
     <div className="layer-list">{layerDefinitions.map(([id,label,color])=><Toggle key={id} label={label} color={color}
       checked={layers[id]} disabled={mode==='roads'&&id!=='roads'} onChange={checked=>setLayers({...layers,[id]:checked})}/>)}</div>
     <div className="divider"/>
     <Toggle label="Road centre lines" checked={overlays.centreLines} onChange={centreLines=>setOverlays({...overlays,centreLines})}/>
+    <Toggle label="Inferred traffic flow" checked={overlays.trafficFlow!==false} onChange={trafficFlow=>setOverlays({...overlays,trafficFlow})}/>
     <Toggle label="Study boundary" checked={overlays.boundary} onChange={boundary=>setOverlays({...overlays,boundary})}/>
     <Toggle label="Wireframe" checked={wireframe} onChange={setWireframe}/>
     <p className="help-note"><Info size={16}/><span>Control markers show mapped locations, not verified traffic lights.</span></p>

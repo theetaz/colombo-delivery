@@ -766,9 +766,10 @@ roadmap.
 - Added a reference-guided mounting and dismounting study in `7ec7367` while
   preserving the approved walking and pedaling animation tracks.
 - Corrected the transition leg motion in `939c56b`, including the knee hinge,
-  rear sweep, support steps, and shoe placement. The corrected transitions
-  remain pending human feedback; automated and visual regression evidence does
-  not record human approval.
+  rear sweep, support steps, and shoe placement. Human review approved these
+  revised Mount and Dismount clips on 15 September 2026. The approval does not
+  extend to the rejected first transition pass or separate stationary-rider
+  experiments.
 
 ## 2026-09-15 — Road and animation study consolidated
 
@@ -790,3 +791,348 @@ roadmap.
   delivery tests pass; both production builds succeed. The migrated transition
   page renders on port 5175 with no browser console warnings or errors, and its
   GLB and downloadable Blender scene match the files in the new location.
+
+## 2026-09-15 — Textured street and building-family pass
+
+- Added a deterministic procedural asphalt material to the standalone district
+  roads, with metre-scaled UVs, a 6 m repeat, a matte finish, fine bump, and warm
+  bounded PCF shadows, without changing the saved geometry or source snapshot.
+- Added inferred white centre/lane treatments only for roads that meet the
+  study's mapped-lane and road-class/direction criteria. Tunnels, roundabouts,
+  conditional cases, short segments, and graph junction clearances are omitted.
+  The rendered widths and dash rhythm are art defaults, not claimed statutory
+  or surveyed dimensions.
+- Added a separate teal left-hand traffic-flow overlay. Its arrows explain the
+  current routing interpretation; they are not presented as pavement symbols.
+  No stop, give-way, crossing, junction-box, turn-arrow, bus-lane, cycle-lane,
+  or parking marking is synthesized.
+- Added Source/Dressed comparison and Inferred traffic flow controls plus a
+  street-study camera aimed at the Vauxhall area and a direct `#street` preset.
+  Source mode restores the original source materials and building triangles.
+- Generated six original Blender building families with 48 material-merged mesh
+  nodes and 45,140 triangles in the 3,180,688-byte runtime GLB. The asset check
+  verifies the six named roots and their ground-centred, Y-up, positive-Z
+  facade contract.
+- Added 12 deterministic, schema-v2 replacements across four families:
+  four corner shops, four heritage shops, three courtyard houses, and one
+  mixed-use building. Uniform scale ranges from 0.8301 to 1.0458. Town-house
+  and apartment remain in the six-family kit but did not safely fit the chosen
+  source footprints and heights.
+- Required each rotated family rectangle to remain inside its exact source
+  polygon, respect polygon holes, preserve source base height, face the nearest
+  target road, clear water, clear every non-tunnel carriageway by half-width
+  plus 0.5 m, clear other mapped buildings by 0.25 m, and clear other dressed
+  buildings by 1 m. A 35 m guard prevents nearby repeats of the same family.
+  The independent placement audit reports zero failures in every category.
+- Documented the official Sri Lankan keep-left rule, the 2015 road-marking
+  Gazette, bundled OSM interpretation rules, original-asset pipeline, and human
+  review boundary in the [street study](../studies/colombo-road/streets/README.md).
+- Corrected road textures missing UVs, reversed left-lane offsets, one-way
+  junction detection, and source-wall fragments during implementation review.
+  Markings sample actual road triangles, and source-building replacement is
+  staged until the complete artwork loads successfully. Corrected the corner-shop
+  storefront depth so its windows and signage sit outside the shell.
+- All 46 standalone viewer tests and the production build pass. Browser checks
+  cover the Street preset, Source/Dressed, layer/flow toggles, and the existing
+  Drive pilot with no console warnings or errors. The approved movement,
+  rider, bicycle, geographic model, and network retain their original hashes.
+  Human visual review of the dressed street remains pending.
+
+## 2026-09-15 — Street concepts for visual selection
+
+- Recorded feedback that the first street pass needs a more realistic overall
+  composition before more modeling.
+- Produced three original imagined Colombo street directions: green
+  neighborhood, neighborhood shops, and lakeside street.
+- Removed inconsistent vehicle poses from the lakeside concept while preserving
+  its street composition. Traffic positioning will be resolved with the road
+  data when the chosen direction is modeled.
+- Preserved the concept images and full art briefs in the
+  [street concept gallery](../studies/colombo-road/streets/concepts/2026-09-15-directions/README.md).
+- Deferred further 3D changes until a direction is selected. The existing
+  runtime, geographic assets, and approved character movements are unchanged.
+- These are visual exploration assets. Build and movement tests were not
+  repeated for this image-and-documentation checkpoint.
+
+## 2026-09-15 — Combined street composition
+
+- Recorded the selection of A + B + C: shaded residential gardens, neighborhood
+  shops and a lakeside promenade. Preserved all three concept images for
+  comparison with the modeled result.
+- Added a separate 190 m authored street at `/street-composition.html`, with
+  Garden, Shops and Lakeside camera presets, orbit/zoom/pan and a pausable tour.
+  The district header and viewer guide link to the new review page.
+- Created seven Blender architecture families and eleven placements, including
+  veranda houses, narrow homes, shop-houses and buildings opposite the lake.
+  The kit exports 37,444 triangles and 67 material mesh nodes in 2,793,236 bytes.
+  Independent bounds checks found no architecture intersections; frontage
+  clearance beyond the pavement ranges from 0.165 m to 2.193 m.
+- Created twelve landscape prefabs with broadleaf canopy variations, a palm,
+  benches, railings, lamps, planters and drainage pieces. Replaced oversized
+  single-leaf cards with an original multi-leaf branch atlas. Broadleaf foliage
+  uses UV-mapped alpha cutouts; palm fronds use opaque geometry. Packed the atlas
+  into the Blender scene for portability.
+- Merged compatible landscape parts from 130 to 26 export meshes. The final
+  kit contains 8,444 realized triangles in 749,036 bytes. Runtime instancing
+  shares repeated geometry and materials, and rendering idles when the camera
+  and tour are still.
+- Produced a separate 17,502-triangle Lotus Tower LOD from the preserved local
+  source. The tower retains its original proportions and metre scale, with
+  distant water and shoreline context. Removed empty decimated groups and
+  loose vertices so the exported bounds and 39 mesh nodes match the manifest.
+- Added asphalt grain, roughness, repairs, faded road paint, slab pavements,
+  three driveway cuts and a promenade. Corrected reversed ramp faces, pavement
+  surfaces covering ramps, inconsistent paving UV scale and buried prop bases.
+- All 52 standalone tests and the production build pass. Browser DOM checks
+  confirm the scene reaches ready, all three presets select correctly, and the
+  tour starts and pauses without console warnings or errors. An 800 × 600
+  render probe measured 248, 197 and 126 renderer calls for Garden, Shops and
+  Lakeside respectively; these are local observations, not frame-rate targets.
+- Hash checks confirm the approved movement, rider, fitted bicycle, geographic
+  model and road-network files are unchanged. The browser art review has no
+  driving, traffic or delivery simulation. Human feedback on proportions,
+  density, materials and overall appearance remains pending.
+
+## 2026-09-15 — Living street expansion
+
+- Used positive feedback on the combined A + B + C scene as the basis for a
+  richer exterior environment. Kept the mapped district and approved player
+  rider, bicycle and animation assets separate.
+- Expanded the architecture kit from seven to eleven families. Added City
+  Basket Market, Corner Care parcel/pharmacy frontage, modern courtyard
+  apartments and a louvered lane house. Exterior windows, shutters, grilles,
+  roof shapes, balconies and awnings vary by family. The scene contains 14
+  buildings and one separately classified boundary gate.
+- Expanded the landscape kit from 12 to 24 prefabs: rain-tree, flowering-tree,
+  mango, frangipani and coconut-palm forms plus flowerbeds, grass, shrub, fern
+  and groundcover layers. Preserved the original packed leaf atlas and clear
+  paths around modeled entrances. Moved a palm away from a new house footprint.
+- Added flexible-plant material metadata and per-instance wind phase. Rigid
+  trunks and roots remain fixed; the color and shadow passes share the same
+  time and alpha-cutout behavior. Repeated geometry uses instancing.
+- Modeled compact cars, delivery vans, scooter riders and bicycle riders in a
+  separate Blender traffic kit. Eight seeded actors use left-hand lanes in a
+  bounded corridor with minimum spacing and wheel motion.
+- Refined bicycle wheel geometry, rider proportions, bent arms and leg chains.
+  Corrected non-opposing cranks and unreachable pedal positions; symmetric
+  limb lengths now cover the complete crank cycle. Corrected the limb target
+  transform so the actual exported rig can keep its shoes on the pedals.
+- Added Day, Dusk and Night controls and an optional 90-second cycle. A bounded
+  pool of five nearby pavement lights supplies illumination, with warm civic
+  lenses, windows and headlight lenses after sunset. Added Motion, Traffic and
+  Wind switches for review.
+- Added stable catalogue and placement IDs, block/road/district references,
+  five exterior delivery destinations, transformed model doorway anchors,
+  unique pavement approaches and a downloadable JSON registry. The location
+  selector focuses a destination and displays its stop and building identity.
+- Preserved procedural asphalt, paving UVs, repairs, curbs, upward driveway
+  ramps, tree pits, drainage and the distant lake/shoreline while integrating
+  the expansion. This prevents the new runtime layers from simplifying the
+  accepted ground treatment.
+- Documented model preparation, wind and motion pivots, identity relationships
+  and provenance requirements in the asset guide. This pass uses original
+  Blender-authored additions; generated or licensed community assets can enter
+  the same catalogue later.
+- Made all placed architecture/landscape prefabs and traffic exports required
+  before the page reports ready. Corrected phase application after loading,
+  civic lens placement, paused render scheduling and development reload cleanup.
+- All 77 viewer tests and the production build pass. The new exported bicycle
+  is sampled through 144 crank positions in both directions, checking actual
+  foot/pedal pivots, fixed segment lengths, matching foot orientation and hand
+  stability. Cadence uses a 2.4 wheel-to-crank ratio.
+- Browser checks confirm Day/Night light activation, Motion pause, independent
+  Traffic/Wind controls, destination focus and a valid 178-instance registry.
+  Corrected a 13 px mobile panel overlap; at 390 × 844 the controls have an
+  11 px gap and no horizontal overflow. The clean final reload reports one
+  canvas and no new console warnings or errors.
+- Runtime observations varied by view: the garden-wide Night view reported
+  876 renderer calls and 345,816 triangles, while the supermarket focus reported
+  176 calls and 174,272 triangles. These local observations include render
+  passes and are not a frame-rate guarantee; larger streets will need more
+  batching and distance-based asset detail.
+- Independent GLB counts match the manifests: architecture 81,600 triangles /
+  4,578,068 bytes; landscape 15,316 / 1,208,988; traffic 12,584 / 944,436; landmark
+  LOD 17,502 / 1,075,460. The approved movement, rider, fitted bicycle, source
+  road model and network hashes remain unchanged. New visual acceptance awaits
+  human feedback on this checkpoint.
+
+## 2026-09-15 — Tripo production workflow and review reset
+
+- Recorded human rejection of the living-street expansion's visual result.
+  Its functional checks remain useful engineering evidence, but do not approve
+  asset quality. Preserved the earlier selected A + B + C street direction.
+- Installed Tripo CLI 0.4.0 globally and verified authentication, API
+  reachability and the local diagnostic after login. No generation, upload
+  or paid processing was submitted during this documentation checkpoint.
+- Reviewed the current V3 documentation alongside the installed CLI help,
+  reference and source. Documented model capabilities and operation choices
+  in [the Tripo-to-Blender guide](TRIPO_BLENDER_ASSET_PIPELINE.md).
+- Defined separate source, editable Blender and runtime deliverables, with
+  per-asset provenance, IDs, hashes, measured export budgets and human feedback.
+  Recorded the different forward-axis contracts used by street assets and the
+  approved hero character/bicycle so imports do not silently reverse models.
+- Documented task-ID recovery for existing work and the CLI 0.4.0 limitations:
+  no dry-run generation, asynchronous submission still creates a task, and
+  whole-job batch retries can duplicate generation. These are documentation
+  and source findings, not live failure experiments.
+- Distinguished foliage wind setup, building entrance anchors, vehicle pivots
+  and character skinning. A generated mesh or a successful rig check does not
+  establish motion, mechanical correctness or deformation quality.
+- Proposed one rain-tree pilot through generation, Blender and an orbitable
+  browser handoff for human testing. The subject and reference brief are still
+  to be selected. No new candidate or automated visual assessment was made.
+- Updated the README, chronological timeline and composition guides to reflect
+  the rejection and next production checkpoint. Runtime tests and builds were
+  not repeated because this change contains documentation only.
+
+## 2026-09-15 — Blender Tripo installation and credential persistence
+
+- Installed official Tripo 3D 0.7.7 in Blender 5.1.2, using the published
+  stable GitHub release after finding the developer-page download was still
+  0.7.3. Preserved the existing Studio Bridge 1.0.32 installation.
+- Reused the configured Tripo API login and verified the add-on's read-only
+  account lookup. Saved add-on preferences and checked automatic credential
+  recovery in a fresh Blender process. Opened the authenticated Tripo Model
+  Generator panel for the artist handoff.
+- Corrected a local credential-serialization issue. The first scratch save
+  demonstrated that a skip-save property flag was insufficient. Replaced
+  serializable key storage with runtime-only getters/setters and purged legacy
+  key properties. Verified two-scene save/reload behavior and absence of the
+  literal key in the uncompressed saved file. Removed the scratch scene.
+- Restricted the add-on's credential file to its owner. Installation scripts,
+  credentials, configuration and validation logs remain outside this repository.
+  The local protection must be preserved and rechecked after an add-on update.
+- Verified the existing Studio Bridge's local listener and successful
+  WebSocket handshake after restart. Full Tripo Studio model transfer remains
+  untested. The API add-on's latest dropdown model is Version 3.0; newer CLI
+  model options remain part of the separate production workflow.
+- Submitted no generation, upload or paid processing. Existing project assets
+  and game code remain unchanged; runtime tests were not repeated for setup
+  documentation.
+
+## 2026-09-15 — First generated vegetation kit
+
+- Expanded the first source trial to the requested vegetation family: rain
+  tree, rounded tropical tree, coconut palm, short grass and tall grass.
+  Each candidate uses an explicit P1 model version, detailed textures and
+  PBR materials. No automatic regeneration or paid cleanup stage is used.
+- Preserved task IDs and immutable source hashes. Public recipes contain
+  reproducible product inputs; account credentials and expiring download
+  addresses are excluded. Source downloads are archived outside the game.
+- Prepared editable Blender scenes and separate LOD0/LOD1 GLBs with ground
+  pivots and metre dimensions. Wind masks use height ramps for root locking
+  and sampled texture colour to estimate foliage flexibility.
+- Added a separate vegetation review with wind strength, direction, pause,
+  weather comparisons and asset downloads. The motion is a visual shader
+  treatment, not baked animation clips or physical weather simulation.
+- Kept the existing street composition and approved rider/movement assets
+  intact. Human feedback will determine which candidates need refinement
+  before street placement and generation of other asset families.
+- Export review caught Blender-space bounds being written into a Y-up runtime
+  manifest; the bounds contract was corrected. The colour attribute also
+  needed an explicit Blender export connection while retaining the original
+  PBR texture path. These checks cover the delivered file, not only the source
+  scene. Reduced grass geometry exposed interpolated wind weights near its
+  roots; weights are now authored again after decimation. That second pass
+  initially lost the texture reference behind the export mix node. The
+  sampler now follows its preserved image input, with a Blender regression
+  check for foliage variation in all three tree LOD1 meshes.
+- Verified all ten exported GLBs against their hashes, triangle counts,
+  bounds, embedded PBR textures and wind data. All 84 viewer tests and the
+  production build pass. Wind tests sample 1,500 combinations and check
+  zero-motion roots, rigid weights, bounded displacement and shared shadow
+  deformation. Framing tests cover normal and narrow canvas aspects.
+- Browser checks confirmed ten loaded model variants, asset/LOD and weather
+  switching, wind direction, pause with an unchanged animation clock, and
+  collection controls. All 15 model/Blender download endpoints return the
+  expected files and are included in the production build. No automated
+  screenshots or visual-quality scoring were used.
+
+## 2026-09-15 — Essential street assets and environment assembly
+
+- Recorded positive vegetation feedback and approval to reuse the five
+  candidates. Limited the next batch to five missing roles: market, café,
+  verandah house, compact apartments and a flowering hibiscus shrub.
+- Generated exactly five P1 detailed-texture sources at 50 credits each.
+  Preserved immutable source hashes and task references. No regeneration,
+  extra variants or paid cleanup was submitted.
+- Prepared five packed Blender files and ten local GLBs, using uniform metre
+  scaling, 1024-pixel PBR textures and reduced triangle LODs. The shrub uses
+  the existing wind-mask and shadow-deformation contract.
+- Corrected reduced-mesh grounding after simplification exposed floating
+  market geometry. Ground checks now use nondegenerate exported triangle
+  vertices, and re-grounding happens before final shrub wind-mask authoring.
+- Assembled a new 190 m environment from 12 buildings, 14 trees and 24 smaller
+  planting groups. Building setbacks derive from actual bounds; unique
+  placement IDs link four fictional exterior delivery references to their
+  buildings. New generated front orientations still require human review.
+- Reused the approved courier, bicycle and movement assets. The first
+  integration review caught missing hand-grip and mechanical pose updates;
+  exploration must retain those established contacts and transition stages.
+- Preserved the district map, original prototypes and earlier composition
+  for comparison. Updated the README, timeline, asset guide and production
+  pipeline record. Human visual judgement remains the acceptance step.
+- Reused the approved movement state machine through an optional spatial
+  context, preserving the courtyard defaults. The street retains the approach,
+  mounting, braking, pedal settling and local dismount stages, the 2.8 gear
+  ratio, hand-grip morph, steering and foot-contact solver. Corridor tests
+  cover the complete sequence and stop behavior at its bounds.
+- Kept wind authoring in local asset units so scaled trees do not receive
+  scale twice, and kept phase identical between each placement's two LODs.
+  Matching material/texture slots share the same GPU texture objects after
+  byte-level comparison confirmed all 30 embedded texture pairs are identical.
+- Final validation: all 92 viewer tests and the production build pass. Both
+  asset validators pass, all 15 new download endpoints have the expected
+  lengths, and built GLBs/Blender files match the final source hashes.
+  Approved movement, rider, bicycle and original district hashes are unchanged.
+- Browser checks confirmed complete loading, mount/dismount, stop focus,
+  Sunny/Dusk/Night and weather controls, eight active night lights, and pause
+  with frozen time and blocked interaction. Initial follow views use about
+  153–156 draw calls. No automated visual-quality judgement was performed.
+
+## 2026-09-15 — Single-player delivery game
+
+- Recorded approval of the assembled street and the decision to complete the
+  local game before building a shared multiplayer service.
+- Added a separate Play entry point using the approved environment, courier,
+  bicycle and movement pipeline. The game interface presents jobs, remaining
+  time, wallet, minimap and contextual controls without review telemetry.
+- Added three timed jobs using the four authored exterior approaches, stopped
+  on-foot interactions, once-only rewards, retry/recovery, shift results and
+  another-shift flow. Local traffic reuses existing car, van and scooter models
+  and keeps to the left, follows safely and yields to the player and parked bike.
+- Kept simulation commands and serializable state independent of rendering.
+  The scene samples the approved animation/contact pipeline from that state;
+  it does not run a second gameplay clock or calculate rewards.
+- Added versioned browser progress with a persistent local player ID and
+  session-scoped reward receipts. A saved shift can resume without paying a
+  completed job twice; a later shift can earn from the same routes again.
+- Review exposed a completed-shift index surviving a return to the menu,
+  input enabling beneath help overlays, absent minimap entities from mismatched
+  field names, and display speed overwriting the raw movement speed. Corrected
+  those contracts, guarded malformed saves and storage failures, and retained
+  the original raw movement units for animation and collision.
+- Preserved the original map and approved model files. No additional generation
+  credits were used. Expanded the README, viewer guide and development timeline,
+  and documented server authority, independent player identity, snapshot
+  replication and trusted persistence as later multiplayer requirements.
+- Added a full three-route test using actual controls and live traffic. It
+  exposed a pedestrian crossing deadlock: vehicles detected the crossing too
+  late and stopped against the collision boundary. Widened early pedestrian
+  yielding while retaining the physical footprint checks. Extended the longest
+  deadline to 140 seconds after the input-driven route left only two seconds
+  under its initial limit.
+- Browser integration exposed a disposed-runtime initialization race during
+  refresh and a pause menu overlapping a completed-job card after reload.
+  Scoped initialization callbacks to their active instance and restricted
+  automatic focus suspension to active gameplay. Modal controls pause the
+  simulation and isolate input; routine progress saves are limited to once per
+  second, with immediate saves at important state changes. Traffic prefabs use
+  the same asphalt elevation as the courier bicycle so grounded wheels are not
+  buried below the road surface.
+- Final verification: all 114 viewer tests, production build and both binary
+  asset validators pass. Approved movement, rider, bicycle and geographic files
+  retain their hashes. Browser checks confirm the full first delivery, 80-credit
+  reward, saved parcel/reward continuation, movement interactions, night/rain/
+  wind settings, frozen pause time and fitting controls at 390 × 844. No
+  screenshots or automated appearance scoring were used.

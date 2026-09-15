@@ -9,7 +9,7 @@ import {assetFiles} from './asset-files.js';
 const root = fileURLToPath(new URL('../',import.meta.url));
 const allowed = new Set(assetFiles.map(a=>a.file));
 const mime = {'.json':'application/json','.geojson':'application/geo+json','.glb':'model/gltf-binary',
-  '.md':'text/plain; charset=utf-8','.py':'text/plain; charset=utf-8'};
+  '.md':'text/plain; charset=utf-8','.py':'text/plain; charset=utf-8','.blend':'application/octet-stream'};
 let output,building=false;
 
 export default defineConfig({
@@ -45,5 +45,5 @@ export default defineConfig({
       }
     }
   }],
-  build:{chunkSizeWarningLimit:1000,rollupOptions:{input:{transitions:fileURLToPath(new URL('./transitions.html',import.meta.url)),main:fileURLToPath(new URL('./index.html',import.meta.url)),cyclist:fileURLToPath(new URL('./cyclist.html',import.meta.url)),walking:fileURLToPath(new URL('./walking.html',import.meta.url)),movement:fileURLToPath(new URL('./movement.html',import.meta.url))}}}
+  build:{chunkSizeWarningLimit:1000,rollupOptions:{input:{transitions:fileURLToPath(new URL('./transitions.html',import.meta.url)),main:fileURLToPath(new URL('./index.html',import.meta.url)),play:fileURLToPath(new URL('./play.html',import.meta.url)),streetComposition:fileURLToPath(new URL('./street-composition.html',import.meta.url)),environment:fileURLToPath(new URL('./environment.html',import.meta.url)),vegetationReview:fileURLToPath(new URL('./vegetation-review.html',import.meta.url)),cyclist:fileURLToPath(new URL('./cyclist.html',import.meta.url)),walking:fileURLToPath(new URL('./walking.html',import.meta.url)),movement:fileURLToPath(new URL('./movement.html',import.meta.url))}}}
 });

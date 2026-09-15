@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 1,
+  "assetPack": "colombo-ambient-traffic",
+  "glb": "/streets/composition/traffic.glb",
+  "coordinateSystem": {
+    "upAxis": "+Y",
+    "frontAxis": "+Z",
+    "origin": "ground-center",
+    "unit": "meter"
+  },
+  "authoredWith": {
+    "generator": "studies/colombo-road/streets/composition/build_traffic.py",
+    "source": "studies/colombo-road/streets/composition/traffic.blend"
+  },
+  "provenance": "Original project-authored Blender procedural geometry. No external models, downloads, trademarks, or hero-character geometry.",
+  "usage": "Clone top-level roots. Animate named wheel pivots around local X. Rider limb pivots are rigid ambient articulation nodes.",
+  "assets": [
+    {
+      "assetId": "traffic-compact-car",
+      "category": "car",
+      "nodeName": "TRAFFIC_CompactCar",
+      "label": "Compact hatchback",
+      "bounds": {
+        "min": [
+          -0.893,
+          -0.0,
+          -1.975
+        ],
+        "max": [
+          0.893,
+          1.44,
+          1.975
+        ]
+      },
+      "size": {
+        "width": 1.785,
+        "height": 1.44,
+        "length": 3.95
+      },
+      "triangles": 1392,
+      "meshNodes": 20,
+      "motion": {
+        "wheelNodes": [
+          "TRAFFIC_CompactCar__Wheel_FL",
+          "TRAFFIC_CompactCar__Wheel_FR",
+          "TRAFFIC_CompactCar__Wheel_RL",
+          "TRAFFIC_CompactCar__Wheel_RR"
+        ],
+        "wheelAxis": "local +X",
+        "metersPerUnit": 1
+      }
+    },
+    {
+      "assetId": "traffic-delivery-van",
+      "category": "van",
+      "nodeName": "TRAFFIC_DeliveryVan",
+      "label": "Original unbranded delivery van",
+      "bounds": {
+        "min": [
+          -0.988,
+          -0.0,
+          -2.5
+        ],
+        "max": [
+          0.988,
+          2.06,
+          2.385
+        ]
+      },
+      "size": {
+        "width": 1.975,
+        "height": 2.06,
+        "length": 4.885
+      },
+      "triangles": 1348,
+      "meshNodes": 19,
+      "motion": {
+        "wheelNodes": [
+          "TRAFFIC_DeliveryVan__Wheel_FL",
+          "TRAFFIC_DeliveryVan__Wheel_FR",
+          "TRAFFIC_DeliveryVan__Wheel_RL",
+          "TRAFFIC_DeliveryVan__Wheel_RR"
+        ],
+        "wheelAxis": "local +X",
+        "metersPerUnit": 1
+      }
+    },
+    {
+      "assetId": "traffic-scooter-rider",
+      "category": "motorcycle",
+      "nodeName": "TRAFFIC_ScooterRider",
+      "label": "Small scooter with helmeted ambient rider",
+      "bounds": {
+        "min": [
+          -0.415,
+          -0.0,
+          -0.97
+        ],
+        "max": [
+          0.415,
+          1.75,
+          1.01
+        ]
+      },
+      "size": {
+        "width": 0.83,
+        "height": 1.75,
+        "length": 1.98
+      },
+      "triangles": 3032,
+      "meshNodes": 31,
+      "motion": {
+        "wheelNodes": [
+          "TRAFFIC_ScooterRider__Wheel_Front",
+          "TRAFFIC_ScooterRider__Wheel_Rear"
+        ],
+        "wheelAxis": "local +X",
+        "metersPerUnit": 1,
+        "riderContacts": {
+          "leftHand": [
+            -0.35,
+            1.1,
+            0.58
+          ],
+          "rightHand": [
+            0.35,
+            1.1,
+            0.58
+          ],
+          "leftFoot": [
+            -0.17,
+            0.41,
+            0.1
+          ],
+          "rightFoot": [
+            0.17,
+            0.41,
+            0.1
+          ]
+        },
+        "contactSpace": "asset-local glTF [x,y,z]"
+      }
+    },
+    {
+      "assetId": "traffic-bicycle-rider",
+      "category": "bicycle",
+      "nodeName": "TRAFFIC_BicycleRider",
+      "label": "Original city bicycle with articulated helmeted rider",
+      "bounds": {
+        "min": [
+          -0.325,
+          0.0,
+          -1.06
+        ],
+        "max": [
+          0.325,
+          1.88,
+          1.02
+        ]
+      },
+      "size": {
+        "width": 0.65,
+        "height": 1.88,
+        "length": 2.08
+      },
+      "triangles": 6812,
+      "meshNodes": 61,
+      "motion": {
+        "wheelNodes": [
+          "TRAFFIC_BicycleRider__Wheel_Front",
+          "TRAFFIC_BicycleRider__Wheel_Rear"
+        ],
+        "wheelAxis": "local +X",
+        "metersPerUnit": 1,
+        "crankNode": "TRAFFIC_BicycleRider__Crank",
+        "pedalNodes": [
+          "TRAFFIC_BicycleRider__Pedal_L",
+          "TRAFFIC_BicycleRider__Pedal_R"
+        ],
+        "legNodes": [
+          "TRAFFIC_BicycleRider__Leg_L",
+          "TRAFFIC_BicycleRider__Leg_R"
+        ],
+        "kneeNodes": [
+          "TRAFFIC_BicycleRider__Knee_L",
+          "TRAFFIC_BicycleRider__Knee_R"
+        ],
+        "footNodes": [
+          "TRAFFIC_BicycleRider__Foot_L",
+          "TRAFFIC_BicycleRider__Foot_R"
+        ],
+        "armNodes": [
+          "TRAFFIC_BicycleRider__Arm_L",
+          "TRAFFIC_BicycleRider__Arm_R"
+        ],
+        "riderContacts": {
+          "leftHand": [
+            -0.26,
+            0.87,
+            0.56
+          ],
+          "rightHand": [
+            0.26,
+            0.87,
+            0.56
+          ],
+          "leftPedal": [
+            -0.07,
+            0.39,
+            0.19
+          ],
+          "rightPedal": [
+            0.07,
+            0.39,
+            -0.29
+          ]
+        },
+        "contactSpace": "asset-local glTF [x,y,z]",
+        "pedaling": {
+          "solver": "two-bone-ik",
+          "crankCenter": [
+            0.0,
+            0.39,
+            -0.05
+          ],
+          "crankRadius": 0.24,
+          "phaseOffsetRadians": {
+            "L": 3.141592653589793,
+            "R": 0
+          },
+          "chains": [
+            {
+              "side": "L",
+              "hip": "TRAFFIC_BicycleRider__Leg_L",
+              "knee": "TRAFFIC_BicycleRider__Knee_L",
+              "foot": "TRAFFIC_BicycleRider__Foot_L",
+              "target": "TRAFFIC_BicycleRider__Pedal_L",
+              "rest": {
+                "hip": [
+                  -0.13,
+                  1.03,
+                  -0.36
+                ],
+                "knee": [
+                  -0.1,
+                  0.5129,
+                  -0.3144
+                ],
+                "ankle": [
+                  -0.07,
+                  0.39,
+                  0.19
+                ],
+                "upperLength": 0.52,
+                "lowerLength": 0.52
+              }
+            },
+            {
+              "side": "R",
+              "hip": "TRAFFIC_BicycleRider__Leg_R",
+              "knee": "TRAFFIC_BicycleRider__Knee_R",
+              "foot": "TRAFFIC_BicycleRider__Foot_R",
+              "target": "TRAFFIC_BicycleRider__Pedal_R",
+              "rest": {
+                "hip": [
+                  0.13,
+                  1.03,
+                  -0.36
+                ],
+                "knee": [
+                  0.1,
+                  0.6657,
+                  -0.7299
+                ],
+                "ankle": [
+                  0.07,
+                  0.39,
+                  -0.29
+                ],
+                "upperLength": 0.52,
+                "lowerLength": 0.52
+              }
+            }
+          ],
+          "reachAudit": {
+            "samples": 144,
+            "L": {
+              "min": 0.4749701565069675,
+              "max": 0.9529970104629338
+            },
+            "R": {
+              "min": 0.4749701565069675,
+              "max": 0.9529970104629338
+            }
+          },
+          "constraint": "Keep each foot pivot coincident with its pedal target; preserve upper/lower rest lengths while solving knee bend."
+        }
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "MAT_CarBlue",
+      "baseColor": [
+        0.025,
+        0.16,
+        0.3
+      ],
+      "roughness": 0.34,
+      "metallic": 0.48
+    },
+    {
+      "id": "MAT_VanOchre",
+      "baseColor": [
+        0.68,
+        0.27,
+        0.035
+      ],
+      "roughness": 0.45,
+      "metallic": 0.25
+    },
+    {
+      "id": "MAT_ScooterRed",
+      "baseColor": [
+        0.52,
+        0.025,
+        0.02
+      ],
+      "roughness": 0.38,
+      "metallic": 0.32
+    },
+    {
+      "id": "MAT_BikeGreen",
+      "baseColor": [
+        0.025,
+        0.32,
+        0.19
+      ],
+      "roughness": 0.4,
+      "metallic": 0.5
+    },
+    {
+      "id": "MAT_Rubber",
+      "baseColor": [
+        0.012,
+        0.014,
+        0.015
+      ],
+      "roughness": 0.9,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Rim",
+      "baseColor": [
+        0.34,
+        0.37,
+        0.38
+      ],
+      "roughness": 0.3,
+      "metallic": 0.75
+    },
+    {
+      "id": "MAT_GlassDark",
+      "baseColor": [
+        0.018,
+        0.045,
+        0.06
+      ],
+      "roughness": 0.18,
+      "metallic": 0.25
+    },
+    {
+      "id": "MAT_Headlight",
+      "baseColor": [
+        1,
+        0.78,
+        0.33
+      ],
+      "roughness": 0.25,
+      "metallic": 0.1
+    },
+    {
+      "id": "MAT_Taillight",
+      "baseColor": [
+        0.8,
+        0.015,
+        0.006
+      ],
+      "roughness": 0.3,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_White",
+      "baseColor": [
+        0.86,
+        0.83,
+        0.72
+      ],
+      "roughness": 0.65,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Charcoal",
+      "baseColor": [
+        0.035,
+        0.04,
+        0.042
+      ],
+      "roughness": 0.72,
+      "metallic": 0.05
+    },
+    {
+      "id": "MAT_Skin",
+      "baseColor": [
+        0.45,
+        0.22,
+        0.12
+      ],
+      "roughness": 0.78,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Helmet",
+      "baseColor": [
+        0.92,
+        0.55,
+        0.04
+      ],
+      "roughness": 0.3,
+      "metallic": 0.3
+    },
+    {
+      "id": "MAT_Shirt",
+      "baseColor": [
+        0.08,
+        0.28,
+        0.56
+      ],
+      "roughness": 0.72,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Trousers",
+      "baseColor": [
+        0.035,
+        0.07,
+        0.12
+      ],
+      "roughness": 0.83,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Crate",
+      "baseColor": [
+        0.28,
+        0.12,
+        0.035
+      ],
+      "roughness": 0.8,
+      "metallic": 0.0
+    }
+  ],
+  "stats": {
+    "assets": 4,
+    "triangles": 12584,
+    "meshNodes": 131,
+    "glbBytes": 944436
+  },
+  "budgets": {
+    "triangleTargetMax": 30000,
+    "glbTargetBytesMax": 4194304
+  }
+}

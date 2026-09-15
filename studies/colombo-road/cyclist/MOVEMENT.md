@@ -338,3 +338,8 @@ walking, standing and pedaling tracks retain their exact fingerprints.
 [Transition notes](TRANSITIONS.md) describe the changes and checks;
 [the new screenshot timeline](../docs/visual-history/2026-09-15-bicycle-leg-correction/README.md)
 preserves the revised browser poses without replacing the earlier captures.
+
+Human review approved these revised Mount and Dismount clips on 15 September
+2026. Approval is attached to the leg-corrected `939c56b` checkpoint and does
+not retroactively approve the rejected first transition pass or the separate
+main-project stationary rider experiments.

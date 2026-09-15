@@ -11,6 +11,13 @@ Open http://127.0.0.1:5175. Use Node 22.12 or newer. The development server read
 the original files from the parent directory through an explicit asset allowlist.
 It does not modify the models or run either Blender script.
 
+- **Play:** open http://127.0.0.1:5175/play.html for a three-job single-player
+  shift in the approved Lake Garden Street. Use WASD/arrows to walk and ride,
+  E to mount/dismount, F to collect/deliver while stopped on foot, and Escape
+  to pause. Onscreen controls support pointer and touch input. The game has
+  local traffic, a minimap, restart/retry and saved browser progress. Accounts
+  and a multiplayer server are not part of this checkpoint. See the
+  [game guide](../../../docs/SINGLEPLAYER_GAME.md).
 - **Layers:** switch between the full district and the independent road-only GLB,
   show/hide scene layers, road centre lines, the boundary and wireframe.
 - **Inspect:** search roads, controls and turn restrictions by name/type/ID. Select
@@ -31,7 +38,28 @@ It does not modify the models or run either Blender script.
 - **Bicycle transitions:** open http://127.0.0.1:5175/transitions.html. Compare the
   mounting/dismounting pose sheets with the animated rider, scrub six stages,
   show joints, use quarter speed, and download the editable Blender assembly.
+- **Combined street composition:** open
+  http://127.0.0.1:5175/street-composition.html. Choose Garden, Shops or Lakeside,
+  orbit and zoom, or start/pause the Street tour. This authored 190 m art study
+  combines the selected A, B and C concepts; it has no driving controls.
+  The living-street controls add Day/Dusk/Night, optional automatic time,
+  wind and traffic toggles, exterior delivery-location focus and a portable
+  registry export. Background vehicles follow the two left-hand lanes.
+  See the [composition guide](../streets/composition/README.md) for Blender
+  sources, rebuilding and the human review checklist.
 - **Save view:** download the current canvas as a PNG.
+- **Vegetation review:** open http://127.0.0.1:5175/vegetation-review.html.
+  Inspect three generated tree candidates and two grass forms, compare wind
+  strength and weather, and download the GLBs or editable Blender sources.
+  This separate review leaves the street composition intact. See the
+  [vegetation guide](../vegetation/README.md) for provenance and preparation.
+- **Lake Garden Street:** open http://127.0.0.1:5175/environment.html.
+  Explore the assembled 190 m street on foot or bicycle, compare Garden,
+  Shops and Lakeside views, and test night lighting, wind and rain. Four
+  fictional exterior address markers identify future delivery stops. This
+  page reuses approved movement assets; positive human feedback approved the
+  environment for the separate Play page. See the [environment guide](../../../docs/FIRST_STREET_ENVIRONMENT.md)
+  and [editable asset package](../environment/README.md).
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local
   storage; the export is the portable copy. Nothing is sent to a remote server.

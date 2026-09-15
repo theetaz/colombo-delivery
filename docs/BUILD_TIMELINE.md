@@ -948,7 +948,8 @@ The current consolidated copy of that evidence is the
 
 ## 2026-09-15 — Bicycle transition study and leg correction
 
-Status: transition study implemented; corrected revision awaits human feedback.
+Status: transition study implemented; the corrected `939c56b` revision was
+human-approved on 15 September 2026.
 
 [`7ec7367`](https://github.com/theetaz/colombo-delivery/commit/7ec7367)
 added the reference-guided mounting and dismounting study while preserving the
@@ -958,8 +959,8 @@ approved walking and pedaling tracks. The first transition gallery remains
 [`939c56b`](https://github.com/theetaz/colombo-delivery/commit/939c56b)
 then corrected the knee hinge, rear leg sweep, support steps, and shoe alignment.
 Its [leg-correction gallery](../studies/colombo-road/docs/visual-history/2026-09-15-bicycle-leg-correction/README.md)
-and automated checks document the revision, but they do not constitute human
-approval of the mounting and dismounting motion.
+and automated checks document the revision. Human approval applies to this
+leg-corrected checkpoint, not to the rejected first pass.
 
 ## 2026-09-15 — Colombo road and movement study consolidated
 
@@ -978,8 +979,307 @@ change the rejected status of the separate clean-rig experiments above.
 
 The latest animation revision corrects the knee hinge, rear leg sweep, support
 steps, and shoe alignment during mounting and dismounting. The previously
-approved walking and pedaling clips are preserved; the revised transitions
-remain ready for human testing.
+approved walking and pedaling clips are preserved; human review approved the
+revised Mount and Dismount clips at `939c56b` on 15 September 2026.
 
 Delivered in
 [`80270cb`](https://github.com/theetaz/colombo-delivery/commit/80270cb).
+
+## 2026-09-15 — Textured streets and original building families
+
+Status: implementation and automated validation complete; human review
+requested a more realistic visual direction before further modeling.
+
+The first-district viewer gained a deterministic street-art layer with a
+metre-scaled procedural asphalt texture, 6 m repeat, matte finish, fine bump,
+warm bounded shadows, and inferred white centre/lane treatments. The
+inference reads the bundled OSM lane count, road class, direction, tunnels,
+roundabouts, conditional tags, and graph junctions. It leaves junction gaps
+and does not create stop lines, give-way lines, pedestrian crossings, boxes,
+turn arrows, bus lanes, or cycle lanes. A separate teal overlay communicates
+inferred left-hand traffic flow and is not presented as real road paint.
+Source and Dressed controls compare the pass with the exact original materials
+and building triangles. A dedicated camera frames the Vauxhall study area, and
+`#street` opens that preset directly.
+
+Six original Blender families are available to dress retained source building
+sites: heritage shop, town house, corner shop, courtyard house, mixed use, and
+apartment. Twelve high-confidence replacements use four families at uniform
+scales from 0.8301 to 1.0458; the town-house and apartment forms did not safely
+fit the selected source sites. Stable source-ID choices vary family and palette.
+Exact source-polygon containment, road/water/building clearance, source base
+height, road-facing orientation, and a local family-repeat guard all pass their
+independent placement audit with zero failures.
+Named and institutional buildings are excluded so the existing Colombo
+landmarks remain separate. The editable source, generator, GLB, manifest, and
+placement data are documented in the
+[street art study](../studies/colombo-road/streets/README.md).
+
+The treatment is an authored geographic study rather than a survey of current
+paint or facades. Line dimensions and asphalt appearance are visual defaults;
+missing OSM direction data is still a routing assumption rather than proof of
+a two-way marked road. Human review remains the acceptance check for scale,
+repetition, overlaps, road readability, and landmark context.
+All 46 viewer tests and the production build pass. Browser controls and the
+existing Drive pilot load without console warnings or errors; the approved
+movement, rider, bicycle, geographic model, and road-network files retain their
+original hashes.
+
+## 2026-09-15 — Street composition concepts before further modeling
+
+Human feedback on the first street-art checkpoint (`62212bd`) requested
+imagined street perspectives before more 3D work. The resulting
+[three visual directions](../studies/colombo-road/streets/concepts/2026-09-15-directions/README.md)
+explore a shaded residential neighborhood, a street of small shops, and a
+lakeside route with a promenade and distant Lotus Tower.
+
+Each image considers asphalt, curbs, drainage, continuous pavements, mature
+trees, varied buildings, and everyday street details together. The concepts
+and their art briefs are preserved for comparison. They are imagined visual
+targets, not game renders or an approval of the earlier runtime appearance.
+
+Status: a combination of A, B and C was selected on 15 September. The images
+remain the visual targets for the following 3D checkpoint; concept selection
+does not establish approval of the modeled result.
+
+## 2026-09-15 — Combined garden, shops and lakeside composition
+
+The [combined composition](../studies/colombo-road/streets/composition/README.md)
+turns the selected directions into a 190 m authored street. Residential
+verandas, walls and tree shade lead into varied neighborhood shopfronts; the
+street opens beside a promenade with benches, railings and a distant Lotus
+Tower. Buildings continue on the opposite side of the lakefront.
+
+Seven editable architecture families and twelve landscape/prop prefabs were
+created in Blender. Original leaf artwork gives the broadleaf trees a branched
+canopy, while the existing Lotus Tower model has a separate lightweight export.
+The browser scene adds asphalt and pavement materials, two lanes, driveway
+access and Garden, Shops and Lakeside camera presets with a pausable tour.
+
+Status: delivered in [`c182fe1`](https://github.com/theetaz/colombo-delivery/commit/c182fe1).
+Human feedback described the result as much better and requested more varied
+plants, exterior destinations, lighting and road users. This authored composition
+remains separate from the mapped district and approved character work.
+
+All 52 viewer tests and the production build pass. Browser controls and asset
+loading were checked without automated visual inspection. The approved
+movement, rider, fitted bicycle and source map hashes remain unchanged.
+
+## 2026-09-15 — Living street assets and exterior delivery addresses
+
+Delivered in [`4226722`](https://github.com/theetaz/colombo-delivery/commit/422672210f80a3ccd5dd4157e4e8bc800a258d02).
+
+Frozen artifacts: [asset guide](https://github.com/theetaz/colombo-delivery/blob/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition/ASSET_GUIDE.md),
+[study and validation](https://github.com/theetaz/colombo-delivery/blob/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition/README.md),
+[editable Blender kit](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition),
+and [runtime and tests](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/viewer/src/streets/composition).
+
+Status: delivered for human review, then rejected for its visual result.
+The following checkpoint establishes a Tripo-to-Blender production workflow.
+City-scale placement, player collisions and delivery gameplay remain separate
+integration milestones.
+
+The [living street study](../studies/colombo-road/streets/composition/README.md)
+adds distinct tropical tree forms, flowers, grass, ferns, shrubs and groundcover
+to the accepted garden/shop/lakeside direction. Eleven building families now
+include a supermarket, pharmacy/parcel frontage, courtyard apartments and a
+louvered home, with varied windows, balconies and awnings. Buildings remain
+exterior assets.
+
+The [asset and address guide](../studies/colombo-road/streets/composition/ASSET_GUIDE.md)
+separates reusable models from uniquely identified placements and delivery
+stops. Five selected destinations have model-derived doorway anchors and
+same-side pavement approaches. The downloadable registry preserves those
+relationships through road, block and district IDs. This is one authored
+190 m corridor, not a claim of completed Colombo geographic coverage.
+
+Day, Dusk and Night controls, an automatic cycle, pavement lights and phased
+foliage wind add environmental motion. Eight background cars, vans, scooters
+and bicycles follow left-hand lanes with spacing controls. Independent motion
+switches support still inspection. Original Blender sources, self-contained
+GLBs and provenance manifests make the additions editable and reusable.
+
+Refinements address bicycle crank opposition, reachable leg lengths, actual
+foot/pedal contact, root-anchored wind shadows and destination alignment.
+The existing road materials and driveway surfaces were retained. The review
+brief covered visual variety, lighting, plant density and background rider
+proportions. The rejection prevents treating these kits as approved assets
+for longer mapped streets.
+
+All 77 viewer tests and the production build pass. Actual exported bicycle
+contacts were checked through 144 crank positions in each road direction.
+Browser checks cover lighting, motion pause, destination selection and narrow
+controls without automated screenshots. The full runtime registry validates
+178 instances and 199 world/entity/address IDs against 43 catalogue entries.
+The approved rider, bicycle, movement and geographic source hashes are unchanged.
+
+## 2026-09-15 — Tripo-to-Blender production workflow
+
+Human feedback on the living-street expansion requested better source assets
+and a dependable production process before another modeling pass. Its technical
+checks did not establish the required visual quality. The existing expansion
+is preserved as a rejected art experiment; the earlier A + B + C composition
+remains the selected direction.
+
+Tripo CLI 0.4.0 was installed globally. After login, its diagnostic confirmed
+authentication and API reachability. The V3 developer guide, CLI command
+reference and installed command implementation were reviewed together with
+the project's Blender export and wind contracts.
+
+The [production guide](TRIPO_BLENDER_ASSET_PIPELINE.md) records model selection,
+image and multiview inputs, segmentation, texturing, topology work, rigging,
+conversion, immutable source preservation and task-ID recovery. It separates
+the needs of foliage, exterior buildings, mechanical vehicles and characters.
+Version-specific findings include the absence of a CLI dry run and the risk
+of duplicate generation when batch retries restart a whole job.
+
+Status: documented and authenticated, ready for a single-asset pilot after
+the asset brief is selected. No generation, upload or paid processing was
+performed in this checkpoint. A rain tree is the proposed first subject;
+its Blender preparation and browser handoff are not yet executed. Human
+feedback will determine visual acceptance before any family-wide expansion.
+
+Validation is limited to documentation, command/source inspection and the
+read-only diagnostic. Existing game assets and runtime code are unchanged;
+the earlier 77-test result belongs to the living-street implementation above,
+not to a generated-asset trial.
+
+## 2026-09-15 — Blender Tripo add-on configured
+
+Installed the official stable Tripo 3D 0.7.7 release in Blender 5.1.2 and
+connected it to the existing Tripo API login. The developer download page
+still supplied 0.7.3, so the newer published GitHub release was used. The
+existing Tripo Studio Bridge 1.0.32 remains enabled alongside the API add-on.
+The [workstation setup guide](TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup)
+records where to find the generator and the current model-selection limits.
+
+A local credential-storage correction was necessary: the initial save test
+found that Blender's property flag alone did not prevent the key from being
+serialized into a scene. Runtime-only storage now keeps the key out of saved
+scene data. An uncompressed two-scene save/reload test confirmed the key was
+absent from file bytes while local credential recovery continued to work.
+The temporary test scene was removed, and project assets were unchanged.
+
+Status: installed, authenticated and reopened on the generator panel. Clean
+restart persistence and read-only account lookup passed. The Studio Bridge's
+local listener and WebSocket handshake passed; a transfer from Tripo Studio
+has not yet been exercised. No model generation, upload or paid processing
+was submitted. This is a workstation setup checkpoint, not asset acceptance.
+
+## 2026-09-15 — Generated vegetation and weather review
+
+The next requested asset family is vegetation. The one-tree proposal was
+expanded to a bounded comparison of three tree silhouettes and two grass
+forms, with one source candidate per asset. The [vegetation package](../studies/colombo-road/vegetation/README.md)
+preserves the generation recipes and editable Blender preparation; the
+[browser review](../studies/colombo-road/viewer/vegetation-review.html) keeps
+these candidates separate from the street composition.
+
+Tripo P1 supplies the source geometry and textures. Blender grounds each
+model, establishes metre scale, limits texture resolution, creates near and
+reduced LODs, and writes per-vertex bend, flutter and phase data. Roots remain
+anchored. Tree foliage influence is estimated from texture colour and height;
+this is an initial preparation method for generated surfaces, not a botanical
+simulation or manually painted branch rig.
+
+The reviewer can compare wind strength and direction, pause motion, inspect
+individual assets, and switch weather. Visible geometry and shadow rendering
+share the wind deformation. Source task IDs and hashes connect each export
+to its downloaded candidate. The browser needs no Tripo credentials.
+
+Status: prepared for human appearance feedback. Leaf structure, branch
+silhouettes, grass density and motion still need the user's judgement.
+Existing street placements and approved character, bicycle and movement
+assets are preserved. Other asset families follow vegetation review.
+
+Validation: all 84 viewer tests, the production build and the binary asset
+validator pass. Ten GLB variants and five Blender downloads are available in
+the built viewer. Browser checks confirm asset and LOD switching, weather
+selection, direction and frozen wind time while paused. Visual quality has
+not been approved by these engineering checks.
+
+## 2026-09-15 — Essential assets and first assembled street
+
+Positive human feedback on the vegetation review approved reuse of those
+models. The next request was to generate only necessary missing assets and
+then assemble the game environment. The new batch contains one market,
+café, verandah house, apartment building and hibiscus shrub. Five successful
+Tripo P1 detailed-texture jobs consumed 250 credits, without paid retries or
+extra processing. Existing trees, grass, road materials, street furniture,
+Lotus Tower, courier and bicycle supply the other roles.
+
+The [environment package](../studies/colombo-road/environment/README.md)
+contains five packed editable Blender sources, ten runtime GLBs, source
+recipes and measured export metadata. Buildings retain their generated
+proportions under uniform scaling. The source model does not prove which
+surface is the entrance: front anchors are explicit assumptions awaiting
+human orientation review, and collision rectangles are conservative visual
+bounds that include overhangs.
+
+Preparation exposed a reduced market model floating roughly 10 cm above the
+ground. Grounding now uses vertices referenced by nondegenerate exported
+triangles after simplification, so unused geometry cannot hide a floating
+surface. The ten new GLBs pass binary checks for grounding, source and output
+hashes, triangle counts, finite geometry, texture dimensions and PBR channels;
+both shrub LODs also pass root-lock and wind-channel checks.
+
+The [Lake Garden Street guide](FIRST_STREET_ENVIRONMENT.md) records a 190 m
+authored Colombo-inspired corridor containing 12 buildings, 14 trees, 24 small
+planting groups and four fictional exterior delivery references. It preserves
+the selected garden, shops and lakeside direction, with separate walking and
+cycling exploration, named stop views, wind, rain and night lighting. Actual
+asset bounds determine building setbacks so deep models cannot occupy the
+pavement. The original geographic map and prior review pages remain intact.
+
+Status: new assets and their assembled appearance are prepared for human
+playtesting. This is a local environment study, not a surveyed Colombo road,
+multiplayer world or completed delivery economy. Further asset generation
+should follow a specific missing role found during that review.
+
+Validation: all 92 viewer tests and the production build pass. The ten new
+GLBs and five Blender downloads are served locally and match their production
+copies. Browser checks confirm complete asset loading, mount/dismount,
+named stop focus, lighting/weather selection, eight active night lights and
+an unchanged animation clock while paused. Identical textures are shared
+across LOD pairs, and both LODs use the same wind phase per placement. The
+approved courier, rider, fitted bicycle and original geographic files retain
+their hashes. No automated screenshots or appearance scoring were used.
+
+## 2026-09-15 — Single-player delivery shift in the approved street
+
+Human feedback approved the assembled environment and requested the actual
+game, with a focused interface and future multiplayer in mind. The
+[single-player checkpoint](SINGLEPLAYER_GAME.md) connects the approved courier,
+bicycle and street to three timed parcel jobs. The first crosses from the
+market to a verandah home; later jobs run from the café and market to the
+courtyard apartments. All four stops are authored fictional exterior locations.
+
+The new Play page contains offers, contextual collection and bicycle actions,
+a minimap, remaining time, earnings, pause/help/settings, retry and a shift
+summary. Collection and delivery require stopping on foot near the appropriate
+marker. Existing compact car, van and scooter assets provide ambient left-hand
+traffic with separation and yielding. This checkpoint reuses existing assets;
+no further paid generation was needed.
+
+The simulation owns commands, movement, job state, deadlines and traffic at a
+fixed timestep; the scene displays its snapshots. A persistent local player ID
+and versioned progress record preserve browser earnings and the current shift.
+Session-scoped reward receipts prevent duplicate payment after reloading while
+allowing the same route to earn again in a later shift. A WebSocket service,
+login, shared traffic authority and trusted online balances remain later work.
+
+Review caught a repeat-shift index error, generic prompts masking movement
+guidance, mismatched minimap coordinates, and modal input/timer behavior.
+Refinements address those integration errors before human gameplay review.
+The environment study remains available separately from the player interface.
+The dated Paper Route audit guides reuse of approved assets and complete small
+playable loops; fresh devlog retrieval failed during this checkpoint.
+
+The physical route test found a pedestrian crossing deadlock and insufficient
+margin on the longest delivery. Traffic now notices crossing intent earlier,
+and the longest deadline is 140 seconds. With a fixed traffic seed, the three
+input-driven routes complete in approximately 32.2, 67.0 and 112.9 seconds.
+All 114 viewer tests, the production build and both asset validators pass.
+Browser checks cover movement, a completed delivery, reward persistence,
+pause/settings and narrow-screen controls. Appearance and handling remain
+with the user for human playtesting; no automated visual scoring was used.

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "asset": "lotus-tower-distant-lod",
+  "glb": "/streets/composition/landmark-lod.glb",
+  "nodeName": "LANDMARK_LotusTower_LOD",
+  "coordinateSystem": {
+    "upAxis": "+Y",
+    "origin": "ground-center",
+    "unit": "meter"
+  },
+  "source": {
+    "path": "studies/colombo-road/source/lotus-tower-original.glb",
+    "sha256": "b10bb9a0e1728a20d05c43341ccd4b2dcebbd1a6e2a1c3309db9370f187d2427",
+    "triangles": 1251540
+  },
+  "provenance": "Simplified distant-view derivative of the original project-authored Lotus Tower model; source geometry preserved unchanged.",
+  "bounds": {
+    "min": [
+      -43.33,
+      0.0,
+      -42.817
+    ],
+    "max": [
+      43.33,
+      356.3,
+      42.817
+    ]
+  },
+  "size": {
+    "width": 86.66,
+    "height": 356.3,
+    "depth": 85.634
+  },
+  "stats": {
+    "triangles": 17502,
+    "meshNodes": 39,
+    "glbBytes": 1075460
+  },
+  "usage": "Distant skyline placement only; use the root at metre scale and keep the base on y=0."
+}

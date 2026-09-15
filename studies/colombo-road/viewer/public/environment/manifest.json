@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "environment.corner-cafe-01",
+      "label": "Corner Cafe",
+      "kind": "building",
+      "height": 4.684932,
+      "width": 6.0,
+      "depth": 5.92955,
+      "url": "/environment/environment.corner-cafe-01.lod0.glb",
+      "lod1Url": "/environment/environment.corner-cafe-01.lod1.glb",
+      "blendUrl": "/assets/environment/environment.corner-cafe-01.blend",
+      "bounds": {
+        "min": [
+          -3.0,
+          0.0,
+          -2.964775
+        ],
+        "max": [
+          3.0,
+          4.684932,
+          2.964775
+        ]
+      },
+      "frontAssumption": "Authoring -Y / glTF +Z; generated orientation assumption, not human verified.",
+      "triangleCount": 13333,
+      "lod1TriangleCount": 5998,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "974cd3b9298945fdd023b7e9501199df5828429d608e36844176f3dfec2186d9",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "front": "Z",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_d6f86bb1-410a-4ce3-bc10-e1d76da24e1b"
+      ],
+      "textures": [
+        {
+          "name": "Color_d6f86bb1-410a-4ce3-bc10-e1d76da24e1b",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_d6f86bb1-410a-4ce3-bc10-e1d76da24e1b",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_d6f86bb1-410a-4ce3-bc10-e1d76da24e1b",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/environment/environment.corner-cafe-01.lod0.glb",
+          "triangles": 13333,
+          "bytes": 3375264,
+          "sha256": "f2e6059cf17cd48ace582d879eddd3d2732acf669cea20f8dd450d4b69095eda"
+        },
+        {
+          "level": 1,
+          "uri": "/environment/environment.corner-cafe-01.lod1.glb",
+          "triangles": 5998,
+          "bytes": 3018072,
+          "sha256": "08d8cd8bc0d9ec508cbd65878ac81082c0d5e9e2e0408242fe153189b9306dd0"
+        }
+      ],
+      "anchors": {
+        "front": {
+          "id": "environment.corner-cafe-01.anchor.front",
+          "position": [
+            0,
+            0,
+            2.964775
+          ],
+          "purpose": "exterior interaction reference; not detected doorway"
+        }
+      },
+      "collisionFootprint": {
+        "minX": -3.0,
+        "maxX": 3.0,
+        "minZ": -2.964775,
+        "maxZ": 2.964775,
+        "method": "conservative visual bounds; includes roof, awning, and balcony extents"
+      }
+    },
+    {
+      "id": "environment.courtyard-apartments-01",
+      "label": "Courtyard Apartments",
+      "kind": "building",
+      "height": 8.436399,
+      "width": 9.0,
+      "depth": 9.0,
+      "url": "/environment/environment.courtyard-apartments-01.lod0.glb",
+      "lod1Url": "/environment/environment.courtyard-apartments-01.lod1.glb",
+      "blendUrl": "/assets/environment/environment.courtyard-apartments-01.blend",
+      "bounds": {
+        "min": [
+          -4.5,
+          0.0,
+          -4.5
+        ],
+        "max": [
+          4.5,
+          8.436399,
+          4.5
+        ]
+      },
+      "frontAssumption": "Authoring -Y / glTF +Z; generated orientation assumption, not human verified.",
+      "triangleCount": 15231,
+      "lod1TriangleCount": 6853,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "28598a46a2e3bbad9857275a9dc581b37986c0afc331d47ba01842105d1a47ae",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "front": "Z",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_0cc0ca73-b957-4b04-b8bc-a8e750821f84"
+      ],
+      "textures": [
+        {
+          "name": "Color_0cc0ca73-b957-4b04-b8bc-a8e750821f84",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_0cc0ca73-b957-4b04-b8bc-a8e750821f84",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_0cc0ca73-b957-4b04-b8bc-a8e750821f84",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/environment/environment.courtyard-apartments-01.lod0.glb",
+          "triangles": 15231,
+          "bytes": 3668984,
+          "sha256": "c9a1676456aa562cd5678a36359acc5414e440db47126ce49061102385186373"
+        },
+        {
+          "level": 1,
+          "uri": "/environment/environment.courtyard-apartments-01.lod1.glb",
+          "triangles": 6853,
+          "bytes": 3209532,
+          "sha256": "b9310eb611c60f6ee7869ba5f3580fb65fd6dcd0b91c56960835591d7b527fc0"
+        }
+      ],
+      "anchors": {
+        "front": {
+          "id": "environment.courtyard-apartments-01.anchor.front",
+          "position": [
+            0,
+            0,
+            4.5
+          ],
+          "purpose": "exterior interaction reference; not detected doorway"
+        }
+      },
+      "collisionFootprint": {
+        "minX": -4.5,
+        "maxX": 4.5,
+        "minZ": -4.5,
+        "maxZ": 4.5,
+        "method": "conservative visual bounds; includes roof, awning, and balcony extents"
+      }
+    },
+    {
+      "id": "environment.hibiscus-shrub-01",
+      "label": "Hibiscus Shrub",
+      "kind": "shrub",
+      "height": 1.1,
+      "width": 1.095695,
+      "depth": 1.087084,
+      "url": "/environment/environment.hibiscus-shrub-01.lod0.glb",
+      "lod1Url": "/environment/environment.hibiscus-shrub-01.lod1.glb",
+      "blendUrl": "/assets/environment/environment.hibiscus-shrub-01.blend",
+      "bounds": {
+        "min": [
+          -0.547847,
+          0.0,
+          -0.543542
+        ],
+        "max": [
+          0.547847,
+          1.1,
+          0.543542
+        ]
+      },
+      "frontAssumption": "Authoring -Y / glTF +Z; generated orientation assumption, not human verified.",
+      "triangleCount": 4256,
+      "lod1TriangleCount": 1915,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "1b61a5a803dfec56d2848a703e5e94e2b74de30856357b81fadedb02d056aed6",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "front": "Z",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_96d65c10-5ff5-4375-9e7d-61c47f281726"
+      ],
+      "textures": [
+        {
+          "name": "Color_96d65c10-5ff5-4375-9e7d-61c47f281726",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_96d65c10-5ff5-4375-9e7d-61c47f281726",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_96d65c10-5ff5-4375-9e7d-61c47f281726",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/environment/environment.hibiscus-shrub-01.lod0.glb",
+          "triangles": 4256,
+          "bytes": 3591856,
+          "sha256": "900e102b0a3e52bc2b3b4b8d3515133d75c49039bccad3996d48752707b2010d"
+        },
+        {
+          "level": 1,
+          "uri": "/environment/environment.hibiscus-shrub-01.lod1.glb",
+          "triangles": 1915,
+          "bytes": 3426348,
+          "sha256": "cb1102439a44837198378761fbb5d7c233bd3143e9bc06c3c9fe8f583ce66258"
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "base-colour UV greenness plus height heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime must not use COLOR_0 as material tint."
+      }
+    },
+    {
+      "id": "environment.neighborhood-market-01",
+      "label": "Neighborhood Market",
+      "kind": "building",
+      "height": 5.175637,
+      "width": 7.0,
+      "depth": 10.133144,
+      "url": "/environment/environment.neighborhood-market-01.lod0.glb",
+      "lod1Url": "/environment/environment.neighborhood-market-01.lod1.glb",
+      "blendUrl": "/assets/environment/environment.neighborhood-market-01.blend",
+      "bounds": {
+        "min": [
+          -3.5,
+          0.0,
+          -5.066572
+        ],
+        "max": [
+          3.5,
+          5.175638,
+          5.066572
+        ]
+      },
+      "frontAssumption": "Authoring -Y / glTF +Z; generated orientation assumption, not human verified.",
+      "triangleCount": 14223,
+      "lod1TriangleCount": 6399,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "d09de955bf02fd700098b4cc7deccda6ec5380a3f65d0455434ef35e408acd0f",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "front": "Z",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_f9fc0da8-f55c-4132-8c7d-4669b726663a"
+      ],
+      "textures": [
+        {
+          "name": "Color_f9fc0da8-f55c-4132-8c7d-4669b726663a",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_f9fc0da8-f55c-4132-8c7d-4669b726663a",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_f9fc0da8-f55c-4132-8c7d-4669b726663a",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/environment/environment.neighborhood-market-01.lod0.glb",
+          "triangles": 14223,
+          "bytes": 3457064,
+          "sha256": "c505cbd7d4586ba88904ee6ccb57f290186b987ae44ddaf9dbfc7ea23d006656"
+        },
+        {
+          "level": 1,
+          "uri": "/environment/environment.neighborhood-market-01.lod1.glb",
+          "triangles": 6399,
+          "bytes": 3080372,
+          "sha256": "205cb072c79f708671e06e23fdd2a2cb1cd819e19a0fd60040d4c2a748b252de"
+        }
+      ],
+      "anchors": {
+        "front": {
+          "id": "environment.neighborhood-market-01.anchor.front",
+          "position": [
+            0,
+            0,
+            5.066572
+          ],
+          "purpose": "exterior interaction reference; not detected doorway"
+        }
+      },
+      "collisionFootprint": {
+        "minX": -3.5,
+        "maxX": 3.5,
+        "minZ": -5.066572,
+        "maxZ": 5.066572,
+        "method": "conservative visual bounds; includes roof, awning, and balcony extents"
+      }
+    },
+    {
+      "id": "environment.verandah-house-01",
+      "label": "Verandah House",
+      "kind": "building",
+      "height": 5.152224,
+      "width": 8.0,
+      "depth": 9.573771,
+      "url": "/environment/environment.verandah-house-01.lod0.glb",
+      "lod1Url": "/environment/environment.verandah-house-01.lod1.glb",
+      "blendUrl": "/assets/environment/environment.verandah-house-01.blend",
+      "bounds": {
+        "min": [
+          -4.0,
+          0.0,
+          -4.786885
+        ],
+        "max": [
+          4.0,
+          5.152225,
+          4.786885
+        ]
+      },
+      "frontAssumption": "Authoring -Y / glTF +Z; generated orientation assumption, not human verified.",
+      "triangleCount": 14282,
+      "lod1TriangleCount": 6426,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "9a734794c513f28c749f3e5e8dda6ce80fef00f6c88da39586f095abfe695a01",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "front": "Z",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_9146007d-b6ab-4872-8b7e-055ca6a4e6fa"
+      ],
+      "textures": [
+        {
+          "name": "Color_9146007d-b6ab-4872-8b7e-055ca6a4e6fa",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_9146007d-b6ab-4872-8b7e-055ca6a4e6fa",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_9146007d-b6ab-4872-8b7e-055ca6a4e6fa",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/environment/environment.verandah-house-01.lod0.glb",
+          "triangles": 14282,
+          "bytes": 3094804,
+          "sha256": "850d590dc200fea23361a0c77a1dfebbb9753f3b900d5f890b8556dd67acaa71"
+        },
+        {
+          "level": 1,
+          "uri": "/environment/environment.verandah-house-01.lod1.glb",
+          "triangles": 6426,
+          "bytes": 2777492,
+          "sha256": "af016150a78fb09487745659225d05ec5a36b923a39a47d758ac822cb4bc4d6e"
+        }
+      ],
+      "anchors": {
+        "front": {
+          "id": "environment.verandah-house-01.anchor.front",
+          "position": [
+            0,
+            0,
+            4.786885
+          ],
+          "purpose": "exterior interaction reference; not detected doorway"
+        }
+      },
+      "collisionFootprint": {
+        "minX": -4.0,
+        "maxX": 4.0,
+        "minZ": -4.786885,
+        "maxZ": 4.786885,
+        "method": "conservative visual bounds; includes roof, awning, and balcony extents"
+      }
+    }
+  ]
+}
