@@ -1089,3 +1089,50 @@ roadmap.
   Sunny/Dusk/Night and weather controls, eight active night lights, and pause
   with frozen time and blocked interaction. Initial follow views use about
   153–156 draw calls. No automated visual-quality judgement was performed.
+
+## 2026-09-15 — Single-player delivery game
+
+- Recorded approval of the assembled street and the decision to complete the
+  local game before building a shared multiplayer service.
+- Added a separate Play entry point using the approved environment, courier,
+  bicycle and movement pipeline. The game interface presents jobs, remaining
+  time, wallet, minimap and contextual controls without review telemetry.
+- Added three timed jobs using the four authored exterior approaches, stopped
+  on-foot interactions, once-only rewards, retry/recovery, shift results and
+  another-shift flow. Local traffic reuses existing car, van and scooter models
+  and keeps to the left, follows safely and yields to the player and parked bike.
+- Kept simulation commands and serializable state independent of rendering.
+  The scene samples the approved animation/contact pipeline from that state;
+  it does not run a second gameplay clock or calculate rewards.
+- Added versioned browser progress with a persistent local player ID and
+  session-scoped reward receipts. A saved shift can resume without paying a
+  completed job twice; a later shift can earn from the same routes again.
+- Review exposed a completed-shift index surviving a return to the menu,
+  input enabling beneath help overlays, absent minimap entities from mismatched
+  field names, and display speed overwriting the raw movement speed. Corrected
+  those contracts, guarded malformed saves and storage failures, and retained
+  the original raw movement units for animation and collision.
+- Preserved the original map and approved model files. No additional generation
+  credits were used. Expanded the README, viewer guide and development timeline,
+  and documented server authority, independent player identity, snapshot
+  replication and trusted persistence as later multiplayer requirements.
+- Added a full three-route test using actual controls and live traffic. It
+  exposed a pedestrian crossing deadlock: vehicles detected the crossing too
+  late and stopped against the collision boundary. Widened early pedestrian
+  yielding while retaining the physical footprint checks. Extended the longest
+  deadline to 140 seconds after the input-driven route left only two seconds
+  under its initial limit.
+- Browser integration exposed a disposed-runtime initialization race during
+  refresh and a pause menu overlapping a completed-job card after reload.
+  Scoped initialization callbacks to their active instance and restricted
+  automatic focus suspension to active gameplay. Modal controls pause the
+  simulation and isolate input; routine progress saves are limited to once per
+  second, with immediate saves at important state changes. Traffic prefabs use
+  the same asphalt elevation as the courier bicycle so grounded wheels are not
+  buried below the road surface.
+- Final verification: all 114 viewer tests, production build and both binary
+  asset validators pass. Approved movement, rider, bicycle and geographic files
+  retain their hashes. Browser checks confirm the full first delivery, 80-credit
+  reward, saved parcel/reward continuation, movement interactions, night/rain/
+  wind settings, frozen pause time and fitting controls at 390 × 844. No
+  screenshots or automated appearance scoring were used.

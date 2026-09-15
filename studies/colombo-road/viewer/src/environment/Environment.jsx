@@ -30,7 +30,7 @@ export default function Environment() {
     <div ref={host} className="environment-canvas" />
     <header className="environment-header">
       <div><span className="eyebrow">First playable environment</span><h1>Lake Garden Street</h1><p>A fictional Colombo pilot assembled from prepared candidates and approved movement assets.</p></div>
-      <nav><a href="/street-composition.html">Street study</a><a href="/vegetation-review.html">Vegetation kit</a></nav>
+      <nav><a className="play-link" href="/play.html">Play delivery game</a><a href="/street-composition.html">Street study</a><a href="/vegetation-review.html">Vegetation kit</a></nav>
     </header>
     <section className="view-tabs" aria-label="Environment views">
       {["Garden", "Shops", "Lakeside", "Overview"].map((name) => <button disabled={!ready} key={name} onClick={() => choosePreset(name)}>{name}</button>)}

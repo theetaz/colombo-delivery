@@ -11,6 +11,7 @@ button, select { font: inherit; }
 .eyebrow { color: #f2b95e; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; }
 .environment-header nav { display: flex; gap: 8px; pointer-events: auto; }
 .environment-header a, .view-tabs button { color: #eef4ef; text-decoration: none; border: 1px solid #ffffff24; background: #10201ae8; border-radius: 999px; padding: 9px 13px; }
+.environment-header a.play-link { color: #142019; background: #f2b95e; border-color: #f2b95e; }
 .view-tabs { position: fixed; top: 124px; left: 24px; display: flex; gap: 7px; }
 .view-tabs button { cursor: pointer; }
 .view-tabs .follow { display: flex; gap: 6px; align-items: center; color: #142019; background: #f2b95e; }

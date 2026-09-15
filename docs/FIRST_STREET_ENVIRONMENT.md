@@ -60,6 +60,13 @@ or a parcel economy in this page.
 
 ## Review
 
+Positive human feedback on 15 September 2026 approved this assembled street
+and requested the playable single-player loop. The separate
+[game page](http://127.0.0.1:5175/play.html) now uses these surroundings and
+exterior stops for deliveries. The environment page remains an exploration
+and lighting review. See the [game guide](SINGLEPLAYER_GAME.md) for its controls,
+progress and later multiplayer boundaries.
+
 Open [Lake Garden Street](http://127.0.0.1:5175/environment.html) after starting
 the study server. Use **W/A/S/D** or the arrow keys to move. **E** approaches
 and mounts the nearby bicycle; brake with **S**, stop, then press **E** again

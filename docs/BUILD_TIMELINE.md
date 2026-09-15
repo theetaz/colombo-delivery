@@ -1244,3 +1244,42 @@ an unchanged animation clock while paused. Identical textures are shared
 across LOD pairs, and both LODs use the same wind phase per placement. The
 approved courier, rider, fitted bicycle and original geographic files retain
 their hashes. No automated screenshots or appearance scoring were used.
+
+## 2026-09-15 — Single-player delivery shift in the approved street
+
+Human feedback approved the assembled environment and requested the actual
+game, with a focused interface and future multiplayer in mind. The
+[single-player checkpoint](SINGLEPLAYER_GAME.md) connects the approved courier,
+bicycle and street to three timed parcel jobs. The first crosses from the
+market to a verandah home; later jobs run from the café and market to the
+courtyard apartments. All four stops are authored fictional exterior locations.
+
+The new Play page contains offers, contextual collection and bicycle actions,
+a minimap, remaining time, earnings, pause/help/settings, retry and a shift
+summary. Collection and delivery require stopping on foot near the appropriate
+marker. Existing compact car, van and scooter assets provide ambient left-hand
+traffic with separation and yielding. This checkpoint reuses existing assets;
+no further paid generation was needed.
+
+The simulation owns commands, movement, job state, deadlines and traffic at a
+fixed timestep; the scene displays its snapshots. A persistent local player ID
+and versioned progress record preserve browser earnings and the current shift.
+Session-scoped reward receipts prevent duplicate payment after reloading while
+allowing the same route to earn again in a later shift. A WebSocket service,
+login, shared traffic authority and trusted online balances remain later work.
+
+Review caught a repeat-shift index error, generic prompts masking movement
+guidance, mismatched minimap coordinates, and modal input/timer behavior.
+Refinements address those integration errors before human gameplay review.
+The environment study remains available separately from the player interface.
+The dated Paper Route audit guides reuse of approved assets and complete small
+playable loops; fresh devlog retrieval failed during this checkpoint.
+
+The physical route test found a pedestrian crossing deadlock and insufficient
+margin on the longest delivery. Traffic now notices crossing intent earlier,
+and the longest deadline is 140 seconds. With a fixed traffic seed, the three
+input-driven routes complete in approximately 32.2, 67.0 and 112.9 seconds.
+All 114 viewer tests, the production build and both asset validators pass.
+Browser checks cover movement, a completed delivery, reward persistence,
+pause/settings and narrow-screen controls. Appearance and handling remain
+with the user for human playtesting; no automated visual scoring was used.

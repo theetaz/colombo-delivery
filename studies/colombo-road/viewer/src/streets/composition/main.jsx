@@ -41,7 +41,7 @@ function Composition(){
 
   return <main className="composition-shell">
     <div ref={host} className="composition-canvas" aria-label="Interactive 3D Colombo street composition"/>
-    <header className="composition-header"><a href="/" className="back-link"><ArrowLeft size={16}/> District review</a><div><h1>A living Colombo street</h1><p>One authored 190 m corridor with neighbourhood deliveries, gardens and lakeside movement. <a href="/environment.html">Open the playable asset environment</a>.</p></div></header>
+    <header className="composition-header"><a href="/" className="back-link"><ArrowLeft size={16}/> District review</a><div><h1>A living Colombo street</h1><p>One authored 190 m corridor with neighbourhood deliveries, gardens and lakeside movement. <a href="/play.html">Play the delivery game</a> or <a href="/environment.html">inspect the asset environment</a>.</p></div></header>
     <nav className="composition-controls" aria-label="Street views">
       {['Garden','Shops','Lakeside'].map(name=><button key={name} aria-pressed={preset===name&&!tour} onClick={()=>viewer.current?.preset(name)}>{name}</button>)}
       <span/><button className="tour" aria-pressed={tour} onClick={()=>viewer.current?.toggleTour()}>{tour?<Pause size={14}/>:<Play size={14}/>} {tour?'Pause tour':'Street tour'}</button>

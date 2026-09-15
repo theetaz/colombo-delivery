@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test src/delivery/*.test.js src/cyclist/*.test.js src/streets/*.test.js src/streets/composition/*.test.js src/vegetation/*.test.js src/environment/*.test.js",
+    "test": "node --test src/delivery/*.test.js src/cyclist/*.test.js src/streets/*.test.js src/streets/composition/*.test.js src/vegetation/*.test.js src/environment/*.test.js src/game/*.test.js",
+    "test:game": "node --test src/game/*.test.js",
     "test:environment": "node --test src/environment/*.test.js",
     "test:vegetation": "node --test src/vegetation/*.test.js",
     "dev": "vite --host 127.0.0.1 --port 5175 --strictPort",

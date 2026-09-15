@@ -9,6 +9,7 @@ import { addresses, buildingPlacements, cameraPresets, propPlacements, treePlace
 import { dayPhase, distanceForLod, resolveBuildingPlacement, validateEnvironmentManifest, validateLayout, validateSpatialLayout } from "./model.js";
 import { attachWind, updateWind } from "./wind.js";
 import { createStreetMovement, interactStreet, stepStreet, STREET_BOUNDS } from "./street-movement.js";
+import { createTrafficRenderer } from "../game/traffic-renderer.js";
 
 const WEATHER = { Clear: { fog: .0025, wet: 0 }, Rain: { fog: .008, wet: 1 } };
 const WIND = { Calm: 0, Breeze: .55, Strong: 1 };
@@ -61,7 +62,9 @@ export async function createEnvironment(host, callbacks = {}) {
   if (layoutErrors.length) throw new Error(layoutErrors.join(" · "));
   let disposed = false, frame = 0, last = performance.now(), elapsed = 0, paused = false, lastReport = 0;
   let phase = "Sunny", weather = "Clear", windPreset = "Breeze", windRadians = Math.PI * .2;
-  let inspection = false, actorReady = false;
+  const controlled = Boolean(callbacks.controlled);
+  let inspection = false, actorReady = false, externalView = null, inputEnabled = true, trafficRenderer = null;
+  const manualInput = { forward: 0, turn: 0 };
   const keyboard = new Set(), resources = new Set(), lodInstances = [], winds = [], civicLights = [];
   const scene = new THREE.Scene(), renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.55));
@@ -89,6 +92,7 @@ export async function createEnvironment(host, callbacks = {}) {
 
   try {
   const loader = new GLTFLoader();
+  trafficRenderer = controlled ? await createTrafficRenderer(scene, loader) : null;
   const [environmentResponse, vegetationResponse] = await Promise.all([fetch("/environment/manifest.json"), fetch("/vegetation/manifest.json")]);
   if (!environmentResponse.ok || !vegetationResponse.ok) throw new Error("Required environment manifests could not be loaded");
   const environmentManifest = await environmentResponse.json(), vegetationManifest = await vegetationResponse.json();
@@ -148,15 +152,26 @@ export async function createEnvironment(host, callbacks = {}) {
   scene.add(landmark.scene);
 
   const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffc35a, side: THREE.DoubleSide, transparent: true, opacity: .9 });
+  const beaconMaterial = new THREE.MeshBasicMaterial({ color: 0xffc35a, transparent: true, opacity: .14, depthWrite: false });
+  const addressMarkers = new Map();
   addresses.forEach((address) => {
+    const root = new THREE.Group();
     const marker = new THREE.Mesh(new THREE.RingGeometry(.34, .52, 28), markerMaterial);
     marker.rotation.x = -Math.PI / 2;
-    marker.position.set(...address.approach);
-    marker.name = address.id;
-    marker.userData = { stableId: address.id, buildingId: address.buildingId, role: address.role, fictionalPilot: true };
-    scene.add(marker);
+    const beacon = new THREE.Mesh(new THREE.CylinderGeometry(.16, .42, 2.6, 18, 1, true), beaconMaterial);
+    beacon.position.y = 1.3;
+    const canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 64;
+    const context = canvas.getContext("2d"); context.fillStyle = "rgba(20,27,25,.88)"; context.fillRect(0, 0, 256, 64); context.fillStyle = "#fff4d6"; context.font = "600 25px sans-serif"; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(address.role === "pickup" ? "PICKUP" : "DROP-OFF", 128, 32);
+    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+    const labelMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
+    const label = new THREE.Sprite(labelMaterial); label.scale.set(2.65, .66, 1); label.position.y = 2.8;
+    root.add(marker, beacon, label); root.position.set(...address.approach); root.name = address.id;
+    root.userData = { stableId: address.id, buildingId: address.buildingId, role: address.role, fictionalPilot: true };
+    root.visible = !controlled;
+    scene.add(root);
+    addressMarkers.set(address.id, root); resources.add(texture); resources.add(labelMaterial);
   });
-  resources.add(markerMaterial);
+  resources.add(markerMaterial); resources.add(beaconMaterial);
 
   const rainGeometry = new THREE.BufferGeometry();
   const rainPoints = new Float32Array(480 * 3);
@@ -185,12 +200,33 @@ export async function createEnvironment(host, callbacks = {}) {
   for (const action of Object.values(actions)) action.setEffectiveWeight(0);
   playAt("Pedal", 0); mixer.update(0); scene.updateMatrixWorld(true);
   contacts = createRiderContacts(rider, bike); actorReady = true;
+  function syncActor(source) {
+    if (!source) return;
+    for (const key of ["mode", "elapsed", "lean", "phase", "steer", "wheelAngle", "walkSpeed", "walkDistance", "speed", "paused"]) if (source[key] !== undefined) actor[key] = source[key];
+    if (source.player) Object.assign(actor.player, source.player);
+    if (source.bike) Object.assign(actor.bike, source.bike);
+    actor.transition = source.transition ? { ...source.transition } : null;
+  }
+  function updateObjective(view) {
+    if (!controlled) return;
+    const job = view?.currentJob || view?.activeJob || view?.jobs?.find?.((item) => item.active);
+    const target = view?.target || view?.objective || job?.objective || job?.target;
+    const targetId = typeof target === "string" ? target : target?.stopId || target?.id || view?.targetStopId;
+    addressMarkers.forEach((marker, id) => { marker.visible = Boolean(targetId && id === targetId); });
+  }
   function moveActor(dt) {
-    if (!actorReady || paused || inspection) return;
-    const forward = (keyboard.has("KeyW") || keyboard.has("ArrowUp") ? 1 : 0) - (keyboard.has("KeyS") || keyboard.has("ArrowDown") ? 1 : 0);
-    const turn = (keyboard.has("KeyA") || keyboard.has("ArrowLeft") ? 1 : 0) - (keyboard.has("KeyD") || keyboard.has("ArrowRight") ? 1 : 0);
+    if (!actorReady || (!controlled && (paused || inspection))) return;
+    const forward = inputEnabled ? THREE.MathUtils.clamp((keyboard.has("KeyW") || keyboard.has("ArrowUp") ? 1 : 0) - (keyboard.has("KeyS") || keyboard.has("ArrowDown") ? 1 : 0) + manualInput.forward, -1, 1) : 0;
+    const turn = inputEnabled ? THREE.MathUtils.clamp((keyboard.has("KeyA") || keyboard.has("ArrowLeft") ? 1 : 0) - (keyboard.has("KeyD") || keyboard.has("ArrowRight") ? 1 : 0) + manualInput.turn, -1, 1) : 0;
     for (const action of Object.values(actions)) action.setEffectiveWeight(0);
-    stepStreet(actor, { forward, turn }, dt);
+    if (controlled) {
+      externalView = callbacks.onFrame?.(dt, { forward, turn }) || externalView;
+      const movement = externalView?.movement || externalView?.actor;
+      syncActor(movement);
+      trafficRenderer?.apply(externalView?.traffic);
+      paused = Boolean(externalView?.paused);
+      updateObjective(externalView);
+    } else stepStreet(actor, { forward, turn }, dt);
     const onFoot = actor.mode === "foot" || actor.mode === "approach";
     if (onFoot) {
       walkWeight += (Math.min(1, Math.abs(actor.walkSpeed) / .8) - walkWeight) * Math.min(1, dt * 12);
@@ -220,7 +256,7 @@ export async function createEnvironment(host, callbacks = {}) {
     rider.traverse((object) => { if (object.morphTargetDictionary?.HandlebarGrip !== undefined) object.morphTargetInfluences[object.morphTargetDictionary.HandlebarGrip] = grip; });
     scene.updateMatrixWorld(true);
     if (riding) contacts.solve();
-    if (!inspection) {
+    if (!inspection || controlled) {
       const focus = new THREE.Vector3(actorPosition.x, 1.1, actorPosition.z), offset = new THREE.Vector3(Math.sin(actorPosition.yaw) * 5.5, 2.8, Math.cos(actorPosition.yaw) * 5.5);
       controls.target.lerp(focus, 1 - Math.exp(-dt * 4)); camera.position.lerp(focus.add(offset), 1 - Math.exp(-dt * 3));
     }
@@ -231,10 +267,11 @@ export async function createEnvironment(host, callbacks = {}) {
     actor.paused = paused;
     interactStreet(actor, paused || inspection);
   }
-  function keydown(event) { if (/INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return; if (["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyE", "Space"].includes(event.code)) event.preventDefault(); if (event.code === "KeyE" && !event.repeat) interact(); else if (event.code === "Space" && !event.repeat) { paused = !paused; actor.paused = paused; keyboard.clear(); } else keyboard.add(event.code); }
+  function keydown(event) { if (/INPUT|TEXTAREA|SELECT/.test(event.target.tagName) || (controlled && !inputEnabled)) return; if (["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyE", "KeyF", "Escape", "Space"].includes(event.code)) event.preventDefault(); if (controlled && !event.repeat && ["KeyE", "KeyF", "Escape"].includes(event.code)) callbacks.onAction?.(event.code); else if (event.code === "KeyE" && !event.repeat) interact(); else if (event.code === "Space" && !event.repeat) { paused = !paused; actor.paused = paused; keyboard.clear(); } else keyboard.add(event.code); }
   function keyup(event) { keyboard.delete(event.code); }
   function blur() { keyboard.clear(); }
-  window.addEventListener("keydown", keydown); window.addEventListener("keyup", keyup); window.addEventListener("blur", blur);
+  function visibility() { if (document.hidden) blur(); }
+  window.addEventListener("keydown", keydown); window.addEventListener("keyup", keyup); window.addEventListener("blur", blur); document.addEventListener("visibilitychange", visibility);
 
   function applyPhase() {
     const value = dayPhase(phase); scene.background = new THREE.Color(value.background); scene.fog = new THREE.FogExp2(value.fog, WEATHER[weather].fog); hemi.intensity = value.hemi; sun.intensity = value.sun; renderer.toneMappingExposure = value.exposure;
@@ -266,16 +303,21 @@ export async function createEnvironment(host, callbacks = {}) {
     follow() { inspection = false; controls.enabled = false; },
     inspect() { inspection = true; controls.enabled = true; },
     interact,
+    applyState(view) { externalView = view; syncActor(view?.movement || view?.actor); updateObjective(view); },
+    setMovement(input = {}) { manualInput.forward = THREE.MathUtils.clamp(Number(input.forward) || 0, -1, 1); manualInput.turn = THREE.MathUtils.clamp(Number(input.turn) || 0, -1, 1); },
+    setInputEnabled(value) { inputEnabled = Boolean(value); if (!inputEnabled) { manualInput.forward = manualInput.turn = 0; keyboard.clear(); } return inputEnabled; },
+    clearInput() { manualInput.forward = manualInput.turn = 0; keyboard.clear(); },
     setPhase(value) { phase = value; applyPhase(); },
     setWeather(value) { weather = WEATHER[value] ? value : "Clear"; applyPhase(); },
     setWind(value) { windPreset = WIND[value] !== undefined ? value : "Breeze"; },
     setDirection(degrees) { windRadians = THREE.MathUtils.degToRad(degrees); },
+    resize,
     pause(value) { paused = Boolean(value); actor.paused = paused; keyboard.clear(); },
-    stats() { return { actor: { ...actor, transition: actor.transition ? { ...actor.transition } : null }, phase, weather, wind: windPreset, elapsed, paused, inspection, lights: civicLights.filter((light) => light.intensity > 0).length, loaded: { buildings: buildingPlacements.length, trees: treePlacements.length, understory: understoryPlacements.length, addresses: addresses.length, assetFamilies: sources.size, sharedLodTextures: [...sources.values()].reduce((sum, source) => sum + source.roots.sharedTextures, 0) }, bounds: { ...STREET_BOUNDS }, drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }; },
-    dispose() { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("keydown", keydown); window.removeEventListener("keyup", keyup); window.removeEventListener("blur", blur); controls.dispose(); mixer?.stopAllAction(); release(scene, resources); resources.forEach((resource) => resource.dispose?.()); renderer.dispose(); renderer.domElement.remove(); }
+    stats() { return { actor: { ...actor, transition: actor.transition ? { ...actor.transition } : null }, phase, weather, wind: windPreset, elapsed, paused, inspection, lights: civicLights.filter((light) => light.intensity > 0).length, loaded: { buildings: buildingPlacements.length, trees: treePlacements.length, understory: understoryPlacements.length, addresses: addresses.length, traffic: trafficRenderer?.count() || 0, assetFamilies: sources.size, sharedLodTextures: [...sources.values()].reduce((sum, source) => sum + source.roots.sharedTextures, 0) }, bounds: { ...STREET_BOUNDS }, drawCalls: renderer.info.render.calls, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }; },
+    dispose() { disposed = true; cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("keydown", keydown); window.removeEventListener("keyup", keyup); window.removeEventListener("blur", blur); document.removeEventListener("visibilitychange", visibility); controls.dispose(); mixer?.stopAllAction(); trafficRenderer?.dispose(); release(scene, resources); resources.forEach((resource) => resource.dispose?.()); renderer.dispose(); renderer.domElement.remove(); }
   };
   } catch (error) {
-    release(scene, resources); resources.forEach((resource) => resource.dispose?.()); controls.dispose(); renderer.dispose(); renderer.domElement.remove();
+    trafficRenderer?.dispose(); release(scene, resources); resources.forEach((resource) => resource.dispose?.()); controls.dispose(); renderer.dispose(); renderer.domElement.remove();
     throw error;
   }
 }

@@ -11,6 +11,13 @@ Open http://127.0.0.1:5175. Use Node 22.12 or newer. The development server read
 the original files from the parent directory through an explicit asset allowlist.
 It does not modify the models or run either Blender script.
 
+- **Play:** open http://127.0.0.1:5175/play.html for a three-job single-player
+  shift in the approved Lake Garden Street. Use WASD/arrows to walk and ride,
+  E to mount/dismount, F to collect/deliver while stopped on foot, and Escape
+  to pause. Onscreen controls support pointer and touch input. The game has
+  local traffic, a minimap, restart/retry and saved browser progress. Accounts
+  and a multiplayer server are not part of this checkpoint. See the
+  [game guide](../../../docs/SINGLEPLAYER_GAME.md).
 - **Layers:** switch between the full district and the independent road-only GLB,
   show/hide scene layers, road centre lines, the boundary and wireframe.
 - **Inspect:** search roads, controls and turn restrictions by name/type/ID. Select
@@ -50,8 +57,8 @@ It does not modify the models or run either Blender script.
   Explore the assembled 190 m street on foot or bicycle, compare Garden,
   Shops and Lakeside views, and test night lighting, wind and rain. Four
   fictional exterior address markers identify future delivery stops. This
-  page reuses approved movement assets; its assembled appearance awaits human
-  review. See the [environment guide](../../../docs/FIRST_STREET_ENVIRONMENT.md)
+  page reuses approved movement assets; positive human feedback approved the
+  environment for the separate Play page. See the [environment guide](../../../docs/FIRST_STREET_ENVIRONMENT.md)
   and [editable asset package](../environment/README.md).
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local

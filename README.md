@@ -62,9 +62,17 @@ reuses that vegetation, the approved courier and bicycle, and existing road
 materials. Five new Tripo sources supply a market, café, verandah house,
 apartment building and flowering shrub. The 190 m authored corridor contains
 12 building placements, 14 trees, 24 smaller planting groups and four fictional
-exterior delivery references. Walking, cycling, camera views, night lighting
-and wind controls support the next human playtest. This environment is a
+exterior delivery references. Human feedback approved the assembled environment
+on 15 September and requested a playable game in these surroundings. This is a
 Colombo-inspired pilot; its buildings and addresses are not surveyed locations.
+
+The [single-player game](docs/SINGLEPLAYER_GAME.md) now connects that street to
+a three-job delivery shift, the approved walking and cycling controls, local
+traffic, a compact minimap and saved browser progress. Open **Play** to collect
+and deliver parcels; environment and asset inspection remain on separate pages.
+Player commands, simulation state and rendering are separate responsibilities
+in preparation for multiplayer. Accounts, WebSockets and a shared server world
+are later milestones. This game checkpoint is ready for human playtesting.
 
 ## Development checkpoints
 
@@ -92,7 +100,8 @@ Colombo-inspired pilot; its buildings and addresses are not surveyed locations.
 | 15 Sep | [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) | CLI 0.4.0 installation and authentication verified; V3 documentation and installed command behavior reviewed. Asset stages, recovery, Blender contracts and human review documented before a first pilot. |
 | 15 Sep | [Blender Tripo setup](docs/TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup) | Official Tripo 3D 0.7.7 installed and authenticated in Blender 5.1.2; restart, scene-save credential protection and local Studio Bridge connection checked. No generation submitted. |
 | 15 Sep | [Generated vegetation review](studies/colombo-road/vegetation/README.md) | Three Tripo tree candidates and two grass candidates, editable Blender sources, two LODs per asset, wind masks and a separate weather review. Positive human feedback approved reuse in the street environment. |
-| 15 Sep | [Essential assets and assembled street](docs/FIRST_STREET_ENVIRONMENT.md) | Five necessary source models prepared in Blender and combined with existing assets in an explorable 190 m street. New building appearance, orientation and assembled movement await human review. |
+| 15 Sep | [Essential assets and assembled street](docs/FIRST_STREET_ENVIRONMENT.md) | Five necessary source models prepared in Blender and combined with existing assets in an explorable 190 m street. Positive human feedback approved the environment and requested the single-player game. |
+| 15 Sep | [Single-player delivery shift](docs/SINGLEPLAYER_GAME.md) | Three timed jobs, local progress, left-hand ambient traffic and a focused game interface reuse the approved environment and animations. Multiplayer boundaries are documented; human gameplay feedback is the next review. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -112,6 +121,7 @@ npm run study:dev
 
 Open these local pages:
 
+- [Play the single-player delivery game](http://127.0.0.1:5175/play.html)
 - [Map and limited car-delivery pilot](http://127.0.0.1:5175/#drive)
 - [Dressed street study](http://127.0.0.1:5175/#street)
 - [Combined garden, shops and lakeside composition](http://127.0.0.1:5175/street-composition.html)
