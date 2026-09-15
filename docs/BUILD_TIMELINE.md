@@ -1067,6 +1067,13 @@ movement, rider, fitted bicycle and source map hashes remain unchanged.
 
 ## 2026-09-15 — Living street assets and exterior delivery addresses
 
+Delivered in [`4226722`](https://github.com/theetaz/colombo-delivery/commit/422672210f80a3ccd5dd4157e4e8bc800a258d02).
+
+Frozen artifacts: [asset guide](https://github.com/theetaz/colombo-delivery/blob/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition/ASSET_GUIDE.md),
+[study and validation](https://github.com/theetaz/colombo-delivery/blob/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition/README.md),
+[editable Blender kit](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition),
+and [runtime and tests](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/viewer/src/streets/composition).
+
 Status: environment expansion prepared for human review; city-scale placement,
 player collisions and delivery gameplay remain separate integration milestones.
 
