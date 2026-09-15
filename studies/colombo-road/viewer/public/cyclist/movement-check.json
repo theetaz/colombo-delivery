@@ -1,0 +1,106 @@
+{
+  "Idle": {
+    "lowestVertexMetres": -0.0005443893023766577,
+    "maxEdgeStretch": [
+      1.4034750576161499,
+      12,
+      [
+        4970,
+        4971
+      ]
+    ]
+  },
+  "Stand": {
+    "lowestVertexMetres": -8.615650415322307e-08,
+    "maxEdgeStretch": [
+      1.1413110751799767,
+      0.0,
+      [
+        2531,
+        2533
+      ]
+    ]
+  },
+  "Walk": {
+    "lowestVertexMetres": -0.000431243417551741,
+    "maxEdgeStretch": [
+      1.7555694940295972,
+      21.0,
+      [
+        2921,
+        2924
+      ]
+    ]
+  },
+  "Mount": {
+    "lowestVertexMetres": -0.0012466729385778308,
+    "maxEdgeStretch": [
+      3.1526518322769106,
+      36,
+      [
+        7252,
+        7255
+      ]
+    ]
+  },
+  "Dismount": {
+    "lowestVertexMetres": -0.0005829379661008716,
+    "maxEdgeStretch": [
+      3.1597081595048757,
+      45,
+      [
+        7252,
+        7255
+      ]
+    ]
+  },
+  "Pedal": {
+    "lowestVertexMetres": 0.12887369096279144,
+    "maxEdgeStretch": [
+      2.1893284867045044,
+      40,
+      [
+        3161,
+        3162
+      ]
+    ]
+  },
+  "walkingKinematics": {
+    "WalkBefore": {
+      "supportKneeAt30PercentDegrees": 32.308265086064694,
+      "elbowFlexionDegrees": [
+        34.22073171404662,
+        59.33569246202033
+      ],
+      "peakSwingKneeDegrees": 61.09755341880347,
+      "maxTrunkFromVerticalDegrees": 2.4006140581037863
+    },
+    "Walk": {
+      "supportKneeAt30PercentDegrees": 7.301945327029188,
+      "elbowFlexionDegrees": [
+        8.386538386092212,
+        18.145799540151557
+      ],
+      "peakSwingKneeDegrees": 67.19281423412285,
+      "maxTrunkFromVerticalDegrees": 1.230828689853447
+    }
+  },
+  "assetSha256": "055681547d6d99e51cbec8d25ad348440defddf0836d0bb2b8aa0a38c0496d58",
+  "saddleClearance": {
+    "Mount": {
+      "firstFrame": 21,
+      "lastFrame": 66,
+      "stepFrames": 0.5,
+      "samples": 91,
+      "intersections": []
+    },
+    "Dismount": {
+      "firstFrame": 21,
+      "lastFrame": 66,
+      "stepFrames": 0.5,
+      "samples": 91,
+      "intersections": []
+    }
+  },
+  "bicycleSha256": "f04dff2d91caabf51e91352d6ddd3f44fa274d6e19dc14a4db02efd7b7d397b5"
+}

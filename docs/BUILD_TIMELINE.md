@@ -899,3 +899,23 @@ edge ratios from 0.097824× to 10.306895×. It remains under
 Trials stopped with the continuous torso/neck/head and disconnected-part
 interface unresolved. The public viewer continues to show rejected checkpoint
 1; the approved original face and bicycle remain unchanged.
+
+### 2026-09-15 — Colombo road and movement study consolidated
+
+Moved the complete standalone road and animation study into
+[`studies/colombo-road`](../studies/colombo-road/README.md), preserving its 11
+development commits through `939c56b`, source map data, Blender projects, GLBs,
+reference images, and 37 browser screenshots. The
+[visual history](../studies/colombo-road/docs/visual-history/README.md) retains
+the approved walking milestone and both bicycle transition milestones in order.
+
+The study runs independently on port 5175 through `npm run study:dev` from the
+repository root. Its dependency lockfile and asset-relative paths are preserved.
+The main delivery app and its character experiments remain available through
+the existing commands. The imported study's rider and animation review do not
+change the rejected status of the separate clean-rig experiments above.
+
+The latest animation revision corrects the knee hinge, rear leg sweep, support
+steps, and shoe alignment during mounting and dismounting. The previously
+approved walking and pedaling clips are preserved; the revised transitions
+remain ready for human testing.

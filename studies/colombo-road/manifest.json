@@ -1,0 +1,102 @@
+{
+  "name": "Colombo Roads — Lotus Tower and Fort v1",
+  "version": 1,
+  "stage": "geographic_asset_for_user_testing",
+  "origin_lon_lat": [
+    79.85832,
+    6.92703
+  ],
+  "crs": "+proj=aeqd +lat_0=6.92703 +lon_0=79.85832 +datum=WGS84 +units=m",
+  "units": "metres",
+  "blender_axes": "X east, Y north, Z up",
+  "gltf_and_graph_axes": "X east, Y up, Z south",
+  "bounds_local_xy": [
+    -1300,
+    -450,
+    500,
+    1350
+  ],
+  "area_km2": 3.24,
+  "osm_timestamp": "2026-09-14T11:47:35Z",
+  "context_snapshot": "2026-09-05",
+  "statistics": {
+    "road_ways": 565,
+    "road_length_km": 56.9,
+    "named_ways": 289,
+    "distinct_road_names": 108,
+    "graph_nodes": 2514,
+    "directed_edges": 4213,
+    "roundabout_ways": 5,
+    "traffic_signal_nodes": 10,
+    "control_nodes": 25,
+    "turn_restrictions": 4,
+    "buildings": 7829
+  },
+  "sources": [
+    {
+      "name": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "use": "Roads, waterways, railways, green spaces; ODbL"
+    },
+    {
+      "name": "CMC / NSDI",
+      "url": "https://gisapps.nsdi.gov.lk/server/rest/services/SLNSDI/CMC/MapServer",
+      "use": "Building footprints and floor counts; survey date unspecified"
+    },
+    {
+      "name": "Overture Maps",
+      "url": "https://docs.overturemaps.org/guides/buildings/",
+      "use": "Building footprints and available heights; 2026-08-19 release"
+    },
+    {
+      "name": "Mapzen Terrain Tiles",
+      "url": "https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "use": "Elevation; includes SRTM and other open elevation sources"
+    }
+  ],
+  "accuracy_notes": [
+    "First district asset for user testing, not all of Colombo and not a playable game.",
+    "Road geometry/tags are from the bundled OpenStreetMap snapshot. Completeness and current ground conditions have not been verified.",
+    "Regional terrain, water and building context reuse the 2026-09-05 city dataset. Building facades are simple placeholders.",
+    "Most road widths are estimated. Lane meshes, surveyed kerbs, stop lines, street signs and signal schedules are not supplied.",
+    "Bridge surfaces use a provisional terrain + 1.2 m offset. Ramps, overpass clearance and graph heights need correction before driving physics.",
+    "Graph edges follow shared source node IDs and base one-way tags. Restrictions and node access/barrier tags are preserved but not enforced.",
+    "Conditional direction is unresolved and excluded from the eligible base graph; vehicle-specific exceptions require runtime interpretation.",
+    "Unmapped direction defaults to two-way for the base graph; this is an assumption, not verified signage.",
+    "Private, destination-only and other restricted roads remain visible but are excluded from the eligible base graph.",
+    "No safe spawns, reachable delivery stops, pathfinding, penalties, collisions or traffic simulation have been established.",
+    "Boundary endpoints leave the study area; they are not real-world dead ends.",
+    "Signal markers may sit at junction centres or approach nodes; do not use their position as a fine trigger.",
+    "No browser, gameplay, performance or visual testing was performed for this handover."
+  ],
+  "assets": {
+    "scene": "colombo-roads.glb",
+    "blender": "Colombo_Roads_v1.blend",
+    "road_surfaces": "road-surfaces.glb",
+    "road_network": "road-network.json",
+    "geographic_roads": "roads.geojson"
+  },
+  "default_camera": {
+    "position": [
+      700,
+      1350,
+      1100
+    ],
+    "target": [
+      -400,
+      0,
+      -450
+    ]
+  },
+  "tested": false,
+  "export": {
+    "format": "glTF 2.0 binary, standard uncompressed geometry",
+    "triangles": 711690,
+    "mesh_objects": 798,
+    "files": {
+      "Colombo_Roads_v1.blend": 12613290,
+      "colombo-roads.glb": 23926984,
+      "road-surfaces.glb": 1773916
+    }
+  }
+}

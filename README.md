@@ -11,6 +11,34 @@ motorbikes, and eventually unlocks cars.
 
 Repository: [theetaz/colombo-delivery](https://github.com/theetaz/colombo-delivery)
 
+## Walking and bicycle animation study
+
+The complete Colombo road and animation study now lives in
+[`studies/colombo-road`](studies/colombo-road/README.md). It includes the map data,
+editable Blender scenes, browser models, approved walking cycle, pedaling,
+mounting and dismounting previews, build scripts, and all 11 original development
+commits. This study has its own rider and viewer; the art status above refers to
+the existing delivery app's separate character experiments.
+
+Run these commands from this repository:
+
+```sh
+npm run study:install
+npm run study:dev
+```
+
+Open [walk and ride](http://127.0.0.1:5175/movement.html),
+[bicycle transitions](http://127.0.0.1:5175/transitions.html), or
+[walking](http://127.0.0.1:5175/walking.html). The
+[viewer guide](studies/colombo-road/viewer/README.md) lists every preview and its
+controls. Use `npm run study:test` and `npm run study:build` to validate it.
+
+The [screenshot timeline](studies/colombo-road/docs/visual-history/README.md)
+preserves 37 UI captures across approved walking, the first transition study,
+and the latest leg correction. The corrected mount/dismount animations remain
+available for human testing. Future changes to this study belong in this
+repository.
+
 ## Project status
 
 The repository now contains the reproducible Stage 1 OpenStreetMap audit, a

@@ -751,3 +751,19 @@ roadmap.
 - Audited the [Paper Route development archive](https://www.paperroute.lol/devlog/)
   on 2026-09-14. Corrected the character pipeline's evidence boundary and next
   milestone without changing the existing rider's rejected status.
+
+## 2026-09-15 — Road and animation study consolidated
+
+- Added the complete standalone study at `studies/colombo-road`, with its 11
+  original commits, map source data, editable Blender files, browser assets,
+  reference images, and 37 screenshots documenting the animation milestones.
+- Added root commands `study:install`, `study:dev`, `study:test`, and
+  `study:build`. The study continues to use port 5175 and its own dependency
+  lockfile. Its implementation and exported models are preserved during the move.
+- Linked the study, testing pages, and screenshot timeline from the root README.
+  The original delivery app and its separate character review remain available.
+- Verified all 133 imported files byte-for-byte against the original study and
+  preserved the destination's existing local files. All 33 study tests and 63
+  delivery tests pass; both production builds succeed. The migrated transition
+  page renders on port 5175 with no browser console warnings or errors, and its
+  GLB and downloadable Blender scene match the files in the new location.

@@ -1,0 +1,25 @@
+{
+  "vertices": 8951,
+  "triangles": 17681,
+  "bones": 19,
+  "riderSha256": "3ac8904971bbb2ba5df15e77275daf4a2ef8adff14b13f37a384a789f4b252c2",
+  "sampledFrames": 49,
+  "maxAnkleTargetErrorMetres": 3.286787128787603e-06,
+  "maxBlenderPedalErrorMetres": 1.0543295516136963e-07,
+  "loopSeamMetres": 0.0,
+  "soleClearanceRangeMetres": [
+    -0.0004440641403198331,
+    5.269050598055713e-07
+  ],
+  "maxEdgeStretch": [
+    2.189675170627833,
+    41,
+    [
+      3161,
+      3162
+    ]
+  ],
+  "allVerticesNormalized": true,
+  "maximumSkinInfluences": 4,
+  "scope": "Geometry and animation checks only. This does not certify visual quality or physical simulation."
+}

@@ -9,6 +9,10 @@
   },
   "scripts": {
     "dev": "vite",
+    "study:install": "npm --prefix studies/colombo-road/viewer ci",
+    "study:dev": "npm --prefix studies/colombo-road/viewer run dev",
+    "study:test": "npm --prefix studies/colombo-road/viewer test",
+    "study:build": "npm --prefix studies/colombo-road/viewer run build",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
