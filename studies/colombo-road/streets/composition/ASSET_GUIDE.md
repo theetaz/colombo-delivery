@@ -5,9 +5,10 @@ varied tropical planting, recognizable exterior building types, night-time
 path lighting and background road users. The street remains an authored test
 section. Human review rejected this expansion's visual result. The
 [Tripo-to-Blender production guide](../../../../docs/TRIPO_BLENDER_ASSET_PIPELINE.md)
-defines the next single-asset pilot before further kit expansion. The identity
-and runtime contracts below remain the handoff requirements for replacement
-models.
+defines the production steps. A separate [generated vegetation review](../../vegetation/README.md)
+now exercises them on three tree shapes and two grass forms. These candidates
+await human acceptance before street placement. The identity and runtime
+contracts below remain the handoff requirements for replacement models.
 
 ## Keep models separate from places
 

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "provider": "Tripo API",
+  "operation": "text_to_model",
+  "generatedAt": "2026-09-15",
+  "provenance": "Project-directed generative source created from original text prompts through the Tripo API. Use and distribution remain subject to the applicable Tripo terms and account plan; this record does not make a separate legal or licensing claim.",
+  "recipes": [
+    {
+      "assetId": "vegetation.rain-tree-01",
+      "taskId": "ff369fcc-01e9-46cb-b6a0-4c5416bc2b30",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated mature tropical rain tree asset, approximately 8 metres visual height, wide umbrella silhouette, asymmetric branching trunk and airy layered dark green canopy with visible gaps between branch and leaf clusters, warm semi-real stylized Colombo street game art, coherent natural branching geometry, clean readable silhouette, full tree centered and complete. No pot, platform, ground plane, diorama, text, cast shadow, baked lighting, buildings, people, vehicles, or extra objects.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 16000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 2714188, "sha256": "229455855518a027f52f7d0019ee081edd70d444ccb5a71972904d64f97714a6"},
+        {"filename": "generated_image.jpeg", "bytes": 194264, "sha256": "f1a7063f9651f2a2b9f422594c44f364c626918cb4ac56d0759116a5b642e4c7"},
+        {"filename": "rendered_image.webp", "bytes": 221584, "sha256": "861ad91ecbac72a7aa9edec6aff411ee004e6ee4456d9cc6adcf6099a769400e"}
+      ]
+    },
+    {
+      "assetId": "vegetation.round-tree-01",
+      "taskId": "2eae34f0-c49f-426c-a639-58d91b3ceea5",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated mango-like tropical evergreen tree asset, approximately 6 metres visual height, rounded but naturally asymmetric crown, sturdy branching trunk, varied green leaves in layered clusters with visible gaps, warm semi-real stylized Colombo street game art, coherent natural branching geometry, clean readable silhouette, full tree centered and complete. No fruit, pot, platform, ground plane, diorama, text, cast shadow, baked lighting, buildings, people, vehicles, or extra objects.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 14000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 2775568, "sha256": "52d6662b19e8d366ebc8cbb829a0f11321956adf47eabeecda69b11702da375a"},
+        {"filename": "generated_image.jpeg", "bytes": 202859, "sha256": "1b0bf82ecd1808c3ae75265c4e7fa491e8eb93a8f4ae43451549c63c61261107"},
+        {"filename": "rendered_image.webp", "bytes": 300716, "sha256": "efbd0bd1fe50e38b71e885436abd4247db63593b3474a646f16bf5dfa92c1ee5"}
+      ]
+    },
+    {
+      "assetId": "vegetation.coconut-palm-01",
+      "taskId": "e98829d0-3104-44d3-86fe-be3a71354f11",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated slender tropical coconut palm asset, approximately 9 metres visual height, subtly leaning ringed trunk and open crown fan of long curved feathered fronds with clear gaps between fronds, warm semi-real stylized Colombo street game art, coherent frond geometry and clean readable silhouette, full palm centered and complete. No coconuts, pot, platform, ground plane, diorama, text, cast shadow, baked lighting, buildings, people, vehicles, or extra objects.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 12000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 3367216, "sha256": "bd01bb11d06e22938ce28982206301057f497b5b532a3e5de56dec9eea8daf2b"},
+        {"filename": "generated_image.jpeg", "bytes": 199837, "sha256": "bb723f89aad1170f7c8f05bac5a1832505d43983e14384a7479e3ea5dc54b4f3"},
+        {"filename": "rendered_image.webp", "bytes": 216167, "sha256": "2ea74f2cf9d6134eeac8043478027f4d67b49948c3aff24f3a8cb97be1817a54"}
+      ]
+    },
+    {
+      "assetId": "vegetation.short-grass-01",
+      "taskId": "d39990ee-839f-49ff-99a5-b25b5729d7b1",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated short irregular roadside grass tuft asset, approximately 0.25 metres visual height, mixed green blades with varied length, direction and spacing, small natural clump with visible gaps, warm semi-real stylized Colombo street game art, clean readable silhouette, centered and complete. No flowers, pot, platform, soil, ground plane, diorama, text, cast shadow, baked lighting, rocks, litter, or extra objects.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 3000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 2147100, "sha256": "16fce65b2aae7e52f139321aa6dfcb7d3edb32ea11988d228287be656d5b5599"},
+        {"filename": "generated_image.jpeg", "bytes": 239987, "sha256": "1d4affabbfe0012e911c99a0e0ffb458b302720e961483a04bb3749a8001e133"},
+        {"filename": "rendered_image.webp", "bytes": 230776, "sha256": "a184eef9564927e577337d16ccf57a8b88e0deced6714acd108c4c2bd6ac1260"}
+      ]
+    },
+    {
+      "assetId": "vegetation.tall-grass-01",
+      "taskId": "1860a09b-335c-4861-bc82-8d3a53725ac7",
+      "modelVersion": "P1-20260311",
+      "prompt": "Individual isolated tall fountain grass clump asset, approximately 0.9 metres visual height, dense base and arching slender mixed-green blades with varied length and visible gaps, naturally asymmetric fountain silhouette, warm semi-real stylized Colombo street game art, centered and complete. No flower plumes, pot, platform, soil, ground plane, diorama, text, cast shadow, baked lighting, rocks, litter, or extra objects.",
+      "seed": null,
+      "seedNote": "The provider task record did not return a model seed.",
+      "parameters": {"texture": true, "textureQuality": "detailed", "textureAlignment": "geometry", "pbr": true, "exportUv": true, "faceLimit": 5000},
+      "outputs": [
+        {"filename": "model.glb", "bytes": 2782216, "sha256": "e839dfb835bf814acda0c468a597ff4f981bccba9d9bb5dacb6556eeb2e079d6"},
+        {"filename": "generated_image.jpeg", "bytes": 180457, "sha256": "13188f667dc485265e722cc86e82937e8adbdd19afc89006f61c0832c8a1fe54"},
+        {"filename": "rendered_image.webp", "bytes": 210725, "sha256": "f5d923e35b8679972cdd5c627070a5486c42d7d3a9379ba12db5268a01c67569"}
+      ]
+    }
+  ]
+}

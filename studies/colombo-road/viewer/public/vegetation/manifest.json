@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "vegetation.coconut-palm-01",
+      "label": "Coconut Palm",
+      "kind": "palm",
+      "height": 9.0,
+      "url": "/vegetation/vegetation.coconut-palm-01.lod0.glb",
+      "lod1Url": "/vegetation/vegetation.coconut-palm-01.lod1.glb",
+      "blendUrl": "/assets/vegetation/vegetation.coconut-palm-01.blend",
+      "bounds": {
+        "min": [
+          -4.741237,
+          0.0,
+          -4.22165
+        ],
+        "max": [
+          4.741237,
+          9.0,
+          4.22165
+        ]
+      },
+      "triangleCount": 9764,
+      "lod1TriangleCount": 4393,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "bd01bb11d06e22938ce28982206301057f497b5b532a3e5de56dec9eea8daf2b",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_e98829d0-3104-44d3-86fe-be3a71354f11"
+      ],
+      "textures": [
+        {
+          "name": "Color_e98829d0-3104-44d3-86fe-be3a71354f11",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_e98829d0-3104-44d3-86fe-be3a71354f11",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_e98829d0-3104-44d3-86fe-be3a71354f11",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "base-colour UV greenness plus height heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime shaders must read COLOR_0 as wind data and must not multiply it into material colour."
+      },
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/vegetation/vegetation.coconut-palm-01.lod0.glb",
+          "triangles": 9764,
+          "bytes": 4207736,
+          "sha256": "38e548b3b627a251908d902646fa5078987e0728e68b82f8aa54bbfcbc84cd56"
+        },
+        {
+          "level": 1,
+          "uri": "/vegetation/vegetation.coconut-palm-01.lod1.glb",
+          "triangles": 4393,
+          "bytes": 3861628,
+          "sha256": "a20e5a192ead162964e66e10d1035dd97f15f72bd098ab2e02e59c1688198982"
+        }
+      ]
+    },
+    {
+      "id": "vegetation.rain-tree-01",
+      "label": "Rain Tree",
+      "kind": "tree",
+      "height": 8.0,
+      "url": "/vegetation/vegetation.rain-tree-01.lod0.glb",
+      "lod1Url": "/vegetation/vegetation.rain-tree-01.lod1.glb",
+      "blendUrl": "/assets/vegetation/vegetation.rain-tree-01.blend",
+      "bounds": {
+        "min": [
+          -4.414687,
+          0.0,
+          -4.414687
+        ],
+        "max": [
+          4.414687,
+          8.0,
+          4.414687
+        ]
+      },
+      "triangleCount": 14971,
+      "lod1TriangleCount": 6736,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "229455855518a027f52f7d0019ee081edd70d444ccb5a71972904d64f97714a6",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_ff369fcc-01e9-46cb-b6a0-4c5416bc2b30"
+      ],
+      "textures": [
+        {
+          "name": "Color_ff369fcc-01e9-46cb-b6a0-4c5416bc2b30",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_ff369fcc-01e9-46cb-b6a0-4c5416bc2b30",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_ff369fcc-01e9-46cb-b6a0-4c5416bc2b30",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "base-colour UV greenness plus height heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime shaders must read COLOR_0 as wind data and must not multiply it into material colour."
+      },
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/vegetation/vegetation.rain-tree-01.lod0.glb",
+          "triangles": 14971,
+          "bytes": 3716688,
+          "sha256": "b40e302fe51e317b39ee4ce2687e9f2d7ca7cc9531c9f84350ff307736e794c0"
+        },
+        {
+          "level": 1,
+          "uri": "/vegetation/vegetation.rain-tree-01.lod1.glb",
+          "triangles": 6736,
+          "bytes": 3231696,
+          "sha256": "4e75e5036d119570860165705c0475d80992aac950bda479f62b4a8d8a1d4ceb"
+        }
+      ]
+    },
+    {
+      "id": "vegetation.round-tree-01",
+      "label": "Round Tree",
+      "kind": "tree",
+      "height": 6.0,
+      "url": "/vegetation/vegetation.round-tree-01.lod0.glb",
+      "lod1Url": "/vegetation/vegetation.round-tree-01.lod1.glb",
+      "blendUrl": "/assets/vegetation/vegetation.round-tree-01.blend",
+      "bounds": {
+        "min": [
+          -2.976517,
+          0.0,
+          -2.765166
+        ],
+        "max": [
+          2.976517,
+          6.0,
+          2.765166
+        ]
+      },
+      "triangleCount": 9801,
+      "lod1TriangleCount": 4410,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "52d6662b19e8d366ebc8cbb829a0f11321956adf47eabeecda69b11702da375a",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_2eae34f0-c49f-426c-a639-58d91b3ceea5"
+      ],
+      "textures": [
+        {
+          "name": "Color_2eae34f0-c49f-426c-a639-58d91b3ceea5",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_2eae34f0-c49f-426c-a639-58d91b3ceea5",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_2eae34f0-c49f-426c-a639-58d91b3ceea5",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "base-colour UV greenness plus height heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime shaders must read COLOR_0 as wind data and must not multiply it into material colour."
+      },
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/vegetation/vegetation.round-tree-01.lod0.glb",
+          "triangles": 9801,
+          "bytes": 3673316,
+          "sha256": "c04dc4b280d30aa8db418a3733b6bf56f7d5253e886c292edf4a628763655c24"
+        },
+        {
+          "level": 1,
+          "uri": "/vegetation/vegetation.round-tree-01.lod1.glb",
+          "triangles": 4410,
+          "bytes": 3373500,
+          "sha256": "e38dcd0c0cdd2b9ab443e6b613cff9323d61fdc6b5b7ffbe3213973ad6b3581b"
+        }
+      ]
+    },
+    {
+      "id": "vegetation.short-grass-01",
+      "label": "Short Grass",
+      "kind": "grass",
+      "height": 0.25,
+      "url": "/vegetation/vegetation.short-grass-01.lod0.glb",
+      "lod1Url": "/vegetation/vegetation.short-grass-01.lod1.glb",
+      "blendUrl": "/assets/vegetation/vegetation.short-grass-01.blend",
+      "bounds": {
+        "min": [
+          -0.25247,
+          0.0,
+          -0.25247
+        ],
+        "max": [
+          0.25247,
+          0.25,
+          0.25247
+        ]
+      },
+      "triangleCount": 2882,
+      "lod1TriangleCount": 1296,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "16fce65b2aae7e52f139321aa6dfcb7d3edb32ea11988d228287be656d5b5599",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_d39990ee-839f-49ff-99a5-b25b5729d7b1"
+      ],
+      "textures": [
+        {
+          "name": "Color_d39990ee-839f-49ff-99a5-b25b5729d7b1",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_d39990ee-839f-49ff-99a5-b25b5729d7b1",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_d39990ee-839f-49ff-99a5-b25b5729d7b1",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "height-only heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime shaders must read COLOR_0 as wind data and must not multiply it into material colour."
+      },
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/vegetation/vegetation.short-grass-01.lod0.glb",
+          "triangles": 2882,
+          "bytes": 2955156,
+          "sha256": "0fce664f48b1024ffe6c70bbaff4977f47495706c3202dc322f2f00ca70d68f3"
+        },
+        {
+          "level": 1,
+          "uri": "/vegetation/vegetation.short-grass-01.lod1.glb",
+          "triangles": 1296,
+          "bytes": 2834384,
+          "sha256": "f5fe9d5eea29b3c6831afc9a4a9bac301220b38801fecbe72160b8ce3a3219d4"
+        }
+      ]
+    },
+    {
+      "id": "vegetation.tall-grass-01",
+      "label": "Tall Grass",
+      "kind": "grass",
+      "height": 0.9,
+      "url": "/vegetation/vegetation.tall-grass-01.lod0.glb",
+      "lod1Url": "/vegetation/vegetation.tall-grass-01.lod1.glb",
+      "blendUrl": "/assets/vegetation/vegetation.tall-grass-01.blend",
+      "bounds": {
+        "min": [
+          -0.45,
+          0.0,
+          -0.45
+        ],
+        "max": [
+          0.45,
+          0.9,
+          0.45
+        ]
+      },
+      "triangleCount": 4359,
+      "lod1TriangleCount": 1958,
+      "source": {
+        "filename": "model.glb",
+        "sha256": "e839dfb835bf814acda0c468a597ff4f981bccba9d9bb5dacb6556eeb2e079d6",
+        "generator": "Tripo"
+      },
+      "coordinateSystem": {
+        "authoringUp": "Z",
+        "glbUp": "Y",
+        "unit": "metre",
+        "grounded": true
+      },
+      "materials": [
+        "tripo_material_1860a09b-335c-4861-bc82-8d3a53725ac7"
+      ],
+      "textures": [
+        {
+          "name": "Color_1860a09b-335c-4861-bc82-8d3a53725ac7",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "NormalGL_1860a09b-335c-4861-bc82-8d3a53725ac7",
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "ORM_1860a09b-335c-4861-bc82-8d3a53725ac7",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "wind": {
+        "attribute": "COLOR_0",
+        "channels": {
+          "r": "bend",
+          "g": "flutter",
+          "b": "phase"
+        },
+        "rootLocked": true,
+        "method": "height-only heuristic",
+        "limitations": "Generated mesh semantics were inferred; masks are not a hand-authored botanical rig. Runtime shaders must read COLOR_0 as wind data and must not multiply it into material colour."
+      },
+      "lods": [
+        {
+          "level": 0,
+          "uri": "/vegetation/vegetation.tall-grass-01.lod0.glb",
+          "triangles": 4359,
+          "bytes": 3194588,
+          "sha256": "43a8e8ae935216c831680faaba9110e75164f993299f6f332c044ad8a419e742"
+        },
+        {
+          "level": 1,
+          "uri": "/vegetation/vegetation.tall-grass-01.lod1.glb",
+          "triangles": 1958,
+          "bytes": 3041644,
+          "sha256": "5fe9dfe8380d9ff7074087bbc10a992208da00dc25b0b3effb25b456424e74ba"
+        }
+      ]
+    }
+  ]
+}

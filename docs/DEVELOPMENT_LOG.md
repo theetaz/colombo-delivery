@@ -1009,3 +1009,41 @@ roadmap.
 - Submitted no generation, upload or paid processing. Existing project assets
   and game code remain unchanged; runtime tests were not repeated for setup
   documentation.
+
+## 2026-09-15 — First generated vegetation kit
+
+- Expanded the first source trial to the requested vegetation family: rain
+  tree, rounded tropical tree, coconut palm, short grass and tall grass.
+  Each candidate uses an explicit P1 model version, detailed textures and
+  PBR materials. No automatic regeneration or paid cleanup stage is used.
+- Preserved task IDs and immutable source hashes. Public recipes contain
+  reproducible product inputs; account credentials and expiring download
+  addresses are excluded. Source downloads are archived outside the game.
+- Prepared editable Blender scenes and separate LOD0/LOD1 GLBs with ground
+  pivots and metre dimensions. Wind masks use height ramps for root locking
+  and sampled texture colour to estimate foliage flexibility.
+- Added a separate vegetation review with wind strength, direction, pause,
+  weather comparisons and asset downloads. The motion is a visual shader
+  treatment, not baked animation clips or physical weather simulation.
+- Kept the existing street composition and approved rider/movement assets
+  intact. Human feedback will determine which candidates need refinement
+  before street placement and generation of other asset families.
+- Export review caught Blender-space bounds being written into a Y-up runtime
+  manifest; the bounds contract was corrected. The colour attribute also
+  needed an explicit Blender export connection while retaining the original
+  PBR texture path. These checks cover the delivered file, not only the source
+  scene. Reduced grass geometry exposed interpolated wind weights near its
+  roots; weights are now authored again after decimation. That second pass
+  initially lost the texture reference behind the export mix node. The
+  sampler now follows its preserved image input, with a Blender regression
+  check for foliage variation in all three tree LOD1 meshes.
+- Verified all ten exported GLBs against their hashes, triangle counts,
+  bounds, embedded PBR textures and wind data. All 84 viewer tests and the
+  production build pass. Wind tests sample 1,500 combinations and check
+  zero-motion roots, rigid weights, bounded displacement and shared shadow
+  deformation. Framing tests cover normal and narrow canvas aspects.
+- Browser checks confirmed ten loaded model variants, asset/LOD and weather
+  switching, wind direction, pause with an unchanged animation clock, and
+  collection controls. All 15 model/Blender download endpoints return the
+  expected files and are included in the production build. No automated
+  screenshots or visual-quality scoring were used.

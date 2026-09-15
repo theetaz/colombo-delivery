@@ -51,11 +51,12 @@ Human feedback rejected the expansion's visual result and requested a
 Tripo-based asset workflow before further modeling. The
 [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md)
 now records source generation, cleanup, motion preparation, export and human
-review. CLI 0.4.0 is installed and authenticated; this documentation checkpoint
-does not include a new generated asset or an end-to-end pipeline trial.
-Tripo 3D 0.7.7 is also configured in Blender 5.1.2, alongside the existing
-Studio Bridge. Authentication, restart persistence and credential-free scene
-serialization have been verified; the first generated-asset trial remains open.
+review. Tripo CLI 0.4.0 and the Blender 5.1.2 workstation are configured.
+The first [generated vegetation kit](studies/colombo-road/vegetation/README.md)
+takes three tree silhouettes and two grass forms through source generation,
+Blender preparation and an independent browser review. Wind strength, direction
+and weather controls support human testing before any street replacement.
+Visual acceptance remains open.
 
 ## Development checkpoints
 
@@ -82,6 +83,7 @@ serialization have been verified; the first generated-asset trial remains open.
 | 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Expanded flora, buildings, address IDs, lighting and background traffic implemented. Human review rejected the visual result and requested a Tripo-based production workflow. |
 | 15 Sep | [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) | CLI 0.4.0 installation and authentication verified; V3 documentation and installed command behavior reviewed. Asset stages, recovery, Blender contracts and human review documented before a first pilot. |
 | 15 Sep | [Blender Tripo setup](docs/TRIPO_BLENDER_ASSET_PIPELINE.md#blender-workstation-setup) | Official Tripo 3D 0.7.7 installed and authenticated in Blender 5.1.2; restart, scene-save credential protection and local Studio Bridge connection checked. No generation submitted. |
+| 15 Sep | [Generated vegetation review](studies/colombo-road/vegetation/README.md) | Three Tripo tree candidates and two grass candidates, editable Blender sources, two LODs per asset, wind masks and a separate weather review. Awaiting human appearance feedback before street integration. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -104,6 +106,7 @@ Open these local pages:
 - [Map and limited car-delivery pilot](http://127.0.0.1:5175/#drive)
 - [Dressed street study](http://127.0.0.1:5175/#street)
 - [Combined garden, shops and lakeside composition](http://127.0.0.1:5175/street-composition.html)
+- [Vegetation, wind and weather review](http://127.0.0.1:5175/vegetation-review.html)
 - [Walk and ride courtyard](http://127.0.0.1:5175/movement.html)
 - [Bicycle transition review](http://127.0.0.1:5175/transitions.html)
 - [Walking review](http://127.0.0.1:5175/walking.html)
@@ -223,6 +226,8 @@ Then open
 - [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) —
   model selection, source preservation, task recovery, editable assets and
   human review before reuse.
+- [Vegetation kit](studies/colombo-road/vegetation/README.md) — generated tree
+  and grass sources, Blender preparation, wind data and review controls.
 - [Vehicles and progression](docs/VEHICLES.md) — implemented bicycle contract
   and planned vehicle roles.
 - [Data sources](docs/DATA_SOURCES.md) — OSM provenance, interpretation,
@@ -230,11 +235,11 @@ Then open
 
 ## Next checkpoints
 
-The next environment checkpoint is one Tripo-generated asset taken through
-Blender and handed over for human review. A rain tree is the proposed pilot;
-its subject and reference brief remain to be selected. This will validate
-source quality, cleanup, wind preparation and browser cost before expanding
-the kit. The existing living-street result is preserved as an experiment,
+The next environment checkpoint is human review of the five generated
+vegetation candidates: silhouette, leaf detail, grass density and wind behavior.
+Refine the selected models from that feedback, then place accepted variants
+along the garden, shop and lakeside street. Other asset families follow that
+review. The existing living-street result is preserved as an experiment,
 with its visual rejection recorded above.
 The mount/dismount sequences are already human-approved at `939c56b`.
 The standalone district still needs street-level accuracy review,

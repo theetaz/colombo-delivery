@@ -100,7 +100,16 @@ Local images accepted by the CLI uploader are PNG, JPEG, WebP, BMP, and TIFF up 
 
 ## Operating a longer production run
 
-Start with one active candidate. Record parent and child task IDs for each processing stage and save the downloaded bytes with hashes; a prompt and seed alone are not a durable source archive. A polling timeout is not a remote cancellation. Check task status before resubmission, and review usage before starting additional candidates. Tripo documents credit reservation when work starts and settlement or release when it completes or fails. See [task lifecycle](https://developers.tripo3d.ai/en/docs/task-lifecycle) and [billing](https://developers.tripo3d.ai/en/docs/billing).
+Default to one active candidate. A requested comparison set can use a bounded
+batch with explicit subjects and a shared spending cap; the first vegetation
+set used at most two active tasks. Record parent and child task IDs for each
+processing stage and save the downloaded bytes with hashes; a prompt and seed
+alone are not a durable source archive. A polling timeout is not a remote
+cancellation. Check task status before resubmission, and review usage before
+starting additional candidates. Tripo documents credit reservation when work
+starts and settlement or release when it completes or fails. See
+[task lifecycle](https://developers.tripo3d.ai/en/docs/task-lifecycle) and
+[billing](https://developers.tripo3d.ai/en/docs/billing).
 
 Request-rate limits and concurrent-task limits are separate. Respect returned throttling information; do not hard-code a concurrency number from a different model or account tier. For a later hosted production service, verified and deduplicated webhooks can replace repeated polling. No hosted service is configured at this checkpoint. See [error handling](https://developers.tripo3d.ai/en/docs/error-handling), [rate limits](https://developers.tripo3d.ai/en/docs/rate-limits) and [webhooks](https://developers.tripo3d.ai/en/docs/webhooks).
 
@@ -117,6 +126,26 @@ Axis conversion must follow the destination asset family. The current architectu
 | Vehicles | Rebuild mechanical topology where needed. Name and center wheel, steering, crank, pedal, suspension, door, and cargo pivots; keep collision and visual meshes separate. | Wheelbase and clearances, steering axis, rider contacts, cargo access, animation range, and LOD silhouette. |
 | Characters | Treat generated rigging as reference until Blender review. Validate skin weights, joint placement, garment separation, clipping, hand and foot contacts, facial topology, and required morph targets. Clothes and facial morphs are not automatically production-ready. | Identity, proportions, seated pose, deformation, clothing motion, expression range, equipment fit, and mobile readability. |
 
-## First pilot
+## First vegetation trial
 
-The proposed first exercise is one rain-tree candidate, not a completed generation. Approve a reference board and a single prompt; request one candidate; preserve the raw task package; separate rigid trunk geometry from flexible foliage meshes in Blender; assign only the flexible surfaces to manifest-listed `Wind_` materials; correct scale, normals, UVs, and materials; produce measured near and mid LODs; export one +Y-up, +Z-forward GLB for the current landscape contract; update its manifest; then provide the orbitable review page and named still views. The game browser loads the approved GLB and manifest without an API key or live Tripo request; asset generation stays offline from the shipped experience. Only after user review should the prompt or cleanup method be reused for the broader tree family.
+The initial one-tree proposal was expanded at the user's request to three tree
+shapes and two grass forms: a spreading rain tree, a rounded tropical evergreen,
+a coconut palm, short roadside grass and tall fountain grass. Each receives one
+P1 candidate before human feedback. This small comparison follows the useful
+idea of an isolated foliage study in the [Paper Route devlog](https://www.paperroute.lol/devlog/):
+judge asset shapes under shared conditions before filling a street with them.
+
+The [vegetation package](../studies/colombo-road/vegetation/README.md) records
+exact prompts, model version, task IDs and source hashes, with immutable raw
+downloads archived separately from the runtime exports. Blender sets metre
+scale, ground pivots, texture resolution and two LODs. Generated fused surfaces
+use height and sampled texture colour to estimate bend and flutter weights.
+The resulting `COLOR_0` channels are motion data, not material tint; this differs
+from the earlier street kit's `Wind_` material selection contract. Wind-aware
+shaders are required to animate these GLBs. They do not contain skeletal wind
+animation clips or weather simulation.
+
+The browser review loads only local GLBs and their manifest, with no API key
+or live generation request. Wind and weather are visual review controls.
+Human appearance feedback remains required before these candidates replace
+street vegetation or the process expands to other asset families.

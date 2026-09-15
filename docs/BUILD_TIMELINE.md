@@ -1165,3 +1165,35 @@ restart persistence and read-only account lookup passed. The Studio Bridge's
 local listener and WebSocket handshake passed; a transfer from Tripo Studio
 has not yet been exercised. No model generation, upload or paid processing
 was submitted. This is a workstation setup checkpoint, not asset acceptance.
+
+## 2026-09-15 — Generated vegetation and weather review
+
+The next requested asset family is vegetation. The one-tree proposal was
+expanded to a bounded comparison of three tree silhouettes and two grass
+forms, with one source candidate per asset. The [vegetation package](../studies/colombo-road/vegetation/README.md)
+preserves the generation recipes and editable Blender preparation; the
+[browser review](../studies/colombo-road/viewer/vegetation-review.html) keeps
+these candidates separate from the street composition.
+
+Tripo P1 supplies the source geometry and textures. Blender grounds each
+model, establishes metre scale, limits texture resolution, creates near and
+reduced LODs, and writes per-vertex bend, flutter and phase data. Roots remain
+anchored. Tree foliage influence is estimated from texture colour and height;
+this is an initial preparation method for generated surfaces, not a botanical
+simulation or manually painted branch rig.
+
+The reviewer can compare wind strength and direction, pause motion, inspect
+individual assets, and switch weather. Visible geometry and shadow rendering
+share the wind deformation. Source task IDs and hashes connect each export
+to its downloaded candidate. The browser needs no Tripo credentials.
+
+Status: prepared for human appearance feedback. Leaf structure, branch
+silhouettes, grass density and motion still need the user's judgement.
+Existing street placements and approved character, bicycle and movement
+assets are preserved. Other asset families follow vegetation review.
+
+Validation: all 84 viewer tests, the production build and the binary asset
+validator pass. Ten GLB variants and five Blender downloads are available in
+the built viewer. Browser checks confirm asset and LOD switching, weather
+selection, direction and frozen wind time while paused. Visual quality has
+not been approved by these engineering checks.

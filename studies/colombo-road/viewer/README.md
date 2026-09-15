@@ -41,6 +41,11 @@ It does not modify the models or run either Blender script.
   See the [composition guide](../streets/composition/README.md) for Blender
   sources, rebuilding and the human review checklist.
 - **Save view:** download the current canvas as a PNG.
+- **Vegetation review:** open http://127.0.0.1:5175/vegetation-review.html.
+  Inspect three generated tree candidates and two grass forms, compare wind
+  strength and weather, and download the GLBs or editable Blender sources.
+  This separate review leaves the street composition intact. See the
+  [vegetation guide](../vegetation/README.md) for provenance and preparation.
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local
   storage; the export is the portable copy. Nothing is sent to a remote server.

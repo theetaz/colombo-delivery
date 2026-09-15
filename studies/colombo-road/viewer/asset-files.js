@@ -20,4 +20,9 @@ export const assetFiles = [
   {file:'cyclist/bicycle-transitions.blend', label:'Bicycle transition study in Blender', kind:'Blender'},
   {file:'cyclist/TRANSITIONS.md', label:'Mounting and dismounting study', kind:'Documentation'},
   {file:'cyclist/MOVEMENT.md', label:'Walking and riding notes', kind:'Documentation'},
+  {file:'vegetation/vegetation.rain-tree-01.blend', label:'Rain tree editable source', kind:'Blender'},
+  {file:'vegetation/vegetation.round-tree-01.blend', label:'Round tree editable source', kind:'Blender'},
+  {file:'vegetation/vegetation.coconut-palm-01.blend', label:'Coconut palm editable source', kind:'Blender'},
+  {file:'vegetation/vegetation.short-grass-01.blend', label:'Short grass editable source', kind:'Blender'},
+  {file:'vegetation/vegetation.tall-grass-01.blend', label:'Tall grass editable source', kind:'Blender'},
 ];
