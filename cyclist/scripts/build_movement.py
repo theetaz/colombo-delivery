@@ -12,6 +12,7 @@ rig=bpy.data.objects['CyclistRig'];body=bpy.data.objects['CourierSurface']
 bpy.context.scene.frame_set(1);bpy.context.view_layer.update()
 pedal=rig.animation_data.action
 seated={p.name:p.matrix.copy() for p in rig.pose.bones}
+seated_basis={p.name:p.matrix_basis.copy() for p in rig.pose.bones}
 for o in list(bpy.data.objects):
     if o not in (rig,body):bpy.data.objects.remove(o,do_unlink=True)
 for a in list(bpy.data.actions):
@@ -220,61 +221,134 @@ def walk(t):
 def seated_pose():
     for p in rig.pose.bones:p.matrix=seated[p.name];update()
 
+def beside_pose():
+    # Exact upright walking-study stance, translated to the bike's left side.
+    stand(0)
+    matrix=rig.pose.bones['Pelvis'].matrix.copy()
+    matrix.translation+=Vector((-.6,-.2,0))
+    rig.pose.bones['Pelvis'].matrix=matrix;update()
+
+def transition_arms(reach):
+    relaxed_arms(0,0)
+    for side,sign in [('L',-1),('R',1)]:
+        palm=rig.pose.bones['Hand_'+side]
+        _,rest_rotation,_=palm.matrix.decompose()
+        wrist=palm.head.copy()
+        elbow=rig.pose.bones['Forearm_'+side].head.copy()
+        ik('UpperArm_'+side,'Forearm_'+side,
+           wrist.lerp(Vector((sign*.287,.260,1.037)),reach),
+           elbow.lerp(Vector((sign*.48,.18,.88)),reach))
+        # Share the palm turn with the forearm instead of hinging the wrist.
+        lower=rig.pose.bones['Forearm_'+side];pivot=lower.head.copy()
+        twist=Quaternion((lower.tail-lower.head).normalized(),sign*math.radians(48)*reach).to_matrix().to_4x4()
+        lower.matrix=Matrix.Translation(pivot)@twist@Matrix.Translation(-pivot)@lower.matrix;update()
+        _,goal,_=seated[palm.name].decompose()
+        loc,_,scale=palm.matrix.decompose()
+        palm.matrix=Matrix.LocRotScale(loc,rest_rotation.slerp(goal,reach),scale);update()
+
 def transition_pose(t,getting_off=False):
-    if not getting_off and t<=0:idle(0,Vector((-.6,-.2,0)));return
+    if not getting_off and t<=0:beside_pose();return
     if not getting_off and t>=1:seated_pose();return
     if getting_off and t<=0:seated_pose();return
-    if getting_off and t>=1:idle(0,Vector((-.6,-.2,0)));return
-    reset()
+    if getting_off and t>=1:beside_pose();return
+    reset();standing_height=support_height(.22,7)
     if not getting_off:
-        hip=path(t,[(0,(-.6,-.2,.918)),(.23,(-.30,.13,.90)),(.60,(-.30,.13,.90)),(.72,(0,.17,.91)),(.84,(0,.17,.91)),(.94,(0,-.2753,1.06)),(1,(0,-.2753,1.025))])
-        left=path(t,[(0,(-.71,-.2952,.11648)),(.08,(-.71,-.2952,.11648)),(.17,(-.52,-.22,.185)),(.24,(-.38,.05,.11648)),(.82,(-.38,.05,.11648)),(.94,(-.14,-.36,.49)),(1,(-.0728,-.3958,.41548))])
-        right=path(t,[(0,(-.49,-.2952,.11648)),(.28,(-.49,-.2952,.11648)),(.40,(-.34,-.40,1.05)),(.51,(.02,-.48,1.20)),(.60,(.42,-.30,1.08)),(.72,(.30,.02,.50)),(.78,(.26,.0558,.11648)),(.81,(.26,.0558,.11648)),(.89,(.0728,-.0558,.41548)),(1,(.0728,-.0558,.41548))])
-        pole=path(t,[(0,(-.25,.28,.65)),(.34,(-.15,.30,.75)),(.46,(-.32,-.35,1.26)),(.54,(.20,-.06,1.35)),(.65,(.47,.35,1.15)),(.76,(.28,.38,.70)),(1,(.17,.38,.88))])
-        lean=math.radians(24+15*smooth((t-.82)/.15))*smooth(t/.25)
-        reach=smooth((t-.05)/.24)
-        pitch=-math.radians(16)*math.sin(math.pi*max(0,min(1,(t-.34)/.39)))
+        # Approach the bar, put weight over the left shoe, then fold the right
+        # knee and sweep the heel behind the saddle. The pelvis stays forward
+        # of the saddle until both legs are on their respective sides.
+        hip=path(t,[(0,(-.6,-.2,standing_height)),(.24,(-.34,-.12,.93)),(.45,(-.34,-.12,.93)),(.52,(-.24,.10,.92)),(.65,(-.14,.16,.91)),(.70,(-.12,.13,.90)),(.79,(0,.13,.875)),(.82,(0,.13,.875)),(.94,(0,-.2753,1.05)),(1,(0,-.2753,1.025))])
+        left=path(t,[(0,(-.705,-.2,.11648)),(.05,(-.705,-.2,.11648)),(.14,(-.53,-.08,.20)),(.23,(-.38,.02,.11648)),(.82,(-.38,.02,.11648)),(.94,(-.14,-.36,.49)),(1,(-.0728,-.3958,.41548))])
+        right=path(t,[(0,(-.495,-.2,.11648)),(.25,(-.495,-.2,.11648)),(.35,(-.50,-.52,.70)),(.46,(-.18,-.58,1.14)),(.54,(.15,-.54,1.14)),(.62,(.40,-.34,.89)),(.70,(.30,.05,.11648)),(.75,(.30,.05,.11648)),(.81,(.0728,-.0558,.41548)),(1,(.0728,-.0558,.41548))])
+        pole=path(t,[(0,(-.495,.25,.55)),(.25,(-.30,.38,.65)),(.35,(-.60,-.12,.93)),(.46,(-.40,-.20,1.24)),(.54,(.40,-.20,1.24)),(.62,(.53,.04,1.05)),(.70,(.28,.38,.66)),(1,(.17,.38,.88))])
+        lean=math.radians(20)*smooth(t/.23)+math.radians(19)*smooth((t-.80)/.17)
+        reach=smooth((t-.02)/.21)
+        pitch=-math.radians(12)*math.sin(math.pi*max(0,min(1,(t-.25)/.45)))
         seated_blend=smooth((t-.90)/.10)
+        shift=smooth((t-.12)/.14)*(1-smooth((t-.60)/.16))
     else:
-        # Free the saddle, establish the left ground support, then swing the
-        # right leg back. Keep the hands until both shoes have landed.
-        hip=path(t,[(0,(0,-.2753,1.025)),(.12,(0,.15,1.05)),(.25,(-.05,.17,.92)),(.38,(-.30,.13,.90)),(.64,(-.30,.13,.90)),(.78,(-.34,-.04,.90)),(1,(-.6,-.2,.918))])
-        left=path(t,[(0,(-.0728,-.3958,.41548)),(.08,(-.0728,-.3958,.41548)),(.23,(-.38,.05,.11648)),(.80,(-.38,.05,.11648)),(.9,(-.56,-.25,.18)),(1,(-.71,-.2952,.11648))])
-        right=path(t,[(0,(.0728,-.0558,.41548)),(.25,(.0728,-.0558,.41548)),(.36,(.42,-.30,1.08)),(.49,(.02,-.48,1.20)),(.62,(-.34,-.40,1.05)),(.74,(-.49,-.2952,.11648)),(1,(-.49,-.2952,.11648))])
-        pole=path(t,[(0,(.17,.38,.88)),(.25,(.28,.38,.76)),(.39,(.47,.35,1.15)),(.49,(.20,-.06,1.35)),(.60,(-.32,-.35,1.26)),(.74,(-.25,.28,.65)),(1,(-.25,.28,.65))])
-        lean=math.radians(39-15*smooth(t/.20))*(1-smooth((t-.73)/.27))
-        reach=1-smooth((t-.76)/.24)
-        pitch=-math.radians(16)*math.sin(math.pi*max(0,min(1,(t-.25)/.49)))
+        # Stand forward of the saddle before unweighting the right pedal.
+        # Left foot and both hands hold their contacts for the complete sweep;
+        # release the bar only after the right shoe lands on the left side.
+        hip=path(t,[(0,(0,-.2753,1.025)),(.12,(0,.13,1.02)),(.23,(-.12,.13,.92)),(.36,(-.18,.13,.92)),(.44,(-.27,.08,.93)),(.54,(-.34,-.12,.93)),(.67,(-.34,-.12,.93)),(.77,(-.37,-.12,.925)),(.83,(-.40,-.14,.925)),(1,(-.6,-.2,standing_height))])
+        left=path(t,[(0,(-.0728,-.3958,.41548)),(.06,(-.0728,-.3958,.41548)),(.15,(-.28,-.12,.26)),(.23,(-.38,.02,.11648)),(.80,(-.38,.02,.11648)),(.9,(-.56,-.11,.20)),(1,(-.705,-.2,.11648))])
+        right=path(t,[(0,(.0728,-.0558,.41548)),(.25,(.0728,-.0558,.41548)),(.34,(.40,-.34,.89)),(.43,(.15,-.54,1.14)),(.51,(-.18,-.58,1.14)),(.63,(-.50,-.52,.70)),(.76,(-.495,-.2,.11648)),(1,(-.495,-.2,.11648))])
+        pole=path(t,[(0,(.17,.38,.88)),(.25,(.28,.38,.76)),(.34,(.53,.04,1.05)),(.43,(.40,-.20,1.24)),(.51,(-.40,-.20,1.24)),(.63,(-.60,-.12,.93)),(.76,(-.30,.38,.65)),(1,(-.495,.25,.55))])
+        lean=math.radians(39-19*smooth(t/.20))*(1-smooth((t-.76)/.24))
+        reach=1-smooth((t-.78)/.22)
+        pitch=-math.radians(12)*math.sin(math.pi*max(0,min(1,(t-.25)/.51)))
         seated_blend=1-smooth(t/.10)
+        shift=smooth((t-.18)/.14)*(1-smooth((t-.65)/.14))
+    upper_shift=(smooth((t-.10)/.13)*(1-smooth((t-.79)/.21))
+                 if getting_off else shift)
     pelvis_at(hip,lean)
-    shift=smooth((t-.10)/.16)*(1-smooth((t-.60)/.14)) if not getting_off else smooth((t-.23)/.15)*(1-smooth((t-.67)/.15))
-    rotate('Pelvis',math.radians(14)*shift,'Y')
-    foot('L',left,Vector((-.25,.38,.75)))
+    rotate('Pelvis',math.radians(-8)*shift,'Y')
+    rotate('Pelvis',-math.radians(6)*shift,'Z')
+    rotate('Chest',math.radians(4)*shift,'Z')
+    # The hips stay over the ground shoe while the shoulders lean toward the
+    # bicycle. Both grips must remain within the real arm lengths.
+    rotate('Spine',math.radians(24)*upper_shift,'Y')
+    rotate('Neck',-math.radians(8)*upper_shift,'Y')
+    rotate('Head',-math.radians(8)*upper_shift,'Y')
+    # Reserve a softly extended knee as each shoe approaches the ground. A target beyond
+    # the actual leg length would otherwise be clamped and visibly float.
+    supports=[('L',left),('R',right)]
+    lower_hips=0
+    for side,target in supports:
+        root=rig.pose.bones['Thigh_'+side].head
+        a=rig.data.bones['Thigh_'+side].length;b=rig.data.bones['Shin_'+side].length
+        reach2=a*a+b*b+2*a*b*math.cos(math.radians(6))
+        maximum=target.z+math.sqrt(max(.001,reach2-(root.x-target.x)**2-(root.y-target.y)**2))
+        lower_hips=max(lower_hips,root.z-maximum)
+    if lower_hips>0:
+        matrix=rig.pose.bones['Pelvis'].matrix.copy();matrix.translation.z-=lower_hips
+        rig.pose.bones['Pelvis'].matrix=matrix;update()
+    support=smooth(t/.23) if not getting_off else 1-smooth((t-.80)/.20)
+    left_pole=Vector((-.705,.25,.55)).lerp(Vector((-.38,.45,.65)),support)
+    foot('L',left,left_pole)
     foot('R',right,pole);rotate('Foot_R',pitch)
-    arms(Vector((hip.x,hip.y,hip.z-.918)),0,reach)
+    transition_arms(reach)
     if seated_blend:
+        # Blend the local pose once, then solve the contacts again. Reading
+        # world matrices after changing their parents applied the old blend
+        # repeatedly down each chain and pulled the palms off the handlebars.
+        goals={name:rig.pose.bones[name].head.lerp(seated[name].translation,seated_blend)
+               for name in ['Shin_L','Shin_R','Foot_L','Foot_R','Forearm_L','Forearm_R','Hand_L','Hand_R']}
+        end_rotations={name:rig.pose.bones[name].matrix.to_quaternion().slerp(seated[name].to_quaternion(),seated_blend)
+                       for name in ['Foot_L','Foot_R','Hand_L','Hand_R']}
         for p in rig.pose.bones:
-            loc,rot,scale=p.matrix.decompose();l,q,s=seated[p.name].decompose()
-            p.matrix=Matrix.LocRotScale(loc.lerp(l,seated_blend),rot.slerp(q,seated_blend),scale.lerp(s,seated_blend));update()
+            loc,rot,scale=p.matrix_basis.decompose();l,q,s=seated_basis[p.name].decompose()
+            p.matrix_basis=Matrix.LocRotScale(loc.lerp(l,seated_blend),rot.slerp(q,seated_blend),scale.lerp(s,seated_blend))
+        update()
+        for side in ['L','R']:
+            for upper,lower,end in [('Thigh_','Shin_','Foot_'),('UpperArm_','Forearm_','Hand_')]:
+                a,b,c=upper+side,lower+side,end+side
+                twists={name:rig.pose.bones[name].matrix.to_quaternion() for name in [a,b]}
+                ik(a,b,goals[c],goals[b])
+                solved={name:(rig.pose.bones[name].head.copy(),rig.pose.bones[name].tail.copy()) for name in [a,b,c]}
+                for name in [a,b]:
+                    head,tail=solved[name];q=twists[name]
+                    q=(q@Vector((0,1,0))).rotation_difference((tail-head).normalized())@q
+                    rig.pose.bones[name].matrix=Matrix.LocRotScale(head,q,Vector((1,1,1)));update()
+                rig.pose.bones[c].matrix=Matrix.LocRotScale(solved[c][0],end_rotations[c],Vector((1,1,1)));update()
 
 def mount(t):transition_pose(t)
 def dismount(t):transition_pose(t,True)
 
-clips=[('Idle',48,lambda t:idle(t)),('Stand',48,stand),('WalkBefore',24,walk_before),('Walk',96,walk),('Mount',84,mount),('Dismount',84,dismount)]
+clips=[('Idle',48,lambda t:idle(t)),('Stand',48,stand),('WalkBefore',24,walk_before),('Walk',96,walk),('Mount',336,mount),('Dismount',336,dismount)]
 for name,frames,pose in clips:
     rig.animation_data_clear()
     previous_rotations={}
     for frame in range(frames+1):
-        sample_frame=frame/4 if name=='Walk' else frame
+        sample_frame=frame/4 if name in ('Walk','Mount','Dismount') else frame
         bpy.context.scene.frame_set(int(sample_frame),subframe=sample_frame%1);pose(frame/frames)
         for p in rig.pose.bones:
             p.rotation_mode='QUATERNION'
-            if name=='Walk':
+            if name in ('Walk','Mount','Dismount'):
                 if p.name in previous_rotations and p.rotation_quaternion.dot(previous_rotations[p.name])<0:p.rotation_quaternion.negate()
                 previous_rotations[p.name]=p.rotation_quaternion.copy()
             for prop in ('location','rotation_quaternion','scale'):p.keyframe_insert(prop,frame=sample_frame)
     action=rig.animation_data.action;action.name=name;action.use_fake_user=True
-    if name=='Walk':
+    if name in ('Walk','Mount','Dismount'):
         for layer in action.layers:
             for strip in layer.strips:
                 for curve in strip.channelbag(action.slots[0]).fcurves:
@@ -284,6 +358,7 @@ for name,frames,pose in clips:
                         before=keys[i-1] if i>0 else keys[-2]
                         after=keys[i+1] if i<len(keys)-1 else keys[1]
                         slope=(after.co.y-before.co.y)/.5
+                        if name!='Walk' and i in (0,len(keys)-1):slope=0
                         key.handle_left_type=key.handle_right_type='FREE'
                         key.handle_left=(key.co.x-1/12,key.co.y-slope/12)
                         key.handle_right=(key.co.x+1/12,key.co.y+slope/12)
@@ -294,10 +369,12 @@ bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);body.select_se
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'courier-movement.blend'),compress=True)
 bpy.ops.export_scene.gltf(filepath=str(OUT/'courier-movement.glb'),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='ACTIONS',export_force_sampling=True,export_anim_slide_to_zero=True)
-# Keep all other clips in their existing form. Preserve the Walk's authored
-# subframe keys and cubic tangents instead of resampling it to 24 linear keys.
+# Preserve authored subframe keys and cubic tangents in the browser. Walking
+# retains its periodic seam; the one-shot transitions ease only at endpoints.
 with tempfile.TemporaryDirectory(prefix='colombo-walk-export-') as directory:
     curved=Path(directory)/'curves.glb'
     bpy.ops.export_scene.gltf(filepath=str(curved),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='ACTIONS',export_force_sampling=False,export_anim_slide_to_zero=True)
     replace_animation(OUT/'courier-movement.glb',curved,'Walk')
+    for name in ('Mount','Dismount'):
+        replace_animation(OUT/'courier-movement.glb',curved,name,loop=False)
 print('MOVEMENT_EXPORTED',flush=True)

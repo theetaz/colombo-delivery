@@ -12,7 +12,7 @@ def read_glb(path):
     assert len(document['buffers'])==1 and 'uri' not in document['buffers'][0]
     return document,bytearray(data[offset+8:offset+8+size])
 
-def replace_animation(destination,source,name):
+def replace_animation(destination,source,name,loop=True):
     target,binary=read_glb(destination);origin,source_binary=read_glb(source)
     clip=deepcopy(next(a for a in origin['animations'] if a['name']==name))
     nodes={node['name']:i for i,node in enumerate(target['nodes']) if 'name' in node}
@@ -47,14 +47,16 @@ def replace_animation(destination,source,name):
             # interpolation must keep each value and its tangents in one hemisphere.
             for i in range(1,len(values)):
                 if sum(a*b for a,b in zip(values[i-1],values[i]))<0:values[i]=[-v for v in values[i]]
-        assert max(abs(a-b) for a,b in zip(values[0],values[-1]))<1e-4,'Expected a closed walking loop'
-        values[-1]=values[0][:]
+        if loop:
+            assert max(abs(a-b) for a,b in zip(values[0],values[-1]))<1e-4,'Expected a closed animation loop'
+            values[-1]=values[0][:]
         packed=[];period=times[-1]-times[0]
         for i,value in enumerate(values):
             prev=i-1 if i>0 else len(values)-2;following=i+1 if i<len(values)-1 else 1
             dt=times[following]-times[prev]
             if dt<0:dt+=period
-            tangent=[(b-a)/dt for a,b in zip(values[prev],values[following])]
+            tangent=([0]*width if not loop and i in (0,len(values)-1)
+                     else [(b-a)/dt for a,b in zip(values[prev],values[following])])
             if paths[sampler_index]=='rotation':
                 projection=sum(a*b for a,b in zip(value,tangent))
                 tangent=[v-projection*q for v,q in zip(tangent,value)]

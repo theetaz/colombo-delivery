@@ -28,8 +28,8 @@ keyboard-accessible timeline are available. The courtyard uses the updated gait.
 ## What is implemented
 
 The same textured character uses Stand, Walk, Mount, Dismount and the approved
-Pedal clip. The original Idle pose remains as the transition endpoint; WalkBefore
-is retained only for comparison. Walking distance drives the gait. Mount/dismount clips share exact
+Pedal clip. The upright Stand pose is the transition endpoint; the earlier Idle and
+WalkBefore clips remain available for comparison. Walking distance drives the gait. Mount/dismount clips share exact
 standing and seated endpoints; the controller changes the character's origin
 at those matching endpoints. One character remains present through every state.
 The rider is independent of the bicycle while walking and follows it while
@@ -316,3 +316,11 @@ unchanged.
 
 The browser measurement describes this local run, not all devices. Visual
 review of `/walking.html` remains the acceptance check for the procedural gait.
+
+## Bicycle transition study — 15 September 2026
+
+The approved walking milestone is preserved in commit `88e5bca`, including
+seven numbered web UI screenshots. The new mounting and dismounting pass
+is documented in [TRANSITIONS.md](TRANSITIONS.md). Open `/transitions.html`
+to inspect the generated pose guides, the authored joint movement, exact phase
+selection and slow playback. The courtyard uses the same new transition clips.

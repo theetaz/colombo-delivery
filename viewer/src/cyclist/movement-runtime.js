@@ -8,7 +8,7 @@ import {createMovement,stepMovement,interact,setWalkTarget,movementStatus,OBSTAC
 
 const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),TAU=Math.PI*2;
 export function createMovementYard(host,onReady,onState,onError){
-  let state=createMovement(),disposed=false,raf=0,last=0,report=0,ready=false,mixer,rider,bike,actions={},walkWeight=0,standWeight=1,timeScale=1,viewportFit=1,contacts;
+  let state=createMovement(),disposed=false,raf=0,last=0,report=0,ready=false,mixer,rider,bike,actions={},walkWeight=0,timeScale=1,viewportFit=1,contacts;
   const keyboard=new Set(),touch={forward:0,turn:0},scene=new THREE.Scene();
   scene.background=new THREE.Color('#e4ecea');scene.fog=new THREE.Fog('#e4ecea',35,85);
   const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(host.clientWidth,host.clientHeight);
@@ -45,10 +45,7 @@ export function createMovementYard(host,onReady,onState,onError){
     const onFoot=state.mode==='foot'||state.mode==='approach';
     if(onFoot){
       walkWeight+=(Math.min(1,Math.abs(state.walkSpeed)/.8)-walkWeight)*Math.min(1,dt*12);
-      standWeight=Math.min(1,standWeight+dt/.28);
-      const upright=state.mode==='approach'?1-smooth((state.elapsed-state.transition.duration+.1)/.3):standWeight;
-      action('Stand',state.clock%2,(1-walkWeight)*upright);
-      action('Idle',state.clock%2,(1-walkWeight)*(1-upright));
+      action('Stand',state.clock%2,1-walkWeight);
       const timing=walkTiming(state.walkDistance/WALK_STRIDE_METRES);
       action('Walk',timing.phase*actions.Walk.getClip().duration,walkWeight);
       actorRoot.position.set(state.player.x,0,state.player.z);actorRoot.rotation.y=state.player.yaw;actorLean.rotation.z=0;actorLean.position.y=0;
@@ -57,14 +54,14 @@ export function createMovementYard(host,onReady,onState,onError){
       actorRoot.position.x-=Math.sin(state.player.yaw)*timing.offset*walkWeight;
       actorRoot.position.z-=Math.cos(state.player.yaw)*timing.offset*walkWeight;
     }else{
-      walkWeight=0;standWeight=0;actorRoot.position.set(state.bike.x,0,state.bike.z);actorRoot.rotation.y=state.bike.yaw;
+      walkWeight=0;actorRoot.position.set(state.bike.x,0,state.bike.z);actorRoot.rotation.y=state.bike.yaw;
       if(state.mode==='mount')action('Mount',Math.min(state.elapsed,MOUNT_SECONDS));
       else if(state.mode==='dismount')action('Dismount',Math.min(state.elapsed,MOUNT_SECONDS));
       else action('Pedal',(((state.phase/TAU)%1)+1)%1*2);
       actorLean.rotation.z=state.lean;actorLean.position.y=.349*(1-Math.cos(state.lean));
     }
     contacts.restore();mixer.update(0);contacts.capture();
-    const gripAmount=onFoot?0:state.mode==='mount'?smooth((state.elapsed/MOUNT_SECONDS-.05)/.24):state.mode==='dismount'?1-smooth((state.elapsed/MOUNT_SECONDS-.76)/.24):1;
+    const gripAmount=onFoot?0:state.mode==='mount'?smooth((state.elapsed/MOUNT_SECONDS-.02)/.21):state.mode==='dismount'?1-smooth((state.elapsed/MOUNT_SECONDS-.78)/.22):1;
     rider.traverse(o=>{if(o.morphTargetDictionary?.HandlebarGrip!==undefined)o.morphTargetInfluences[o.morphTargetDictionary.HandlebarGrip]=gripAmount;});
     bikeRoot.position.set(state.bike.x,0,state.bike.z);bikeRoot.rotation.y=state.bike.yaw;bikeLean.rotation.z=state.lean;bikeLean.position.y=.349*(1-Math.cos(state.lean));
     for(const name of ['FrontWheel','RearWheel'])bike.getObjectByName(name).quaternion.copy(restRotations.get(name)).multiply(new THREE.Quaternion().setFromAxisAngle(X,state.wheelAngle));
@@ -96,7 +93,7 @@ export function createMovementYard(host,onReady,onState,onError){
   const axis=()=>({forward:touch.forward+(keyboard.has('KeyW')||keyboard.has('ArrowUp')?1:0)-(keyboard.has('KeyS')||keyboard.has('ArrowDown')?1:0),turn:touch.turn+(keyboard.has('KeyA')||keyboard.has('ArrowLeft')?1:0)-(keyboard.has('KeyD')||keyboard.has('ArrowRight')?1:0)});
   function clearInput(){keyboard.clear();touch.forward=touch.turn=0;}
   function pause(value){state.paused=value;clearInput();last=0;emit();}
-  function reset(){state=createMovement();walkWeight=0;standWeight=1;clearInput();emit();}
+  function reset(){state=createMovement();walkWeight=0;clearInput();emit();}
   function keydown(e){if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyE','Escape','KeyR'].includes(e.code))e.preventDefault();if(e.code==='Escape'&&!e.repeat)pause(!state.paused);else if(e.code==='KeyR'&&!e.repeat)reset();else if(e.code==='KeyE'&&!e.repeat){interact(state);emit();}else keyboard.add(e.code);}
   function keyup(e){keyboard.delete(e.code);}function blur(){if(ready)pause(true);}function visibility(){if(document.hidden)blur();}
   window.addEventListener('keydown',keydown);window.addEventListener('keyup',keyup);window.addEventListener('blur',blur);document.addEventListener('visibilitychange',visibility);

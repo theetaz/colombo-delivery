@@ -17,5 +17,7 @@ export const assetFiles = [
   {file:'cyclist/bicycle-fitted.blend', label:'Fitted bicycle in Blender', kind:'Blender'},
   {file:'cyclist/README.md', label:'Cyclist asset notes', kind:'Documentation'},
   {file:'cyclist/courier-movement.blend', label:'Walking and mounting animations', kind:'Blender'},
+  {file:'cyclist/bicycle-transitions.blend', label:'Bicycle transition study in Blender', kind:'Blender'},
+  {file:'cyclist/TRANSITIONS.md', label:'Mounting and dismounting study', kind:'Documentation'},
   {file:'cyclist/MOVEMENT.md', label:'Walking and riding notes', kind:'Documentation'},
 ];

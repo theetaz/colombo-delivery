@@ -28,6 +28,9 @@ It does not modify the models or run either Blender script.
 - **Walk & ride:** open http://127.0.0.1:5175/movement.html. Walk independently,
   approach the bicycle, mount, ride, stop, dismount and leave it parked. Keyboard,
   ground clicks and touch controls are available. See `../cyclist/MOVEMENT.md`.
+- **Bicycle transitions:** open http://127.0.0.1:5175/transitions.html. Compare the
+  mounting/dismounting pose sheets with the animated rider, scrub six stages,
+  show joints, use quarter speed, and download the editable Blender assembly.
 - **Save view:** download the current canvas as a PNG.
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local

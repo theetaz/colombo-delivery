@@ -61,7 +61,7 @@ test('movement clips preserve the approved rig and connect without root jumps',a
     for(const name of Object.keys(a))assert.ok(a[name].distanceTo(b[name].clone().add(offset))<.00001,`${name} jumps between movement clips`);
   }
   match(sample('Mount',3.5),sample('Pedal',0));match(sample('Dismount',0),sample('Pedal',0));
-  match(sample('Mount',0),sample('Idle',0),new Vector3(-.6,0,.2));
+  match(sample('Mount',0),sample('Stand',0),new Vector3(-.6,0,.2));
   match(sample('Dismount',3.5),sample('Mount',0));
   match(sample('Idle',0),sample('Idle',2));match(sample('Walk',0),sample('Walk',1));
 });
@@ -88,7 +88,7 @@ test('mount and dismount keep a ground support and hand contacts through the leg
   }
   for(const name of ['Mount','Dismount'])for(const progress of [.36,.43,.50,.57,.64]){
     const point=sample(name,progress*3.5);
-    assert.ok(point('Foot_L').distanceTo(new Vector3(-.38,.11648,-.05))<.008,`${name} loses the planted left shoe at ${progress}`);
+    assert.ok(point('Foot_L').distanceTo(new Vector3(-.38,.11648,-.02))<.008,`${name} loses the planted left shoe at ${progress}`);
     for(const [side,sign] of [['L',-1],['R',1]])
       assert.ok(point('Hand_'+side).distanceTo(new Vector3(sign*.287,1.037,-.260))<.008,`${name} loses ${side} hand contact at ${progress}`);
   }
