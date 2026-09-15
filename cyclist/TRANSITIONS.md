@@ -30,13 +30,14 @@ human motion.
 | --- | ---: | --- | ---: |
 | Stand beside the bicycle | 0% | Stop in the seated pose | 0% |
 | Hold the bars, establish left support | 23% | Plant the left foot | 23% |
-| Fold and sweep the right leg over the rear saddle | 46% | Lift the right leg behind the bike | 34% |
+| Extend the lifted right leg and sweep behind the saddle | 46% | Lift the right leg behind the bike | 34% |
 | Lower the right foot into the straddling stance | 70% | Clear the saddle | 49% |
 | Put the right foot on its pedal, then lift onto the seat | 88% | Land the right foot beside the left | 76% |
 | Settle into the approved riding pose | 100% | Stand upright and release the bars | 100% |
 
 The pelvis transfers weight toward the planted shoe while the shoulders reach
-toward the bicycle. The right hip and bent knee guide a rearward sweep. The
+toward the bicycle. The right hip guides the rearward sweep. The knee first bends to lift the heel,
+then extends for the crossover and bends again before landing. The
 left shoe remains fixed through the swing, and both palms hold the grips until
 the right foot lands. Getting on uses separate timing from getting off.
 The rider finishes in the upright Stand pose, without blending through the
@@ -79,29 +80,56 @@ continue to apply to the reused character.
 
 [Approved walking screenshots](../docs/visual-history/2026-09-15-walk-approved/README.md)
 were saved first in commit `88e5bca`. The
-[new transition timeline](../docs/visual-history/2026-09-15-bicycle-transitions/README.md)
+[initial transition timeline](../docs/visual-history/2026-09-15-bicycle-transitions/README.md)
 contains numbered browser captures from both actions, plus joint and responsive
 views. Earlier milestone screenshots are retained.
 
-## Validation for this milestone
+## Leg correction — 15 September 2026
 
-- **31 tests pass.** These include fingerprints of the approved Walk, Stand and
-  Pedal tracks, matching animation endpoints, continuous foot/grip contacts,
-  subframe joint-velocity continuity and the existing courtyard/controller tests.
-- **Blender geometry checks pass.** There are no rider/saddle surface intersections
-  in 91 samples per transition over frames 21–66. Sampled lowest vertices are
-  about -1.00 mm for Mount and -0.76 mm for Dismount. Maximum sampled mesh-edge
-  stretch is 3.16× and 3.08× respectively; clothing deformation remains a visual
-  review item. This checks the saddle, not all bicycle or body self-collisions.
-- **Blender handover checks pass.** Both pose sheets are packed into the assembly,
-  the six exit markers are present, and grip closure follows either selected action.
-- **Browser review:** normal replay, quarter speed, pause, both sequences, phase
-  selection, keyboard scrubbing and the joint overlay were exercised. The study
-  was checked at 1280 × 720 and 390 × 844, with no horizontal overflow on the phone.
-  Mounting and dismounting also completed in the courtyard. The review tab
-  reported no warning/error console entries.
-- **Production build passes** for all five entry pages, with the Blender assembly
-  and reference images included in the downloadable/static assets.
+The first transition pass (`7ec7367`) passed contact checks but failed visual
+review. Around the middle of the exit, its right knee rose roughly 36 cm above
+the hip. A moving knee target switched the bending plane, while independently
+oriented thigh, shin and shoe bones made the leg look twisted. The approach
+and exit also crossed the feet before the supporting step had finished.
 
-These checks establish continuity and the stated contacts. Visual acceptance
-of the posture and clothing remains part of testing this study.
+The revised Blender actions address those problems together:
+
+- An explicit hip swivel selects a continuous knee bending plane. The thigh
+  and shin share an anatomical hinge axis, so the visible kneecap follows the bend.
+- The knee extends from about 32° to 18° of flexion at the rear crossover. The heel
+  travels farther behind the bike, reducing the high-knee kick. The leg bends
+  again for landing rather than descending as a rigid limb.
+- During the swing, the shoe follows the shin with a relaxed pointed ankle.
+  It returns to its contact orientation before taking weight.
+- The right foot steps toward the bicycle first; the left follows and becomes
+  the ground support. On exit the right lands on its own side of the left shoe,
+  then two separate steps return the rider to the standing position.
+- Pelvis movement and the forward torso hinge are coordinated with the bar
+  position. Elbow bending uses a stable reference direction so it cannot flip
+  as the shoulders move past a fixed elbow target.
+
+The original reference images, character mesh, bicycle and approved Walk,
+Stand and Pedal animation tracks are retained. New captures are in the
+[leg-correction timeline](../docs/visual-history/2026-09-15-bicycle-leg-correction/README.md).
+
+## Validation for this correction
+
+- **33 tests pass**, including the preserved animation fingerprints, matching
+  endpoints, support/grip contacts and subframe velocity continuity. New checks
+  reject the high-knee pose, independent shin/ankle rotation, crossed feet and
+  approach/exit steps with both shoes airborne. Sampled peak knee height above
+  the hip decreased from 36.5 cm to 12.8 cm for Mount and from 36.3 cm to
+  12.6 cm for Dismount (samples every 0.1% over 25–76% of each clip).
+- **Blender surface checks pass:** 91 samples per action over frames 21–66
+  contain no rider/saddle intersections. Current measured values and the exact
+  exported asset fingerprint are in
+  [movement-check.json](../viewer/public/cyclist/movement-check.json).
+- **Browser review:** both actions were played and inspected from the side and
+  three-quarter views. Numbered UI screenshots record both six-stage sequences,
+  with additional side/front joint views. The courtyard uses the same GLB.
+- **Production build passes** for all five entry pages and includes the updated
+  downloadable Blender assembly.
+
+The checks cover the stated joint/contact behavior and saddle clearance.
+They do not replace visual assessment of the complete movement, clothing,
+other bicycle contacts or body self-collision.

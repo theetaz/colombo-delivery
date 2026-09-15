@@ -324,3 +324,17 @@ seven numbered web UI screenshots. The new mounting and dismounting pass
 is documented in [TRANSITIONS.md](TRANSITIONS.md). Open `/transitions.html`
 to inspect the generated pose guides, the authored joint movement, exact phase
 selection and slow playback. The courtyard uses the same new transition clips.
+
+
+## 15 September 2026 — Correct the mounting and dismounting leg path
+
+Rebuilt the two transition actions after the reference images were accepted
+but the animated leg movement failed review. The right leg now uses a continuous
+hip swivel, a shared knee hinge and a shin-following ankle. It extends during
+the rear crossover and bends for landing. Approach/exit foot placement and
+upper-body reach are coordinated with the supporting contacts. The approved
+walking, standing and pedaling tracks retain their exact fingerprints.
+
+[Transition notes](TRANSITIONS.md) describe the changes and checks;
+[the new screenshot timeline](../docs/visual-history/2026-09-15-bicycle-leg-correction/README.md)
+preserves the revised browser poses without replacing the earlier captures.

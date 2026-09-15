@@ -235,9 +235,12 @@ def transition_arms(reach):
         _,rest_rotation,_=palm.matrix.decompose()
         wrist=palm.head.copy()
         elbow=rig.pose.bones['Forearm_'+side].head.copy()
-        ik('UpperArm_'+side,'Forearm_'+side,
-           wrist.lerp(Vector((sign*.287,.260,1.037)),reach),
-           elbow.lerp(Vector((sign*.48,.18,.88)),reach))
+        shoulder=rig.pose.bones['UpperArm_'+side].head.copy()
+        target=wrist.lerp(Vector((sign*.287,.260,1.037)),reach)
+        direction=(target-shoulder).normalized()
+        back=Vector((0,-1,0));back-=direction*back.dot(direction);back.normalize()
+        bend=back*math.cos(math.radians(35))+sign*direction.cross(back)*math.sin(math.radians(35))
+        ik('UpperArm_'+side,'Forearm_'+side,target,elbow.lerp(shoulder+bend,reach))
         # Share the palm turn with the forearm instead of hinging the wrist.
         lower=rig.pose.bones['Forearm_'+side];pivot=lower.head.copy()
         twist=Quaternion((lower.tail-lower.head).normalized(),sign*math.radians(48)*reach).to_matrix().to_4x4()
@@ -245,6 +248,37 @@ def transition_arms(reach):
         _,goal,_=seated[palm.name].decompose()
         loc,_,scale=palm.matrix.decompose()
         palm.matrix=Matrix.LocRotScale(loc,rest_rotation.slerp(goal,reach),scale);update()
+
+def swing_leg(ankle, bend_angle, influence):
+    # Solve on the knee circle with an explicit, continuous hip swivel. A
+    # moving pole can cross the leg axis and flip to the opposite bend plane.
+    root=rig.pose.bones['Thigh_R'].head.copy();ankle=Vector(ankle)
+    delta=ankle-root;direction=delta.normalized()
+    a=rig.data.bones['Thigh_R'].length;b=rig.data.bones['Shin_R'].length
+    distance=min(delta.length,a+b-.00001)
+    along=(a*a-b*b+distance*distance)/(2*distance)
+    lateral=Vector((1,0,0));lateral-=direction*lateral.dot(direction);lateral.normalize()
+    around=direction.cross(lateral)
+    bend=lateral*math.cos(bend_angle)+around*math.sin(bend_angle)
+    knee=root+direction*along+bend*math.sqrt(max(0,a*a-along*along))
+    place('Thigh_R',root,knee);place('Shin_R',knee,ankle)
+    p=rig.pose.bones['Foot_R'];place(p.name,ankle,ankle+Vector((0,.19,-.056))*S)
+    flat_rotation=p.matrix.to_quaternion()
+    upper=(knee-root).normalized();lower=(ankle-knee).normalized()
+    hinge=lower.cross(upper).normalized()
+    # Both bones share one hinge axis. Independent shortest-arc bone rotations
+    # can make the mesh's kneecap face away from the geometric knee bend.
+    solved={n:(rig.pose.bones[n].head.copy(),rig.pose.bones[n].tail.copy(),rig.pose.bones[n].matrix.to_quaternion())
+            for n in ['Thigh_R','Shin_R']}
+    for name in ['Thigh_R','Shin_R']:
+        bone=rig.pose.bones[name];loc,tail,old=solved[name];direction=(tail-loc).normalized()
+        q=Matrix((hinge,direction,hinge.cross(direction))).transposed().to_quaternion()
+        bone.matrix=Matrix.LocRotScale(loc,old.slerp(q,influence),Vector((1,1,1)));update()
+    bone=rig.pose.bones['Foot_R'];loc=Vector(ankle)
+    forward=hinge.cross(lower).normalized()
+    direction=(forward+lower).normalized()
+    q=Matrix((hinge,direction,hinge.cross(direction))).transposed().to_quaternion()
+    bone.matrix=Matrix.LocRotScale(loc,flat_rotation.slerp(q,influence),Vector((1,1,1)));update()
 
 def transition_pose(t,getting_off=False):
     if not getting_off and t<=0:beside_pose();return
@@ -254,39 +288,39 @@ def transition_pose(t,getting_off=False):
     reset();standing_height=support_height(.22,7)
     if not getting_off:
         # Approach the bar, put weight over the left shoe, then fold the right
-        # knee and sweep the heel behind the saddle. The pelvis stays forward
-        # of the saddle until both legs are on their respective sides.
-        hip=path(t,[(0,(-.6,-.2,standing_height)),(.24,(-.34,-.12,.93)),(.45,(-.34,-.12,.93)),(.52,(-.24,.10,.92)),(.65,(-.14,.16,.91)),(.70,(-.12,.13,.90)),(.79,(0,.13,.875)),(.82,(0,.13,.875)),(.94,(0,-.2753,1.05)),(1,(0,-.2753,1.025))])
-        left=path(t,[(0,(-.705,-.2,.11648)),(.05,(-.705,-.2,.11648)),(.14,(-.53,-.08,.20)),(.23,(-.38,.02,.11648)),(.82,(-.38,.02,.11648)),(.94,(-.14,-.36,.49)),(1,(-.0728,-.3958,.41548))])
-        right=path(t,[(0,(-.495,-.2,.11648)),(.25,(-.495,-.2,.11648)),(.35,(-.50,-.52,.70)),(.46,(-.18,-.58,1.14)),(.54,(.15,-.54,1.14)),(.62,(.40,-.34,.89)),(.70,(.30,.05,.11648)),(.75,(.30,.05,.11648)),(.81,(.0728,-.0558,.41548)),(1,(.0728,-.0558,.41548))])
-        pole=path(t,[(0,(-.495,.25,.55)),(.25,(-.30,.38,.65)),(.35,(-.60,-.12,.93)),(.46,(-.40,-.20,1.24)),(.54,(.40,-.20,1.24)),(.62,(.53,.04,1.05)),(.70,(.28,.38,.66)),(1,(.17,.38,.88))])
-        lean=math.radians(20)*smooth(t/.23)+math.radians(19)*smooth((t-.80)/.17)
+        # knee and sweep the heel behind the saddle. Keep the pelvis beside or
+        # ahead of the saddle while the leg crosses to the opposite side.
+        hip=path(t,[(0,(-.6,-.2,standing_height)),(.12,(-.40,-.16,.93)),(.24,(-.36,-.05,.94)),(.35,(-.43,-.08,.95)),(.45,(-.43,-.08,.95)),(.52,(-.38,-.08,.95)),(.56,(-.22,.20,.94)),(.60,(-.10,.13,.925)),(.65,(-.10,.13,.92)),(.70,(-.12,.13,.90)),(.79,(0,.13,.875)),(.82,(0,.13,.875)),(.94,(0,-.2753,1.05)),(1,(0,-.2753,1.025))])
+        left=path(t,[(0,(-.705,-.2,.11648)),(.12,(-.705,-.2,.11648)),(.175,(-.53,-.08,.20)),(.23,(-.38,.02,.11648)),(.82,(-.38,.02,.11648)),(.94,(-.14,-.36,.49)),(1,(-.0728,-.3958,.41548))])
+        right=path(t,[(0,(-.495,-.2,.11648)),(.015,(-.495,-.2,.11648)),(.07,(-.32,-.14,.20)),(.12,(-.17,-.08,.11648)),(.25,(-.17,-.08,.11648)),(.35,(-.17,-.40,.63)),(.44,(-.13,-.63,1.07)),(.54,(.20,-.62,1.07)),(.62,(.38,-.35,.79)),(.70,(.30,.05,.11648)),(.75,(.30,.05,.11648)),(.81,(.0728,-.0558,.41548)),(1,(.0728,-.0558,.41548))])
+        lean=math.radians(20)*smooth(t/.23)+math.radians(19)*smooth((t-.80)/.17)+math.radians(22)*smooth((t-.18)/.12)*(1-smooth((t-.61)/.13))
         reach=smooth((t-.02)/.21)
-        pitch=-math.radians(12)*math.sin(math.pi*max(0,min(1,(t-.25)/.45)))
         seated_blend=smooth((t-.90)/.10)
         shift=smooth((t-.12)/.14)*(1-smooth((t-.60)/.16))
     else:
         # Stand forward of the saddle before unweighting the right pedal.
         # Left foot and both hands hold their contacts for the complete sweep;
         # release the bar only after the right shoe lands on the left side.
-        hip=path(t,[(0,(0,-.2753,1.025)),(.12,(0,.13,1.02)),(.23,(-.12,.13,.92)),(.36,(-.18,.13,.92)),(.44,(-.27,.08,.93)),(.54,(-.34,-.12,.93)),(.67,(-.34,-.12,.93)),(.77,(-.37,-.12,.925)),(.83,(-.40,-.14,.925)),(1,(-.6,-.2,standing_height))])
-        left=path(t,[(0,(-.0728,-.3958,.41548)),(.06,(-.0728,-.3958,.41548)),(.15,(-.28,-.12,.26)),(.23,(-.38,.02,.11648)),(.80,(-.38,.02,.11648)),(.9,(-.56,-.11,.20)),(1,(-.705,-.2,.11648))])
-        right=path(t,[(0,(.0728,-.0558,.41548)),(.25,(.0728,-.0558,.41548)),(.34,(.40,-.34,.89)),(.43,(.15,-.54,1.14)),(.51,(-.18,-.58,1.14)),(.63,(-.50,-.52,.70)),(.76,(-.495,-.2,.11648)),(1,(-.495,-.2,.11648))])
-        pole=path(t,[(0,(.17,.38,.88)),(.25,(.28,.38,.76)),(.34,(.53,.04,1.05)),(.43,(.40,-.20,1.24)),(.51,(-.40,-.20,1.24)),(.63,(-.60,-.12,.93)),(.76,(-.30,.38,.65)),(1,(-.495,.25,.55))])
-        lean=math.radians(39-19*smooth(t/.20))*(1-smooth((t-.76)/.24))
+        hip=path(t,[(0,(0,-.2753,1.025)),(.12,(0,.13,1.02)),(.23,(-.12,.13,.92)),(.34,(-.10,.13,.925)),(.38,(-.16,.20,.935)),(.43,(-.27,.12,.95)),(.49,(-.40,-.08,.95)),(.53,(-.43,-.08,.95)),(.67,(-.43,-.08,.95)),(.77,(-.30,.02,.945)),(.83,(-.32,-.04,.94)),(1,(-.6,-.2,standing_height))])
+        left=path(t,[(0,(-.0728,-.3958,.41548)),(.06,(-.0728,-.3958,.41548)),(.15,(-.28,-.12,.26)),(.23,(-.38,.02,.11648)),(.80,(-.38,.02,.11648)),(.85,(-.56,-.11,.20)),(.90,(-.705,-.2,.11648)),(1,(-.705,-.2,.11648))])
+        right=path(t,[(0,(.0728,-.0558,.41548)),(.25,(.0728,-.0558,.41548)),(.34,(.38,-.35,.79)),(.43,(.20,-.62,1.07)),(.53,(-.13,-.63,1.07)),(.63,(-.17,-.40,.63)),(.76,(-.17,-.08,.11648)),(.90,(-.17,-.08,.11648)),(.95,(-.32,-.14,.20)),(1,(-.495,-.2,.11648))])
+        lean=math.radians(39-19*smooth(t/.20))*(1-smooth((t-.76)/.24))+math.radians(22)*smooth((t-.25)/.10)*(1-smooth((t-.65)/.12))
         reach=1-smooth((t-.78)/.22)
-        pitch=-math.radians(12)*math.sin(math.pi*max(0,min(1,(t-.25)/.51)))
         seated_blend=1-smooth(t/.10)
         shift=smooth((t-.18)/.14)*(1-smooth((t-.65)/.14))
     upper_shift=(smooth((t-.10)/.13)*(1-smooth((t-.79)/.21))
                  if getting_off else shift)
+    # As the hips move ahead of the seat, reduce the forward trunk hinge so
+    # the shoulders do not overshoot the grips and force elbows behind the back.
+    lean=max(0,lean-math.atan2(max(0,hip.y+.08),.42)*upper_shift)
+    hip.z+=.035*shift
     pelvis_at(hip,lean)
-    rotate('Pelvis',math.radians(-8)*shift,'Y')
+    rotate('Pelvis',math.radians(-22)*shift,'Y')
     rotate('Pelvis',-math.radians(6)*shift,'Z')
     rotate('Chest',math.radians(4)*shift,'Z')
     # The hips stay over the ground shoe while the shoulders lean toward the
     # bicycle. Both grips must remain within the real arm lengths.
-    rotate('Spine',math.radians(24)*upper_shift,'Y')
+    rotate('Spine',math.radians(24+16*smooth((-.20-hip.x)/.23))*upper_shift,'Y')
     rotate('Neck',-math.radians(8)*upper_shift,'Y')
     rotate('Head',-math.radians(8)*upper_shift,'Y')
     # Reserve a softly extended knee as each shoe approaches the ground. A target beyond
@@ -305,7 +339,23 @@ def transition_pose(t,getting_off=False):
     support=smooth(t/.23) if not getting_off else 1-smooth((t-.80)/.20)
     left_pole=Vector((-.705,.25,.55)).lerp(Vector((-.38,.45,.65)),support)
     foot('L',left,left_pole)
-    foot('R',right,pole);rotate('Foot_R',pitch)
+    if getting_off:
+        angle=path(t,[(0,(-90,0,0)),(.25,(-90,0,0)),(.34,(5,0,0)),(.43,(45,0,0)),(.53,(160,0,0)),(.63,(270,0,0)),(.76,(270,0,0)),(1,(270,0,0))]).x
+        influence=smooth((t-.25)/.09)*(1-smooth((t-.65)/.11))
+    else:
+        angle=path(t,[(0,(270,0,0)),(.25,(270,0,0)),(.35,(270,0,0)),(.44,(160,0,0)),(.54,(45,0,0)),(.62,(5,0,0)),(.70,(-90,0,0)),(1,(-90,0,0))]).x
+        influence=smooth((t-.25)/.10)*(1-smooth((t-.62)/.08))
+    # Extend the knee while passing the saddle, then fold it again for the
+    # landing. Keeping a deeply folded leg here forced the old high-knee kick.
+    extend=(smooth((t-.35)/.08)*(1-smooth((t-.55)/.08)) if getting_off
+            else smooth((t-.35)/.09)*(1-smooth((t-.54)/.08)))
+    root=rig.pose.bones['Thigh_R'].head.copy()
+    a=rig.data.bones['Thigh_R'].length;b=rig.data.bones['Shin_R'].length
+    u=max(0,min(1,(t-(.43 if getting_off else .44))/.10))
+    flexion=32-14*64*u**3*(1-u)**3
+    distance=math.sqrt(a*a+b*b+2*a*b*math.cos(math.radians(flexion)))
+    right=right.lerp(root+(right-root).normalized()*distance,extend)
+    swing_leg(right,math.radians(angle),influence)
     transition_arms(reach)
     if seated_blend:
         # Blend the local pose once, then solve the contacts again. Reading

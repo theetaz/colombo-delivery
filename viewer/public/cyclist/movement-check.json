@@ -33,24 +33,24 @@
     ]
   },
   "Mount": {
-    "lowestVertexMetres": -0.0010000764159485698,
+    "lowestVertexMetres": -0.0012466729385778308,
     "maxEdgeStretch": [
-      3.163185648836332,
-      42,
+      3.1526518322769106,
+      36,
       [
-        2922,
-        2924
+        7252,
+        7255
       ]
     ]
   },
   "Dismount": {
-    "lowestVertexMetres": -0.0007592590409331024,
+    "lowestVertexMetres": -0.0005829379661008716,
     "maxEdgeStretch": [
-      3.0827140481834556,
-      39,
+      3.1597081595048757,
+      45,
       [
-        2922,
-        2924
+        7252,
+        7255
       ]
     ]
   },
@@ -85,7 +85,7 @@
       "maxTrunkFromVerticalDegrees": 1.230828689853447
     }
   },
-  "assetSha256": "0582d07096a793e20149bc3c7a6d4f07691f14ccf1f9ce01f9378006beec5c29",
+  "assetSha256": "055681547d6d99e51cbec8d25ad348440defddf0836d0bb2b8aa0a38c0496d58",
   "saddleClearance": {
     "Mount": {
       "firstFrame": 21,
