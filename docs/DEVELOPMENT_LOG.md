@@ -837,3 +837,19 @@ roadmap.
   Drive pilot with no console warnings or errors. The approved movement,
   rider, bicycle, geographic model, and network retain their original hashes.
   Human visual review of the dressed street remains pending.
+
+## 2026-09-15 — Street concepts for visual selection
+
+- Recorded feedback that the first street pass needs a more realistic overall
+  composition before more modeling.
+- Produced three original imagined Colombo street directions: green
+  neighborhood, neighborhood shops, and lakeside street.
+- Removed inconsistent vehicle poses from the lakeside concept while preserving
+  its street composition. Traffic positioning will be resolved with the road
+  data when the chosen direction is modeled.
+- Preserved the concept images and full art briefs in the
+  [street concept gallery](../studies/colombo-road/streets/concepts/2026-09-15-directions/README.md).
+- Deferred further 3D changes until a direction is selected. The existing
+  runtime, geographic assets, and approved character movements are unchanged.
+- These are visual exploration assets. Build and movement tests were not
+  repeated for this image-and-documentation checkpoint.

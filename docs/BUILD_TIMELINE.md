@@ -987,8 +987,8 @@ Delivered in
 
 ## 2026-09-15 — Textured streets and original building families
 
-Status: implementation and automated validation complete; human visual review
-pending.
+Status: implementation and automated validation complete; human review
+requested a more realistic visual direction before further modeling.
 
 The first-district viewer gained a deterministic street-art layer with a
 metre-scaled procedural asphalt texture, 6 m repeat, matte finish, fine bump,
@@ -1024,3 +1024,20 @@ All 46 viewer tests and the production build pass. Browser controls and the
 existing Drive pilot load without console warnings or errors; the approved
 movement, rider, bicycle, geographic model, and road-network files retain their
 original hashes.
+
+## 2026-09-15 — Street composition concepts before further modeling
+
+Human feedback on the first street-art checkpoint (`62212bd`) requested
+imagined street perspectives before more 3D work. The resulting
+[three visual directions](../studies/colombo-road/streets/concepts/2026-09-15-directions/README.md)
+explore a shaded residential neighborhood, a street of small shops, and a
+lakeside route with a promenade and distant Lotus Tower.
+
+Each image considers asphalt, curbs, drainage, continuous pavements, mature
+trees, varied buildings, and everyday street details together. The concepts
+and their art briefs are preserved for comparison. They are imagined visual
+targets, not game renders or an approval of the earlier runtime appearance.
+
+Status: waiting for human selection of A, B, C, or a combination. The next
+implementation checkpoint is one short 3D street section based on that
+selection, followed by another human review before district-wide repetition.

@@ -1,7 +1,9 @@
 # Colombo street art study
 
-Status: implementation and automated validation complete on 15 September 2026;
-human visual review remains pending.
+Status: the first pass is technically complete. Human review on 15 September
+2026 requested a more realistic visual direction before further 3D work.
+The [three street concepts](concepts/2026-09-15-directions/README.md) are ready
+for selection; the current runtime remains the first implementation checkpoint.
 
 ## Delivered study
 

@@ -55,7 +55,8 @@ walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 | 15 Sep | [Walking approval](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md) | Upright gait refined through planted contacts, momentum handoffs, smooth curves, and removal of repeated pelvis/knee motion; human-approved result preserved. |
 | 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; the `939c56b` revision is human-approved. |
 | 15 Sep | [Study consolidation](docs/BUILD_TIMELINE.md#2026-09-15--colombo-road-and-movement-study-consolidated) | Map data, Blender sources, browser assets, tests, 37 milestone captures, and original commit history moved into this repository. |
-| 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added to the standalone district; human visual review remains pending. |
+| 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added; review requested a more realistic visual direction. |
+| 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explore believable pavements, trees, materials, and building variety. Selection precedes further 3D modeling. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
