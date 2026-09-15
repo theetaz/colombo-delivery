@@ -766,9 +766,10 @@ roadmap.
 - Added a reference-guided mounting and dismounting study in `7ec7367` while
   preserving the approved walking and pedaling animation tracks.
 - Corrected the transition leg motion in `939c56b`, including the knee hinge,
-  rear sweep, support steps, and shoe placement. The corrected transitions
-  remain pending human feedback; automated and visual regression evidence does
-  not record human approval.
+  rear sweep, support steps, and shoe placement. Human review approved these
+  revised Mount and Dismount clips on 15 September 2026. The approval does not
+  extend to the rejected first transition pass or separate stationary-rider
+  experiments.
 
 ## 2026-09-15 — Road and animation study consolidated
 
@@ -790,3 +791,49 @@ roadmap.
   delivery tests pass; both production builds succeed. The migrated transition
   page renders on port 5175 with no browser console warnings or errors, and its
   GLB and downloadable Blender scene match the files in the new location.
+
+## 2026-09-15 — Textured street and building-family pass
+
+- Added a deterministic procedural asphalt material to the standalone district
+  roads, with metre-scaled UVs, a 6 m repeat, a matte finish, fine bump, and warm
+  bounded PCF shadows, without changing the saved geometry or source snapshot.
+- Added inferred white centre/lane treatments only for roads that meet the
+  study's mapped-lane and road-class/direction criteria. Tunnels, roundabouts,
+  conditional cases, short segments, and graph junction clearances are omitted.
+  The rendered widths and dash rhythm are art defaults, not claimed statutory
+  or surveyed dimensions.
+- Added a separate teal left-hand traffic-flow overlay. Its arrows explain the
+  current routing interpretation; they are not presented as pavement symbols.
+  No stop, give-way, crossing, junction-box, turn-arrow, bus-lane, cycle-lane,
+  or parking marking is synthesized.
+- Added Source/Dressed comparison and Inferred traffic flow controls plus a
+  street-study camera aimed at the Vauxhall area and a direct `#street` preset.
+  Source mode restores the original source materials and building triangles.
+- Generated six original Blender building families with 48 material-merged mesh
+  nodes and 45,140 triangles in the 3,180,688-byte runtime GLB. The asset check
+  verifies the six named roots and their ground-centred, Y-up, positive-Z
+  facade contract.
+- Added 12 deterministic, schema-v2 replacements across four families:
+  four corner shops, four heritage shops, three courtyard houses, and one
+  mixed-use building. Uniform scale ranges from 0.8301 to 1.0458. Town-house
+  and apartment remain in the six-family kit but did not safely fit the chosen
+  source footprints and heights.
+- Required each rotated family rectangle to remain inside its exact source
+  polygon, respect polygon holes, preserve source base height, face the nearest
+  target road, clear water, clear every non-tunnel carriageway by half-width
+  plus 0.5 m, clear other mapped buildings by 0.25 m, and clear other dressed
+  buildings by 1 m. A 35 m guard prevents nearby repeats of the same family.
+  The independent placement audit reports zero failures in every category.
+- Documented the official Sri Lankan keep-left rule, the 2015 road-marking
+  Gazette, bundled OSM interpretation rules, original-asset pipeline, and human
+  review boundary in the [street study](../studies/colombo-road/streets/README.md).
+- Corrected road textures missing UVs, reversed left-lane offsets, one-way
+  junction detection, and source-wall fragments during implementation review.
+  Markings sample actual road triangles, and source-building replacement is
+  staged until the complete artwork loads successfully. Corrected the corner-shop
+  storefront depth so its windows and signage sit outside the shell.
+- All 46 standalone viewer tests and the production build pass. Browser checks
+  cover the Street preset, Source/Dressed, layer/flow toggles, and the existing
+  Drive pilot with no console warnings or errors. The approved movement,
+  rider, bicycle, geographic model, and network retain their original hashes.
+  Human visual review of the dressed street remains pending.

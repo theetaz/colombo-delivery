@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {assetUrl,linesOf} from './data.js';
+import {createStreetScene,disposeStreetScene,setStreetPresentation} from './streets/street-scene.js';
+import {sampleLine} from './streets/road-markings.js';
 
 function category(object){
   for(let o=object;o;o=o.parent){
@@ -16,8 +18,8 @@ function category(object){
   return 'tower';
 }
 
-export function createViewer(container,{onProgress,onReady,onPick,onError,onCamera,onDelivery}){
-  let alive=true,frame=0,model=null,network=null,mode='full',wireframe=false;
+export function createViewer(container,{onProgress,onReady,onPick,onError,onCamera,onDelivery,onNotice}){
+  let alive=true,frame=0,model=null,network=null,mode='full',wireframe=false,dressed=true,streetRoot=null;
   let activeCamera='overview';
   let delivery=null,deliveryLoading=null;
   let layerState={},overlays={},selection=null,roadLoading=null;
@@ -29,6 +31,7 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=.95;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
   renderer.domElement.tabIndex=0;
   renderer.domElement.setAttribute('aria-label','Interactive Colombo district. Drag to orbit, scroll to zoom, right-drag to pan. Use the Inspect tab to select roads by name.');
   container.appendChild(renderer.domElement);
@@ -39,7 +42,9 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
   controls.maxPolarAngle=Math.PI-.06;
   controls.target.set(-400,10,-450);camera.position.set(1700,2000,1900);
   scene.add(new THREE.HemisphereLight(0xe5f3ff,0x707a64,1));
-  const sun=new THREE.DirectionalLight(0xfff5e3,2);sun.position.set(1200,2200,800);scene.add(sun);
+  const sun=new THREE.DirectionalLight(0xffe8c2,2.25);sun.position.set(180,430,220);sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-320;sun.shadow.camera.right=320;sun.shadow.camera.top=320;sun.shadow.camera.bottom=-320;sun.shadow.camera.near=40;sun.shadow.camera.far=1000;sun.shadow.bias=-.00025;scene.add(sun);
+  scene.add(sun.target);
   const fill=new THREE.DirectionalLight(0xd6e6ff,.3);fill.position.set(-800,1000,-900);scene.add(fill);
   const overlayRoot=new THREE.Group();scene.add(overlayRoot);
   const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2();
@@ -110,6 +115,7 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
     if(roadLines)roadLines.visible=!!overlays.centreLines;
     if(controlPoints)controlPoints.visible=mode==='full'&&layerState.markers!==false;
     if(boundary)boundary.visible=!!overlays.boundary;
+    if(streetRoot)setStreetPresentation(streetRoot,{dressed:dressed&&mode==='full',roadsVisible:layerState.roads!==false,buildingsVisible:layerState.buildings!==false,trafficFlow:overlays.trafficFlow!==false});
     invalidate();
   }
   function loadModel(key,file){
@@ -212,6 +218,29 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
     if(name==='top'){
       const distance=1050/Math.tan(THREE.MathUtils.degToRad(camera.fov)/2)/Math.min(camera.aspect,1);
       setPose([-400,distance,-449.9],[-400,0,-450],'top');
+    }else if(name==='street'){
+      const road=network?.roads.find(item=>String(item.id)==='386048812');
+      if(!road)return;
+      const line=linesOf(road)[0],placements=(streetRoot?.userData.placements||[]).filter(item=>item.roadId===String(road.id));
+      // Frame the densest authored cluster, with the camera kept over the left lane.
+      const countNearby=item=>placements.filter(other=>Math.hypot(other.position[0]-item.position[0],other.position[2]-item.position[2])<60).length;
+      const anchor=placements.slice().sort((a,b)=>countNearby(b)-countNearby(a))[0]?.position||[-558,0,368];
+      let nearest=Infinity,focusDistance=0,distance=0;
+      for(let i=1;i<line.length;i++){
+        const [ax,an]=line[i-1],[bx,bn]=line[i],dx=bx-ax,dz=an-bn,length=Math.hypot(dx,dz);
+        if(!length)continue;
+        const t=THREE.MathUtils.clamp(((anchor[0]-ax)*dx+(anchor[2]+an)*dz)/(length*length),0,1);
+        const gap=Math.hypot(anchor[0]-ax-dx*t,anchor[2]+an-dz*t);
+        if(gap<nearest){nearest=gap;focusDistance=distance+length*t;}distance+=length;
+      }
+      const at=sampleLine(line,focusDistance-18),ahead=sampleLine(line,focusDistance+12);
+      const x=at.x+at.tz*.9,z=at.z-at.tx*.9;
+      const heightAt=streetRoot?.userData.heightAt;
+      const position=[x,(heightAt?.(x,z)??0)+3.2,z],target=[ahead.x,(heightAt?.(ahead.x,ahead.z)??0)+2.5,ahead.z];
+      const point=new THREE.Vector3(...target);
+      sun.target.position.copy(point);sun.position.copy(point).add(new THREE.Vector3(180,430,220));sun.target.updateMatrixWorld();
+      sun.shadow.camera.left=sun.shadow.camera.bottom=-80;sun.shadow.camera.right=sun.shadow.camera.top=80;sun.shadow.camera.updateProjectionMatrix();
+      setPose(position,target,'street');
     }else setPose([460,260,580],[0,175,0],'tower');
   }
   function focus(value){
@@ -257,7 +286,14 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
     }
   }
   return {
-    async load(data,manifest){buildOverlays(data,manifest);model=await loadModel('full','colombo-roads.glb');if(alive)fit();return model;},
+    async load(data,manifest){buildOverlays(data,manifest);model=await loadModel('full','colombo-roads.glb');
+      if(!alive)return model;
+      try{
+        const streets=await createStreetScene({network:data,sourceRoot:model,invalidate});
+        if(!alive){disposeStreetScene(streets);return model;}
+        streetRoot=streets;scene.add(streetRoot);applyLayers();
+      }catch(error){if(alive)onNotice?.(`Street artwork could not load. The source district is available. ${error.message}`);}
+      if(alive)fit();return model;},
     async setMode(next){
       mode=next;applyLayers();
       if(next==='roads')await ensureRoads();
@@ -269,6 +305,8 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
         if(alive)delivery=createDeliveryRuntime({scene,camera,controls,renderer,invalidate,onUpdate:onDelivery});
       }).catch(error=>{deliveryLoading=null;throw error;});
       await deliveryLoading;if(!alive)return;
+      sun.target.position.set(40,0,-120);sun.position.set(220,430,100);sun.target.updateMatrixWorld();
+      sun.shadow.camera.left=sun.shadow.camera.bottom=-320;sun.shadow.camera.right=sun.shadow.camera.top=320;sun.shadow.camera.updateProjectionMatrix();
       showSelection(null);activeCamera='drive';onCamera('drive');await delivery.start();
     },
     stopDelivery(){delivery?.stop();fit();},
@@ -282,6 +320,7 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
     setLayers(value){layerState=value;applyLayers();},
     setOverlays(value){overlays=value;applyLayers();},
     setWireframe(value){wireframe=value;applyLayers();},
+    setDressed(value){dressed=value;applyLayers();},
     preset,focus,select:showSelection,
     pose(){return {position:camera.position.toArray(),target:controls.target.toArray()};},
     async capture(){
@@ -289,7 +328,7 @@ export function createViewer(container,{onProgress,onReady,onPick,onError,onCame
       return new Promise((resolve,reject)=>renderer.domElement.toBlob(b=>b?resolve(b):reject(new Error('Image capture failed.')),'image/png'));
     },
     dispose(){
-      alive=false;if(frame)cancelAnimationFrame(frame);delivery?.dispose();observer.disconnect();controls.dispose();clearHighlight();
+      alive=false;if(frame)cancelAnimationFrame(frame);delivery?.dispose();observer.disconnect();controls.dispose();clearHighlight();disposeStreetScene(streetRoot);
       renderer.domElement.removeEventListener('webglcontextlost',lost);
       renderer.domElement.removeEventListener('pointerdown',pointerDown);renderer.domElement.removeEventListener('pointerup',pointerUp);
       for(const resource of allResources)resource.dispose();renderer.dispose();renderer.domElement.remove();

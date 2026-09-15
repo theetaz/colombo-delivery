@@ -26,8 +26,9 @@ with all 11 original study commits preserved in history.
 
 Human review approved the study's walking cycle, and the previously approved
 pedaling track is preserved unchanged. This does not approve the cyclist study
-as final character quality. The revised mounting and dismounting animations are
-ready for human testing and are not approved yet.
+as final character quality. The revised mounting and dismounting animations
+were human-approved on 15 September 2026 at the leg-corrected `939c56b`
+checkpoint.
 The study reuses the approved bicycle design with a fitted saddle. Earlier
 full-body stationary rider fits and clean-rig checkpoint 1 in the original app
 were rejected; later diagnostic experiments did not produce a review candidate.
@@ -52,8 +53,9 @@ walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 | 14 Sep | [Rider source audit](docs/BUILD_TIMELINE.md#2026-09-14--clean-rig-revision-2-repair-and-source-audit) | Rejected rigs and deformation evidence preserved; the audit corrected the construction history. Revision 2 failed engineering bounds and was not sent for human review. |
 | 15 Sep | [First-district study baseline](docs/BUILD_TIMELINE.md#2026-09-15--standalone-study-baseline-preserved) | Standalone 1.8 × 1.8 km map from a 14 September OSM snapshot, review viewer, limited car delivery pilot, cyclist asset, and movement testbed preserved. |
 | 15 Sep | [Walking approval](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md) | Upright gait refined through planted contacts, momentum handoffs, smooth curves, and removal of repeated pelvis/knee motion; human-approved result preserved. |
-| 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; human testing remains pending. |
+| 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; the `939c56b` revision is human-approved. |
 | 15 Sep | [Study consolidation](docs/BUILD_TIMELINE.md#2026-09-15--colombo-road-and-movement-study-consolidated) | Map data, Blender sources, browser assets, tests, 37 milestone captures, and original commit history moved into this repository. |
+| 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added to the standalone district; human visual review remains pending. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -74,6 +76,7 @@ npm run study:dev
 Open these local pages:
 
 - [Map and limited car-delivery pilot](http://127.0.0.1:5175/#drive)
+- [Dressed street study](http://127.0.0.1:5175/#street)
 - [Walk and ride courtyard](http://127.0.0.1:5175/movement.html)
 - [Bicycle transition review](http://127.0.0.1:5175/transitions.html)
 - [Walking review](http://127.0.0.1:5175/walking.html)
@@ -122,8 +125,8 @@ live map data.
 
 [![Approved walking study](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/01-walking-side.png)](studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md)
 
-*The approved walking checkpoint is preserved separately from the later,
-still-pending bicycle transition review.*
+*The walking checkpoint is preserved separately from the later, approved
+`939c56b` bicycle transition review.*
 
 [![Completed first practice delivery](docs/milestones/2026-09-13-courier-bicycle.jpg)](docs/DELIVERY_PROTOTYPE.md)
 

@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "assetPack": "colombo-building-kit",
+  "glb": "/streets/colombo-building-kit.glb",
+  "coordinateSystem": {
+    "upAxis": "+Y",
+    "facadeAxis": "+Z",
+    "origin": "ground-center",
+    "unit": "meter"
+  },
+  "authoredWith": {
+    "generator": "studies/colombo-road/streets/generate_building_kit.py",
+    "source": "studies/colombo-road/streets/colombo-building-kit.blend"
+  },
+  "provenance": "Original Colombo-inspired project artwork; no third-party building assets or trademarks.",
+  "families": [
+    {
+      "id": "heritage-shop",
+      "nodeName": "heritage-shop",
+      "familyLabel": "Verandah Heritage Shop",
+      "dimensions": {
+        "width": 8.55,
+        "depth": 6.32,
+        "height": 6.93
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    },
+    {
+      "id": "town-house",
+      "nodeName": "town-house",
+      "familyLabel": "Balcony Town House",
+      "dimensions": {
+        "width": 5.92,
+        "depth": 5.87,
+        "height": 8.48
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    },
+    {
+      "id": "corner-shop",
+      "nodeName": "corner-shop",
+      "familyLabel": "Deep Awning Corner Shop",
+      "dimensions": {
+        "width": 7.77,
+        "depth": 6.97,
+        "height": 7.71
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    },
+    {
+      "id": "courtyard-house",
+      "nodeName": "courtyard-house",
+      "familyLabel": "Tiled Roof Courtyard House",
+      "dimensions": {
+        "width": 9.25,
+        "depth": 6.78,
+        "height": 6.12
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    },
+    {
+      "id": "mixed-use",
+      "nodeName": "mixed-use",
+      "familyLabel": "Shopfront Mixed Use",
+      "dimensions": {
+        "width": 7.35,
+        "depth": 5.93,
+        "height": 9.74
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    },
+    {
+      "id": "apartment",
+      "nodeName": "apartment",
+      "familyLabel": "Tropical Balcony Apartment",
+      "dimensions": {
+        "width": 9.92,
+        "depth": 7.33,
+        "height": 13.56
+      },
+      "recommendedScaleRange": [
+        0.92,
+        1.08
+      ],
+      "paletteVariantIds": [
+        "warm-cream",
+        "sun-faded-ochre",
+        "muted-teal",
+        "dusty-rose",
+        "monsoon-blue",
+        "limewash"
+      ]
+    }
+  ],
+  "paletteVariants": [
+    {
+      "id": "warm-cream",
+      "wall": "plaster-warm-cream",
+      "accent": "plaster-muted-teal",
+      "roof": "terracotta-tile"
+    },
+    {
+      "id": "sun-faded-ochre",
+      "wall": "plaster-sun-faded-ochre",
+      "accent": "plaster-warm-cream",
+      "roof": "terracotta-tile"
+    },
+    {
+      "id": "muted-teal",
+      "wall": "plaster-muted-teal",
+      "accent": "plaster-warm-cream",
+      "roof": "awning-rust"
+    },
+    {
+      "id": "dusty-rose",
+      "wall": "plaster-dusty-rose",
+      "accent": "plaster-warm-cream",
+      "roof": "terracotta-tile"
+    },
+    {
+      "id": "monsoon-blue",
+      "wall": "plaster-monsoon-blue",
+      "accent": "plaster-warm-cream",
+      "roof": "concrete"
+    },
+    {
+      "id": "limewash",
+      "wall": "plaster-limewash",
+      "accent": "plaster-sun-faded-ochre",
+      "roof": "terracotta-tile"
+    }
+  ],
+  "materials": [
+    {
+      "id": "plaster-warm-cream",
+      "baseColorLinear": [
+        0.78,
+        0.66,
+        0.47
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "plaster-sun-faded-ochre",
+      "baseColorLinear": [
+        0.72,
+        0.43,
+        0.19
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "plaster-muted-teal",
+      "baseColorLinear": [
+        0.18,
+        0.44,
+        0.43
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "plaster-dusty-rose",
+      "baseColorLinear": [
+        0.64,
+        0.36,
+        0.32
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "plaster-monsoon-blue",
+      "baseColorLinear": [
+        0.3,
+        0.48,
+        0.55
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "plaster-limewash",
+      "baseColorLinear": [
+        0.72,
+        0.73,
+        0.6
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "terracotta-tile",
+      "baseColorLinear": [
+        0.48,
+        0.17,
+        0.08
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "deep-shadow",
+      "baseColorLinear": [
+        0.045,
+        0.055,
+        0.052
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "window-glass",
+      "baseColorLinear": [
+        0.08,
+        0.25,
+        0.29
+      ],
+      "roughness": 0.24
+    },
+    {
+      "id": "painted-timber",
+      "baseColorLinear": [
+        0.18,
+        0.1,
+        0.06
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "aged-brass",
+      "baseColorLinear": [
+        0.35,
+        0.25,
+        0.1
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "concrete",
+      "baseColorLinear": [
+        0.43,
+        0.44,
+        0.4
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "awning-rust",
+      "baseColorLinear": [
+        0.6,
+        0.2,
+        0.1
+      ],
+      "roughness": 0.84
+    },
+    {
+      "id": "awning-mustard",
+      "baseColorLinear": [
+        0.78,
+        0.48,
+        0.1
+      ],
+      "roughness": 0.84
+    }
+  ],
+  "budgets": {
+    "triangleTargetMax": 70000,
+    "glbTargetBytesMax": 4194304
+  },
+  "stats": {
+    "triangles": 45140,
+    "meshNodes": 48,
+    "glbBytes": 3180688
+  }
+}

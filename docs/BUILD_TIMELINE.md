@@ -948,7 +948,8 @@ The current consolidated copy of that evidence is the
 
 ## 2026-09-15 — Bicycle transition study and leg correction
 
-Status: transition study implemented; corrected revision awaits human feedback.
+Status: transition study implemented; the corrected `939c56b` revision was
+human-approved on 15 September 2026.
 
 [`7ec7367`](https://github.com/theetaz/colombo-delivery/commit/7ec7367)
 added the reference-guided mounting and dismounting study while preserving the
@@ -958,8 +959,8 @@ approved walking and pedaling tracks. The first transition gallery remains
 [`939c56b`](https://github.com/theetaz/colombo-delivery/commit/939c56b)
 then corrected the knee hinge, rear leg sweep, support steps, and shoe alignment.
 Its [leg-correction gallery](../studies/colombo-road/docs/visual-history/2026-09-15-bicycle-leg-correction/README.md)
-and automated checks document the revision, but they do not constitute human
-approval of the mounting and dismounting motion.
+and automated checks document the revision. Human approval applies to this
+leg-corrected checkpoint, not to the rejected first pass.
 
 ## 2026-09-15 — Colombo road and movement study consolidated
 
@@ -978,8 +979,48 @@ change the rejected status of the separate clean-rig experiments above.
 
 The latest animation revision corrects the knee hinge, rear leg sweep, support
 steps, and shoe alignment during mounting and dismounting. The previously
-approved walking and pedaling clips are preserved; the revised transitions
-remain ready for human testing.
+approved walking and pedaling clips are preserved; human review approved the
+revised Mount and Dismount clips at `939c56b` on 15 September 2026.
 
 Delivered in
 [`80270cb`](https://github.com/theetaz/colombo-delivery/commit/80270cb).
+
+## 2026-09-15 — Textured streets and original building families
+
+Status: implementation and automated validation complete; human visual review
+pending.
+
+The first-district viewer gained a deterministic street-art layer with a
+metre-scaled procedural asphalt texture, 6 m repeat, matte finish, fine bump,
+warm bounded shadows, and inferred white centre/lane treatments. The
+inference reads the bundled OSM lane count, road class, direction, tunnels,
+roundabouts, conditional tags, and graph junctions. It leaves junction gaps
+and does not create stop lines, give-way lines, pedestrian crossings, boxes,
+turn arrows, bus lanes, or cycle lanes. A separate teal overlay communicates
+inferred left-hand traffic flow and is not presented as real road paint.
+Source and Dressed controls compare the pass with the exact original materials
+and building triangles. A dedicated camera frames the Vauxhall study area, and
+`#street` opens that preset directly.
+
+Six original Blender families are available to dress retained source building
+sites: heritage shop, town house, corner shop, courtyard house, mixed use, and
+apartment. Twelve high-confidence replacements use four families at uniform
+scales from 0.8301 to 1.0458; the town-house and apartment forms did not safely
+fit the selected source sites. Stable source-ID choices vary family and palette.
+Exact source-polygon containment, road/water/building clearance, source base
+height, road-facing orientation, and a local family-repeat guard all pass their
+independent placement audit with zero failures.
+Named and institutional buildings are excluded so the existing Colombo
+landmarks remain separate. The editable source, generator, GLB, manifest, and
+placement data are documented in the
+[street art study](../studies/colombo-road/streets/README.md).
+
+The treatment is an authored geographic study rather than a survey of current
+paint or facades. Line dimensions and asphalt appearance are visual defaults;
+missing OSM direction data is still a routing assumption rather than proof of
+a two-way marked road. Human review remains the acceptance check for scale,
+repetition, overlaps, road readability, and landmark context.
+All 46 viewer tests and the production build pass. Browser controls and the
+existing Drive pilot load without console warnings or errors; the approved
+movement, rider, bicycle, geographic model, and road-network files retain their
+original hashes.
