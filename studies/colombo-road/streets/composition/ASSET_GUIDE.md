@@ -1,9 +1,13 @@
 # Living street assets and delivery addresses
 
-The next environment layer builds on the approved A + B + C composition:
+The existing environment experiment builds on the selected A + B + C composition:
 varied tropical planting, recognizable exterior building types, night-time
 path lighting and background road users. The street remains an authored test
-section; geographic expansion follows review of this asset set.
+section. Human review rejected this expansion's visual result. The
+[Tripo-to-Blender production guide](../../../../docs/TRIPO_BLENDER_ASSET_PIPELINE.md)
+defines the next single-asset pilot before further kit expansion. The identity
+and runtime contracts below remain the handoff requirements for replacement
+models.
 
 ## Keep models separate from places
 

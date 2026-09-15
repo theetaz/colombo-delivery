@@ -40,13 +40,19 @@ The latest environment checkpoint combines the selected green neighborhood,
 small-shop street and lakeside concepts in a
 [190 m street composition](studies/colombo-road/streets/composition/README.md).
 It includes editable Blender architecture and landscape kits, textured roads
-and pavements, and three street-level review views. Human visual feedback is
-the next step before adapting this composition to the geographic district.
+and pavements, and three street-level review views. Positive human feedback
+on this composition prompted a larger environment experiment.
 
 The [living-street expansion](studies/colombo-road/streets/composition/ASSET_GUIDE.md)
 adds tropical planting varieties, supermarket and residential exteriors,
 night-time path lighting and background vehicles. A stable asset and place
 registry links selected delivery locations to exterior building entrances.
+Human feedback rejected the expansion's visual result and requested a
+Tripo-based asset workflow before further modeling. The
+[Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md)
+now records source generation, cleanup, motion preparation, export and human
+review. CLI 0.4.0 is installed and authenticated; this documentation checkpoint
+does not include a new generated asset or an end-to-end pipeline trial.
 
 ## Development checkpoints
 
@@ -70,7 +76,8 @@ registry links selected delivery locations to exterior building entrances.
 | 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added; review requested a more realistic visual direction. |
 | 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explored; a combination of A, B and C was selected. |
 | 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; positive feedback prompted the living-street expansion. |
-| 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Positive feedback on the combined street led to expanded flora and exterior buildings, address IDs, night lighting and background traffic. This expansion returns for human review. |
+| 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Expanded flora, buildings, address IDs, lighting and background traffic implemented. Human review rejected the visual result and requested a Tripo-based production workflow. |
+| 15 Sep | [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) | CLI 0.4.0 installation and authentication verified; V3 documentation and installed command behavior reviewed. Asset stages, recovery, Blender contracts and human review documented before a first pilot. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -209,6 +216,9 @@ Then open
   walking, and transition previews.
 - [Character art pipeline](docs/CHARACTER_ART_PIPELINE.md) — hero-character
   direction, reconstruction stages, and remaining rights/review gates.
+- [Tripo-to-Blender production guide](docs/TRIPO_BLENDER_ASSET_PIPELINE.md) —
+  model selection, source preservation, task recovery, editable assets and
+  human review before reuse.
 - [Vehicles and progression](docs/VEHICLES.md) — implemented bicycle contract
   and planned vehicle roles.
 - [Data sources](docs/DATA_SOURCES.md) — OSM provenance, interpretation,
@@ -216,8 +226,12 @@ Then open
 
 ## Next checkpoints
 
-The immediate review is the living street: planting variety, building
-proportions, delivery-entrance placement, night lighting and background traffic.
+The next environment checkpoint is one Tripo-generated asset taken through
+Blender and handed over for human review. A rain tree is the proposed pilot;
+its subject and reference brief remain to be selected. This will validate
+source quality, cleanup, wind preparation and browser cost before expanding
+the kit. The existing living-street result is preserved as an experiment,
+with its visual rejection recorded above.
 The mount/dismount sequences are already human-approved at `939c56b`.
 The standalone district still needs street-level accuracy review,
 bridge and lane refinement, routing rules, collisions, traffic, and integration

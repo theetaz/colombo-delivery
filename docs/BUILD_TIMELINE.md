@@ -1074,8 +1074,10 @@ Frozen artifacts: [asset guide](https://github.com/theetaz/colombo-delivery/blob
 [editable Blender kit](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/streets/composition),
 and [runtime and tests](https://github.com/theetaz/colombo-delivery/tree/422672210f80a3ccd5dd4157e4e8bc800a258d02/studies/colombo-road/viewer/src/streets/composition).
 
-Status: environment expansion prepared for human review; city-scale placement,
-player collisions and delivery gameplay remain separate integration milestones.
+Status: delivered for human review, then rejected for its visual result.
+The following checkpoint establishes a Tripo-to-Blender production workflow.
+City-scale placement, player collisions and delivery gameplay remain separate
+integration milestones.
 
 The [living street study](../studies/colombo-road/streets/composition/README.md)
 adds distinct tropical tree forms, flowers, grass, ferns, shrubs and groundcover
@@ -1099,9 +1101,10 @@ GLBs and provenance manifests make the additions editable and reusable.
 
 Refinements address bicycle crank opposition, reachable leg lengths, actual
 foot/pedal contact, root-anchored wind shadows and destination alignment.
-The existing road materials and driveway surfaces were retained. The next
-human review covers visual variety, lighting, plant density and background
-rider proportions before these kits are applied to longer mapped streets.
+The existing road materials and driveway surfaces were retained. The review
+brief covered visual variety, lighting, plant density and background rider
+proportions. The rejection prevents treating these kits as approved assets
+for longer mapped streets.
 
 All 77 viewer tests and the production build pass. Actual exported bicycle
 contacts were checked through 144 crank positions in each road direction.
@@ -1109,3 +1112,34 @@ Browser checks cover lighting, motion pause, destination selection and narrow
 controls without automated screenshots. The full runtime registry validates
 178 instances and 199 world/entity/address IDs against 43 catalogue entries.
 The approved rider, bicycle, movement and geographic source hashes are unchanged.
+
+## 2026-09-15 — Tripo-to-Blender production workflow
+
+Human feedback on the living-street expansion requested better source assets
+and a dependable production process before another modeling pass. Its technical
+checks did not establish the required visual quality. The existing expansion
+is preserved as a rejected art experiment; the earlier A + B + C composition
+remains the selected direction.
+
+Tripo CLI 0.4.0 was installed globally. After login, its diagnostic confirmed
+authentication and API reachability. The V3 developer guide, CLI command
+reference and installed command implementation were reviewed together with
+the project's Blender export and wind contracts.
+
+The [production guide](TRIPO_BLENDER_ASSET_PIPELINE.md) records model selection,
+image and multiview inputs, segmentation, texturing, topology work, rigging,
+conversion, immutable source preservation and task-ID recovery. It separates
+the needs of foliage, exterior buildings, mechanical vehicles and characters.
+Version-specific findings include the absence of a CLI dry run and the risk
+of duplicate generation when batch retries restart a whole job.
+
+Status: documented and authenticated, ready for a single-asset pilot after
+the asset brief is selected. No generation, upload or paid processing was
+performed in this checkpoint. A rain tree is the proposed first subject;
+its Blender preparation and browser handoff are not yet executed. Human
+feedback will determine visual acceptance before any family-wide expansion.
+
+Validation is limited to documentation, command/source inspection and the
+read-only diagnostic. Existing game assets and runtime code are unchanged;
+the earlier 77-test result belongs to the living-street implementation above,
+not to a generated-asset trial.

@@ -955,3 +955,32 @@ roadmap.
   LOD 17,502 / 1,075,460. The approved movement, rider, fitted bicycle, source
   road model and network hashes remain unchanged. New visual acceptance awaits
   human feedback on this checkpoint.
+
+## 2026-09-15 — Tripo production workflow and review reset
+
+- Recorded human rejection of the living-street expansion's visual result.
+  Its functional checks remain useful engineering evidence, but do not approve
+  asset quality. Preserved the earlier selected A + B + C street direction.
+- Installed Tripo CLI 0.4.0 globally and verified authentication, API
+  reachability and the local diagnostic after login. No generation, upload
+  or paid processing was submitted during this documentation checkpoint.
+- Reviewed the current V3 documentation alongside the installed CLI help,
+  reference and source. Documented model capabilities and operation choices
+  in [the Tripo-to-Blender guide](TRIPO_BLENDER_ASSET_PIPELINE.md).
+- Defined separate source, editable Blender and runtime deliverables, with
+  per-asset provenance, IDs, hashes, measured export budgets and human feedback.
+  Recorded the different forward-axis contracts used by street assets and the
+  approved hero character/bicycle so imports do not silently reverse models.
+- Documented task-ID recovery for existing work and the CLI 0.4.0 limitations:
+  no dry-run generation, asynchronous submission still creates a task, and
+  whole-job batch retries can duplicate generation. These are documentation
+  and source findings, not live failure experiments.
+- Distinguished foliage wind setup, building entrance anchors, vehicle pivots
+  and character skinning. A generated mesh or a successful rig check does not
+  establish motion, mechanical correctness or deformation quality.
+- Proposed one rain-tree pilot through generation, Blender and an orbitable
+  browser handoff for human testing. The subject and reference brief are still
+  to be selected. No new candidate or automated visual assessment was made.
+- Updated the README, chronological timeline and composition guides to reflect
+  the rejection and next production checkpoint. Runtime tests and builds were
+  not repeated because this change contains documentation only.

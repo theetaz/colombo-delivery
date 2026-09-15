@@ -23,7 +23,11 @@ Choose **Garden**, **Shops** or **Lakeside** to jump between review views.
 Drag to orbit, scroll to zoom, and right-drag to pan. **Street tour** starts a
 camera journey along the section; **Pause tour** stops it for inspection.
 
-The scene is ready for human visual feedback. Check:
+Human feedback rejected the living-street expansion's visual result. The
+earlier A + B + C composition remains the selected direction. Further asset
+work follows the [Tripo-to-Blender production guide](../../../../docs/TRIPO_BLENDER_ASSET_PIPELINE.md),
+starting with one candidate for human review. This scene is preserved for
+comparison; its original review criteria were:
 
 1. Whether homes, shopfronts, verandas and balconies have believable proportions.
 2. Whether the tree canopy provides shade without overpowering the street.
