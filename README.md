@@ -43,6 +43,11 @@ It includes editable Blender architecture and landscape kits, textured roads
 and pavements, and three street-level review views. Human visual feedback is
 the next step before adapting this composition to the geographic district.
 
+The [living-street expansion](studies/colombo-road/streets/composition/ASSET_GUIDE.md)
+adds tropical planting varieties, supermarket and residential exteriors,
+night-time path lighting and background vehicles. A stable asset and place
+registry links selected delivery locations to exterior building entrances.
+
 ## Development checkpoints
 
 | Date | Checkpoint | Status and evidence |
@@ -64,7 +69,8 @@ the next step before adapting this composition to the geographic district.
 | 15 Sep | [Study consolidation](docs/BUILD_TIMELINE.md#2026-09-15--colombo-road-and-movement-study-consolidated) | Map data, Blender sources, browser assets, tests, 37 milestone captures, and original commit history moved into this repository. |
 | 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added; review requested a more realistic visual direction. |
 | 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explored; a combination of A, B and C was selected. |
-| 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; visual approval pending. |
+| 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; positive feedback prompted the living-street expansion. |
+| 15 Sep | [Living street assets and addresses](studies/colombo-road/streets/composition/ASSET_GUIDE.md) | Positive feedback on the combined street led to expanded flora and exterior buildings, address IDs, night lighting and background traffic. This expansion returns for human review. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -210,8 +216,8 @@ Then open
 
 ## Next checkpoints
 
-The immediate review is the combined street composition: building proportions,
-tree scale, pavement space, materials and the transition to the lakefront.
+The immediate review is the living street: planting variety, building
+proportions, delivery-entrance placement, night lighting and background traffic.
 The mount/dismount sequences are already human-approved at `939c56b`.
 The standalone district still needs street-level accuracy review,
 bridge and lane refinement, routing rules, collisions, traffic, and integration

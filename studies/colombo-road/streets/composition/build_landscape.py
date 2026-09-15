@@ -224,6 +224,113 @@ def add_leaf_cards(name, clusters, mat, root_obj, seed, cards_per_cluster=12):
     return parent(obj, root_obj)
 
 
+def add_blade_mesh(name, patches, mat, root_obj, seed, blades=24, height=(.22,.48), width=(.025,.055)):
+    """Create crossed, tapered grass/groundcover blades with roots at patch Z."""
+    rng=random.Random(seed); verts=[]; faces=[]
+    for centre,radius in patches:
+        centre=Vector(centre)
+        for _ in range(blades):
+            az=rng.uniform(0,math.tau); rr=radius*math.sqrt(rng.random())
+            base=centre+Vector((math.cos(az)*rr,math.sin(az)*rr,0))
+            h=rng.uniform(*height); w=rng.uniform(*width); lean=rng.uniform(-.10,.10)
+            right=Vector((math.cos(az)*w,math.sin(az)*w,0)); tip=base+Vector((lean*math.sin(az),-lean*math.cos(az),h))
+            i=len(verts); verts += [base-right,base+right,tip+right*.12,tip]
+            faces += [(i,i+1,i+2),(i,i+2,i+3)]
+    mesh=bpy.data.meshes.new(name+"_Mesh"); mesh.from_pydata(verts,[],faces); mesh.materials.append(mat)
+    obj=bpy.data.objects.new(name,mesh); bpy.context.collection.objects.link(obj)
+    return parent(obj,root_obj)
+
+
+def add_petals(name, centres, mat, root_obj, petals=5, radius=.08):
+    verts=[]; faces=[]
+    for centre in centres:
+        c=Vector(centre)
+        for p in range(petals):
+            a=p*math.tau/petals; radial=Vector((math.cos(a),math.sin(a),0))
+            side=Vector((-math.sin(a),math.cos(a),0))*radius*.35
+            inner=c+radial*radius*.12; outer=c+radial*radius
+            i=len(verts); verts += [inner-side*.45,inner+side*.45,outer+side,outer]
+            faces += [(i,i+1,i+2),(i,i+2,i+3)]
+    mesh=bpy.data.meshes.new(name+"_Mesh"); mesh.from_pydata(verts,[],faces); mesh.materials.append(mat)
+    obj=bpy.data.objects.new(name,mesh); bpy.context.collection.objects.link(obj)
+    return parent(obj,root_obj)
+
+
+def species_tree(name, style, bark, leaf_mat, flower_mat=None):
+    """Species-specific Colombo street tree silhouettes, not palette variants."""
+    r=root(name,"tree"); rng=random.Random(style["seed"])
+    h=style["height"]; trunk_h=style["trunk_h"]; trunk_r=style["trunk_r"]
+    tapered_branch(name+"_Trunk",(0,0,0),(style.get("lean",0),0,trunk_h),trunk_r*1.25,trunk_r*.62,bark,r,12)
+    clusters=[]; flower_centres=[]
+    for i in range(style["arms"]):
+        az=i*math.tau/style["arms"]+rng.uniform(-.24,.24)
+        start=Vector((style.get("lean",0),0,trunk_h-rng.uniform(.1,.65)))
+        spread=style["spread"]*rng.uniform(.76,1.08)
+        rise=(h-trunk_h)*rng.uniform(.32,.72)
+        elbow=start+Vector((math.cos(az)*spread*.48,math.sin(az)*spread*.48,rise*.45))
+        tip=start+Vector((math.cos(az)*spread,math.sin(az)*spread,rise))
+        tapered_branch(name+f"_Arm_{i}",start,elbow,trunk_r*.42,trunk_r*.16,bark,r,8)
+        tapered_branch(name+f"_Fork_{i}",elbow,tip,trunk_r*.17,.025,bark,r,6)
+        fork=tip+Vector((-math.sin(az)*spread*.26,math.cos(az)*spread*.26,rng.uniform(.25,.72)))
+        tapered_branch(name+f"_Twig_{i}",elbow.lerp(tip,.65),fork,.055,.018,bark,r,5)
+        rad=style["cluster"]*rng.uniform(.82,1.12)
+        clusters += [(tip,rad),(fork,rad*.76),(elbow.lerp(tip,.62),rad*.72)]
+        if flower_mat:
+            flower_centres += [tip+Vector((rng.uniform(-.3,.3),rng.uniform(-.3,.3),rad*.34)) for _ in range(3)]
+    add_leaf_cards(name+"_LeafSprays",clusters,leaf_mat,r,style["seed"]+91,style.get("cards",7))
+    if flower_mat: add_petals(name+"_Flowers",flower_centres,flower_mat,r,5,style.get("flower_size",.11))
+    return r
+
+
+def build_coconut_palm(bark, frond_mat):
+    r=root("Palm_Coconut_A","palm"); points=[(0,0,0),(.13,.02,2.8),(-.08,.06,5.8),(.20,.10,8.6),(.38,.08,10.4)]
+    for i in range(4): tapered_branch(f"Coconut_Trunk_{i}",points[i],points[i+1],.34-i*.035,.30-i*.035,bark,r,12)
+    crown=Vector(points[-1]); verts=[]; faces=[]
+    for fi in range(14):
+        az=fi/14*math.tau; reach=2.7+(.35 if fi%3==0 else 0); end=crown+Vector((math.cos(az)*reach,math.sin(az)*reach,.35-reach*.26))
+        tapered_branch(f"Coconut_Rachis_{fi}",crown,end,.045,.012,bark,r,5)
+        radial=Vector((math.cos(az),math.sin(az),0)); side=Vector((-math.sin(az),math.cos(az),0))
+        for j in range(1,11):
+            t=j/11; c=crown.lerp(end,t); ln=.56*math.sin(math.pi*t)**.55
+            for sign in (-1,1):
+                tip=c+side*ln*sign-radial*.10+Vector((0,0,-.10*t)); w=.055
+                i=len(verts); verts += [c-side*w,c+side*w,tip+side*w*.15,tip-side*w*.15]; faces.append((i,i+1,i+2,i+3))
+    mesh=bpy.data.meshes.new("Coconut_Fronds_Mesh"); mesh.from_pydata(verts,[],faces); mesh.materials.append(frond_mat)
+    obj=bpy.data.objects.new("Coconut_Fronds",mesh); bpy.context.collection.objects.link(obj); parent(obj,r)
+    for i in range(5):
+        az=i*math.tau/5; sphere(f"Coconut_{i}",crown+Vector((math.cos(az)*.25,math.sin(az)*.25,-.25)),(.13,.13,.16),bark,r,8,5)
+    return r
+
+
+def build_low_vegetation(m):
+    roots=[]
+    for name,flower,seed in (("Flowerbed_Warm_A",m["flower_warm"],601),("Flowerbed_Cool_A",m["flower_cool"],602)):
+        r=root(name,"flowerbed"); roots.append(r); rng=random.Random(seed)
+        cube(name+"_Soil",(0,0,.025),(1.8,.72,.05),m["soil"],r,.02)
+        stems=[]; centres=[]
+        for i in range(22):
+            x=rng.uniform(-.8,.8); y=rng.uniform(-.27,.27); z=rng.uniform(.20,.42)
+            stems.append(((x,y,0),(x+rng.uniform(-.03,.03),y+rng.uniform(-.03,.03),z)))
+            centres.append((x,y,z))
+        for i,(a,b) in enumerate(stems): tapered_branch(name+f"_Stem_{i}",a,b,.012,.006,m["stem"],r,4)
+        add_petals(name+"_Blooms",centres,flower,r,5 if seed==601 else 6,.07 if seed==601 else .06)
+    r=root("Grass_VergeTuft_A","grass"); roots.append(r); add_blade_mesh("Grass_Tuft",[((0,0,0),.22)],m["grass"],r,710,32,(.22,.55),(.018,.038))
+    r=root("Grass_VergeClump_A","grass"); roots.append(r); add_blade_mesh("Grass_Clump",[((-.32,0,0),.30),((.28,.08,0),.32),((0,-.22,0),.24)],m["grass"],r,711,24,(.28,.68),(.018,.045))
+    r=root("Shrub_Ornamental_A","shrub"); roots.append(r)
+    for i,az in enumerate([0,.9,1.8,2.7,3.6,4.5,5.4]):
+        end=Vector((math.cos(az)*.48,math.sin(az)*.48,.72+(i%3)*.10)); tapered_branch(f"Shrub_Stem_{i}",(0,0,0),end,.035,.012,m["bark"],r,5)
+    add_leaf_cards("Shrub_LeafSprays",[((math.cos(a)*.48,math.sin(a)*.48,.72+(i%3)*.1),.35) for i,a in enumerate([0,.9,1.8,2.7,3.6,4.5,5.4])],m["leaf"],r,712,5)
+    r=root("Fern_Tropical_A","fern"); roots.append(r)
+    for i in range(12):
+        az=i*math.tau/12; patches=[]
+        # Narrow blades along each arched frond imply many pinnae at low cost.
+        for j in range(2,8):
+            t=j/8; patches.append(((math.cos(az)*t*.72,math.sin(az)*t*.72,.06+math.sin(t*math.pi)*.32),.055))
+        add_blade_mesh(f"Fern_Frond_{i}",patches,m["fern"],r,800+i,2,(.08,.18),(.025,.045))
+    r=root("Groundcover_Low_A","groundcover"); roots.append(r); add_blade_mesh("Groundcover",[((-.28,0,0),.28),((.25,.08,0),.31),((0,-.24,0),.25)],m["ground"],r,901,18,(.08,.24),(.022,.05))
+    return roots
+
+
 def build_tree(name, spec, bark, leaf_mat):
     r = root(name, "vegetation")
     # A flared base keeps large trees anchored in pavement tree pits.
@@ -406,7 +513,7 @@ def force_mask_materials(glb_path):
         chunks.append([kind,raw[offset:offset+length]]); offset+=length
     doc=json.loads(chunks[0][1].rstrip(b" \0"))
     for mat in doc.get("materials",[]):
-        if mat.get("name") in {"Broadleaf_Cutout","PalmLeaf_Cutout"}:
+        if mat.get("name","").startswith("Wind_") and "Cutout" in mat.get("name",""):
             mat["alphaMode"]="MASK"; mat["alphaCutoff"]=0.45; mat["doubleSided"]=True
     encoded=json.dumps(doc,separators=(",",":")).encode()
     encoded += b" "*((4-len(encoded)%4)%4)
@@ -415,13 +522,40 @@ def force_mask_materials(glb_path):
     glb_path.write_bytes(struct.pack("<4sII",magic,version,12+len(body))+body)
 
 
+def validate_exported_glb(manifest):
+    """Re-import the GLB and verify exported roots, bounds, and triangle counts."""
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.import_scene.gltf(filepath=str(GLB_PATH))
+    imported={obj.name:obj for obj in bpy.context.scene.objects}
+    tri_total=0
+    for prefab in manifest["prefabs"]:
+        obj=imported.get(prefab["node"])
+        if obj is None: raise RuntimeError("Export missing prefab root: "+prefab["node"])
+        bounds,dims=gltf_bounds(obj)
+        if any(abs(a-b)>.025 for a,b in zip(dims,prefab["dimensions"])):
+            raise RuntimeError(f"Exported bounds mismatch for {obj.name}: {dims} != {prefab['dimensions']}")
+        tris=mesh_triangles(obj); tri_total += tris
+        if tris != prefab["triangles"]: raise RuntimeError(f"Exported triangle mismatch for {obj.name}")
+    if tri_total != manifest["totals"]["triangles"]: raise RuntimeError("Exported total triangle mismatch")
+    print(json.dumps({"validatedGLB":True,"prefabs":len(manifest["prefabs"]),"triangles":tri_total}))
+
+
 def main():
     clear_scene()
     image=make_leaf_texture()
     mats={
         "bark":material("Bark_Mottled",(.25,.16,.09),.92),
-        "leaf":leaf_material("Broadleaf_Cutout",image),
+        "leaf":leaf_material("Wind_Broadleaf_Cutout",image),
+        "leaf_light":leaf_material("Wind_FloweringLeaf_Cutout",image),
         "palm":material("PalmFrond_Green",(.075,.29,.105),.86),
+        "palm_wind":material("Wind_PalmFrond_Green",(.075,.29,.105),.86),
+        "grass":material("Wind_GrassBlade_Green",(.12,.34,.08),.92),
+        "fern":material("Wind_FernLeaf_Green",(.055,.29,.11),.9),
+        "ground":material("Wind_Groundcover_Green",(.17,.38,.09),.94),
+        "stem":material("Wind_FlowerStem_Green",(.12,.31,.08),.9),
+        "flower_warm":material("Wind_Flower_Warm",(.92,.22,.08),.72),
+        "flower_cool":material("Wind_Flower_Cool",(.66,.18,.62),.72),
+        "flower_white":material("Wind_Flower_White",(.94,.88,.67),.76),
         "metal":material("PaintedMetal_Dark",(.075,.095,.09),.58,.25),
         "glass":material("LampLens_Warm",(.72,.54,.28),.28,.05),
         "concrete":material("Concrete_Warm",(.46,.43,.37),.92),
@@ -450,6 +584,14 @@ def main():
     roots=[]
     for name,spec in specs: roots.append(build_tree(name,spec,mats["bark"],mats["leaf"]))
     roots.append(build_palm(mats["bark"],mats["palm"]))
+    roots += [
+      species_tree("Tree_Rain_A",{"seed":101,"height":12.0,"trunk_h":4.0,"trunk_r":.55,"arms":8,"spread":4.8,"cluster":1.45,"cards":6},mats["bark"],mats["leaf"]),
+      species_tree("Tree_Flowering_A",{"seed":102,"height":10.8,"trunk_h":5.5,"trunk_r":.29,"arms":6,"spread":2.0,"cluster":.88,"cards":6,"flower_size":.09},mats["bark"],mats["leaf_light"],mats["flower_warm"]),
+      species_tree("Tree_Mango_A",{"seed":103,"height":10.2,"trunk_h":3.3,"trunk_r":.48,"arms":9,"spread":3.6,"cluster":1.28,"cards":7},mats["bark"],mats["leaf"]),
+      species_tree("Tree_Frangipani_A",{"seed":104,"height":5.6,"trunk_h":1.65,"trunk_r":.27,"arms":7,"spread":2.15,"cluster":.67,"cards":5,"flower_size":.105},mats["bark"],mats["leaf_light"],mats["flower_white"]),
+      build_coconut_palm(mats["bark"],mats["palm_wind"]),
+    ]
+    roots.extend(build_low_vegetation(mats))
     roots.extend(build_props(mats))
 
     for obj in roots:
@@ -461,6 +603,16 @@ def main():
         obj["originConvention"]="ground-center"
         obj["runtimeUp"]="+Y"
         obj["runtimeFront"]="+Z"
+        wind_mats=sorted({slot.material.name for child in list(obj.children_recursive)
+                          if child.type=="MESH" for slot in child.material_slots
+                          if slot.material and slot.material.name.startswith("Wind_")})
+        wind_enabled=bool(wind_mats)
+        if obj.get("category") in {"grass","groundcover","flowerbed","fern"}: root_lock=.035; bend_start=.08; amplitude=.075
+        elif obj.get("category") in {"tree","palm","vegetation","shrub"}: root_lock=.18; bend_start=.35 if obj.get("category")=="shrub" else 1.2; amplitude=.07 if obj.get("category")=="shrub" else .16
+        else: root_lock=0.0; bend_start=0.0; amplitude=0.0
+        obj["windEnabled"]=wind_enabled; obj["windMaterials"]=json.dumps(wind_mats)
+        obj["windRootLockHeight"]=root_lock; obj["windBendStartHeight"]=bend_start
+        obj["windAmplitude"]=amplitude; obj["windFrequency"]=0.55; obj["windPhaseSeed"]=(sum(ord(c) for c in obj.name)%997)/997
     bpy.context.scene.unit_settings.system="METRIC"
     bpy.context.scene.unit_settings.scale_length=1.0
     bpy.context.scene.render.engine="BLENDER_EEVEE"
@@ -481,17 +633,31 @@ def main():
         bounds,dims=gltf_bounds(obj)
         mats_used=sorted({slot.material.name for child in [obj]+list(obj.children_recursive)
                           if child.type=="MESH" for slot in child.material_slots if slot.material})
-        prefabs.append({"name":obj.name,"node":obj.name,"category":obj.get("category","prop"),
+        legacy_ids={"Tree_Broadleaf_A":"tree.broadleaf_a","Tree_Broadleaf_B":"tree.broadleaf_b","Tree_Broadleaf_C":"tree.broadleaf_c","Palm_Modest_A":"palm.modest_a"}
+        asset_ids={"Tree_Rain_A":"tree.rain_a","Tree_Flowering_A":"tree.flowering_a","Tree_Mango_A":"tree.mango_a","Tree_Frangipani_A":"tree.frangipani_a","Palm_Coconut_A":"palm.coconut_a","Flowerbed_Warm_A":"flowerbed.warm_a","Flowerbed_Cool_A":"flowerbed.cool_a","Grass_VergeTuft_A":"grass.verge_tuft_a","Grass_VergeClump_A":"grass.verge_clump_a","Shrub_Ornamental_A":"shrub.ornamental_a","Fern_Tropical_A":"fern.tropical_a","Groundcover_Low_A":"groundcover.low_a"}
+        wind_mats=[m for m in mats_used if m.startswith("Wind_")]
+        prefabs.append({"assetId":asset_ids.get(obj.name,legacy_ids.get(obj.name,"prop."+obj.name.lower())),
+                        "name":obj.name,"node":obj.name,"category":obj.get("category","prop"),
                         "bounds":bounds,"dimensions":dims,"origin":"ground-center","front":"+Z",
-                        "triangles":mesh_triangles(obj),"materials":mats_used})
-    manifest={"asset":"landscape.glb","version":1,"units":"metres",
+                        "triangles":mesh_triangles(obj),"materials":mats_used,
+                        "provenance":{"type":"original","author":"project"},
+                        "wind":{"enabled":bool(wind_mats),"materials":wind_mats,
+                                "rootLockHeight":obj["windRootLockHeight"],"bendStartHeight":obj["windBendStartHeight"],
+                                "amplitude":obj["windAmplitude"],"frequency":obj["windFrequency"],
+                                "phaseSeed":round(obj["windPhaseSeed"],4)}})
+    manifest={"asset":"landscape.glb","version":2,"units":"metres",
               "coordinateSystem":{"up":"+Y","front":"+Z","handedness":"right"},
-              "texturePolicy":{"leafAtlas":"landscape/leaf_atlas.png","appliesTo":["Broadleaf_Cutout"],
+              "texturePolicy":{"leafAtlas":"landscape/leaf_atlas.png","appliesTo":["Wind_Broadleaf_Cutout","Wind_FloweringLeaf_Cutout"],
                                "alphaMode":"MASK","alphaCutoff":0.45,
                                "palmFronds":"opaque-untextured"},
+              "windContract":{"materialPrefix":"Wind_","heightAxis":"+Y","timeUnit":"seconds",
+                              "rootRule":"vertices at or below rootLockHeight remain stationary",
+                              "weightRule":"smoothstep(rootLockHeight, max(rootLockHeight + 0.01, bendStartHeight), localPosition.y)",
+                              "amplitudeUnit":"metres","optional":True},
               "prefabs":prefabs,"totals":{"prefabs":len(prefabs),"triangles":sum(p["triangles"] for p in prefabs)}}
     MANIFEST_PATH.write_text(json.dumps(manifest,indent=2)+"\n")
     print(json.dumps(manifest["totals"]))
+    validate_exported_glb(manifest)
 
 
 if __name__ == "__main__":

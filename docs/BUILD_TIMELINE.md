@@ -1056,11 +1056,49 @@ canopy, while the existing Lotus Tower model has a separate lightweight export.
 The browser scene adds asphalt and pavement materials, two lanes, driveway
 access and Garden, Shops and Lakeside camera presets with a pausable tour.
 
-Status: implementation prepared for human visual review. This is an imagined
-composition, separate from the mapped district and approved character work.
-The next decision is whether its proportions, density, foliage, materials and
-lakefront feel convincing enough to carry into geographic road sections.
+Status: delivered in [`c182fe1`](https://github.com/theetaz/colombo-delivery/commit/c182fe1).
+Human feedback described the result as much better and requested more varied
+plants, exterior destinations, lighting and road users. This authored composition
+remains separate from the mapped district and approved character work.
 
 All 52 viewer tests and the production build pass. Browser controls and asset
 loading were checked without automated visual inspection. The approved
 movement, rider, fitted bicycle and source map hashes remain unchanged.
+
+## 2026-09-15 — Living street assets and exterior delivery addresses
+
+Status: environment expansion prepared for human review; city-scale placement,
+player collisions and delivery gameplay remain separate integration milestones.
+
+The [living street study](../studies/colombo-road/streets/composition/README.md)
+adds distinct tropical tree forms, flowers, grass, ferns, shrubs and groundcover
+to the accepted garden/shop/lakeside direction. Eleven building families now
+include a supermarket, pharmacy/parcel frontage, courtyard apartments and a
+louvered home, with varied windows, balconies and awnings. Buildings remain
+exterior assets.
+
+The [asset and address guide](../studies/colombo-road/streets/composition/ASSET_GUIDE.md)
+separates reusable models from uniquely identified placements and delivery
+stops. Five selected destinations have model-derived doorway anchors and
+same-side pavement approaches. The downloadable registry preserves those
+relationships through road, block and district IDs. This is one authored
+190 m corridor, not a claim of completed Colombo geographic coverage.
+
+Day, Dusk and Night controls, an automatic cycle, pavement lights and phased
+foliage wind add environmental motion. Eight background cars, vans, scooters
+and bicycles follow left-hand lanes with spacing controls. Independent motion
+switches support still inspection. Original Blender sources, self-contained
+GLBs and provenance manifests make the additions editable and reusable.
+
+Refinements address bicycle crank opposition, reachable leg lengths, actual
+foot/pedal contact, root-anchored wind shadows and destination alignment.
+The existing road materials and driveway surfaces were retained. The next
+human review covers visual variety, lighting, plant density and background
+rider proportions before these kits are applied to longer mapped streets.
+
+All 77 viewer tests and the production build pass. Actual exported bicycle
+contacts were checked through 144 crank positions in each road direction.
+Browser checks cover lighting, motion pause, destination selection and narrow
+controls without automated screenshots. The full runtime registry validates
+178 instances and 199 world/entity/address IDs against 43 catalogue entries.
+The approved rider, bicycle, movement and geographic source hashes are unchanged.

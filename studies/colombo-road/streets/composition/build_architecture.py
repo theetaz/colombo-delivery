@@ -50,6 +50,10 @@ PALETTE = {
     "MAT_FruitGreen": ((0.27, 0.50, 0.09, 1), 0.82, 0.0),
     "MAT_FruitGold": ((0.92, 0.48, 0.05, 1), 0.75, 0.0),
     "MAT_FruitRed": ((0.67, 0.10, 0.045, 1), 0.78, 0.0),
+    "MAT_SignBlue": ((0.035, 0.18, 0.42, 1), 0.62, 0.05),
+    "MAT_SignWhite": ((0.92, 0.88, 0.72, 1), 0.68, 0.0),
+    "MAT_PharmacyMint": ((0.18, 0.58, 0.42, 1), 0.72, 0.0),
+    "MAT_Brick": ((0.48, 0.16, 0.08, 1), 0.88, 0.0),
 }
 
 
@@ -72,7 +76,7 @@ MATS = {name: make_material(name, spec) for name, spec in PALETTE.items()}
 ROOTS = []
 
 
-def asset_root(name, label):
+def asset_root(name, label, category="architecture", asset_id=None, doorway_anchors=None):
     obj = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(obj)
     obj["asset_family"] = label
@@ -80,6 +84,9 @@ def asset_root(name, label):
     obj["up_axis_gltf"] = "+Y"
     obj["unit"] = "meter"
     obj["origin"] = "ground-center"
+    obj["asset_id"] = asset_id or name.lower().replace("_", "-")
+    obj["category"] = category
+    obj["doorway_anchors"] = json.dumps(doorway_anchors or [])
     ROOTS.append(obj)
     return obj
 
@@ -143,6 +150,34 @@ def window(parent, x, y, z, w=1.0, h=1.35, trim="MAT_TrimStone", shutters=False)
                     box(parent,"shutter-louver",(sx,y-.18,z+dz),(w*.24,.035,.035),"MAT_TrimStone",.004)
 
 
+def varied_window(parent, kind, x, y, z, w=1.15, h=1.45):
+    """Street-readable opening silhouettes, not color-only window variants."""
+    if kind == "wide-aluminum":
+        window(parent,x,y,z,w,h)
+        for dx in (-w/4,w/4): box(parent,"aluminum-mullion",(x+dx,y-.18,z),(.035,.04,h),"MAT_PaintedMetal",.004)
+    elif kind == "grilled":
+        window(parent,x,y,z,w,h)
+        for dx in (-w*.32,0,w*.32): box(parent,"security-grille-v",(x+dx,y-.25,z),(.025,.025,h+.08),"MAT_PaintedMetal",.003)
+        for dz in (-h*.28,0,h*.28): box(parent,"security-grille-h",(x,y-.25,z+dz),(w+.08,.025,.025),"MAT_PaintedMetal",.003)
+    elif kind == "louvered":
+        box(parent,"louver-reveal",(x,y,z),(w+.24,.15,h+.24),"MAT_Shadow",.018)
+        for dz in [(-h/2+.12)+i*.18 for i in range(max(2,int((h-.12)/.18)))]:
+            box(parent,"window-louver",(x,y-.19,z+dz),(w,.11,.075),"MAT_Timber",.006,rot=(math.radians(-18),0,0))
+    elif kind == "arched":
+        window(parent,x,y,z-.12,w,h-.24)
+        for a in range(0,181,30):
+            ang=math.radians(a); box(parent,"arched-trim",(x+math.cos(ang)*w*.58,y-.22,z+h*.40+math.sin(ang)*w*.38),(.18,.12,.14),"MAT_TrimStone",.015)
+
+
+def text_sign(parent, text, loc, size, material="MAT_SignWhite"):
+    bpy.ops.object.text_add(location=loc, rotation=(math.pi/2,0,0))
+    obj=bpy.context.object; obj.name="readable-sign-"+text.lower().replace(" ","-")
+    obj.data.body=text; obj.data.align_x="CENTER"; obj.data.align_y="CENTER"; obj.data.size=size; obj.data.extrude=.025; obj.data.bevel_depth=.008
+    obj.data.materials.append(MATS[material]); obj.parent=parent
+    bpy.context.view_layer.objects.active=obj; obj.select_set(True); bpy.ops.object.convert(target="MESH"); obj.select_set(False)
+    return obj
+
+
 def door(parent, x, y, z=1.15, w=1.0, h=2.3, color="MAT_Timber", fanlight=False):
     box(parent,"door-reveal",(x,y,z),(w+.30,.16,h+.26),"MAT_Shadow",.025)
     box(parent,"door",(x,y-.12,z),(w,.075,h),color,.025)
@@ -193,7 +228,8 @@ def pot(parent,x,y,z=.30,plant=True):
 
 
 def verandah_house():
-    r=asset_root("ARCH_VerandahHouse","Verandah house and garden entrance")
+    r=asset_root("ARCH_VerandahHouse","Verandah house and garden entrance","residential","arch-verandah-house",[
+        {"id":"front-door","position":[0,0,3.45],"kind":"residential"}])
     box(r,"house-shell",(0,.45,2.35),(8.8,5.5,4.7),"MAT_Limewash",.07)
     gable_roof(r,(0,.45,4.68),9.25,6.0,1.38)
     # deep, usable verandah with columns and low plinth
@@ -212,7 +248,8 @@ def verandah_house():
 
 
 def narrow_balcony_home():
-    r=asset_root("ARCH_NarrowBalconyHome","Narrow tropical balcony home")
+    r=asset_root("ARCH_NarrowBalconyHome","Narrow tropical balcony home","residential","arch-narrow-balcony-home",[
+        {"id":"front-door","position":[1.38,0,3.18],"kind":"residential"}])
     box(r,"townhouse-shell",(0,.10,4.25),(5.2,5.1,8.5),"MAT_PlasterRose",.075)
     box(r,"parapet",(0,.10,8.68),(5.5,5.35,.40),"MAT_TrimStone",.045)
     door(r,1.38,-2.49,1.22,1.04,2.3)
@@ -231,7 +268,8 @@ def narrow_balcony_home():
 
 
 def produce_shop():
-    r=asset_root("ARCH_ProduceShop","Neighborhood produce shop")
+    r=asset_root("ARCH_ProduceShop","Neighborhood produce shop","retail","arch-produce-shop",[
+        {"id":"produce-counter","position":[-.50,0,3.48],"kind":"storefront-pickup"}])
     box(r,"shop-shell",(0,.20,2.75),(6.5,5.4,5.5),"MAT_PlasterOchre",.075)
     gable_roof(r,(0,.20,5.48),6.95,5.85,1.05)
     box(r,"open-shop-recess",(-.55,-2.55,1.42),(4.55,.20,2.60),"MAT_Shadow",.02)
@@ -254,7 +292,8 @@ def produce_shop():
 
 
 def cafe_shop_house():
-    r=asset_root("ARCH_CafeShopHouse","Cafe shop house")
+    r=asset_root("ARCH_CafeShopHouse","Cafe shop house","retail","arch-cafe-shop-house",[
+        {"id":"cafe-door","position":[.40,0,3.42],"kind":"storefront-pickup"}])
     box(r,"cafe-shell",(0,.10,4.05),(7.0,5.25,8.1),"MAT_PlasterTeal",.075)
     box(r,"roof-parapet",(0,.10,8.34),(7.34,5.55,.48),"MAT_TrimStone",.045)
     box(r,"cafe-recess",(-.85,-2.57,1.52),(4.55,.18,2.72),"MAT_Shadow",.018)
@@ -280,7 +319,8 @@ def cafe_shop_house():
 
 
 def heritage_facade():
-    r=asset_root("ARCH_HeritageFacade","Colombo heritage facade")
+    r=asset_root("ARCH_HeritageFacade","Colombo heritage facade","civic","arch-heritage-facade",[
+        {"id":"main-door","position":[0,0,3.55],"kind":"entrance"}])
     box(r,"heritage-shell",(0,.15,3.45),(8.3,5.4,6.9),"MAT_PlasterCream",.08)
     box(r,"stone-plinth",(0,-2.61,.48),(8.42,.26,.96),"MAT_Concrete",.025)
     box(r,"cornice",(0,-2.65,6.28),(8.62,.38,.28),"MAT_TrimStone",.035)
@@ -306,7 +346,10 @@ def heritage_facade():
 
 
 def mixed_use_apartments():
-    r=asset_root("ARCH_MixedUseApartments","Compact mixed-use apartments")
+    r=asset_root("ARCH_MixedUseApartments","Compact mixed-use apartments","mixed-use","arch-mixed-use-apartments",[
+        {"id":"residential-entry","position":[-3.48,0,3.62],"kind":"residential"},
+        {"id":"shop-a","position":[-.95,0,3.62],"kind":"storefront-pickup"},
+        {"id":"shop-b","position":[2.42,0,3.62],"kind":"storefront-dropoff"}])
     box(r,"apartment-shell",(0,.20,5.55),(9.0,6.0,11.1),"MAT_PlasterSage",.08)
     box(r,"stair-tower",(-3.45,.42,5.82),(1.82,5.52,11.64),"MAT_PlasterOchre",.055)
     box(r,"roof-parapet",(0,.20,11.32),(9.34,6.32,.48),"MAT_TrimStone",.045)
@@ -329,7 +372,8 @@ def mixed_use_apartments():
 
 
 def garden_wall_gate():
-    r=asset_root("ARCH_GardenWallGate","Garden wall and slatted gate module")
+    r=asset_root("ARCH_GardenWallGate","Garden wall and slatted gate module","residential-access","arch-garden-wall-gate",[
+        {"id":"vehicle-gate","position":[0,0,.72],"kind":"gate"}])
     # Shallow centered module intended to sit ahead of residential facades.
     for x,w in ((-3.25,3.50),(3.25,3.50)):
         box(r,"garden-wall",(x,0,.72),(w,.34,1.44),"MAT_Limewash",.035)
@@ -345,7 +389,82 @@ def garden_wall_gate():
     return r
 
 
-BUILDERS=(verandah_house,narrow_balcony_home,produce_shop,cafe_shop_house,heritage_facade,mixed_use_apartments,garden_wall_gate)
+def city_basket_market():
+    r=asset_root("ARCH_CityBasketMarket","City Basket neighborhood supermarket","retail","arch-city-basket-market",[
+        {"id":"main-entry","position":[-2.9,0,3.72],"kind":"storefront-pickup"},
+        {"id":"service-entry","position":[4.1,0,3.18],"kind":"service"}])
+    box(r,"market-shell",(0,.15,3.25),(10.2,6.25,6.5),"MAT_Limewash",.07)
+    box(r,"market-stepped-roof",(-2.0,.15,6.68),(6.4,6.45,.45),"MAT_PlasterOchre",.04)
+    box(r,"market-roof-high",(3.35,.15,7.10),(3.25,6.45,1.28),"MAT_PlasterTeal",.04)
+    box(r,"market-recess",(-.45,-3.04,1.55),(8.65,.18,2.8),"MAT_Shadow",.02)
+    for x,w in ((-2.9,1.35),(-.95,2.15),(1.4,2.15)):
+        box(r,"storefront-glass",(x,-3.16,1.55),(w,.055,2.5),"MAT_Glass",.008)
+        for dx in (-w/2,w/2): box(r,"storefront-frame",(x+dx,-3.21,1.55),(.055,.055,2.62),"MAT_PaintedMetal",.004)
+    box(r,"sign-band",(-.7,-3.20,4.18),(8.45,.20,1.05),"MAT_SignBlue",.025)
+    text_sign(r,"CITY BASKET",(-.7,-3.34,4.18),.67)
+    awning(r,-.7,-3.18,3.55,8.55,1.05,"MAT_AwningGreen")
+    box(r,"service-door",(4.1,-3.06,1.25),(1.05,.12,2.4),"MAT_PaintedMetal",.02)
+    for x in (-3.9,-1.35,1.4,3.8): varied_window(r,"wide-aluminum",x,-3.04,5.55,1.35,1.05)
+    return r
+
+
+def corner_care_parcel():
+    r=asset_root("ARCH_CornerCareParcel","Corner Care pharmacy and parcel shop","retail","arch-corner-care-parcel",[
+        {"id":"pharmacy-entry","position":[-1.65,0,3.55],"kind":"storefront-pickup"},
+        {"id":"parcel-entry","position":[2.5,0,3.55],"kind":"storefront-dropoff"}])
+    box(r,"corner-shell",(0,.05,3.45),(8.0,6.1,6.9),"MAT_PlasterCream",.075)
+    box(r,"corner-parapet",(0,.05,7.02),(8.35,6.4,.42),"MAT_TrimStone",.035)
+    for x,w in ((-1.65,3.0),(2.45,2.55)):
+        box(r,"shop-recess",(x,-3.04,1.5),(w,.18,2.75),"MAT_Shadow",.018)
+        box(r,"shop-glass",(x,-3.16,1.5),(w-.18,.05,2.5),"MAT_Glass",.006)
+    box(r,"pharmacy-band",(-1.65,-3.20,3.35),(3.15,.18,.72),"MAT_PharmacyMint",.018)
+    text_sign(r,"CORNER CARE",(-1.65,-3.31,3.35),.34)
+    box(r,"parcel-band",(2.45,-3.20,3.35),(2.7,.18,.72),"MAT_AwningRust",.018)
+    text_sign(r,"PARCEL",(2.45,-3.31,3.35),.38)
+    for x,kind in ((-2.65,"arched"),(-.65,"grilled"),(1.35,"louvered"),(3.15,"wide-aluminum")):
+        varied_window(r,kind,x,-3.05,5.15,1.08,1.38)
+    box(r,"corner-canopy",(0,-3.48,3.82),(7.75,1.0,.14),"MAT_Concrete",.018)
+    for x in (-3.6,3.6): cyl(r,"canopy-post",(x,-3.75,1.9),.055,3.75,"MAT_PaintedMetal",10)
+    return r
+
+
+def modern_courtyard_apartments():
+    r=asset_root("ARCH_ModernCourtyardApartments","Compact modern courtyard apartments","residential","arch-modern-courtyard-apartments",[
+        {"id":"resident-lobby","position":[0,0,3.72],"kind":"residential"}])
+    box(r,"apartment-wing-left",(-3.45,.25,6.1),(3.7,6.7,12.2),"MAT_Concrete",.07)
+    box(r,"apartment-wing-right",(3.45,.25,5.4),(3.7,6.7,10.8),"MAT_PlasterSage",.07)
+    box(r,"bridge",(0,.35,10.55),(3.35,5.6,1.45),"MAT_PlasterOchre",.04)
+    box(r,"courtyard-shadow",(0,-3.15,4.25),(3.25,.18,8.5),"MAT_Shadow",.015)
+    door(r,0,-3.25,1.3,1.25,2.5,"MAT_Timber",True)
+    for x in (-3.55,3.55):
+        for z,kind in zip((2.25,5.05,7.85,10.65),("wide-aluminum","grilled","louvered","wide-aluminum")):
+            varied_window(r,kind,x,-3.18,z,1.55,1.3)
+            box(r,"sunshade",(x,-3.45,z+.82),(1.9,.62,.11),"MAT_TrimStone",.012)
+    for side in (-1,1):
+        x=side*1.72
+        for z in (4.7,7.5):
+            box(r,"courtyard-balcony",(x,-3.48,z),(1.45,.82,.16),"MAT_TrimStone",.015)
+            rail(r,x-.65,x+.65,-3.86,z+.08,.78)
+    tank(r,-3.5,.6,13.0); tank(r,3.5,.6,11.6)
+    return r
+
+
+def louvered_lane_house():
+    r=asset_root("ARCH_LouveredLaneHouse","Louvered urban lane house","residential","arch-louvered-lane-house",[
+        {"id":"front-door","position":[1.55,0,3.22],"kind":"residential"}])
+    box(r,"lane-shell",(0,.1,4.25),(6.05,5.65,8.5),"MAT_Brick",.065)
+    gable_roof(r,(0,.1,8.48),6.35,5.95,1.05,"MAT_PaintedMetal")
+    door(r,1.55,-2.78,1.26,.95,2.38,"MAT_Timber",True)
+    varied_window(r,"grilled",-1.25,-2.78,1.85,1.65,1.45)
+    varied_window(r,"louvered",-1.45,-2.78,4.55,1.45,1.65)
+    varied_window(r,"arched",1.35,-2.78,4.55,1.3,1.55)
+    varied_window(r,"wide-aluminum",0,-2.78,7.0,2.55,1.25)
+    box(r,"rain-canopy",(.9,-3.18,2.75),(3.85,.95,.12),"MAT_AwningGreen",.018,rot=(math.radians(6),0,0))
+    ac(r,2.62,-2.9,5.85)
+    return r
+
+
+BUILDERS=(verandah_house,narrow_balcony_home,produce_shop,cafe_shop_house,heritage_facade,mixed_use_apartments,garden_wall_gate,city_basket_market,corner_care_parcel,modern_courtyard_apartments,louvered_lane_house)
 for builder in BUILDERS: builder()
 
 # Apply bevels, create UVs, and merge each family's same-material parts.
@@ -400,12 +519,14 @@ def family_stats(root):
     # Blender -> glTF: (x,y,z) becomes (x,z,-y).
     gltf_min=[minv.x,minv.z,-maxv.y]; gltf_max=[maxv.x,maxv.z,-minv.y]
     return {
+        "assetId":root["asset_id"],"category":root["category"],
         "nodeName":root.name,
         "label":root["asset_family"],
         "bounds":{"min":[round(v,3) for v in gltf_min],"max":[round(v,3) for v in gltf_max]},
         "size":{"width":round(maxv.x-minv.x,3),"height":round(maxv.z-minv.z,3),"depth":round(maxv.y-minv.y,3)},
         "footprint":{"width":round(maxv.x-minv.x,3),"depth":round(maxv.y-minv.y,3),"frontOffset":round(-minv.y,3),"backOffset":round(maxv.y,3)},
         "triangles":tris,"meshNodes":meshes,
+        "doorwayAnchors":json.loads(root["doorway_anchors"]),
     }
 
 

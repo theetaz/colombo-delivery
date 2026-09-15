@@ -16,6 +16,8 @@
   "usage": "Place, rotate, and uniformly scale top-level family roots. Do not transform material mesh children independently.",
   "families": [
     {
+      "assetId": "arch-verandah-house",
+      "category": "residential",
       "nodeName": "ARCH_VerandahHouse",
       "label": "Verandah house and garden entrance",
       "bounds": {
@@ -42,9 +44,22 @@
         "backOffset": 3.45
       },
       "triangles": 3668,
-      "meshNodes": 10
+      "meshNodes": 10,
+      "doorwayAnchors": [
+        {
+          "id": "front-door",
+          "position": [
+            0,
+            0,
+            3.45
+          ],
+          "kind": "residential"
+        }
+      ]
     },
     {
+      "assetId": "arch-narrow-balcony-home",
+      "category": "residential",
       "nodeName": "ARCH_NarrowBalconyHome",
       "label": "Narrow tropical balcony home",
       "bounds": {
@@ -71,9 +86,22 @@
         "backOffset": 2.775
       },
       "triangles": 4728,
-      "meshNodes": 10
+      "meshNodes": 10,
+      "doorwayAnchors": [
+        {
+          "id": "front-door",
+          "position": [
+            1.38,
+            0,
+            3.18
+          ],
+          "kind": "residential"
+        }
+      ]
     },
     {
+      "assetId": "arch-produce-shop",
+      "category": "retail",
       "nodeName": "ARCH_ProduceShop",
       "label": "Neighborhood produce shop",
       "bounds": {
@@ -100,9 +128,22 @@
         "backOffset": 3.125
       },
       "triangles": 7256,
-      "meshNodes": 12
+      "meshNodes": 12,
+      "doorwayAnchors": [
+        {
+          "id": "produce-counter",
+          "position": [
+            -0.5,
+            0,
+            3.48
+          ],
+          "kind": "storefront-pickup"
+        }
+      ]
     },
     {
+      "assetId": "arch-cafe-shop-house",
+      "category": "retail",
       "nodeName": "ARCH_CafeShopHouse",
       "label": "Cafe shop house",
       "bounds": {
@@ -129,9 +170,22 @@
         "backOffset": 2.875
       },
       "triangles": 5580,
-      "meshNodes": 9
+      "meshNodes": 9,
+      "doorwayAnchors": [
+        {
+          "id": "cafe-door",
+          "position": [
+            0.4,
+            0,
+            3.42
+          ],
+          "kind": "storefront-pickup"
+        }
+      ]
     },
     {
+      "assetId": "arch-heritage-facade",
+      "category": "civic",
       "nodeName": "ARCH_HeritageFacade",
       "label": "Colombo heritage facade",
       "bounds": {
@@ -158,9 +212,22 @@
         "backOffset": 2.975
       },
       "triangles": 6096,
-      "meshNodes": 9
+      "meshNodes": 9,
+      "doorwayAnchors": [
+        {
+          "id": "main-door",
+          "position": [
+            0,
+            0,
+            3.55
+          ],
+          "kind": "entrance"
+        }
+      ]
     },
     {
+      "assetId": "arch-mixed-use-apartments",
+      "category": "mixed-use",
       "nodeName": "ARCH_MixedUseApartments",
       "label": "Compact mixed-use apartments",
       "bounds": {
@@ -187,9 +254,40 @@
         "backOffset": 3.36
       },
       "triangles": 8384,
-      "meshNodes": 10
+      "meshNodes": 10,
+      "doorwayAnchors": [
+        {
+          "id": "residential-entry",
+          "position": [
+            -3.48,
+            0,
+            3.62
+          ],
+          "kind": "residential"
+        },
+        {
+          "id": "shop-a",
+          "position": [
+            -0.95,
+            0,
+            3.62
+          ],
+          "kind": "storefront-pickup"
+        },
+        {
+          "id": "shop-b",
+          "position": [
+            2.42,
+            0,
+            3.62
+          ],
+          "kind": "storefront-dropoff"
+        }
+      ]
     },
     {
+      "assetId": "arch-garden-wall-gate",
+      "category": "residential-access",
       "nodeName": "ARCH_GardenWallGate",
       "label": "Garden wall and slatted gate module",
       "bounds": {
@@ -216,7 +314,204 @@
         "backOffset": 0.35
       },
       "triangles": 1732,
-      "meshNodes": 7
+      "meshNodes": 7,
+      "doorwayAnchors": [
+        {
+          "id": "vehicle-gate",
+          "position": [
+            0,
+            0,
+            0.72
+          ],
+          "kind": "gate"
+        }
+      ]
+    },
+    {
+      "assetId": "arch-city-basket-market",
+      "category": "retail",
+      "nodeName": "ARCH_CityBasketMarket",
+      "label": "City Basket neighborhood supermarket",
+      "bounds": {
+        "min": [
+          -5.2,
+          0.0,
+          -3.375
+        ],
+        "max": [
+          5.1,
+          7.74,
+          4.239
+        ]
+      },
+      "size": {
+        "width": 10.3,
+        "height": 7.74,
+        "depth": 7.614
+      },
+      "footprint": {
+        "width": 10.3,
+        "depth": 7.614,
+        "frontOffset": 4.239,
+        "backOffset": 3.375
+      },
+      "triangles": 12000,
+      "meshNodes": 11,
+      "doorwayAnchors": [
+        {
+          "id": "main-entry",
+          "position": [
+            -2.9,
+            0,
+            3.72
+          ],
+          "kind": "storefront-pickup"
+        },
+        {
+          "id": "service-entry",
+          "position": [
+            4.1,
+            0,
+            3.18
+          ],
+          "kind": "service"
+        }
+      ]
+    },
+    {
+      "assetId": "arch-corner-care-parcel",
+      "category": "retail",
+      "nodeName": "ARCH_CornerCareParcel",
+      "label": "Corner Care pharmacy and parcel shop",
+      "bounds": {
+        "min": [
+          -4.175,
+          0.0,
+          -3.25
+        ],
+        "max": [
+          4.175,
+          7.23,
+          3.98
+        ]
+      },
+      "size": {
+        "width": 8.35,
+        "height": 7.23,
+        "depth": 7.23
+      },
+      "footprint": {
+        "width": 8.35,
+        "depth": 7.23,
+        "frontOffset": 3.98,
+        "backOffset": 3.25
+      },
+      "triangles": 23728,
+      "meshNodes": 10,
+      "doorwayAnchors": [
+        {
+          "id": "pharmacy-entry",
+          "position": [
+            -1.65,
+            0,
+            3.55
+          ],
+          "kind": "storefront-pickup"
+        },
+        {
+          "id": "parcel-entry",
+          "position": [
+            2.5,
+            0,
+            3.55
+          ],
+          "kind": "storefront-dropoff"
+        }
+      ]
+    },
+    {
+      "assetId": "arch-modern-courtyard-apartments",
+      "category": "residential",
+      "nodeName": "ARCH_ModernCourtyardApartments",
+      "label": "Compact modern courtyard apartments",
+      "bounds": {
+        "min": [
+          -5.3,
+          0.0,
+          -3.6
+        ],
+        "max": [
+          5.3,
+          13.59,
+          3.89
+        ]
+      },
+      "size": {
+        "width": 10.6,
+        "height": 13.59,
+        "depth": 7.49
+      },
+      "footprint": {
+        "width": 10.6,
+        "depth": 7.49,
+        "frontOffset": 3.89,
+        "backOffset": 3.6
+      },
+      "triangles": 6140,
+      "meshNodes": 8,
+      "doorwayAnchors": [
+        {
+          "id": "resident-lobby",
+          "position": [
+            0,
+            0,
+            3.72
+          ],
+          "kind": "residential"
+        }
+      ]
+    },
+    {
+      "assetId": "arch-louvered-lane-house",
+      "category": "residential",
+      "nodeName": "ARCH_LouveredLaneHouse",
+      "label": "Louvered urban lane house",
+      "bounds": {
+        "min": [
+          -3.175,
+          -0.0,
+          -3.075
+        ],
+        "max": [
+          3.175,
+          9.59,
+          3.659
+        ]
+      },
+      "size": {
+        "width": 6.35,
+        "height": 9.59,
+        "depth": 6.734
+      },
+      "footprint": {
+        "width": 6.35,
+        "depth": 6.734,
+        "frontOffset": 3.659,
+        "backOffset": 3.075
+      },
+      "triangles": 2288,
+      "meshNodes": 8,
+      "doorwayAnchors": [
+        {
+          "id": "front-door",
+          "position": [
+            1.55,
+            0,
+            3.22
+          ],
+          "kind": "residential"
+        }
+      ]
     }
   ],
   "materials": [
@@ -399,13 +694,53 @@
       ],
       "roughness": 0.78,
       "metallic": 0.0
+    },
+    {
+      "id": "MAT_SignBlue",
+      "baseColor": [
+        0.035,
+        0.18,
+        0.42
+      ],
+      "roughness": 0.62,
+      "metallic": 0.05
+    },
+    {
+      "id": "MAT_SignWhite",
+      "baseColor": [
+        0.92,
+        0.88,
+        0.72
+      ],
+      "roughness": 0.68,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PharmacyMint",
+      "baseColor": [
+        0.18,
+        0.58,
+        0.42
+      ],
+      "roughness": 0.72,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Brick",
+      "baseColor": [
+        0.48,
+        0.16,
+        0.08
+      ],
+      "roughness": 0.88,
+      "metallic": 0.0
     }
   ],
   "stats": {
-    "families": 7,
-    "triangles": 37444,
-    "meshNodes": 67,
-    "glbBytes": 2793236
+    "families": 11,
+    "triangles": 81600,
+    "meshNodes": 104,
+    "glbBytes": 4578068
   },
   "budgets": {
     "triangleTargetMax": 100000,

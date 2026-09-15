@@ -1,6 +1,6 @@
 {
   "asset": "landscape.glb",
-  "version": 1,
+  "version": 2,
   "units": "metres",
   "coordinateSystem": {
     "up": "+Y",
@@ -10,14 +10,25 @@
   "texturePolicy": {
     "leafAtlas": "landscape/leaf_atlas.png",
     "appliesTo": [
-      "Broadleaf_Cutout"
+      "Wind_Broadleaf_Cutout",
+      "Wind_FloweringLeaf_Cutout"
     ],
     "alphaMode": "MASK",
     "alphaCutoff": 0.45,
     "palmFronds": "opaque-untextured"
   },
+  "windContract": {
+    "materialPrefix": "Wind_",
+    "heightAxis": "+Y",
+    "timeUnit": "seconds",
+    "rootRule": "vertices at or below rootLockHeight remain stationary",
+    "weightRule": "smoothstep(rootLockHeight, max(rootLockHeight + 0.01, bendStartHeight), localPosition.y)",
+    "amplitudeUnit": "metres",
+    "optional": true
+  },
   "prefabs": [
     {
+      "assetId": "tree.broadleaf_a",
       "name": "Tree_Broadleaf_A",
       "node": "Tree_Broadleaf_A",
       "category": "vegetation",
@@ -43,10 +54,26 @@
       "triangles": 976,
       "materials": [
         "Bark_Mottled",
-        "Broadleaf_Cutout"
-      ]
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.5557
+      }
     },
     {
+      "assetId": "tree.broadleaf_b",
       "name": "Tree_Broadleaf_B",
       "node": "Tree_Broadleaf_B",
       "category": "vegetation",
@@ -72,10 +99,26 @@
       "triangles": 976,
       "materials": [
         "Bark_Mottled",
-        "Broadleaf_Cutout"
-      ]
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.5567
+      }
     },
     {
+      "assetId": "tree.broadleaf_c",
       "name": "Tree_Broadleaf_C",
       "node": "Tree_Broadleaf_C",
       "category": "vegetation",
@@ -101,10 +144,26 @@
       "triangles": 780,
       "materials": [
         "Bark_Mottled",
-        "Broadleaf_Cutout"
-      ]
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.5577
+      }
     },
     {
+      "assetId": "palm.modest_a",
       "name": "Palm_Modest_A",
       "node": "Palm_Modest_A",
       "category": "vegetation",
@@ -131,9 +190,567 @@
       "materials": [
         "Bark_Mottled",
         "PalmFrond_Green"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.2728
+      }
     },
     {
+      "assetId": "tree.rain_a",
+      "name": "Tree_Rain_A",
+      "node": "Tree_Rain_A",
+      "category": "tree",
+      "bounds": {
+        "min": [
+          -7.225,
+          -0.0,
+          -4.675
+        ],
+        "max": [
+          7.828,
+          15.177,
+          4.711
+        ]
+      },
+      "dimensions": [
+        15.053,
+        15.177,
+        9.385
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 844,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.0522
+      }
+    },
+    {
+      "assetId": "tree.flowering_a",
+      "name": "Tree_Flowering_A",
+      "node": "Tree_Flowering_A",
+      "category": "tree",
+      "bounds": {
+        "min": [
+          -4.973,
+          0.0,
+          -2.472
+        ],
+        "max": [
+          4.629,
+          11.224,
+          2.325
+        ]
+      },
+      "dimensions": [
+        9.602,
+        11.224,
+        4.797
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 824,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_Flower_Warm",
+        "Wind_FloweringLeaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Flower_Warm",
+          "Wind_FloweringLeaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.6008
+      }
+    },
+    {
+      "assetId": "tree.mango_a",
+      "name": "Tree_Mango_A",
+      "node": "Tree_Mango_A",
+      "category": "tree",
+      "bounds": {
+        "min": [
+          -6.192,
+          0.0,
+          -4.466
+        ],
+        "max": [
+          5.81,
+          12.639,
+          4.659
+        ]
+      },
+      "dimensions": [
+        12.002,
+        12.639,
+        9.125
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 998,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.1565
+      }
+    },
+    {
+      "assetId": "tree.frangipani_a",
+      "name": "Tree_Frangipani_A",
+      "node": "Tree_Frangipani_A",
+      "category": "tree",
+      "bounds": {
+        "min": [
+          -3.29,
+          -0.0,
+          -2.298
+        ],
+        "max": [
+          3.197,
+          7.027,
+          2.837
+        ]
+      },
+      "dimensions": [
+        6.487,
+        7.027,
+        5.135
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 912,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_Flower_White",
+        "Wind_FloweringLeaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Flower_White",
+          "Wind_FloweringLeaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.683
+      }
+    },
+    {
+      "assetId": "palm.coconut_a",
+      "name": "Palm_Coconut_A",
+      "node": "Palm_Coconut_A",
+      "category": "palm",
+      "bounds": {
+        "min": [
+          -2.373,
+          0.0,
+          -3.056
+        ],
+        "max": [
+          3.432,
+          10.46,
+          2.555
+        ]
+      },
+      "dimensions": [
+        5.804,
+        10.46,
+        5.611
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 1280,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_PalmFrond_Green"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_PalmFrond_Green"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.3842
+      }
+    },
+    {
+      "assetId": "flowerbed.warm_a",
+      "name": "Flowerbed_Warm_A",
+      "node": "Flowerbed_Warm_A",
+      "category": "flowerbed",
+      "bounds": {
+        "min": [
+          -0.9,
+          0.0,
+          -0.36
+        ],
+        "max": [
+          0.9,
+          0.586,
+          0.36
+        ]
+      },
+      "dimensions": [
+        1.8,
+        0.586,
+        0.72
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 592,
+      "materials": [
+        "Planter_Soil",
+        "Wind_FlowerStem_Green",
+        "Wind_Flower_Warm"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_FlowerStem_Green",
+          "Wind_Flower_Warm"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.5888
+      }
+    },
+    {
+      "assetId": "flowerbed.cool_a",
+      "name": "Flowerbed_Cool_A",
+      "node": "Flowerbed_Cool_A",
+      "category": "flowerbed",
+      "bounds": {
+        "min": [
+          -0.9,
+          0.0,
+          -0.36
+        ],
+        "max": [
+          0.9,
+          0.438,
+          0.36
+        ]
+      },
+      "dimensions": [
+        1.8,
+        0.438,
+        0.72
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 636,
+      "materials": [
+        "Planter_Soil",
+        "Wind_FlowerStem_Green",
+        "Wind_Flower_Cool"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_FlowerStem_Green",
+          "Wind_Flower_Cool"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.5787
+      }
+    },
+    {
+      "assetId": "grass.verge_tuft_a",
+      "name": "Grass_VergeTuft_A",
+      "node": "Grass_VergeTuft_A",
+      "category": "grass",
+      "bounds": {
+        "min": [
+          -0.228,
+          0.0,
+          -0.24
+        ],
+        "max": [
+          0.232,
+          0.534,
+          0.224
+        ]
+      },
+      "dimensions": [
+        0.461,
+        0.534,
+        0.464
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 64,
+      "materials": [
+        "Wind_GrassBlade_Green"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_GrassBlade_Green"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.6961
+      }
+    },
+    {
+      "assetId": "grass.verge_clump_a",
+      "name": "Grass_VergeClump_A",
+      "node": "Grass_VergeClump_A",
+      "category": "grass",
+      "bounds": {
+        "min": [
+          -0.619,
+          0.0,
+          -0.322
+        ],
+        "max": [
+          0.578,
+          0.678,
+          0.458
+        ]
+      },
+      "dimensions": [
+        1.197,
+        0.678,
+        0.78
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 144,
+      "materials": [
+        "Wind_GrassBlade_Green"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_GrassBlade_Green"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.7904
+      }
+    },
+    {
+      "assetId": "shrub.ornamental_a",
+      "name": "Shrub_Ornamental_A",
+      "node": "Shrub_Ornamental_A",
+      "category": "shrub",
+      "bounds": {
+        "min": [
+          -0.703,
+          0.0,
+          -0.689
+        ],
+        "max": [
+          0.727,
+          1.219,
+          0.722
+        ]
+      },
+      "dimensions": [
+        1.43,
+        1.219,
+        1.411
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 182,
+      "materials": [
+        "Bark_Mottled",
+        "Wind_Broadleaf_Cutout"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Broadleaf_Cutout"
+        ],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 0.35,
+        "amplitude": 0.07,
+        "frequency": 0.55,
+        "phaseSeed": 0.8175
+      }
+    },
+    {
+      "assetId": "fern.tropical_a",
+      "name": "Fern_Tropical_A",
+      "node": "Fern_Tropical_A",
+      "category": "fern",
+      "bounds": {
+        "min": [
+          -0.694,
+          0.0,
+          -0.695
+        ],
+        "max": [
+          0.677,
+          0.375,
+          0.695
+        ]
+      },
+      "dimensions": [
+        1.371,
+        0.375,
+        1.39
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 288,
+      "materials": [
+        "Wind_FernLeaf_Green"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_FernLeaf_Green"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.4845
+      }
+    },
+    {
+      "assetId": "groundcover.low_a",
+      "name": "Groundcover_Low_A",
+      "node": "Groundcover_Low_A",
+      "category": "groundcover",
+      "bounds": {
+        "min": [
+          -0.575,
+          0.0,
+          -0.345
+        ],
+        "max": [
+          0.563,
+          0.238,
+          0.517
+        ]
+      },
+      "dimensions": [
+        1.138,
+        0.238,
+        0.862
+      ],
+      "origin": "ground-center",
+      "front": "+Z",
+      "triangles": 108,
+      "materials": [
+        "Wind_Groundcover_Green"
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": true,
+        "materials": [
+          "Wind_Groundcover_Green"
+        ],
+        "rootLockHeight": 0.035,
+        "bendStartHeight": 0.08,
+        "amplitude": 0.075,
+        "frequency": 0.55,
+        "phaseSeed": 0.7322
+      }
+    },
+    {
+      "assetId": "prop.streetlamp_civic",
       "name": "StreetLamp_Civic",
       "node": "StreetLamp_Civic",
       "category": "lighting",
@@ -160,9 +777,23 @@
       "materials": [
         "LampLens_Warm",
         "PaintedMetal_Dark"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.6189
+      }
     },
     {
+      "assetId": "prop.railing_promenade_2m",
       "name": "Railing_Promenade_2m",
       "node": "Railing_Promenade_2m",
       "category": "barrier",
@@ -188,9 +819,23 @@
       "triangles": 508,
       "materials": [
         "PaintedMetal_Dark"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.988
+      }
     },
     {
+      "assetId": "prop.bench_timberconcrete",
       "name": "Bench_TimberConcrete",
       "node": "Bench_TimberConcrete",
       "category": "furniture",
@@ -218,9 +863,23 @@
         "Concrete_Warm",
         "PaintedMetal_Dark",
         "Timber_Slats"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.011
+      }
     },
     {
+      "assetId": "prop.planter_shrub",
       "name": "Planter_Shrub",
       "node": "Planter_Shrub",
       "category": "vegetation",
@@ -248,9 +907,23 @@
         "Concrete_Warm",
         "Planter_Soil",
         "Shrub_DeepGreen"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.18,
+        "bendStartHeight": 1.2,
+        "amplitude": 0.16,
+        "frequency": 0.55,
+        "phaseSeed": 0.341
+      }
     },
     {
+      "assetId": "prop.draingrate",
       "name": "DrainGrate",
       "node": "DrainGrate",
       "category": "infrastructure",
@@ -277,9 +950,23 @@
       "materials": [
         "DrainVoid",
         "PaintedMetal_Dark"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.996
+      }
     },
     {
+      "assetId": "prop.bollard_civic",
       "name": "Bollard_Civic",
       "node": "Bollard_Civic",
       "category": "barrier",
@@ -306,9 +993,23 @@
       "materials": [
         "PaintedMetal_Dark",
         "ReflectiveBand"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.2969
+      }
     },
     {
+      "assetId": "prop.utilitypole",
       "name": "UtilityPole",
       "node": "UtilityPole",
       "category": "infrastructure",
@@ -336,9 +1037,23 @@
         "CeramicInsulator",
         "PaintedMetal_Dark",
         "WeatheredUtility"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.1595
+      }
     },
     {
+      "assetId": "prop.gardenwall_gate",
       "name": "GardenWall_Gate",
       "node": "GardenWall_Gate",
       "category": "architecture",
@@ -365,11 +1080,24 @@
       "materials": [
         "GardenWall_Warm",
         "Gate_MutedTeal"
-      ]
+      ],
+      "provenance": {
+        "type": "original",
+        "author": "project"
+      },
+      "wind": {
+        "enabled": false,
+        "materials": [],
+        "rootLockHeight": 0.0,
+        "bendStartHeight": 0.0,
+        "amplitude": 0.0,
+        "frequency": 0.55,
+        "phaseSeed": 0.4774
+      }
     }
   ],
   "totals": {
-    "prefabs": 12,
-    "triangles": 8444
+    "prefabs": 24,
+    "triangles": 15316
   }
 }

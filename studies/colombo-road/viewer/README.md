@@ -35,6 +35,9 @@ It does not modify the models or run either Blender script.
   http://127.0.0.1:5175/street-composition.html. Choose Garden, Shops or Lakeside,
   orbit and zoom, or start/pause the Street tour. This authored 190 m art study
   combines the selected A, B and C concepts; it has no driving controls.
+  The living-street controls add Day/Dusk/Night, optional automatic time,
+  wind and traffic toggles, exterior delivery-location focus and a portable
+  registry export. Background vehicles follow the two left-hand lanes.
   See the [composition guide](../streets/composition/README.md) for Blender
   sources, rebuilding and the human review checklist.
 - **Save view:** download the current canvas as a PNG.

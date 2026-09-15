@@ -892,3 +892,66 @@ roadmap.
   model and road-network files are unchanged. The browser art review has no
   driving, traffic or delivery simulation. Human feedback on proportions,
   density, materials and overall appearance remains pending.
+
+## 2026-09-15 — Living street expansion
+
+- Used positive feedback on the combined A + B + C scene as the basis for a
+  richer exterior environment. Kept the mapped district and approved player
+  rider, bicycle and animation assets separate.
+- Expanded the architecture kit from seven to eleven families. Added City
+  Basket Market, Corner Care parcel/pharmacy frontage, modern courtyard
+  apartments and a louvered lane house. Exterior windows, shutters, grilles,
+  roof shapes, balconies and awnings vary by family. The scene contains 14
+  buildings and one separately classified boundary gate.
+- Expanded the landscape kit from 12 to 24 prefabs: rain-tree, flowering-tree,
+  mango, frangipani and coconut-palm forms plus flowerbeds, grass, shrub, fern
+  and groundcover layers. Preserved the original packed leaf atlas and clear
+  paths around modeled entrances. Moved a palm away from a new house footprint.
+- Added flexible-plant material metadata and per-instance wind phase. Rigid
+  trunks and roots remain fixed; the color and shadow passes share the same
+  time and alpha-cutout behavior. Repeated geometry uses instancing.
+- Modeled compact cars, delivery vans, scooter riders and bicycle riders in a
+  separate Blender traffic kit. Eight seeded actors use left-hand lanes in a
+  bounded corridor with minimum spacing and wheel motion.
+- Refined bicycle wheel geometry, rider proportions, bent arms and leg chains.
+  Corrected non-opposing cranks and unreachable pedal positions; symmetric
+  limb lengths now cover the complete crank cycle. Corrected the limb target
+  transform so the actual exported rig can keep its shoes on the pedals.
+- Added Day, Dusk and Night controls and an optional 90-second cycle. A bounded
+  pool of five nearby pavement lights supplies illumination, with warm civic
+  lenses, windows and headlight lenses after sunset. Added Motion, Traffic and
+  Wind switches for review.
+- Added stable catalogue and placement IDs, block/road/district references,
+  five exterior delivery destinations, transformed model doorway anchors,
+  unique pavement approaches and a downloadable JSON registry. The location
+  selector focuses a destination and displays its stop and building identity.
+- Preserved procedural asphalt, paving UVs, repairs, curbs, upward driveway
+  ramps, tree pits, drainage and the distant lake/shoreline while integrating
+  the expansion. This prevents the new runtime layers from simplifying the
+  accepted ground treatment.
+- Documented model preparation, wind and motion pivots, identity relationships
+  and provenance requirements in the asset guide. This pass uses original
+  Blender-authored additions; generated or licensed community assets can enter
+  the same catalogue later.
+- Made all placed architecture/landscape prefabs and traffic exports required
+  before the page reports ready. Corrected phase application after loading,
+  civic lens placement, paused render scheduling and development reload cleanup.
+- All 77 viewer tests and the production build pass. The new exported bicycle
+  is sampled through 144 crank positions in both directions, checking actual
+  foot/pedal pivots, fixed segment lengths, matching foot orientation and hand
+  stability. Cadence uses a 2.4 wheel-to-crank ratio.
+- Browser checks confirm Day/Night light activation, Motion pause, independent
+  Traffic/Wind controls, destination focus and a valid 178-instance registry.
+  Corrected a 13 px mobile panel overlap; at 390 × 844 the controls have an
+  11 px gap and no horizontal overflow. The clean final reload reports one
+  canvas and no new console warnings or errors.
+- Runtime observations varied by view: the garden-wide Night view reported
+  876 renderer calls and 345,816 triangles, while the supermarket focus reported
+  176 calls and 174,272 triangles. These local observations include render
+  passes and are not a frame-rate guarantee; larger streets will need more
+  batching and distance-based asset detail.
+- Independent GLB counts match the manifests: architecture 81,600 triangles /
+  4,578,068 bytes; landscape 15,316 / 1,208,988; traffic 12,584 / 944,436; landmark
+  LOD 17,502 / 1,075,460. The approved movement, rider, fitted bicycle, source
+  road model and network hashes remain unchanged. New visual acceptance awaits
+  human feedback on this checkpoint.
