@@ -1,7 +1,9 @@
 # Colombo street concepts — 15 September 2026
 
-Status: visual directions for selection. No direction has been approved for 3D
-production yet.
+Status: the combined A + B + C direction was selected on 15 September 2026.
+The [combined street study](../../composition/README.md) develops the next 3D
+checkpoint. Selection of the art direction does not approve the resulting 3D
+implementation before human review.
 
 Review of the first street pass requested a more believable environment before
 further modeling. These imagined Colombo-inspired streets explore the complete
@@ -41,10 +43,11 @@ landmark. Warm evening light gives this direction a distinct mood.
 
 ## Selection and next checkpoint
 
-Select A, B, C, or a combination of their elements. The selected image will guide
-one short 3D street section first: proportions and layout, pavement and curb
-kit, building families, trees and street props, then materials and lighting.
-That section returns for human review before expanding the district.
+The selected combination uses A's shade canopy, homes and garden setbacks;
+B's varied shopfronts, awnings and street detail; and C's lake, promenade and
+distant landmark. It guides one short 3D section first: proportions and layout,
+pavement and curb kit, building families, trees and street props, then materials
+and lighting. That section returns for human review before expanding the district.
 
 Image-level details such as apparent road widths, individual traffic poses,
 markings, and exact landmark placement still need to be resolved against the

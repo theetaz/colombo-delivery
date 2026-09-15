@@ -853,3 +853,42 @@ roadmap.
   runtime, geographic assets, and approved character movements are unchanged.
 - These are visual exploration assets. Build and movement tests were not
   repeated for this image-and-documentation checkpoint.
+
+## 2026-09-15 — Combined street composition
+
+- Recorded the selection of A + B + C: shaded residential gardens, neighborhood
+  shops and a lakeside promenade. Preserved all three concept images for
+  comparison with the modeled result.
+- Added a separate 190 m authored street at `/street-composition.html`, with
+  Garden, Shops and Lakeside camera presets, orbit/zoom/pan and a pausable tour.
+  The district header and viewer guide link to the new review page.
+- Created seven Blender architecture families and eleven placements, including
+  veranda houses, narrow homes, shop-houses and buildings opposite the lake.
+  The kit exports 37,444 triangles and 67 material mesh nodes in 2,793,236 bytes.
+  Independent bounds checks found no architecture intersections; frontage
+  clearance beyond the pavement ranges from 0.165 m to 2.193 m.
+- Created twelve landscape prefabs with broadleaf canopy variations, a palm,
+  benches, railings, lamps, planters and drainage pieces. Replaced oversized
+  single-leaf cards with an original multi-leaf branch atlas. Broadleaf foliage
+  uses UV-mapped alpha cutouts; palm fronds use opaque geometry. Packed the atlas
+  into the Blender scene for portability.
+- Merged compatible landscape parts from 130 to 26 export meshes. The final
+  kit contains 8,444 realized triangles in 749,036 bytes. Runtime instancing
+  shares repeated geometry and materials, and rendering idles when the camera
+  and tour are still.
+- Produced a separate 17,502-triangle Lotus Tower LOD from the preserved local
+  source. The tower retains its original proportions and metre scale, with
+  distant water and shoreline context. Removed empty decimated groups and
+  loose vertices so the exported bounds and 39 mesh nodes match the manifest.
+- Added asphalt grain, roughness, repairs, faded road paint, slab pavements,
+  three driveway cuts and a promenade. Corrected reversed ramp faces, pavement
+  surfaces covering ramps, inconsistent paving UV scale and buried prop bases.
+- All 52 standalone tests and the production build pass. Browser DOM checks
+  confirm the scene reaches ready, all three presets select correctly, and the
+  tour starts and pauses without console warnings or errors. An 800 × 600
+  render probe measured 248, 197 and 126 renderer calls for Garden, Shops and
+  Lakeside respectively; these are local observations, not frame-rate targets.
+- Hash checks confirm the approved movement, rider, fitted bicycle, geographic
+  model and road-network files are unchanged. The browser art review has no
+  driving, traffic or delivery simulation. Human feedback on proportions,
+  density, materials and overall appearance remains pending.

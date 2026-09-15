@@ -31,6 +31,12 @@ It does not modify the models or run either Blender script.
 - **Bicycle transitions:** open http://127.0.0.1:5175/transitions.html. Compare the
   mounting/dismounting pose sheets with the animated rider, scrub six stages,
   show joints, use quarter speed, and download the editable Blender assembly.
+- **Combined street composition:** open
+  http://127.0.0.1:5175/street-composition.html. Choose Garden, Shops or Lakeside,
+  orbit and zoom, or start/pause the Street tour. This authored 190 m art study
+  combines the selected A, B and C concepts; it has no driving controls.
+  See the [composition guide](../streets/composition/README.md) for Blender
+  sources, rebuilding and the human review checklist.
 - **Save view:** download the current canvas as a PNG.
 - **Export review:** download JSON with your notes, source date, camera pose,
   layer visibility and checks you ran. Notes persist in this browser's local

@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "assetPack": "colombo-abc-architecture",
+  "glb": "/streets/composition/architecture.glb",
+  "coordinateSystem": {
+    "upAxis": "+Y",
+    "frontAxis": "+Z",
+    "origin": "ground-center",
+    "unit": "meter"
+  },
+  "authoredWith": {
+    "generator": "studies/colombo-road/streets/composition/build_architecture.py",
+    "source": "studies/colombo-road/streets/composition/architecture.blend"
+  },
+  "provenance": "Original Colombo-inspired project artwork. Geometry and materials are original; no third-party models, logos, or trademarks.",
+  "usage": "Place, rotate, and uniformly scale top-level family roots. Do not transform material mesh children independently.",
+  "families": [
+    {
+      "nodeName": "ARCH_VerandahHouse",
+      "label": "Verandah house and garden entrance",
+      "bounds": {
+        "min": [
+          -4.625,
+          0.0,
+          -3.45
+        ],
+        "max": [
+          4.625,
+          6.12,
+          3.607
+        ]
+      },
+      "size": {
+        "width": 9.25,
+        "height": 6.12,
+        "depth": 7.057
+      },
+      "footprint": {
+        "width": 9.25,
+        "depth": 7.057,
+        "frontOffset": 3.607,
+        "backOffset": 3.45
+      },
+      "triangles": 3668,
+      "meshNodes": 10
+    },
+    {
+      "nodeName": "ARCH_NarrowBalconyHome",
+      "label": "Narrow tropical balcony home",
+      "bounds": {
+        "min": [
+          -2.75,
+          -0.0,
+          -2.775
+        ],
+        "max": [
+          2.75,
+          9.99,
+          3.27
+        ]
+      },
+      "size": {
+        "width": 5.5,
+        "height": 9.99,
+        "depth": 6.045
+      },
+      "footprint": {
+        "width": 5.5,
+        "depth": 6.045,
+        "frontOffset": 3.27,
+        "backOffset": 2.775
+      },
+      "triangles": 4728,
+      "meshNodes": 10
+    },
+    {
+      "nodeName": "ARCH_ProduceShop",
+      "label": "Neighborhood produce shop",
+      "bounds": {
+        "min": [
+          -3.475,
+          0.0,
+          -3.125
+        ],
+        "max": [
+          3.475,
+          6.53,
+          4.335
+        ]
+      },
+      "size": {
+        "width": 6.95,
+        "height": 6.53,
+        "depth": 7.46
+      },
+      "footprint": {
+        "width": 6.95,
+        "depth": 7.46,
+        "frontOffset": 4.335,
+        "backOffset": 3.125
+      },
+      "triangles": 7256,
+      "meshNodes": 12
+    },
+    {
+      "nodeName": "ARCH_CafeShopHouse",
+      "label": "Cafe shop house",
+      "bounds": {
+        "min": [
+          -3.67,
+          0.0,
+          -2.875
+        ],
+        "max": [
+          3.67,
+          8.59,
+          3.955
+        ]
+      },
+      "size": {
+        "width": 7.34,
+        "height": 8.59,
+        "depth": 6.83
+      },
+      "footprint": {
+        "width": 7.34,
+        "depth": 6.83,
+        "frontOffset": 3.955,
+        "backOffset": 2.875
+      },
+      "triangles": 5580,
+      "meshNodes": 9
+    },
+    {
+      "nodeName": "ARCH_HeritageFacade",
+      "label": "Colombo heritage facade",
+      "bounds": {
+        "min": [
+          -4.31,
+          0.0,
+          -2.975
+        ],
+        "max": [
+          4.31,
+          7.31,
+          3.655
+        ]
+      },
+      "size": {
+        "width": 8.62,
+        "height": 7.31,
+        "depth": 6.63
+      },
+      "footprint": {
+        "width": 8.62,
+        "depth": 6.63,
+        "frontOffset": 3.655,
+        "backOffset": 2.975
+      },
+      "triangles": 6096,
+      "meshNodes": 9
+    },
+    {
+      "nodeName": "ARCH_MixedUseApartments",
+      "label": "Compact mixed-use apartments",
+      "bounds": {
+        "min": [
+          -4.67,
+          -0.0,
+          -3.36
+        ],
+        "max": [
+          4.67,
+          12.78,
+          4.049
+        ]
+      },
+      "size": {
+        "width": 9.34,
+        "height": 12.78,
+        "depth": 7.409
+      },
+      "footprint": {
+        "width": 9.34,
+        "depth": 7.409,
+        "frontOffset": 4.049,
+        "backOffset": 3.36
+      },
+      "triangles": 8384,
+      "meshNodes": 10
+    },
+    {
+      "nodeName": "ARCH_GardenWallGate",
+      "label": "Garden wall and slatted gate module",
+      "bounds": {
+        "min": [
+          -5.06,
+          0.0,
+          -0.35
+        ],
+        "max": [
+          5.06,
+          2.54,
+          0.67
+        ]
+      },
+      "size": {
+        "width": 10.12,
+        "height": 2.54,
+        "depth": 1.02
+      },
+      "footprint": {
+        "width": 10.12,
+        "depth": 1.02,
+        "frontOffset": 0.67,
+        "backOffset": 0.35
+      },
+      "triangles": 1732,
+      "meshNodes": 7
+    }
+  ],
+  "materials": [
+    {
+      "id": "MAT_PlasterCream",
+      "baseColor": [
+        0.72,
+        0.6,
+        0.42
+      ],
+      "roughness": 0.82,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PlasterSage",
+      "baseColor": [
+        0.25,
+        0.42,
+        0.34
+      ],
+      "roughness": 0.84,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PlasterTeal",
+      "baseColor": [
+        0.12,
+        0.37,
+        0.39
+      ],
+      "roughness": 0.8,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PlasterOchre",
+      "baseColor": [
+        0.63,
+        0.36,
+        0.16
+      ],
+      "roughness": 0.86,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PlasterRose",
+      "baseColor": [
+        0.55,
+        0.29,
+        0.25
+      ],
+      "roughness": 0.85,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Limewash",
+      "baseColor": [
+        0.7,
+        0.69,
+        0.57
+      ],
+      "roughness": 0.91,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_TrimStone",
+      "baseColor": [
+        0.68,
+        0.64,
+        0.53
+      ],
+      "roughness": 0.78,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Concrete",
+      "baseColor": [
+        0.39,
+        0.4,
+        0.36
+      ],
+      "roughness": 0.92,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Terracotta",
+      "baseColor": [
+        0.43,
+        0.13,
+        0.055
+      ],
+      "roughness": 0.86,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Timber",
+      "baseColor": [
+        0.16,
+        0.075,
+        0.033
+      ],
+      "roughness": 0.73,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_PaintedMetal",
+      "baseColor": [
+        0.055,
+        0.085,
+        0.075
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    {
+      "id": "MAT_AwningRust",
+      "baseColor": [
+        0.5,
+        0.12,
+        0.055
+      ],
+      "roughness": 0.78,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_AwningGreen",
+      "baseColor": [
+        0.1,
+        0.3,
+        0.24
+      ],
+      "roughness": 0.78,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_Glass",
+      "baseColor": [
+        0.055,
+        0.19,
+        0.21
+      ],
+      "roughness": 0.18,
+      "metallic": 0.05
+    },
+    {
+      "id": "MAT_Shadow",
+      "baseColor": [
+        0.025,
+        0.035,
+        0.032
+      ],
+      "roughness": 0.88,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_FruitGreen",
+      "baseColor": [
+        0.27,
+        0.5,
+        0.09
+      ],
+      "roughness": 0.82,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_FruitGold",
+      "baseColor": [
+        0.92,
+        0.48,
+        0.05
+      ],
+      "roughness": 0.75,
+      "metallic": 0.0
+    },
+    {
+      "id": "MAT_FruitRed",
+      "baseColor": [
+        0.67,
+        0.1,
+        0.045
+      ],
+      "roughness": 0.78,
+      "metallic": 0.0
+    }
+  ],
+  "stats": {
+    "families": 7,
+    "triangles": 37444,
+    "meshNodes": 67,
+    "glbBytes": 2793236
+  },
+  "budgets": {
+    "triangleTargetMax": 100000,
+    "glbTargetBytesMax": 6291456
+  }
+}

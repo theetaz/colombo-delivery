@@ -1038,6 +1038,29 @@ trees, varied buildings, and everyday street details together. The concepts
 and their art briefs are preserved for comparison. They are imagined visual
 targets, not game renders or an approval of the earlier runtime appearance.
 
-Status: waiting for human selection of A, B, C, or a combination. The next
-implementation checkpoint is one short 3D street section based on that
-selection, followed by another human review before district-wide repetition.
+Status: a combination of A, B and C was selected on 15 September. The images
+remain the visual targets for the following 3D checkpoint; concept selection
+does not establish approval of the modeled result.
+
+## 2026-09-15 — Combined garden, shops and lakeside composition
+
+The [combined composition](../studies/colombo-road/streets/composition/README.md)
+turns the selected directions into a 190 m authored street. Residential
+verandas, walls and tree shade lead into varied neighborhood shopfronts; the
+street opens beside a promenade with benches, railings and a distant Lotus
+Tower. Buildings continue on the opposite side of the lakefront.
+
+Seven editable architecture families and twelve landscape/prop prefabs were
+created in Blender. Original leaf artwork gives the broadleaf trees a branched
+canopy, while the existing Lotus Tower model has a separate lightweight export.
+The browser scene adds asphalt and pavement materials, two lanes, driveway
+access and Garden, Shops and Lakeside camera presets with a pausable tour.
+
+Status: implementation prepared for human visual review. This is an imagined
+composition, separate from the mapped district and approved character work.
+The next decision is whether its proportions, density, foliage, materials and
+lakefront feel convincing enough to carry into geographic road sections.
+
+All 52 viewer tests and the production build pass. Browser controls and asset
+loading were checked without automated visual inspection. The approved
+movement, rider, fitted bicycle and source map hashes remain unchanged.

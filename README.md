@@ -36,6 +36,13 @@ Those rejected historical prototypes do not describe the newer study's approved
 walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 [study movement record](studies/colombo-road/cyclist/MOVEMENT.md).
 
+The latest environment checkpoint combines the selected green neighborhood,
+small-shop street and lakeside concepts in a
+[190 m street composition](studies/colombo-road/streets/composition/README.md).
+It includes editable Blender architecture and landscape kits, textured roads
+and pavements, and three street-level review views. Human visual feedback is
+the next step before adapting this composition to the geographic district.
+
 ## Development checkpoints
 
 | Date | Checkpoint | Status and evidence |
@@ -56,7 +63,8 @@ walk. See [stationary rider fit](docs/RIDER_FIT.md) and the
 | 15 Sep | [Bicycle transitions](studies/colombo-road/cyclist/TRANSITIONS.md) | Reference-guided mount/dismount sequences added and leg paths corrected while preserving the approved walking and pedaling tracks; the `939c56b` revision is human-approved. |
 | 15 Sep | [Study consolidation](docs/BUILD_TIMELINE.md#2026-09-15--colombo-road-and-movement-study-consolidated) | Map data, Blender sources, browser assets, tests, 37 milestone captures, and original commit history moved into this repository. |
 | 15 Sep | [Colombo street art study](studies/colombo-road/streets/README.md) | Textured asphalt, source-aware inferred lane treatment, a separate left-hand traffic-flow aid, and six original Blender building families added; review requested a more realistic visual direction. |
-| 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explore believable pavements, trees, materials, and building variety. Selection precedes further 3D modeling. |
+| 15 Sep | [Street concept directions](studies/colombo-road/streets/concepts/2026-09-15-directions/README.md) | Green neighborhood, neighborhood shops, and lakeside street concepts explored; a combination of A, B and C was selected. |
+| 15 Sep | [Combined street composition](studies/colombo-road/streets/composition/README.md) | A 190 m authored street brings gardens, varied shopfronts and a lakeside promenade together. Blender sources and browser review delivered; visual approval pending. |
 
 The [build timeline](docs/BUILD_TIMELINE.md) provides the full chronological
 record and commit-pinned artifacts. The [development log](docs/DEVELOPMENT_LOG.md)
@@ -78,6 +86,7 @@ Open these local pages:
 
 - [Map and limited car-delivery pilot](http://127.0.0.1:5175/#drive)
 - [Dressed street study](http://127.0.0.1:5175/#street)
+- [Combined garden, shops and lakeside composition](http://127.0.0.1:5175/street-composition.html)
 - [Walk and ride courtyard](http://127.0.0.1:5175/movement.html)
 - [Bicycle transition review](http://127.0.0.1:5175/transitions.html)
 - [Walking review](http://127.0.0.1:5175/walking.html)
@@ -201,8 +210,10 @@ Then open
 
 ## Next checkpoints
 
-The immediate review gate is human testing of the corrected mount/dismount
-sequences. The standalone district still needs street-level accuracy review,
+The immediate review is the combined street composition: building proportions,
+tree scale, pavement space, materials and the transition to the lakefront.
+The mount/dismount sequences are already human-approved at `939c56b`.
+The standalone district still needs street-level accuracy review,
 bridge and lane refinement, routing rules, collisions, traffic, and integration
 before it can become city gameplay. The original practice loop still needs
 verified pickup/drop-off locations and the Stage 1 field checks before its

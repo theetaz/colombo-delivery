@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
-import {Map,Camera,Download,Maximize,Navigation,Landmark,PanelLeft,Info,RefreshCw,X,CarFront} from 'lucide-react';
+import {Map,Camera,Download,Maximize,Navigation,Landmark,PanelLeft,Info,RefreshCw,X,CarFront,Trees} from 'lucide-react';
 import {createViewer} from './createViewer.js';
 import {LayersPanel,InspectPanel,AssetsPanel} from './Panels.jsx';
 import {assetFiles} from '../asset-files.js';
@@ -116,7 +116,7 @@ export default function App(){
   }
   return <div className="app-shell">
     <header className="app-header"><div className="brand"><Map size={28} strokeWidth={1.4}/><h1>Colombo <span>/ Asset review</span></h1></div>
-      <div className="header-actions"><button className="button" aria-label="Save view" title="Save view as PNG" onClick={capture} disabled={!modelReady||busyCapture}><Camera size={16}/><span>{busyCapture?'Saving…':'Save view'}</span></button>
+      <div className="header-actions"><a className="button" href="/street-composition.html"><Trees size={16}/><span>Street study</span></a><button className="button" aria-label="Save view" title="Save view as PNG" onClick={capture} disabled={!modelReady||busyCapture}><Camera size={16}/><span>{busyCapture?'Saving…':'Save view'}</span></button>
         <button className="button primary" aria-label="Export review" title="Export review as JSON" onClick={exportReview} disabled={!ready}><Download size={16}/><span>Export review</span></button></div></header>
     <main className="workspace">
       <aside className={`sidebar ${panelOpen?'open':''}`} aria-label="Asset review controls">
