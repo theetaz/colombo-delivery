@@ -496,7 +496,11 @@ the [static reconstruction](milestones/2026-09-13-teen-courier-reconstruction.jp
 [mobile viewer](milestones/2026-09-13-teen-courier-mobile.jpg), and
 [bounded rig pose](milestones/2026-09-13-teen-courier-rig-pose.jpg).
 
-## Current state
+## Archived 2026-09-13 project snapshot
+
+This section records the main delivery app at the earlier September 13 character-study checkpoint.
+It is retained as historical context; the later standalone road and movement
+study is recorded in the September 15 milestones below.
 
 The repository contains the product definition, Stage 1 audit pipeline, first
 browser-rendered 3D road prototype, first controllable bicycle, and bounded
@@ -537,7 +541,10 @@ Then open
 [http://127.0.0.1:4173/lotus-tower-road-audit.html](http://127.0.0.1:4173/lotus-tower-road-audit.html).
 That address works only while the local server is running.
 
-## Next bounded milestone — Visual and practice review
+## Archived 2026-09-13 next milestone — Visual and practice review
+
+The following was the bounded next-step list at that checkpoint. Later study
+work did not by itself complete these main-game validation tasks.
 
 Keep the minimap's practice status visible until mode-aware legal routing and
 field validation exist. Review its input and readability on physical devices
@@ -878,7 +885,7 @@ Human review rejected clean-rig checkpoint 1 after those engineering checks
 passed. Its model files remain preserved in commit `26b0828`; numeric validation
 did not constitute visual approval.
 
-### 2026-09-14 — Clean-rig revision 2 repair
+## 2026-09-14 — Clean-rig revision 2 repair and source audit
 
 A source audit after checkpoint 1 found that a broad Blender Z-below-0.70 m
 assignment crossed anatomical components, attached lower hand vertices to leg
@@ -900,7 +907,61 @@ Trials stopped with the continuous torso/neck/head and disconnected-part
 interface unresolved. The public viewer continues to show rejected checkpoint
 1; the approved original face and bicycle remain unchanged.
 
-### 2026-09-15 — Colombo road and movement study consolidated
+The same day, the character workflow was checked against the
+[Paper Route development archive](https://www.paperroute.lol/devlog/). The audit
+corrected the documented evidence boundary and next step: it did not establish
+that the rejected clean-rig character was usable, and it did not approve a new
+hero character. The correction is preserved in
+[`901c60f`](https://github.com/theetaz/colombo-delivery/commit/901c60f05be34254e51446e24f1d8fbdead9b093).
+
+## 2026-09-15 — Standalone study baseline preserved
+
+Status: standalone baseline preserved; no main-game integration claimed.
+
+The first study checkpoint preserved a separate 1.8 × 1.8 km Colombo road
+asset, map review, and small car delivery pilot alongside a separate cyclist
+studio and walk/ride courtyard. This was a larger geographic study than the
+main delivery app's 900 × 900 m bicycle slice. Its car pilot, cyclist pages,
+and assets were inspection previews inside the study, not replacements integrated
+into the main game.
+
+At this pre-consolidation commit the artifacts lived at repository-root paths:
+[study handover](https://github.com/theetaz/colombo-delivery/blob/8365b9e/README.md),
+[movement notes](https://github.com/theetaz/colombo-delivery/blob/8365b9e/cyclist/MOVEMENT.md),
+and [viewer guide](https://github.com/theetaz/colombo-delivery/blob/8365b9e/viewer/README.md).
+Delivered in
+[`8365b9e`](https://github.com/theetaz/colombo-delivery/commit/8365b9e).
+
+## 2026-09-15 — Walking checkpoint approved and preserved
+
+Status: walking approved at the frozen asset checkpoint; approval does not
+extend to later bicycle transitions or the rejected main-project clean rig.
+
+The study's upright procedural walk progressed through contact, posture,
+continuity, and rebound corrections. Human approval is bound to the walking
+asset produced by
+[`705a404`](https://github.com/theetaz/colombo-delivery/commit/705a404),
+with the approved browser evidence preserved by
+[`88e5bca`](https://github.com/theetaz/colombo-delivery/commit/88e5bca).
+The current consolidated copy of that evidence is the
+[approved walking gallery](../studies/colombo-road/docs/visual-history/2026-09-15-walk-approved/README.md).
+
+## 2026-09-15 — Bicycle transition study and leg correction
+
+Status: transition study implemented; corrected revision awaits human feedback.
+
+[`7ec7367`](https://github.com/theetaz/colombo-delivery/commit/7ec7367)
+added the reference-guided mounting and dismounting study while preserving the
+approved walking and pedaling tracks. The first transition gallery remains
+[available in the consolidated study](../studies/colombo-road/docs/visual-history/2026-09-15-bicycle-transitions/README.md).
+
+[`939c56b`](https://github.com/theetaz/colombo-delivery/commit/939c56b)
+then corrected the knee hinge, rear leg sweep, support steps, and shoe alignment.
+Its [leg-correction gallery](../studies/colombo-road/docs/visual-history/2026-09-15-bicycle-leg-correction/README.md)
+and automated checks document the revision, but they do not constitute human
+approval of the mounting and dismounting motion.
+
+## 2026-09-15 — Colombo road and movement study consolidated
 
 Moved the complete standalone road and animation study into
 [`studies/colombo-road`](../studies/colombo-road/README.md), preserving its 11
@@ -919,3 +980,6 @@ The latest animation revision corrects the knee hinge, rear leg sweep, support
 steps, and shoe alignment during mounting and dismounting. The previously
 approved walking and pedaling clips are preserved; the revised transitions
 remain ready for human testing.
+
+Delivered in
+[`80270cb`](https://github.com/theetaz/colombo-delivery/commit/80270cb).

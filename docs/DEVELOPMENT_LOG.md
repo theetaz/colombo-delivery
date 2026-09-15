@@ -750,13 +750,36 @@ roadmap.
   failures and do not establish an acceptable replacement character.
 - Audited the [Paper Route development archive](https://www.paperroute.lol/devlog/)
   on 2026-09-14. Corrected the character pipeline's evidence boundary and next
-  milestone without changing the existing rider's rejected status.
+  milestone in commit `901c60f` without changing the existing rider's rejected
+  status or treating the archive as approval for a new hero character.
+
+## 2026-09-15 — Standalone road and movement study
+
+- Preserved the study baseline in commit `8365b9e`. At that checkpoint the
+  study lived at repository-root paths and combined a 1.8 × 1.8 km Colombo road
+  asset and small car delivery pilot with separate cyclist inspection and
+  walk/ride courtyard pages. These remained study previews; they were not
+  integrated into the main app's 900 × 900 m bicycle delivery slice.
+- Refined the study walk across the contact, posture, continuity, and rebound
+  passes. Human approval is attached to the walking asset in `705a404`; commit
+  `88e5bca` preserved seven browser screenshots and the approval record.
+- Added a reference-guided mounting and dismounting study in `7ec7367` while
+  preserving the approved walking and pedaling animation tracks.
+- Corrected the transition leg motion in `939c56b`, including the knee hinge,
+  rear sweep, support steps, and shoe placement. The corrected transitions
+  remain pending human feedback; automated and visual regression evidence does
+  not record human approval.
 
 ## 2026-09-15 — Road and animation study consolidated
 
 - Added the complete standalone study at `studies/colombo-road`, with its 11
   original commits, map source data, editable Blender files, browser assets,
   reference images, and 37 screenshots documenting the animation milestones.
+- Consolidation moved the formerly root-level study files under that directory;
+  commit-pinned links before `80270cb` therefore use their original root paths.
+- Reorganized the public README into dated development checkpoints, with
+  separate original-app and standalone-study setup guides, linked visual
+  history, and explicit approved, rejected, and pending-review states.
 - Added root commands `study:install`, `study:dev`, `study:test`, and
   `study:build`. The study continues to use port 5175 and its own dependency
   lockfile. Its implementation and exported models are preserved during the move.
